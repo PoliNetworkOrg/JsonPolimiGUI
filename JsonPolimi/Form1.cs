@@ -20,11 +20,9 @@ namespace JsonPolimi
             InitializeComponent();
         }
 
-        List<Gruppo> L = null;
-
         private void Button1_Click(object sender, EventArgs e)
         {
-            L = new List<Gruppo>();
+            Variabili.L = new List<Gruppo>();
 
             string content = File.ReadAllText("C:\\git\\polinetwork.github.io\\data\\search\\groups.json");
             var stuff = JObject.Parse(content);
@@ -44,41 +42,47 @@ namespace JsonPolimi
 
         private void Refresh_Tabella()
         {
+            if (Variabili.L == null)
+            {
+                MessageBox.Show("Lista vuota!");
+                return;
+            }
+
             string html = "<html><body><table>";
-            for (int i = 0; i<L.Count; i++)
+            for (int i = 0; i< Variabili.L.Count; i++)
             {
                 html += "<tr>";
 
                 html += "<td>";
-                html += L[i].id;
+                html += Variabili.L[i].id;
                 html += "</td>";
 
                 html += "<td>";
-                html += L[i].platform;
+                html += Variabili.L[i].platform;
                 html += "</td>";
 
                 html += "<td>";
-                html += L[i].classe;
+                html += Variabili.L[i].classe;
                 html += "</td>";
 
                 html += "<td>";
-                html += L[i].degree;
+                html += Variabili.L[i].degree;
                 html += "</td>";
 
                 html += "<td>";
-                html += L[i].language;
+                html += Variabili.L[i].language;
                 html += "</td>";
 
                 html += "<td>";
-                html += L[i].office;
+                html += Variabili.L[i].office;
                 html += "</td>";
 
                 html += "<td>";
-                html += L[i].school;
+                html += Variabili.L[i].school;
                 html += "</td>";
 
                 html += "<td>";
-                html += L[i].type;
+                html += Variabili.L[i].type;
                 html += "</td>";
 
                 html += "</tr>";
@@ -112,7 +116,7 @@ namespace JsonPolimi
 
             G.Aggiusta();
 
-            L.Add(G);
+            Variabili.L.Add(G);
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -122,75 +126,87 @@ namespace JsonPolimi
 
         private void Button3_Click(object sender, EventArgs e)
         {
+            if (Variabili.L == null)
+            {
+                MessageBox.Show("Lista vuota!");
+                return;
+            }
+
             string json = "{\"info_data\":{";
-            for (int i=0; i<L.Count; i++)
+            for (int i=0; i< Variabili.L.Count; i++)
             {
                 /*
                     "FB/230920497487655":{"class":"Ingegneria Aerospaziale","office":"BOVISA","id":"FB/230920497487655","degree":"LT","school":"3I","language":"ITA","group_type":"FB"},
                 */
                 json += '"';
-                json += L[i].id;
+                json += Variabili.L[i].id;
                 json += '"' + ":{";
 
                 json += "\"class\":\"";
-                json += L[i].classe;
+                json += Variabili.L[i].classe;
                 json += "\",\"office\":\"";
-                json += L[i].office;
+                json += Variabili.L[i].office;
                 json += "\",\"id\":\"";
-                json += L[i].id;
+                json += Variabili.L[i].id;
                 json += "\",\"degree\":\"";
-                json += L[i].degree;
+                json += Variabili.L[i].degree;
                 json += "\",\"school\":\"";
-                json += L[i].school;
+                json += Variabili.L[i].school;
                 json += "\",\"language\":\"";
-                json += L[i].language;
+                json += Variabili.L[i].language;
                 json += "\",\"type\":\"";
-                json += L[i].type;
+                json += Variabili.L[i].type;
                 json += "\",\"platform\":\"";
-                json += L[i].platform;
+                json += Variabili.L[i].platform;
                 json += "\"";
 
                 json += "}";
 
-                if (i != L.Count - 1)
+                if (i != Variabili.L.Count - 1)
                     json += ",";
 
             }
 
             json += "},\"index_data\":[";
-            for (int i = 0; i < L.Count; i++)
+            for (int i = 0; i < Variabili.L.Count; i++)
             {
                 //{"class":"Ingegneria Aerospaziale","office":"BOVISA","id":"FB/230920497487655","degree":"LT","school":"3I","language":"ITA","group_type":"FB"},
 
                 json += "{";
 
                 json += "\"class\":\"";
-                json += L[i].classe;
+                json += Variabili.L[i].classe;
                 json += "\",\"office\":\"";
-                json += L[i].office;
+                json += Variabili.L[i].office;
                 json += "\",\"id\":\"";
-                json += L[i].id;
+                json += Variabili.L[i].id;
                 json += "\",\"degree\":\"";
-                json += L[i].degree;
+                json += Variabili.L[i].degree;
                 json += "\",\"school\":\"";
-                json += L[i].school;
+                json += Variabili.L[i].school;
                 json += "\",\"language\":\"";
-                json += L[i].language;
+                json += Variabili.L[i].language;
                 json += "\",\"type\":\"";
-                json += L[i].type;
+                json += Variabili.L[i].type;
                 json += "\",\"platform\":\"";
-                json += L[i].platform;
+                json += Variabili.L[i].platform;
                 json += "\"";
 
                 json += "}";
 
-                if (i != L.Count - 1)
+                if (i != Variabili.L.Count - 1)
                     json += ",";
             }
 
             json += "]}";
 
             File.WriteAllText("C:\\git\\polinetwork.github.io\\data\\search\\groups2.json", json);
+        }
+
+        private void Button4_Click(object sender, EventArgs e)
+        {
+            Aggiungi_Form x = new Aggiungi_Form();
+            x.ShowDialog();
         }
     }
 }
