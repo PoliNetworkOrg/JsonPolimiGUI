@@ -85,6 +85,10 @@ namespace JsonPolimi
                 html += Variabili.L[i].type;
                 html += "</td>";
 
+                html += "<td>";
+                html += Variabili.L[i].year;
+                html += "</td>";
+
                 html += "</tr>";
             }
             html += "</table></body></html>";
@@ -112,6 +116,15 @@ namespace JsonPolimi
             catch
             {
                 G.type = null;
+            }
+
+            try
+            {
+                G.year = i["year"].ToString();
+            }
+            catch
+            {
+                G.year = null;
             }
 
             G.Aggiusta();
@@ -156,6 +169,8 @@ namespace JsonPolimi
                 json += Variabili.L[i].language;
                 json += "\",\"type\":\"";
                 json += Variabili.L[i].type;
+                json += "\",\"year\":\"";
+                json += Variabili.L[i].year;
                 json += "\",\"platform\":\"";
                 json += Variabili.L[i].platform;
                 json += "\"";
@@ -188,6 +203,8 @@ namespace JsonPolimi
                 json += Variabili.L[i].language;
                 json += "\",\"type\":\"";
                 json += Variabili.L[i].type;
+                json += "\",\"year\":\"";
+                json += Variabili.L[i].year;
                 json += "\",\"platform\":\"";
                 json += Variabili.L[i].platform;
                 json += "\"";

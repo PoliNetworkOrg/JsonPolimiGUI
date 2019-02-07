@@ -21,7 +21,7 @@ namespace JsonPolimi
         {
             if (t_classe.Text.Length > 0 && t_degree.Text.Length > 0 && t_id.Text.Length > 0 && 
                 t_lang.Text.Length > 0 && t_office.Text.Length > 0 && t_platform.Text.Length > 0 && 
-                t_school.Text.Length > 0 && t_type.Text.Length > 0)
+                t_school.Text.Length > 0 && t_type.Text.Length > 0 && t_year.Text.Length > 0)
             {
                 ;
             }
@@ -40,7 +40,8 @@ namespace JsonPolimi
                 office = t_office.Text,
                 platform = t_platform.Text,
                 school = t_school.Text,
-                type = t_type.Text
+                type = t_type.Text,
+                year = t_year.Text
             };
 
             if (Variabili.L == null)

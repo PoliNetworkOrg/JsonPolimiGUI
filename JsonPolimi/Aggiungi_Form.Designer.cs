@@ -53,6 +53,9 @@
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.t_year = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -185,7 +188,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(12, 223);
+            this.button1.Location = new System.Drawing.Point(12, 261);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(525, 29);
             this.button1.TabIndex = 16;
@@ -265,11 +268,39 @@
             this.label16.TabIndex = 24;
             this.label16.Text = "FB (o TG)";
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(407, 217);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(60, 13);
+            this.label17.TabIndex = 27;
+            this.label17.Text = "2018/2019";
+            // 
+            // t_year
+            // 
+            this.t_year.Location = new System.Drawing.Point(82, 214);
+            this.t_year.Name = "t_year";
+            this.t_year.Size = new System.Drawing.Size(318, 20);
+            this.t_year.TabIndex = 26;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(36, 217);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(29, 13);
+            this.label18.TabIndex = 25;
+            this.label18.Text = "Year";
+            // 
             // Aggiungi_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(549, 264);
+            this.ClientSize = new System.Drawing.Size(549, 302);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.t_year);
+            this.Controls.Add(this.label18);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.label14);
@@ -332,5 +363,8 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox t_year;
+        private System.Windows.Forms.Label label18;
     }
 }

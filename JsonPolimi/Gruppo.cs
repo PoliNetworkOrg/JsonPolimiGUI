@@ -12,14 +12,20 @@ namespace JsonPolimi
         public string language;
         public string platform;
         public string type;
+        public string year;
 
         internal void Aggiusta()
         {
             classe = classe.Replace('\n', ' ');
 
-            if (type is null || type.Length == 0)
+            if (type is null)
             {
                 type = "S";
+            }
+
+            if (year is null)
+            {
+                year = "2018/2019";
             }
         }
     }
