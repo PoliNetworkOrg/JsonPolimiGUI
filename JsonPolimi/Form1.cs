@@ -148,73 +148,23 @@ namespace JsonPolimi
             string json = "{\"info_data\":{";
             for (int i=0; i< Variabili.L.Count; i++)
             {
-                /*
-                    "FB/230920497487655":{"class":"Ingegneria Aerospaziale","office":"BOVISA","id":"FB/230920497487655","degree":"LT","school":"3I","language":"ITA","group_type":"FB"},
-                */
                 json += '"';
                 json += Variabili.L[i].id;
-                json += '"' + ":{";
+                json += '"' + ":";
 
-                json += "\"class\":\"";
-                json += Variabili.L[i].classe;
-                json += "\",\"office\":\"";
-                json += Variabili.L[i].office;
-                json += "\",\"id\":\"";
-                json += Variabili.L[i].id;
-                json += "\",\"degree\":\"";
-                json += Variabili.L[i].degree;
-                json += "\",\"school\":\"";
-                json += Variabili.L[i].school;
-                json += "\",\"language\":\"";
-                json += Variabili.L[i].language;
-                json += "\",\"type\":\"";
-                json += Variabili.L[i].type;
-                json += "\",\"year\":\"";
-                json += Variabili.L[i].year;
-                json += "\",\"platform\":\"";
-                json += Variabili.L[i].platform;
-                json += "\"";
-
-                json += "}";
-
+                json += Variabili.L[i].to_json();
+                
                 if (i != Variabili.L.Count - 1)
                     json += ",";
-
             }
-
             json += "},\"index_data\":[";
             for (int i = 0; i < Variabili.L.Count; i++)
             {
-                //{"class":"Ingegneria Aerospaziale","office":"BOVISA","id":"FB/230920497487655","degree":"LT","school":"3I","language":"ITA","group_type":"FB"},
-
-                json += "{";
-
-                json += "\"class\":\"";
-                json += Variabili.L[i].classe;
-                json += "\",\"office\":\"";
-                json += Variabili.L[i].office;
-                json += "\",\"id\":\"";
-                json += Variabili.L[i].id;
-                json += "\",\"degree\":\"";
-                json += Variabili.L[i].degree;
-                json += "\",\"school\":\"";
-                json += Variabili.L[i].school;
-                json += "\",\"language\":\"";
-                json += Variabili.L[i].language;
-                json += "\",\"type\":\"";
-                json += Variabili.L[i].type;
-                json += "\",\"year\":\"";
-                json += Variabili.L[i].year;
-                json += "\",\"platform\":\"";
-                json += Variabili.L[i].platform;
-                json += "\"";
-
-                json += "}";
+                json += Variabili.L[i].to_json();
 
                 if (i != Variabili.L.Count - 1)
                     json += ",";
             }
-
             json += "]}";
 
             File.WriteAllText("C:\\git\\polinetwork.github.io\\data\\search\\groups2.json", json);

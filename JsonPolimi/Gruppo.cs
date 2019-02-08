@@ -28,5 +28,34 @@ namespace JsonPolimi
                 year = "2018/2019";
             }
         }
+
+        internal string to_json()
+        {
+            string json = "{";
+
+            json += "\"class\":\"";
+            json += classe;
+            json += "\",\"office\":\"";
+            json += office;
+            json += "\",\"id\":\"";
+            json += id;
+            json += "\",\"degree\":\"";
+            json += degree;
+            json += "\",\"school\":\"";
+            json += school;
+            json += "\",\"language\":\"";
+            json += language;
+            json += "\",\"type\":\"";
+            json += type;
+            json += "\",\"year\":\"";
+            json += year;
+            json += "\",\"platform\":\"";
+            json += platform;
+            json += "\"";
+
+            json += "}";
+
+            return json;
+        }
     }
 }
