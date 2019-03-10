@@ -195,6 +195,9 @@ namespace JsonPolimi
 
         private void Button5_Click(object sender, EventArgs e)
         {
+            if (Variabili.L == null)
+                Variabili.L = new List<Gruppo>();
+
             Independentsoft.Office.Odf.Spreadsheet x = new Independentsoft.Office.Odf.Spreadsheet();
             try
             {
@@ -234,8 +237,14 @@ namespace JsonPolimi
 
                     g.Aggiusta();
 
+                    foreach (Gruppo g3 in g.L)
+                    {
+                        Variabili.L.Add(g3);
+                    }
                 }
             }
+
+            ;
         }
     }
 }

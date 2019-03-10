@@ -64,36 +64,35 @@ namespace JsonPolimi
 
         public static void AggiungiInformazioneAmbigua(string v, ref InsiemeDiGruppi g)
         {
+            string v_upper = v.ToUpper();
+
             //bisogna capire che tipo di informazione stiamo ricevendo
             if (v.StartsWith("https://") || v.StartsWith("http://"))
             {
                 AggiungiLink(v, ref g);
             }
+            else if (v_upper == "LEONARDO" || v_upper == "MANTOVA" || v_upper == "BOVISA" || v_upper == "PIACENZA" || v_upper == "LECCO")
+            {
+                AggiungiSede(v, ref g);
+                    
+            }
+            else if (v_upper == "FACEBOOK" || v_upper == "TELEGRAM" || v_upper == "NON ANCORA CREATO")
+            {
+                //è una cella inutile
+                ;
+            }
+            else if (v.StartsWith("<text:a"))
+            {
+                int n1 = v.IndexOf("xlink:href");
+                string s1 = v.Substring(n1 + 12);
+                string[] s2 = s1.Split('"');
+                AggiungiLink(s2[0], ref g);
+            }
             else
             {
-                string v_upper = v.ToUpper();
-                if (v_upper == "LEONARDO" || v_upper == "MANTOVA" || v_upper == "BOVISA" || v_upper == "PIACENZA" || v_upper == "LECCO")
-                {
-                    AggiungiSede(v, ref g);
-                    
-                }
-                else
-                {               
-                    if (v_upper == "FACEBOOK")
-                    {
-                        //è una cella inutile
-                        ;
-                    }
-                    else
-                    {
-                        //altrimenti è il nome
-                        AggiungiNome(v, ref g);
-                    }
-                }
+                //altrimenti è il nome
+                AggiungiNome(v, ref g);
             }
-
-
-            return;
         }
 
         private static void AggiungiNome(string v, ref InsiemeDiGruppi g)
@@ -125,6 +124,20 @@ namespace JsonPolimi
 
                 string[] s2 = s1.Split('/');
                 if (s2[1] == "groups")
+                {
+                    g2.id = s2[2];
+                }
+                else
+                {
+                    g2.id = s2[1];
+                }
+            }
+            else if (s1[0] == 't')
+            {
+                g2.platform = "TG";
+
+                string[] s2 = s1.Split('/');
+                if (s2[1] == "joinchat")
                 {
                     g2.id = s2[2];
                 }
