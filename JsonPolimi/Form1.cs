@@ -25,7 +25,23 @@ namespace JsonPolimi
         {
             Variabili.L = new List<Gruppo>();
 
-            string content = File.ReadAllText("C:\\git\\polinetwork.github.io\\data\\search\\groups.json");
+            string content = "";
+            try
+            {
+                content = File.ReadAllText("C:\\git\\polinetwork.github.io\\data\\search\\groups.json");
+            }
+            catch (Exception e2)
+            {
+                MessageBox.Show("Lettura fallita! \n\n"+e2.Message.ToString());
+                return;
+            }
+
+            if (content.Length<1)
+            {
+                MessageBox.Show("Il file letto sembra vuoto!");
+                return;
+            }
+
             var stuff = JObject.Parse(content);
 
             var InfoData = stuff["info_data"];
