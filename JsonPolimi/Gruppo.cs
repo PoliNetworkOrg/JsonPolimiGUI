@@ -17,20 +17,53 @@ namespace JsonPolimi
 
         internal void Aggiusta()
         {
-            if (classe == null)
+            if (String.IsNullOrEmpty(classe))
                 classe = "";
+            else
+                classe = classe.Replace('\n', ' ');
 
-            classe = classe.Replace('\n', ' ');
-
-            if (tipo is null)
+            if (String.IsNullOrEmpty(tipo))
             {
                 tipo = "S";
             }
 
-            if (year is null)
+            if (String.IsNullOrEmpty(year))
             {
                 year = "2018/2019";
             }
+
+            if (String.IsNullOrEmpty(language))
+            {
+                language = IndovinaLaLinguaDalNome();
+            }
+
+            if (String.IsNullOrEmpty(school))
+                school = IndovinaLaSchool();
+
+            if (String.IsNullOrEmpty(degree))
+                degree = IndovinaIlDegree();
+        }
+
+        private string IndovinaIlDegree()
+        {
+            throw new NotImplementedException();
+        }
+
+        private string IndovinaLaSchool()
+        {
+            throw new NotImplementedException();
+        }
+
+        private string IndovinaLaLinguaDalNome(string default_language = "ITA")
+        {
+            string c = classe.ToLower();
+
+            if (c.Contains("and"))
+                return "ENG";
+            if (c.Contains("for"))
+                return "ENG";
+
+            return default_language;
         }
 
         internal string To_json()
@@ -152,11 +185,11 @@ namespace JsonPolimi
                 string[] s2 = s1.Split('/');
                 if (s2[1] == "groups")
                 {
-                    g2.id = s2[2];
+                    g2.id = g2.platform + "/" + s2[2];
                 }
                 else
                 {
-                    g2.id = s2[1];
+                    g2.id = g2.platform + "/" + s2[1];
                 }
             }
             else if (s1[0] == 't')
@@ -166,11 +199,11 @@ namespace JsonPolimi
                 string[] s2 = s1.Split('/');
                 if (s2[1] == "joinchat")
                 {
-                    g2.id = s2[2];
+                    g2.id = g2.platform + "/" + s2[2];
                 }
                 else
                 {
-                    g2.id = s2[1];
+                    g2.id = g2.platform + "/" + s2[1];
                 }
             }
             else if (s1[0] == 'i')
@@ -179,7 +212,7 @@ namespace JsonPolimi
 
                 string[] s2 = s1.Split('/');
 
-                g2.id = s2[1];
+                g2.id = g2.platform + "/" + s2[1];
                 
             }
             else
