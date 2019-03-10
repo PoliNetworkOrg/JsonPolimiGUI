@@ -198,16 +198,25 @@ namespace JsonPolimi
             if (Variabili.L == null)
                 Variabili.L = new List<Gruppo>();
 
+            Apri_ODS("C:\\Users\\Arme\\Downloads\\pm.ods");
+
+            ;
+        }
+
+        private void Apri_ODS(string file)
+        {
             Independentsoft.Office.Odf.Spreadsheet x = new Independentsoft.Office.Odf.Spreadsheet();
             try
             {
-                x.Open("C:\\Users\\Arme\\Downloads\\pm.ods");
+                x.Open(file);
             }
             catch
             {
                 MessageBox.Show("Non sono riuscito ad aprire il file!");
                 return;
             }
+
+            string nome_old = "";
 
             foreach (var y in x.Tables)
             {
@@ -216,6 +225,7 @@ namespace JsonPolimi
                     Console.WriteLine("----- NUOVA RIGA ------");
                     InsiemeDiGruppi g = new InsiemeDiGruppi();
                     g.gruppo_di_base.year = "2017/2018";
+                    g.nome_old = nome_old;
 
                     foreach (var y3 in y2.Cells)
                     {
@@ -241,10 +251,13 @@ namespace JsonPolimi
                     {
                         Variabili.L.Add(g3);
                     }
+
+                    if (g.nome_old != "")
+                    {
+                        nome_old = g.nome_old;
+                    }
                 }
             }
-
-            ;
         }
     }
 }

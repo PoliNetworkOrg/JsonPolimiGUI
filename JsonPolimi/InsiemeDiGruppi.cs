@@ -10,6 +10,7 @@ namespace JsonPolimi
     {
         public Gruppo gruppo_di_base;
         public List<Gruppo> L;
+        public string nome_old;
 
         public InsiemeDiGruppi()
         {
@@ -29,6 +30,9 @@ namespace JsonPolimi
                 L[i].school = gruppo_di_base.school;
                 L[i].tipo = gruppo_di_base.tipo;
                 L[i].year = gruppo_di_base.year;
+
+                if (L[i].classe == null || L[i].classe == "")
+                    L[i].classe = nome_old;
                 
 
                 L[i].Aggiusta();

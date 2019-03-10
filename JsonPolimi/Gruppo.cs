@@ -71,12 +71,12 @@ namespace JsonPolimi
             {
                 AggiungiLink(v, ref g);
             }
-            else if (v_upper == "LEONARDO" || v_upper == "MANTOVA" || v_upper == "BOVISA" || v_upper == "PIACENZA" || v_upper == "LECCO")
+            else if (v_upper == "LEONARDO" || v_upper == "MANTOVA" || v_upper == "BOVISA" || v_upper == "PIACENZA" || v_upper == "LECCO" || v_upper == "COMO" || v_upper == "CREMONA")
             {
                 AggiungiSede(v, ref g);
                     
             }
-            else if (v_upper == "FACEBOOK" || v_upper == "TELEGRAM" || v_upper == "NON ANCORA CREATO")
+            else if (v_upper == "FACEBOOK" || v_upper == "TELEGRAM" || v_upper == "NON ANCORA CREATO" || v_upper == "CORSI" || v_upper == "LUOGO" || v_upper.StartsWith("LAUREE"))
             {
                 //è una cella inutile
                 ;
@@ -96,8 +96,20 @@ namespace JsonPolimi
         }
 
         private static void AggiungiNome(string v, ref InsiemeDiGruppi g)
-        {          
-            g.gruppo_di_base.classe = v;
+        {
+            if (g.gruppo_di_base.classe is null || g.gruppo_di_base.classe == "")
+            {
+                g.gruppo_di_base.classe = v;
+
+                g.nome_old = g.gruppo_di_base.classe;
+            }
+            else
+            {
+                g.gruppo_di_base.classe += " ";
+                g.gruppo_di_base.classe += v;
+
+                g.nome_old = g.gruppo_di_base.classe;
+            }
         }
 
         private static void AggiungiSede(string v, ref InsiemeDiGruppi g)
@@ -145,6 +157,19 @@ namespace JsonPolimi
                 {
                     g2.id = s2[1];
                 }
+            }
+            else if (s1[0] == 'i')
+            {
+                g2.platform = "IG";
+
+                string[] s2 = s1.Split('/');
+
+                g2.id = s2[1];
+                
+            }
+            else
+            {
+                ;
             }
 
             g.L.Add(g2);
