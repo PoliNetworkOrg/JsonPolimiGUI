@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Independentsoft.Office.Odf;
 using Newtonsoft.Json.Linq;
 
 namespace JsonPolimi
@@ -174,6 +175,38 @@ namespace JsonPolimi
         {
             Aggiungi_Form x = new Aggiungi_Form();
             x.ShowDialog();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Independentsoft.Office.Odf.Spreadsheet x = new Independentsoft.Office.Odf.Spreadsheet();
+            x.Open("C:\\Users\\Arme\\Downloads\\pm.ods");
+
+            foreach (var y in x.Tables)
+            {
+                foreach (var y2 in y.Rows)
+                {
+                    Console.WriteLine("----- NUOVA RIGA ------");
+                    foreach (var y3 in y2.Cells)
+                    {
+                        foreach (var y4 in y3.Content)
+                        {
+                            if (y4 is Paragraph)
+                            {
+                                Paragraph y5 = (Paragraph)y4;
+                                foreach (var y6 in y5.Content)
+                                {
+                                    Console.WriteLine(y6.ToString());
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine(y4.ToString());
+                            }                    
+                        }
+                    }
+                }
+            }
         }
     }
 }
