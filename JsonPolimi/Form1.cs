@@ -198,12 +198,12 @@ namespace JsonPolimi
             if (Variabili.L == null)
                 Variabili.L = new List<Gruppo>();
 
-            Apri_ODS("C:\\Users\\Arme\\Downloads\\pm.ods");
+            Apri_ODS("C:\\Users\\Arme\\Downloads\\pm.ods", "2017/2018");
 
             ;
         }
 
-        private void Apri_ODS(string file)
+        private void Apri_ODS(string file, string year)
         {
             Independentsoft.Office.Odf.Spreadsheet x = new Independentsoft.Office.Odf.Spreadsheet();
             try
@@ -225,7 +225,7 @@ namespace JsonPolimi
                     //Console.WriteLine("----- NUOVA RIGA ------");
 
                     InsiemeDiGruppi g = new InsiemeDiGruppi();
-                    g.gruppo_di_base.year = "2017/2018";
+                    g.gruppo_di_base.year = year;
                     g.nome_old = nome_old;
 
                     foreach (var y3 in y2.Cells)
