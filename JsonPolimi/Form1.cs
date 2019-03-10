@@ -99,7 +99,7 @@ namespace JsonPolimi
                 html += "</td>";
 
                 html += "<td>";
-                html += Variabili.L[i].type;
+                html += Variabili.L[i].tipo;
                 html += "</td>";
 
                 html += "<td>";
@@ -128,11 +128,11 @@ namespace JsonPolimi
 
             try
             {
-                G.type = i["type"].ToString();
+                G.tipo = i["type"].ToString();
             }
             catch
             {
-                G.type = null;
+                G.tipo = null;
             }
 
             try
@@ -169,7 +169,7 @@ namespace JsonPolimi
                 json += Variabili.L[i].id;
                 json += '"' + ":";
 
-                json += Variabili.L[i].to_json();
+                json += Variabili.L[i].To_json();
                 
                 if (i != Variabili.L.Count - 1)
                     json += ",";
@@ -177,7 +177,7 @@ namespace JsonPolimi
             json += "},\"index_data\":[";
             for (int i = 0; i < Variabili.L.Count; i++)
             {
-                json += Variabili.L[i].to_json();
+                json += Variabili.L[i].To_json();
 
                 if (i != Variabili.L.Count - 1)
                     json += ",";
@@ -193,34 +193,47 @@ namespace JsonPolimi
             x.ShowDialog();
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void Button5_Click(object sender, EventArgs e)
         {
             Independentsoft.Office.Odf.Spreadsheet x = new Independentsoft.Office.Odf.Spreadsheet();
-            x.Open("C:\\Users\\Arme\\Downloads\\pm.ods");
+            try
+            {
+                x.Open("C:\\Users\\Arme\\Downloads\\pm.ods");
+            }
+            catch
+            {
+                MessageBox.Show("Non sono riuscito ad aprire il file!");
+                return;
+            }
 
             foreach (var y in x.Tables)
             {
                 foreach (var y2 in y.Rows)
                 {
                     Console.WriteLine("----- NUOVA RIGA ------");
+                    InsiemeDiGruppi g = new InsiemeDiGruppi();
+                    g.gruppo_di_base.year = "2017/2018";
+
                     foreach (var y3 in y2.Cells)
                     {
                         foreach (var y4 in y3.Content)
                         {
-                            if (y4 is Paragraph)
+                            if (y4 is Paragraph y5)
                             {
-                                Paragraph y5 = (Paragraph)y4;
                                 foreach (var y6 in y5.Content)
                                 {
-                                    Console.WriteLine(y6.ToString());
+                                    Gruppo.AggiungiInformazioneAmbigua(y6.ToString(), ref g);
                                 }
                             }
                             else
                             {
                                 Console.WriteLine(y4.ToString());
-                            }                    
+                            }
                         }
                     }
+
+                    g.Aggiusta();
+
                 }
             }
         }

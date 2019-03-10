@@ -40,7 +40,7 @@ namespace JsonPolimi
                 office = t_office.Text,
                 platform = t_platform.Text,
                 school = t_school.Text,
-                type = t_type.Text,
+                tipo = t_type.Text,
                 year = t_year.Text
             };
 
