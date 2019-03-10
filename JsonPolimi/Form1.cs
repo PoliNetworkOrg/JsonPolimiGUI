@@ -57,7 +57,7 @@ namespace JsonPolimi
 
         }
 
-        private void Refresh_Tabella()
+        private static void Refresh_Tabella()
         {
             if (Variabili.L == null)
             {
@@ -113,7 +113,7 @@ namespace JsonPolimi
             Process.Start("temp.html");
         }
 
-        private void Aggiungi(JToken i)
+        private static void Aggiungi(JToken i)
         {
             Gruppo G = new Gruppo
             {
@@ -203,7 +203,7 @@ namespace JsonPolimi
             ;
         }
 
-        private void Apri_ODS(string file, string year)
+        private static void Apri_ODS(string file, string year)
         {
             Independentsoft.Office.Odf.Spreadsheet x = new Independentsoft.Office.Odf.Spreadsheet();
             try
@@ -253,7 +253,7 @@ namespace JsonPolimi
                         Variabili.L.Add(g3);
                     }
 
-                    if (g.nome_old != "")
+                    if (!String.IsNullOrEmpty(g.nome_old))
                     {
                         nome_old = g.nome_old;
                     }

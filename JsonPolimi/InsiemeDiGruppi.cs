@@ -31,7 +31,7 @@ namespace JsonPolimi
                 L[i].tipo = gruppo_di_base.tipo;
                 L[i].year = gruppo_di_base.year;
 
-                if (L[i].classe == null || L[i].classe == "")
+                if (String.IsNullOrEmpty(L[i].classe))
                     L[i].classe = nome_old;
                 
 

@@ -64,6 +64,9 @@ namespace JsonPolimi
 
         public static void AggiungiInformazioneAmbigua(string v, ref InsiemeDiGruppi g)
         {
+            if (v == null)
+                return;
+
             string v_upper = v.ToUpper();
 
             //bisogna capire che tipo di informazione stiamo ricevendo
@@ -109,7 +112,7 @@ namespace JsonPolimi
 
         private static void AggiungiNome(string v, ref InsiemeDiGruppi g)
         {
-            if (g.gruppo_di_base.classe is null || g.gruppo_di_base.classe == "")
+            if (String.IsNullOrEmpty(g.gruppo_di_base.classe))
             {
                 g.gruppo_di_base.classe = v;
 
