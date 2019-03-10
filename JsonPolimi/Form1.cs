@@ -222,7 +222,8 @@ namespace JsonPolimi
             {
                 foreach (var y2 in y.Rows)
                 {
-                    Console.WriteLine("----- NUOVA RIGA ------");
+                    //Console.WriteLine("----- NUOVA RIGA ------");
+
                     InsiemeDiGruppi g = new InsiemeDiGruppi();
                     g.gruppo_di_base.year = "2017/2018";
                     g.nome_old = nome_old;

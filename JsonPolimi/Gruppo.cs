@@ -86,7 +86,19 @@ namespace JsonPolimi
                 int n1 = v.IndexOf("xlink:href");
                 string s1 = v.Substring(n1 + 12);
                 string[] s2 = s1.Split('"');
-                AggiungiLink(s2[0], ref g);
+
+                string[] s3 = s2[1].Split('>');
+                string[] s4 = s3[1].Split('<');
+
+                string nome = s4[0];
+
+                if (nome.StartsWith("http"))
+                    AggiungiLink(s2[0], ref g);
+                else
+                {
+                    AggiungiNome(nome, ref g);
+                    AggiungiLink(s2[0], ref g);
+                }
             }
             else
             {
