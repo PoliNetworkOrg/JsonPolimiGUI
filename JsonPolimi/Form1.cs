@@ -198,7 +198,7 @@ namespace JsonPolimi
             if (Variabili.L == null)
                 Variabili.L = new List<Gruppo>();
 
-            Apri_ODS("C:\\Users\\Arme\\Downloads\\pm.ods", "2017/2018");
+            Apri_ODS("C:\\Users\\Arme\\Downloads\\pm3.ods", "2017/2018");
 
             ;
         }
@@ -216,7 +216,7 @@ namespace JsonPolimi
                 return;
             }
 
-            string nome_old = "";
+            Gruppo nome_old = new Gruppo();
 
             foreach (var y in x.Tables)
             {
@@ -253,9 +253,34 @@ namespace JsonPolimi
                         Variabili.L.Add(g3);
                     }
 
-                    if (!String.IsNullOrEmpty(g.nome_old))
+                    if (!String.IsNullOrEmpty(g.nome_old.classe))
                     {
-                        nome_old = g.nome_old;
+                        nome_old.classe = g.nome_old.classe;
+                    }
+
+                    if (!String.IsNullOrEmpty(g.nome_old.language))
+                    {
+                        nome_old.language = g.nome_old.language;
+                    }
+
+                    if (!String.IsNullOrEmpty(g.nome_old.degree))
+                    {
+                        nome_old.degree = g.nome_old.degree;
+                    }
+
+                    if (!String.IsNullOrEmpty(g.nome_old.school))
+                    {
+                        nome_old.school = g.nome_old.school;
+                    }
+
+                    if (!String.IsNullOrEmpty(g.nome_old.office))
+                    {
+                        nome_old.office = g.nome_old.office;
+                    }
+
+                    if (!String.IsNullOrEmpty(g.nome_old.year))
+                    {
+                        nome_old.year = g.nome_old.year;
                     }
                 }
             }

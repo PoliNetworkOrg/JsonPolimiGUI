@@ -142,9 +142,13 @@ namespace JsonPolimi
             {
                 AggiungiTriennaleMagistrale(v_upper, ref g);
             }
-            else if (v_upper == "3I" || v_upper == "DES" || v_upper == "AUIC")
+            else if (v_upper == "3I" || v_upper == "DES" || v_upper == "AUIC" || v_upper == "ICAT" || v_upper == "3I+AUIC" || v_upper == "ICAT+3I")
             {
                 AggiungiScuola(v_upper, ref g);
+            }
+            else if (v_upper == "ITA" || v_upper == "ENG")
+            {
+                AggiungiLingua(v_upper, ref g);
             }
             else
             {
@@ -153,14 +157,22 @@ namespace JsonPolimi
             }
         }
 
+        private static void AggiungiLingua(string v_upper, ref InsiemeDiGruppi g)
+        {
+            g.gruppo_di_base.language = v_upper;
+            g.nome_old.language = v_upper;
+        }
+
         private static void AggiungiScuola(string v_upper, ref InsiemeDiGruppi g)
         {
             g.gruppo_di_base.school = v_upper;
+            g.nome_old.school = v_upper;
         }
 
         private static void AggiungiTriennaleMagistrale(string v_upper, ref InsiemeDiGruppi g)
         {
             g.gruppo_di_base.degree = v_upper;
+            g.nome_old.degree = v_upper;
         }
 
         private static void AggiungiNome(string v, ref InsiemeDiGruppi g)
@@ -168,21 +180,19 @@ namespace JsonPolimi
             if (String.IsNullOrEmpty(g.gruppo_di_base.classe))
             {
                 g.gruppo_di_base.classe = v;
-
-                g.nome_old = g.gruppo_di_base.classe;
             }
             else
             {
                 g.gruppo_di_base.classe += " ";
                 g.gruppo_di_base.classe += v;
-
-                g.nome_old = g.gruppo_di_base.classe;
             }
+            g.nome_old.classe = g.gruppo_di_base.classe;
         }
 
         private static void AggiungiSede(string v, ref InsiemeDiGruppi g)
         {
             g.gruppo_di_base.office = v;
+            g.nome_old.office = v;
         }
 
         private static void AggiungiLink(string v, ref InsiemeDiGruppi g)
