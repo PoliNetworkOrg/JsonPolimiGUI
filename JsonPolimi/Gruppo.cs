@@ -46,12 +46,14 @@ namespace JsonPolimi
 
         private string IndovinaIlDegree()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return null;
         }
 
         private string IndovinaLaSchool()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return null;
         }
 
         private string IndovinaLaLinguaDalNome(string default_language = "ITA")
@@ -136,11 +138,29 @@ namespace JsonPolimi
                     AggiungiLink(s2[0], ref g);
                 }
             }
+            else if (v_upper == "LT" || v_upper == "LM" || v_upper == "LU")
+            {
+                AggiungiTriennaleMagistrale(v_upper, ref g);
+            }
+            else if (v_upper == "3I" || v_upper == "DES" || v_upper == "AUIC")
+            {
+                AggiungiScuola(v_upper, ref g);
+            }
             else
             {
                 //altrimenti è il nome
                 AggiungiNome(v, ref g);
             }
+        }
+
+        private static void AggiungiScuola(string v_upper, ref InsiemeDiGruppi g)
+        {
+            g.gruppo_di_base.school = v_upper;
+        }
+
+        private static void AggiungiTriennaleMagistrale(string v_upper, ref InsiemeDiGruppi g)
+        {
+            g.gruppo_di_base.degree = v_upper;
         }
 
         private static void AggiungiNome(string v, ref InsiemeDiGruppi g)
