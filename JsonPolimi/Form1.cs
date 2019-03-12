@@ -106,6 +106,10 @@ namespace JsonPolimi
                 html += Variabili.L[i].year;
                 html += "</td>";
 
+                html += "<td>";
+                html += Variabili.L[i].id_link;
+                html += "</td>";
+
                 html += "</tr>";
             }
             html += "</table></body></html>";
@@ -123,7 +127,8 @@ namespace JsonPolimi
                 id = i["id"].ToString(),
                 language = i["language"].ToString(),
                 office = i["office"].ToString(),
-                school = i["school"].ToString()
+                school = i["school"].ToString(),
+                id_link = i["id_link"].ToString()
             };
 
             try
@@ -165,6 +170,7 @@ namespace JsonPolimi
             string json = "{\"info_data\":{";
             for (int i=0; i< Variabili.L.Count; i++)
             {
+                json += '\n';
                 json += '"';
                 json += Variabili.L[i].id;
                 json += '"' + ":";
@@ -174,9 +180,12 @@ namespace JsonPolimi
                 if (i != Variabili.L.Count - 1)
                     json += ",";
             }
-            json += "},\"index_data\":[";
+            json += "},";
+            json += '\n';
+            json += "\"index_data\":[";
             for (int i = 0; i < Variabili.L.Count; i++)
             {
+                json += '\n';
                 json += Variabili.L[i].To_json();
 
                 if (i != Variabili.L.Count - 1)
@@ -199,6 +208,7 @@ namespace JsonPolimi
                 Variabili.L = new List<Gruppo>();
 
             Apri_ODS("C:\\Users\\Arme\\Downloads\\pm3.ods", "2017/2018");
+            Apri_ODS("C:\\Users\\Arme\\Downloads\\pm4.ods", "2018/2019");
 
             ;
         }

@@ -6,12 +6,13 @@ namespace JsonPolimi
     public class Gruppo
     {
         public string classe;
-        public string office;
-        public string id;
+        public string office;   // esempio: LEONARDO
+        public string id_link;  // esempio: 21432583243205
+        public string id;       // esempio: FB/LEONARDO/21432583243205
         public string degree;
         public string school;
         public string language;
-        public string platform;
+        public string platform; // esempio: FB
         public string tipo;
         public string year;
 
@@ -42,6 +43,14 @@ namespace JsonPolimi
 
             if (String.IsNullOrEmpty(degree))
                 degree = IndovinaIlDegree();
+
+            if (String.IsNullOrEmpty(id))
+                id = CreaId();
+        }
+
+        private string CreaId()
+        {
+            return platform + "/" + office + "/" + id_link;
         }
 
         private string IndovinaIlDegree()
@@ -82,6 +91,8 @@ namespace JsonPolimi
             json += degree;
             json += "\",\"school\":\"";
             json += school;
+            json += "\",\"id_link\":\"";
+            json += id_link;
             json += "\",\"language\":\"";
             json += language;
             json += "\",\"type\":\"";
@@ -109,7 +120,9 @@ namespace JsonPolimi
             {
                 AggiungiLink(v, ref g);
             }
-            else if (v_upper == "LEONARDO" || v_upper == "MANTOVA" || v_upper == "BOVISA" || v_upper == "PIACENZA" || v_upper == "LECCO" || v_upper == "COMO" || v_upper == "CREMONA")
+            else if (   v_upper == "LEONARDO" || v_upper == "MANTOVA" || v_upper == "BOVISA" || v_upper == "PIACENZA" || 
+                        v_upper == "LECCO" || v_upper == "COMO" || v_upper == "CREMONA" || v_upper == "LEONARDO-CREMONA" ||
+                        v_upper == "LEONARDO*")
             {
                 AggiungiSede(v, ref g);
                     
@@ -142,11 +155,12 @@ namespace JsonPolimi
             {
                 AggiungiTriennaleMagistrale(v_upper, ref g);
             }
-            else if (v_upper == "3I" || v_upper == "DES" || v_upper == "AUIC" || v_upper == "ICAT" || v_upper == "3I+AUIC" || v_upper == "ICAT+3I")
+            else if (   v_upper == "3I" || v_upper == "DES" || v_upper == "AUIC" || v_upper == "ICAT" ||
+                        v_upper == "3I+AUIC" || v_upper == "ICAT+3I" || v_upper == "DES+3I")
             {
                 AggiungiScuola(v_upper, ref g);
             }
-            else if (v_upper == "ITA" || v_upper == "ENG")
+            else if (v_upper == "ITA" || v_upper == "ENG" || v_upper == "ITA-ENG")
             {
                 AggiungiLingua(v_upper, ref g);
             }
@@ -215,11 +229,11 @@ namespace JsonPolimi
                 string[] s2 = s1.Split('/');
                 if (s2[1] == "groups")
                 {
-                    g2.id = g2.platform + "/" + s2[2];
+                    g2.id_link = s2[2];
                 }
                 else
                 {
-                    g2.id = g2.platform + "/" + s2[1];
+                    g2.id_link = s2[1];
                 }
             }
             else if (s1[0] == 't')
@@ -229,11 +243,11 @@ namespace JsonPolimi
                 string[] s2 = s1.Split('/');
                 if (s2[1] == "joinchat")
                 {
-                    g2.id = g2.platform + "/" + s2[2];
+                    g2.id_link = s2[2];
                 }
                 else
                 {
-                    g2.id = g2.platform + "/" + s2[1];
+                    g2.id_link = s2[1];
                 }
             }
             else if (s1[0] == 'i')
@@ -242,7 +256,7 @@ namespace JsonPolimi
 
                 string[] s2 = s1.Split('/');
 
-                g2.id = g2.platform + "/" + s2[1];
+                g2.id_link = s2[1];
                 
             }
             else
