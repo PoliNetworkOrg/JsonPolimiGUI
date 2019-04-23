@@ -23,12 +23,19 @@ namespace JsonPolimi
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            Variabili.L = new List<Gruppo>();
+            Variabili.L = new ListaGruppo();
+
+            OpenFileDialog ofd = new OpenFileDialog();
+            var r_dialog = ofd.ShowDialog();
+            if (r_dialog!=DialogResult.OK)
+            {
+                return;
+            }
 
             string content = "";
             try
             {
-                content = File.ReadAllText("C:\\git\\polinetwork.github.io\\data\\search\\groups.json");
+                content = File.ReadAllText(ofd.FileName);
             }
             catch (Exception e2)
             {
@@ -66,48 +73,51 @@ namespace JsonPolimi
             }
 
             string html = "<html><body><table>";
-            for (int i = 0; i< Variabili.L.Count; i++)
+            int n = Variabili.L.GetCount();
+            for (int i = 0; i < n; i++)
             {
+                var elem = Variabili.L.GetElem(i);
+
                 html += "<tr>";
 
                 html += "<td>";
-                html += Variabili.L[i].id;
+                html += elem.id;
                 html += "</td>";
 
                 html += "<td>";
-                html += Variabili.L[i].platform;
+                html += elem.platform;
                 html += "</td>";
 
                 html += "<td>";
-                html += Variabili.L[i].classe;
+                html += elem.classe;
                 html += "</td>";
 
                 html += "<td>";
-                html += Variabili.L[i].degree;
+                html += elem.degree;
                 html += "</td>";
 
                 html += "<td>";
-                html += Variabili.L[i].language;
+                html += elem.language;
                 html += "</td>";
 
                 html += "<td>";
-                html += Variabili.L[i].office;
+                html += elem.office;
                 html += "</td>";
 
                 html += "<td>";
-                html += Variabili.L[i].school;
+                html += elem.school;
                 html += "</td>";
 
                 html += "<td>";
-                html += Variabili.L[i].tipo;
+                html += elem.tipo;
                 html += "</td>";
 
                 html += "<td>";
-                html += Variabili.L[i].year;
+                html += elem.year;
                 html += "</td>";
 
                 html += "<td>";
-                html += Variabili.L[i].id_link;
+                html += elem.id_link;
                 html += "</td>";
 
                 html += "</tr>";
@@ -122,14 +132,26 @@ namespace JsonPolimi
             Gruppo G = new Gruppo
             {
                 classe = i["class"].ToString(),
-                degree = i["degree"].ToString(),
-                platform = i["group_type"].ToString(),
-                id = i["id"].ToString(),
-                language = i["language"].ToString(),
-                office = i["office"].ToString(),
-                school = i["school"].ToString(),
-                id_link = i["id_link"].ToString()
+                degree = i["degree"].ToString()
             };
+
+            try
+            {
+                G.platform = i["group_type"].ToString();
+            }
+#pragma warning disable CS0168 // La variabile è dichiarata, ma non viene mai usata
+            catch (Exception e)
+#pragma warning restore CS0168 // La variabile è dichiarata, ma non viene mai usata
+            {
+                G.platform = i["platform"].ToString();
+            }
+
+            G.id = i["id"].ToString();
+            G.language = i["language"].ToString();
+            G.office = i["office"].ToString();
+            G.school = i["school"].ToString();
+            G.id_link = i["id_link"].ToString();
+            
 
             try
             {
@@ -156,6 +178,7 @@ namespace JsonPolimi
 
         private void Button2_Click(object sender, EventArgs e)
         {
+            Aggiusta();
             Refresh_Tabella();
         }
 
@@ -167,33 +190,91 @@ namespace JsonPolimi
                 return;
             }
 
+            Aggiusta();
+
             string json = "{\"info_data\":{";
-            for (int i=0; i< Variabili.L.Count; i++)
+            int n = Variabili.L.GetCount();
+            for (int i=0; i< n; i++)
             {
+                var elem = Variabili.L.GetElem(i);
+
                 json += '\n';
                 json += '"';
-                json += Variabili.L[i].id;
+                json += elem.id;
                 json += '"' + ":";
 
-                json += Variabili.L[i].To_json();
+                json += elem.To_json();
                 
-                if (i != Variabili.L.Count - 1)
+                if (i != n - 1)
                     json += ",";
             }
             json += "},";
             json += '\n';
             json += "\"index_data\":[";
-            for (int i = 0; i < Variabili.L.Count; i++)
+            for (int i = 0; i < n; i++)
             {
-                json += '\n';
-                json += Variabili.L[i].To_json();
+                var elem = Variabili.L.GetElem(i);
 
-                if (i != Variabili.L.Count - 1)
+                json += '\n';
+                json += elem.To_json();
+
+                if (i != n - 1)
                     json += ",";
             }
             json += "]}";
 
             File.WriteAllText("C:\\git\\polinetwork.github.io\\data\\search\\groups2.json", json);
+        }
+
+        private void Aggiusta()
+        {
+            int n = Variabili.L.GetCount();
+            for (int i=0; i<n; i++)
+            {
+                var elem = Variabili.L.GetElem(i);
+                if (String.IsNullOrEmpty(elem.id_link))
+                {
+                    Variabili.L.Remove(i);
+
+                    i--;
+                    n = Variabili.L.GetCount();
+                }
+            }
+
+            n = Variabili.L.GetCount();
+            for (int i = 0; i < n; i++)
+            {
+                var elem = Variabili.L.GetElem(i);
+
+                string nome = AggiustaNome(elem.classe);
+                elem.classe = nome;
+
+                Variabili.L.SetElem(i, elem);
+            }
+        }
+
+        private string AggiustaNome(string s)
+        {
+            if (s.Contains("<="))
+            {
+                int n = s.IndexOf("<=");
+                string r = "";
+                r += s.Substring(0, n);
+                r += s.Substring(n + 2);
+                return r;
+            }
+            else if (s.Contains("&lt;="))
+            {
+                int n = s.IndexOf("&lt;=");
+                string r = "";
+                r += s.Substring(0, n);
+                r += s.Substring(n + 5);
+                return r;
+            }
+            else
+            {
+                return s;
+            }
         }
 
         private void Button4_Click(object sender, EventArgs e)
@@ -205,17 +286,28 @@ namespace JsonPolimi
         private void Button5_Click(object sender, EventArgs e)
         {
             if (Variabili.L == null)
-                Variabili.L = new List<Gruppo>();
+                Variabili.L = new ListaGruppo();
 
             Apri_ODS("C:\\Users\\Arme\\Downloads\\pm3.ods", "2017/2018");
             Apri_ODS("C:\\Users\\Arme\\Downloads\\pm4.ods", "2018/2019");
+            Apri_ODS("C:\\Users\\Arme\\Downloads\\pm5.ods", "2019/2020");
 
             ;
         }
 
         private static void Apri_ODS(string file, string year)
         {
-            Independentsoft.Office.Odf.Spreadsheet x = new Independentsoft.Office.Odf.Spreadsheet();
+            Independentsoft.Office.Odf.Spreadsheet x = null;
+            try
+            {
+                x = new Independentsoft.Office.Odf.Spreadsheet();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                return;
+            }
+
             try
             {
                 x.Open(file);

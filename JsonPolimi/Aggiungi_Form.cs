@@ -45,7 +45,7 @@ namespace JsonPolimi
             };
 
             if (Variabili.L == null)
-                Variabili.L = new List<Gruppo>();
+                Variabili.L = new ListaGruppo();
 
 
             G.Aggiusta();

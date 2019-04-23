@@ -8,13 +8,13 @@ namespace JsonPolimi
         public string classe;
         public string office;   // esempio: LEONARDO
         public string id_link;  // esempio: 21432583243205
-        public string id;       // esempio: FB/LEONARDO/21432583243205
+        public string id;       // esempio: FB/2018/2019/LEONARDO/21432583243205
         public string degree;
         public string school;
         public string language;
         public string platform; // esempio: FB
         public string tipo;
-        public string year;
+        public string year;     // esempio: 2018/2019
 
         internal void Aggiusta()
         {
@@ -50,7 +50,7 @@ namespace JsonPolimi
 
         private string CreaId()
         {
-            return platform + "/" + office + "/" + id_link;
+            return platform + "/" + year + "/" + office + "/" + id_link;
         }
 
         private string IndovinaIlDegree()
@@ -132,6 +132,11 @@ namespace JsonPolimi
                 //è una cella inutile
                 ;
             }
+            else if (v_upper == "<=")
+            {
+                //è una cella inutile
+                ;
+            }
             else if (v.StartsWith("<text:a"))
             {
                 int n1 = v.IndexOf("xlink:href");
@@ -191,6 +196,11 @@ namespace JsonPolimi
 
         private static void AggiungiNome(string v, ref InsiemeDiGruppi g)
         {
+            if (v == "<=")
+            {
+                return;
+            }
+
             if (String.IsNullOrEmpty(g.gruppo_di_base.classe))
             {
                 g.gruppo_di_base.classe = v;
@@ -236,7 +246,7 @@ namespace JsonPolimi
                     g2.id_link = s2[1];
                 }
             }
-            else if (s1[0] == 't')
+            else if (s1[0] == 't') // telegram
             {
                 g2.platform = "TG";
 
@@ -250,7 +260,7 @@ namespace JsonPolimi
                     g2.id_link = s2[1];
                 }
             }
-            else if (s1[0] == 'i')
+            else if (s1[0] == 'i') // instagram
             {
                 g2.platform = "IG";
 
@@ -258,6 +268,14 @@ namespace JsonPolimi
 
                 g2.id_link = s2[1];
                 
+            }
+            else if (s1[0] == 'c') //whatsapp
+            {
+                g2.platform = "WA";
+
+                string[] s2 = s1.Split('/');
+
+                g2.id_link = s2[1];
             }
             else
             {

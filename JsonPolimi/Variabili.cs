@@ -8,6 +8,6 @@ namespace JsonPolimi
 {
     public static class Variabili
     {
-        public static List<Gruppo> L = null;
+        public static ListaGruppo L = null;
     }
 }

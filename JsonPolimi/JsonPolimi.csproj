@@ -68,6 +68,7 @@
     </Compile>
     <Compile Include="Gruppo.cs" />
     <Compile Include="InsiemeDiGruppi.cs" />
+    <Compile Include="ListaGruppo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Variabili.cs" />
