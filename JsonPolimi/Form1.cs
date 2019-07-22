@@ -208,7 +208,7 @@ namespace JsonPolimi
             json += "},";
             json += '\n';
             json += "\"index_data\":[";
-            for (int i = 0; i < n; i++)
+            for (var i = 0; i < n; i++)
             {
                 var elem = Variabili.L.GetElem(i);
 
@@ -229,13 +229,11 @@ namespace JsonPolimi
             for (var i = 0; i < n; i++)
             {
                 var elem = Variabili.L.GetElem(i);
-                if (String.IsNullOrEmpty(elem.id_link))
-                {
-                    Variabili.L.Remove(i);
+                if (!string.IsNullOrEmpty(elem.id_link)) continue;
+                Variabili.L.Remove(i);
 
-                    i--;
-                    n = Variabili.L.GetCount();
-                }
+                i--;
+                n = Variabili.L.GetCount();
             }
 
             n = Variabili.L.GetCount();
@@ -243,7 +241,7 @@ namespace JsonPolimi
             {
                 var elem = Variabili.L.GetElem(i);
 
-                string nome = AggiustaNome(elem.classe);
+                var nome = AggiustaNome(elem.classe);
                 elem.classe = nome;
 
                 Variabili.L.SetElem(i, elem);
