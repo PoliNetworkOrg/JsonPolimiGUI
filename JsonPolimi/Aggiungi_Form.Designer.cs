@@ -363,6 +363,7 @@
             this.Name = "Aggiungi_Form";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Aggiungi Form";
+            this.Load += new System.EventHandler(this.Aggiungi_Form_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

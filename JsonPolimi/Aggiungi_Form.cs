@@ -19,8 +19,8 @@ namespace JsonPolimi
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            if (t_classe.Text.Length > 0 && t_degree.Text.Length > 0 && t_id.Text.Length > 0 && 
-                t_lang.Text.Length > 0 && t_office.Text.Length > 0 && t_platform.Text.Length > 0 && 
+            if (t_classe.Text.Length > 0 && t_degree.Text.Length > 0 && t_id.Text.Length > 0 &&
+                t_lang.Text.Length > 0 && t_office.Text.Length > 0 && t_platform.Text.Length > 0 &&
                 t_school.Text.Length > 0 && t_type.Text.Length > 0 && t_year.Text.Length > 0)
             {
                 ;
@@ -31,7 +31,7 @@ namespace JsonPolimi
                 return;
             }
 
-            Gruppo G = new Gruppo
+            var G = new Gruppo
             {
                 classe = t_classe.Text,
                 degree = t_degree.Text,
@@ -47,10 +47,13 @@ namespace JsonPolimi
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
 
-
             G.Aggiusta();
 
             Variabili.L.Add(G);
+        }
+
+        private void Aggiungi_Form_Load(object sender, EventArgs e)
+        {
         }
     }
 }

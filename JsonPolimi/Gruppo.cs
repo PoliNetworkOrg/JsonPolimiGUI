@@ -18,33 +18,30 @@ namespace JsonPolimi
 
         internal void Aggiusta()
         {
-            if (String.IsNullOrEmpty(classe))
-                classe = "";
-            else
-                classe = classe.Replace('\n', ' ');
+            classe = string.IsNullOrEmpty(classe) ? "" : classe.Replace('\n', ' ');
 
-            if (String.IsNullOrEmpty(tipo))
+            if (string.IsNullOrEmpty(tipo))
             {
                 tipo = "S";
             }
 
-            if (String.IsNullOrEmpty(year))
+            if (string.IsNullOrEmpty(year))
             {
                 year = "2018/2019";
             }
 
-            if (String.IsNullOrEmpty(language))
+            if (string.IsNullOrEmpty(language))
             {
                 language = IndovinaLaLinguaDalNome();
             }
 
-            if (String.IsNullOrEmpty(school))
+            if (string.IsNullOrEmpty(school))
                 school = IndovinaLaSchool();
 
-            if (String.IsNullOrEmpty(degree))
+            if (string.IsNullOrEmpty(degree))
                 degree = IndovinaIlDegree();
 
-            if (String.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(id))
                 id = CreaId();
         }
 
@@ -67,19 +64,16 @@ namespace JsonPolimi
 
         private string IndovinaLaLinguaDalNome(string default_language = "ITA")
         {
-            string c = classe.ToLower();
+            var c = classe.ToLower();
 
             if (c.Contains("and"))
                 return "ENG";
-            if (c.Contains("for"))
-                return "ENG";
-
-            return default_language;
+            return c.Contains("for") ? "ENG" : default_language;
         }
 
         internal string To_json()
         {
-            string json = "{";
+            var json = "{";
 
             json += "\"class\":\"";
             json += classe;
@@ -113,19 +107,18 @@ namespace JsonPolimi
             if (v == null)
                 return;
 
-            string v_upper = v.ToUpper();
+            var v_upper = v.ToUpper();
 
             //bisogna capire che tipo di informazione stiamo ricevendo
             if (v.StartsWith("https://") || v.StartsWith("http://"))
             {
                 AggiungiLink(v, ref g);
             }
-            else if (   v_upper == "LEONARDO" || v_upper == "MANTOVA" || v_upper == "BOVISA" || v_upper == "PIACENZA" || 
+            else if (v_upper == "LEONARDO" || v_upper == "MANTOVA" || v_upper == "BOVISA" || v_upper == "PIACENZA" ||
                         v_upper == "LECCO" || v_upper == "COMO" || v_upper == "CREMONA" || v_upper == "LEONARDO-CREMONA" ||
                         v_upper == "LEONARDO*")
             {
                 AggiungiSede(v, ref g);
-                    
             }
             else if (v_upper == "FACEBOOK" || v_upper == "TELEGRAM" || v_upper == "NON ANCORA CREATO" || v_upper == "CORSI" || v_upper == "LUOGO" || v_upper.StartsWith("LAUREE"))
             {
@@ -139,14 +132,14 @@ namespace JsonPolimi
             }
             else if (v.StartsWith("<text:a"))
             {
-                int n1 = v.IndexOf("xlink:href");
-                string s1 = v.Substring(n1 + 12);
-                string[] s2 = s1.Split('"');
+                var n1 = v.IndexOf("xlink:href");
+                var s1 = v.Substring(n1 + 12);
+                var s2 = s1.Split('"');
 
-                string[] s3 = s2[1].Split('>');
-                string[] s4 = s3[1].Split('<');
+                var s3 = s2[1].Split('>');
+                var s4 = s3[1].Split('<');
 
-                string nome = s4[0];
+                var nome = s4[0];
 
                 if (nome.StartsWith("http"))
                     AggiungiLink(s2[0], ref g);
@@ -156,23 +149,37 @@ namespace JsonPolimi
                     AggiungiLink(s2[0], ref g);
                 }
             }
-            else if (v_upper == "LT" || v_upper == "LM" || v_upper == "LU")
-            {
-                AggiungiTriennaleMagistrale(v_upper, ref g);
-            }
-            else if (   v_upper == "3I" || v_upper == "DES" || v_upper == "AUIC" || v_upper == "ICAT" ||
-                        v_upper == "3I+AUIC" || v_upper == "ICAT+3I" || v_upper == "DES+3I")
-            {
-                AggiungiScuola(v_upper, ref g);
-            }
-            else if (v_upper == "ITA" || v_upper == "ENG" || v_upper == "ITA-ENG")
-            {
-                AggiungiLingua(v_upper, ref g);
-            }
             else
             {
-                //altrimenti è il nome
-                AggiungiNome(v, ref g);
+                switch (v_upper)
+                {
+                    case "LT":
+                    case "LM":
+                    case "LU":
+                        AggiungiTriennaleMagistrale(v_upper, ref g);
+                        break;
+
+                    case "3I":
+                    case "DES":
+                    case "AUIC":
+                    case "ICAT":
+                    case "3I+AUIC":
+                    case "ICAT+3I":
+                    case "DES+3I":
+                        AggiungiScuola(v_upper, ref g);
+                        break;
+
+                    case "ITA":
+                    case "ENG":
+                    case "ITA-ENG":
+                        AggiungiLingua(v_upper, ref g);
+                        break;
+
+                    default:
+                        //altrimenti è il nome
+                        AggiungiNome(v, ref g);
+                        break;
+                }
             }
         }
 
@@ -201,7 +208,7 @@ namespace JsonPolimi
                 return;
             }
 
-            if (String.IsNullOrEmpty(g.gruppo_di_base.classe))
+            if (string.IsNullOrEmpty(g.gruppo_di_base.classe))
             {
                 g.gruppo_di_base.classe = v;
             }
@@ -221,13 +228,13 @@ namespace JsonPolimi
 
         private static void AggiungiLink(string v, ref InsiemeDiGruppi g)
         {
-            Gruppo g2 = new Gruppo();
+            var g2 = new Gruppo();
 
-            int n1 = v.IndexOf("://");
-            string s1 = v.Substring(n1 + 3);
+            var n1 = v.IndexOf("://");
+            var s1 = v.Substring(n1 + 3);
 
-            int n2 = s1.IndexOf("www.");
-            if (n2>=0 && n2<s1.Length)
+            var n2 = s1.IndexOf("www.");
+            if (n2 >= 0 && n2 < s1.Length)
             {
                 s1 = s1.Substring(4);
             }
@@ -236,44 +243,29 @@ namespace JsonPolimi
             {
                 g2.platform = "FB";
 
-                string[] s2 = s1.Split('/');
-                if (s2[1] == "groups")
-                {
-                    g2.id_link = s2[2];
-                }
-                else
-                {
-                    g2.id_link = s2[1];
-                }
+                var s2 = s1.Split('/');
+                g2.id_link = s2[1] == "groups" ? s2[2] : s2[1];
             }
             else if (s1[0] == 't') // telegram
             {
                 g2.platform = "TG";
 
-                string[] s2 = s1.Split('/');
-                if (s2[1] == "joinchat")
-                {
-                    g2.id_link = s2[2];
-                }
-                else
-                {
-                    g2.id_link = s2[1];
-                }
+                var s2 = s1.Split('/');
+                g2.id_link = s2[1] == "joinchat" ? s2[2] : s2[1];
             }
             else if (s1[0] == 'i') // instagram
             {
                 g2.platform = "IG";
 
-                string[] s2 = s1.Split('/');
+                var s2 = s1.Split('/');
 
                 g2.id_link = s2[1];
-                
             }
             else if (s1[0] == 'c') //whatsapp
             {
                 g2.platform = "WA";
 
-                string[] s2 = s1.Split('/');
+                var s2 = s1.Split('/');
 
                 g2.id_link = s2[1];
             }
