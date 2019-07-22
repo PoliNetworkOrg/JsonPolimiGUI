@@ -25,25 +25,25 @@ namespace JsonPolimi
         {
             Variabili.L = new ListaGruppo();
 
-            OpenFileDialog ofd = new OpenFileDialog();
-            var r_dialog = ofd.ShowDialog();
-            if (r_dialog!=DialogResult.OK)
+            var ofd = new OpenFileDialog();
+            var rDialog = ofd.ShowDialog();
+            if (rDialog != DialogResult.OK)
             {
                 return;
             }
 
-            string content = "";
+            var content = "";
             try
             {
                 content = File.ReadAllText(ofd.FileName);
             }
             catch (Exception e2)
             {
-                MessageBox.Show("Lettura fallita! \n\n"+e2.Message.ToString());
+                MessageBox.Show("Lettura fallita! \n\n" + e2.Message.ToString());
                 return;
             }
 
-            if (content.Length<1)
+            if (content.Length < 1)
             {
                 MessageBox.Show("Il file letto sembra vuoto!");
                 return;
@@ -51,8 +51,8 @@ namespace JsonPolimi
 
             var stuff = JObject.Parse(content);
 
-            var InfoData = stuff["info_data"];
-            var i = InfoData.Children();
+            var infoData = stuff["info_data"];
+            var i = infoData.Children();
 
             foreach (var i2 in i)
             {
@@ -60,8 +60,6 @@ namespace JsonPolimi
 
                 Aggiungi(i3);
             }
-
-
         }
 
         private static void Refresh_Tabella()
@@ -72,9 +70,9 @@ namespace JsonPolimi
                 return;
             }
 
-            string html = "<html><body><table>";
-            int n = Variabili.L.GetCount();
-            for (int i = 0; i < n; i++)
+            var html = "<html><body><table>";
+            var n = Variabili.L.GetCount();
+            for (var i = 0; i < n; i++)
             {
                 var elem = Variabili.L.GetElem(i);
 
@@ -129,7 +127,7 @@ namespace JsonPolimi
 
         private static void Aggiungi(JToken i)
         {
-            Gruppo G = new Gruppo
+            var G = new Gruppo
             {
                 classe = i["class"].ToString(),
                 degree = i["degree"].ToString()
@@ -151,7 +149,6 @@ namespace JsonPolimi
             G.office = i["office"].ToString();
             G.school = i["school"].ToString();
             G.id_link = i["id_link"].ToString();
-            
 
             try
             {
@@ -192,9 +189,9 @@ namespace JsonPolimi
 
             Aggiusta();
 
-            string json = "{\"info_data\":{";
-            int n = Variabili.L.GetCount();
-            for (int i=0; i< n; i++)
+            var json = "{\"info_data\":{";
+            var n = Variabili.L.GetCount();
+            for (var i = 0; i < n; i++)
             {
                 var elem = Variabili.L.GetElem(i);
 
@@ -204,7 +201,7 @@ namespace JsonPolimi
                 json += '"' + ":";
 
                 json += elem.To_json();
-                
+
                 if (i != n - 1)
                     json += ",";
             }
@@ -229,7 +226,7 @@ namespace JsonPolimi
         private void Aggiusta()
         {
             int n = Variabili.L.GetCount();
-            for (int i=0; i<n; i++)
+            for (int i = 0; i < n; i++)
             {
                 var elem = Variabili.L.GetElem(i);
                 if (String.IsNullOrEmpty(elem.id_link))
