@@ -27,7 +27,7 @@ namespace JsonPolimi
 
         internal void Add(Gruppo g)
         {
-            bool a = this.Contiene(g.id);
+            var a = this.Contiene(g.id);
             if (!a)
             {
                 L.Add(g);
