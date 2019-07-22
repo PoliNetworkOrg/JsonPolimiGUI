@@ -225,8 +225,8 @@ namespace JsonPolimi
 
         private void Aggiusta()
         {
-            int n = Variabili.L.GetCount();
-            for (int i = 0; i < n; i++)
+            var n = Variabili.L.GetCount();
+            for (var i = 0; i < n; i++)
             {
                 var elem = Variabili.L.GetElem(i);
                 if (String.IsNullOrEmpty(elem.id_link))
@@ -239,7 +239,7 @@ namespace JsonPolimi
             }
 
             n = Variabili.L.GetCount();
-            for (int i = 0; i < n; i++)
+            for (var i = 0; i < n; i++)
             {
                 var elem = Variabili.L.GetElem(i);
 
@@ -254,16 +254,16 @@ namespace JsonPolimi
         {
             if (s.Contains("<="))
             {
-                int n = s.IndexOf("<=");
-                string r = "";
+                var n = s.IndexOf("<=");
+                var r = "";
                 r += s.Substring(0, n);
                 r += s.Substring(n + 2);
                 return r;
             }
             else if (s.Contains("&lt;="))
             {
-                int n = s.IndexOf("&lt;=");
-                string r = "";
+                var n = s.IndexOf("&lt;=");
+                var r = "";
                 r += s.Substring(0, n);
                 r += s.Substring(n + 5);
                 return r;
@@ -276,7 +276,7 @@ namespace JsonPolimi
 
         private void Button4_Click(object sender, EventArgs e)
         {
-            Aggiungi_Form x = new Aggiungi_Form();
+            var x = new Aggiungi_Form();
             x.ShowDialog();
         }
 
@@ -315,7 +315,7 @@ namespace JsonPolimi
                 return;
             }
 
-            Gruppo nome_old = new Gruppo();
+            var nome_old = new Gruppo();
 
             foreach (var y in x.Tables)
             {
@@ -323,9 +323,7 @@ namespace JsonPolimi
                 {
                     //Console.WriteLine("----- NUOVA RIGA ------");
 
-                    InsiemeDiGruppi g = new InsiemeDiGruppi();
-                    g.gruppo_di_base.year = year;
-                    g.nome_old = nome_old;
+                    var g = new InsiemeDiGruppi { gruppo_di_base = { year = year }, nome_old = nome_old };
 
                     foreach (var y3 in y2.Cells)
                     {
@@ -347,37 +345,37 @@ namespace JsonPolimi
 
                     g.Aggiusta();
 
-                    foreach (Gruppo g3 in g.L)
+                    foreach (var g3 in g.L)
                     {
                         Variabili.L.Add(g3);
                     }
 
-                    if (!String.IsNullOrEmpty(g.nome_old.classe))
+                    if (!string.IsNullOrEmpty(g.nome_old.classe))
                     {
                         nome_old.classe = g.nome_old.classe;
                     }
 
-                    if (!String.IsNullOrEmpty(g.nome_old.language))
+                    if (!string.IsNullOrEmpty(g.nome_old.language))
                     {
                         nome_old.language = g.nome_old.language;
                     }
 
-                    if (!String.IsNullOrEmpty(g.nome_old.degree))
+                    if (!string.IsNullOrEmpty(g.nome_old.degree))
                     {
                         nome_old.degree = g.nome_old.degree;
                     }
 
-                    if (!String.IsNullOrEmpty(g.nome_old.school))
+                    if (!string.IsNullOrEmpty(g.nome_old.school))
                     {
                         nome_old.school = g.nome_old.school;
                     }
 
-                    if (!String.IsNullOrEmpty(g.nome_old.office))
+                    if (!string.IsNullOrEmpty(g.nome_old.office))
                     {
                         nome_old.office = g.nome_old.office;
                     }
 
-                    if (!String.IsNullOrEmpty(g.nome_old.year))
+                    if (!string.IsNullOrEmpty(g.nome_old.year))
                     {
                         nome_old.year = g.nome_old.year;
                     }
