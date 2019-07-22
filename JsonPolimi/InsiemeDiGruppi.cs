@@ -21,8 +21,7 @@ namespace JsonPolimi
 
         internal void Aggiusta()
         {
-
-            for (int i = 0; i < L.Count; i++)
+            for (var i = 0; i < L.Count; i++)
             {
                 L[i].classe = gruppo_di_base.classe;
                 L[i].degree = gruppo_di_base.degree;
@@ -32,24 +31,23 @@ namespace JsonPolimi
                 L[i].tipo = gruppo_di_base.tipo;
                 L[i].year = gruppo_di_base.year;
 
-                if (String.IsNullOrEmpty(L[i].classe))
+                if (string.IsNullOrEmpty(L[i].classe))
                     L[i].classe = nome_old.classe;
 
-                if (String.IsNullOrEmpty(L[i].language))
+                if (string.IsNullOrEmpty(L[i].language))
                     L[i].language = nome_old.language;
 
-                if (String.IsNullOrEmpty(L[i].degree))
+                if (string.IsNullOrEmpty(L[i].degree))
                     L[i].degree = nome_old.degree;
 
-                if (String.IsNullOrEmpty(L[i].school))
+                if (string.IsNullOrEmpty(L[i].school))
                     L[i].school = nome_old.school;
 
-                if (String.IsNullOrEmpty(L[i].office))
+                if (string.IsNullOrEmpty(L[i].office))
                     L[i].office = nome_old.office;
 
-                if (String.IsNullOrEmpty(L[i].year))
+                if (string.IsNullOrEmpty(L[i].year))
                     L[i].year = nome_old.year;
-
 
                 L[i].Aggiusta();
             }
