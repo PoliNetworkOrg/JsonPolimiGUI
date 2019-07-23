@@ -221,7 +221,17 @@ namespace JsonPolimi
 
             json += "]}";
 
-            File.WriteAllText("C:\\git\\polinetwork.github.io\\data\\search\\groups2.json", json);
+            Salva(json);
+        }
+
+        private static void Salva(string json)
+        {
+            var o = new SaveFileDialog();
+            var r = o.ShowDialog();
+            if (r != DialogResult.OK)
+                return;
+
+            File.WriteAllText(o.FileName, json);
         }
 
         private static void Aggiusta()
