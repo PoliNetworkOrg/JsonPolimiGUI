@@ -285,5 +285,10 @@ namespace JsonPolimi
 
             g.L.Add(g2);
         }
+
+        public override string ToString()
+        {
+            return this.To_json() + " " + base.ToString();
+        }
     }
 }

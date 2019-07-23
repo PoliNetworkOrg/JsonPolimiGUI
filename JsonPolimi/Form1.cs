@@ -286,7 +286,7 @@ namespace JsonPolimi
 
         private void Button4_Click(object sender, EventArgs e)
         {
-            var x = new AggiungiForm();
+            var x = new AggiungiForm(false);
             x.ShowDialog();
         }
 
@@ -429,6 +429,12 @@ namespace JsonPolimi
             {
                 Variabili.L = new ListaGruppo();
             }
+        }
+
+        private void Button7_Click(object sender, EventArgs e)
+        {
+            var x = new ListaGruppiModificaForm();
+            x.ShowDialog();
         }
     }
 }

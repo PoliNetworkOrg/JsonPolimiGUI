@@ -5,26 +5,28 @@ namespace JsonPolimi
 {
     public partial class AggiungiForm : Form
     {
-        public AggiungiForm()
+        private readonly bool edit;
+        private Gruppo g;
+
+        public AggiungiForm(bool edit, Gruppo g = null)
         {
+            this.edit = edit;
+            this.g = g;
+
             InitializeComponent();
         }
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            if (t_classe.Text.Length > 0 && t_degree.Text.Length > 0 && t_id.Text.Length > 0 &&
-                t_lang.Text.Length > 0 && t_office.Text.Length > 0 && t_platform.Text.Length > 0 &&
-                t_school.Text.Length > 0 && t_type.Text.Length > 0 && t_year.Text.Length > 0)
-            {
-                ;
-            }
-            else
+            if (t_classe.Text.Length <= 0 || t_degree.Text.Length <= 0 || t_id.Text.Length <= 0 ||
+                t_lang.Text.Length <= 0 || t_office.Text.Length <= 0 || t_platform.Text.Length <= 0 ||
+                t_school.Text.Length <= 0 || t_type.Text.Length <= 0 || t_year.Text.Length <= 0)
             {
                 MessageBox.Show("Non hai compilato qualche campo!");
                 return;
             }
 
-            var G = new Gruppo
+            g = new Gruppo
             {
                 Classe = t_classe.Text,
                 Degree = t_degree.Text,
@@ -40,13 +42,27 @@ namespace JsonPolimi
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
 
-            G.Aggiusta();
+            g.Aggiusta();
 
-            Variabili.L.Add(G);
+            if (edit == false) //new
+            {
+                Variabili.L.Add(g);
+            }
         }
 
         private void Aggiungi_Form_Load(object sender, EventArgs e)
         {
+            if (!edit || g == null) return;
+
+            t_classe.Text = g.Classe;
+            t_degree.Text = g.Degree;
+            t_id.Text = g.Id;
+            t_lang.Text = g.Language;
+            t_office.Text = g.Office;
+            t_platform.Text = g.Platform;
+            t_school.Text = g.School;
+            t_type.Text = g.Tipo;
+            t_year.Text = g.Year;
         }
     }
 }

@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace JsonPolimi
 {
-    public class ListaGruppo
+    public class ListaGruppo : IEnumerable
     {
         private readonly List<Gruppo> _l;
 
@@ -43,6 +44,11 @@ namespace JsonPolimi
         internal void SetElem(int i, Gruppo elem)
         {
             _l[i] = elem;
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return this._l.GetEnumerator();
         }
     }
 }
