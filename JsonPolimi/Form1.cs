@@ -215,7 +215,7 @@ namespace JsonPolimi
             File.WriteAllText("C:\\git\\polinetwork.github.io\\data\\search\\groups2.json", json);
         }
 
-        private void Aggiusta()
+        private static void Aggiusta()
         {
             var n = Variabili.L.GetCount();
             for (var i = 0; i < n; i++)

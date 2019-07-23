@@ -109,7 +109,7 @@ namespace JsonPolimi
             var vUpper = v.ToUpper();
 
             //bisogna capire che tipo di informazione stiamo ricevendo
-            if (v.StartsWith("https://") || v.StartsWith("http://"))
+            if (v.StartsWith("https://", StringComparison.Ordinal) || v.StartsWith("http://", StringComparison.Ordinal))
             {
                 AggiungiLink(v, ref g);
             }
@@ -119,7 +119,7 @@ namespace JsonPolimi
             {
                 AggiungiSede(v, ref g);
             }
-            else if (vUpper == "FACEBOOK" || vUpper == "TELEGRAM" || vUpper == "NON ANCORA CREATO" || vUpper == "CORSI" || vUpper == "LUOGO" || vUpper.StartsWith("LAUREE"))
+            else if (vUpper == "FACEBOOK" || vUpper == "TELEGRAM" || vUpper == "NON ANCORA CREATO" || vUpper == "CORSI" || vUpper == "LUOGO" || vUpper.StartsWith("LAUREE", StringComparison.Ordinal))
             {
                 //è una cella inutile
                 ;
@@ -129,7 +129,7 @@ namespace JsonPolimi
                 //è una cella inutile
                 ;
             }
-            else if (v.StartsWith("<text:a"))
+            else if (v.StartsWith("<text:a", StringComparison.Ordinal))
             {
                 var n1 = v.IndexOf("xlink:href", StringComparison.Ordinal);
                 var s1 = v.Substring(n1 + 12);
@@ -140,7 +140,7 @@ namespace JsonPolimi
 
                 var nome = s4[0];
 
-                if (nome.StartsWith("http"))
+                if (nome.StartsWith("http", StringComparison.Ordinal))
                     AggiungiLink(s2[0], ref g);
                 else
                 {
@@ -150,35 +150,40 @@ namespace JsonPolimi
             }
             else
             {
-                switch (vUpper)
-                {
-                    case "LT":
-                    case "LM":
-                    case "LU":
-                        AggiungiTriennaleMagistrale(vUpper, ref g);
-                        break;
+                AggiungiAltro(ref vUpper, ref g, ref v);
+            }
+        }
 
-                    case "3I":
-                    case "DES":
-                    case "AUIC":
-                    case "ICAT":
-                    case "3I+AUIC":
-                    case "ICAT+3I":
-                    case "DES+3I":
-                        AggiungiScuola(vUpper, ref g);
-                        break;
+        private static void AggiungiAltro(ref string vUpper, ref InsiemeDiGruppi g, ref string v)
+        {
+            switch (vUpper)
+            {
+                case "LT":
+                case "LM":
+                case "LU":
+                    AggiungiTriennaleMagistrale(vUpper, ref g);
+                    break;
 
-                    case "ITA":
-                    case "ENG":
-                    case "ITA-ENG":
-                        AggiungiLingua(vUpper, ref g);
-                        break;
+                case "3I":
+                case "DES":
+                case "AUIC":
+                case "ICAT":
+                case "3I+AUIC":
+                case "ICAT+3I":
+                case "DES+3I":
+                    AggiungiScuola(vUpper, ref g);
+                    break;
 
-                    default:
-                        //altrimenti è il nome
-                        AggiungiNome(v, ref g);
-                        break;
-                }
+                case "ITA":
+                case "ENG":
+                case "ITA-ENG":
+                    AggiungiLingua(vUpper, ref g);
+                    break;
+
+                default:
+                    //altrimenti è il nome
+                    AggiungiNome(v, ref g);
+                    break;
             }
         }
 
