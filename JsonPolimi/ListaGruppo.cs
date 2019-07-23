@@ -4,7 +4,7 @@ namespace JsonPolimi
 {
     public class ListaGruppo
     {
-        private readonly List<Gruppo> _l = null;
+        private readonly List<Gruppo> _l;
 
         public ListaGruppo()
         {
@@ -23,20 +23,15 @@ namespace JsonPolimi
 
         internal void Add(Gruppo g)
         {
-            var a = this.Contiene(g.Id);
-            if (!a)
-            {
-                _l.Add(g);
-            }
+            var a = Contiene(g.Id);
+            if (!a) _l.Add(g);
         }
 
         private bool Contiene(string id)
         {
             foreach (var i in _l)
-            {
                 if (i.Id == id)
                     return true;
-            }
             return false;
         }
 

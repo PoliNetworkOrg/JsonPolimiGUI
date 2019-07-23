@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Independentsoft.Office.Odf;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
-using Independentsoft.Office.Odf;
-using Newtonsoft.Json.Linq;
 
 namespace JsonPolimi
 {
@@ -20,10 +20,7 @@ namespace JsonPolimi
 
             var ofd = new OpenFileDialog();
             var rDialog = ofd.ShowDialog();
-            if (rDialog != DialogResult.OK)
-            {
-                return;
-            }
+            if (rDialog != DialogResult.OK) return;
 
             string content;
             try
@@ -32,7 +29,7 @@ namespace JsonPolimi
             }
             catch (Exception e2)
             {
-                MessageBox.Show("Lettura fallita! \n\n" + e2.Message.ToString());
+                MessageBox.Show("Lettura fallita! \n\n" + e2.Message);
                 return;
             }
 
@@ -113,6 +110,7 @@ namespace JsonPolimi
 
                 html += "</tr>";
             }
+
             html += "</table></body></html>";
             File.WriteAllText("temp.html", html);
             Process.Start("temp.html");
@@ -197,6 +195,7 @@ namespace JsonPolimi
                 if (i != n - 1)
                     json += ",";
             }
+
             json += "},";
             json += '\n';
             json += "\"index_data\":[";
@@ -210,6 +209,7 @@ namespace JsonPolimi
                 if (i != n - 1)
                     json += ",";
             }
+
             json += "]}";
 
             File.WriteAllText("C:\\git\\polinetwork.github.io\\data\\search\\groups2.json", json);
@@ -250,7 +250,8 @@ namespace JsonPolimi
                 r += s.Substring(n + 2);
                 return r;
             }
-            else if (s.Contains("&lt;="))
+
+            if (s.Contains("&lt;="))
             {
                 var n = s.IndexOf("&lt;=", StringComparison.Ordinal);
                 var r = "";
@@ -258,10 +259,8 @@ namespace JsonPolimi
                 r += s.Substring(n + 5);
                 return r;
             }
-            else
-            {
-                return s;
-            }
+
+            return s;
         }
 
         private void Button4_Click(object sender, EventArgs e)
@@ -284,10 +283,10 @@ namespace JsonPolimi
 
         private static void Apri_ODS(string file, string year)
         {
-            Independentsoft.Office.Odf.Spreadsheet x;
+            Spreadsheet x;
             try
             {
-                x = new Independentsoft.Office.Odf.Spreadsheet();
+                x = new Spreadsheet();
             }
             catch (Exception e)
             {
@@ -308,7 +307,6 @@ namespace JsonPolimi
             var nomeOld = new Gruppo();
 
             foreach (var y in x.Tables)
-            {
                 foreach (var y2 in y.Rows)
                 {
                     //Console.WriteLine("----- NUOVA RIGA ------");
@@ -316,61 +314,29 @@ namespace JsonPolimi
                     var g = new InsiemeDiGruppi { GruppoDiBase = { Year = year }, NomeOld = nomeOld };
 
                     foreach (var y3 in y2.Cells)
-                    {
                         foreach (var y4 in y3.Content)
-                        {
                             if (y4 is Paragraph y5)
-                            {
                                 foreach (var y6 in y5.Content)
-                                {
                                     Gruppo.AggiungiInformazioneAmbigua(y6.ToString(), ref g);
-                                }
-                            }
                             else
-                            {
                                 Console.WriteLine(y4.ToString());
-                            }
-                        }
-                    }
 
                     g.Aggiusta();
 
-                    foreach (var g3 in g.L)
-                    {
-                        Variabili.L.Add(g3);
-                    }
+                    foreach (var g3 in g.L) Variabili.L.Add(g3);
 
-                    if (!string.IsNullOrEmpty(g.NomeOld.Classe))
-                    {
-                        nomeOld.Classe = g.NomeOld.Classe;
-                    }
+                    if (!string.IsNullOrEmpty(g.NomeOld.Classe)) nomeOld.Classe = g.NomeOld.Classe;
 
-                    if (!string.IsNullOrEmpty(g.NomeOld.Language))
-                    {
-                        nomeOld.Language = g.NomeOld.Language;
-                    }
+                    if (!string.IsNullOrEmpty(g.NomeOld.Language)) nomeOld.Language = g.NomeOld.Language;
 
-                    if (!string.IsNullOrEmpty(g.NomeOld.Degree))
-                    {
-                        nomeOld.Degree = g.NomeOld.Degree;
-                    }
+                    if (!string.IsNullOrEmpty(g.NomeOld.Degree)) nomeOld.Degree = g.NomeOld.Degree;
 
-                    if (!string.IsNullOrEmpty(g.NomeOld.School))
-                    {
-                        nomeOld.School = g.NomeOld.School;
-                    }
+                    if (!string.IsNullOrEmpty(g.NomeOld.School)) nomeOld.School = g.NomeOld.School;
 
-                    if (!string.IsNullOrEmpty(g.NomeOld.Office))
-                    {
-                        nomeOld.Office = g.NomeOld.Office;
-                    }
+                    if (!string.IsNullOrEmpty(g.NomeOld.Office)) nomeOld.Office = g.NomeOld.Office;
 
-                    if (!string.IsNullOrEmpty(g.NomeOld.Year))
-                    {
-                        nomeOld.Year = g.NomeOld.Year;
-                    }
+                    if (!string.IsNullOrEmpty(g.NomeOld.Year)) nomeOld.Year = g.NomeOld.Year;
                 }
-            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
