@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
 using System.IO;
+using Microsoft.VisualBasic;
 using System.Windows.Forms;
 
 namespace JsonPolimi
@@ -16,7 +17,8 @@ namespace JsonPolimi
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            Variabili.L = new ListaGruppo();
+            if (Variabili.L == null)
+                Variabili.L = new ListaGruppo();
 
             var ofd = new OpenFileDialog();
             var rDialog = ofd.ShowDialog();
@@ -274,11 +276,71 @@ namespace JsonPolimi
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
 
+            var o = new OpenFileDialog();
+            var r = o.ShowDialog();
+            if (r != DialogResult.OK)
+            {
+                return;
+            }
+
+            var (item1, item2) = ShowInputDialog("Anno");
+            if (item1 != DialogResult.OK)
+            {
+                return;
+            }
+
+            Apri_ODS(o.FileName, item2);
+
+            /*
             Apri_ODS("C:\\Users\\Arme\\Downloads\\pm3.ods", "2017/2018");
             Apri_ODS("C:\\Users\\Arme\\Downloads\\pm4.ods", "2018/2019");
             Apri_ODS("C:\\Users\\Arme\\Downloads\\pm5.ods", "2019/2020");
+            */
+        }
 
-            ;
+        private static Tuple<DialogResult, string> ShowInputDialog(string title)
+        {
+            var size = new System.Drawing.Size(200, 70);
+            var inputBox = new Form
+            {
+                FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog,
+                ClientSize = size,
+                Text = title
+            };
+
+            var textBox = new TextBox
+            {
+                Size = new System.Drawing.Size(size.Width - 10, 23),
+                Location = new System.Drawing.Point(5, 5),
+                Text = ""
+            };
+            inputBox.Controls.Add(textBox);
+
+            var okButton = new Button
+            {
+                DialogResult = System.Windows.Forms.DialogResult.OK,
+                Name = "okButton",
+                Size = new System.Drawing.Size(75, 23),
+                Text = "&OK",
+                Location = new System.Drawing.Point(size.Width - 80 - 80, 39)
+            };
+            inputBox.Controls.Add(okButton);
+
+            var cancelButton = new Button
+            {
+                DialogResult = System.Windows.Forms.DialogResult.Cancel,
+                Name = "cancelButton",
+                Size = new System.Drawing.Size(75, 23),
+                Text = "&Cancel",
+                Location = new System.Drawing.Point(size.Width - 80, 39)
+            };
+            inputBox.Controls.Add(cancelButton);
+
+            inputBox.AcceptButton = okButton;
+            inputBox.CancelButton = cancelButton;
+
+            var result = inputBox.ShowDialog();
+            return new Tuple<DialogResult, string>(result, textBox.Text);
         }
 
         private static void Apri_ODS(string file, string year)
@@ -317,7 +379,7 @@ namespace JsonPolimi
                         foreach (var y4 in y3.Content)
                             if (y4 is Paragraph y5)
                                 foreach (var y6 in y5.Content)
-                                    Gruppo.AggiungiInformazioneAmbigua(y6.ToString(), ref g, TODO);
+                                    Gruppo.AggiungiInformazioneAmbigua(y6.ToString(), ref g);
                             else
                                 Console.WriteLine(y4.ToString());
 
@@ -339,8 +401,13 @@ namespace JsonPolimi
                 }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void Button6_Click(object sender, EventArgs e)
         {
+            var dialogResult = MessageBox.Show("Vuoi davvero eliminare la lista in RAM?", "Sicuro?", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                Variabili.L = new ListaGruppo();
+            }
         }
     }
 }
