@@ -64,6 +64,13 @@ namespace JsonPolimi
 
             var html = "<html><body><table>";
             var n = Variabili.L.GetCount();
+
+            if (n <= 0)
+            {
+                MessageBox.Show("Lista vuota!");
+                return;
+            }
+
             for (var i = 0; i < n; i++)
             {
                 var elem = Variabili.L.GetElem(i);
@@ -219,6 +226,9 @@ namespace JsonPolimi
 
         private static void Aggiusta()
         {
+            if (Variabili.L == null)
+                Variabili.L = new ListaGruppo();
+
             var n = Variabili.L.GetCount();
             for (var i = 0; i < n; i++)
             {
@@ -305,7 +315,9 @@ namespace JsonPolimi
             {
                 FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog,
                 ClientSize = size,
-                Text = title
+                Text = title,
+                MaximizeBox = false,
+                StartPosition = FormStartPosition.CenterScreen
             };
 
             var textBox = new TextBox
