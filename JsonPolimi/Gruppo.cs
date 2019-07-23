@@ -40,8 +40,23 @@ namespace JsonPolimi
             if (string.IsNullOrEmpty(Degree))
                 Degree = IndovinaIlDegree();
 
-            if (string.IsNullOrEmpty(Id))
-                Id = CreaId();
+            if (string.IsNullOrEmpty(IdLink))
+                IdLink = CreaIdLink();
+
+            Id = CreaId();
+        }
+
+        private string CreaIdLink()
+        {
+            try
+            {
+                var r = this.Id.Split('/');
+                return r[r.Length - 1];
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private string CreaId()

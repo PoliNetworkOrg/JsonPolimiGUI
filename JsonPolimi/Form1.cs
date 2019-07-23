@@ -433,6 +433,17 @@ namespace JsonPolimi
 
         private void Button7_Click(object sender, EventArgs e)
         {
+            if (Variabili.L == null)
+            {
+                Variabili.L = new ListaGruppo();
+            }
+
+            if (Variabili.L.GetCount() <= 0)
+            {
+                MessageBox.Show("Lista vuota!");
+                return;
+            }
+
             var x = new ListaGruppiModificaForm();
             x.ShowDialog();
         }

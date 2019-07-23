@@ -6,12 +6,12 @@ namespace JsonPolimi
     public partial class AggiungiForm : Form
     {
         private readonly bool edit;
-        private Gruppo g;
+        public static Gruppo g;
 
-        public AggiungiForm(bool edit, Gruppo g = null)
+        public AggiungiForm(bool edit, Gruppo g2 = null)
         {
             this.edit = edit;
-            this.g = g;
+            g = g2;
 
             InitializeComponent();
         }
@@ -36,7 +36,8 @@ namespace JsonPolimi
                 Platform = t_platform.Text,
                 School = t_school.Text,
                 Tipo = t_type.Text,
-                Year = t_year.Text
+                Year = t_year.Text,
+                IdLink = t_idlink.Text
             };
 
             if (Variabili.L == null)
@@ -47,6 +48,10 @@ namespace JsonPolimi
             if (edit == false) //new
             {
                 Variabili.L.Add(g);
+            }
+            else
+            {
+                this.Close();
             }
         }
 
@@ -63,6 +68,9 @@ namespace JsonPolimi
             t_school.Text = g.School;
             t_type.Text = g.Tipo;
             t_year.Text = g.Year;
+            t_idlink.Text = g.IdLink;
+
+            t_id.Enabled = false;
         }
     }
 }

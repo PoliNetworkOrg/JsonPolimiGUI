@@ -30,15 +30,18 @@ namespace JsonPolimi
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            if (listBox1.SelectedIndex < 0 || listBox1.SelectedIndex >= listBox1.Items.Count)
+            int i = listBox1.SelectedIndex;
+            if (i < 0 || i >= listBox1.Items.Count)
             {
                 MessageBox.Show("Devi selezionare un gruppo!");
                 return;
             }
 
-            var g = (Gruppo)listBox1.Items[listBox1.SelectedIndex];
+            var g = (Gruppo)listBox1.Items[i];
+            g.Aggiusta();
             var x = new AggiungiForm(true, g);
             x.ShowDialog();
+            listBox1.Items[i] = AggiungiForm.g;
         }
     }
 }

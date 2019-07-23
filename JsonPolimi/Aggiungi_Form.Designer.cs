@@ -57,7 +57,7 @@
             this.t_year = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.t_idlink = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -306,12 +306,12 @@
             this.label19.TabIndex = 30;
             this.label19.Text = "243535897435";
             // 
-            // textBox1
+            // t_idlink
             // 
-            this.textBox1.Location = new System.Drawing.Point(82, 97);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(318, 20);
-            this.textBox1.TabIndex = 29;
+            this.t_idlink.Location = new System.Drawing.Point(82, 97);
+            this.t_idlink.Name = "t_idlink";
+            this.t_idlink.Size = new System.Drawing.Size(318, 20);
+            this.t_idlink.TabIndex = 29;
             // 
             // label20
             // 
@@ -322,13 +322,13 @@
             this.label20.TabIndex = 28;
             this.label20.Text = "ID_LINK";
             // 
-            // Aggiungi_Form
+            // AggiungiForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(577, 354);
             this.Controls.Add(this.label19);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.t_idlink);
             this.Controls.Add(this.label20);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.t_year);
@@ -400,7 +400,7 @@
         private System.Windows.Forms.TextBox t_year;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox t_idlink;
         private System.Windows.Forms.Label label20;
     }
 }
