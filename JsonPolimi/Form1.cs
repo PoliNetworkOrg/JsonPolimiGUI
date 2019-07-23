@@ -25,7 +25,7 @@ namespace JsonPolimi
                 return;
             }
 
-            var content = "";
+            string content;
             try
             {
                 content = File.ReadAllText(ofd.FileName);
@@ -72,43 +72,43 @@ namespace JsonPolimi
                 html += "<tr>";
 
                 html += "<td>";
-                html += elem.id;
+                html += elem.Id;
                 html += "</td>";
 
                 html += "<td>";
-                html += elem.platform;
+                html += elem.Platform;
                 html += "</td>";
 
                 html += "<td>";
-                html += elem.classe;
+                html += elem.Classe;
                 html += "</td>";
 
                 html += "<td>";
-                html += elem.degree;
+                html += elem.Degree;
                 html += "</td>";
 
                 html += "<td>";
-                html += elem.language;
+                html += elem.Language;
                 html += "</td>";
 
                 html += "<td>";
-                html += elem.office;
+                html += elem.Office;
                 html += "</td>";
 
                 html += "<td>";
-                html += elem.school;
+                html += elem.School;
                 html += "</td>";
 
                 html += "<td>";
-                html += elem.tipo;
+                html += elem.Tipo;
                 html += "</td>";
 
                 html += "<td>";
-                html += elem.year;
+                html += elem.Year;
                 html += "</td>";
 
                 html += "<td>";
-                html += elem.id_link;
+                html += elem.IdLink;
                 html += "</td>";
 
                 html += "</tr>";
@@ -120,50 +120,49 @@ namespace JsonPolimi
 
         private static void Aggiungi(JToken i)
         {
-            var G = new Gruppo
+            var g = new Gruppo
             {
-                classe = i["class"].ToString(),
-                degree = i["degree"].ToString()
+                Classe = i["class"].ToString(),
+                Degree = i["degree"].ToString()
             };
-
             try
             {
-                G.platform = i["group_type"].ToString();
+                g.Platform = i["group_type"].ToString();
             }
 #pragma warning disable CS0168 // La variabile è dichiarata, ma non viene mai usata
-            catch (Exception e)
+            catch (Exception)
 #pragma warning restore CS0168 // La variabile è dichiarata, ma non viene mai usata
             {
-                G.platform = i["platform"].ToString();
+                g.Platform = i["platform"].ToString();
             }
 
-            G.id = i["id"].ToString();
-            G.language = i["language"].ToString();
-            G.office = i["office"].ToString();
-            G.school = i["school"].ToString();
-            G.id_link = i["id_link"].ToString();
-
-            try
-            {
-                G.tipo = i["type"].ToString();
-            }
-            catch
-            {
-                G.tipo = null;
-            }
+            g.Id = i["id"].ToString();
+            g.Language = i["language"].ToString();
+            g.Office = i["office"].ToString();
+            g.School = i["school"].ToString();
+            g.IdLink = i["id_link"].ToString();
 
             try
             {
-                G.year = i["year"].ToString();
+                g.Tipo = i["type"].ToString();
             }
             catch
             {
-                G.year = null;
+                g.Tipo = null;
             }
 
-            G.Aggiusta();
+            try
+            {
+                g.Year = i["year"].ToString();
+            }
+            catch
+            {
+                g.Year = null;
+            }
 
-            Variabili.L.Add(G);
+            g.Aggiusta();
+
+            Variabili.L.Add(g);
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -190,7 +189,7 @@ namespace JsonPolimi
 
                 json += '\n';
                 json += '"';
-                json += elem.id;
+                json += elem.Id;
                 json += '"' + ":";
 
                 json += elem.To_json();
@@ -222,7 +221,7 @@ namespace JsonPolimi
             for (var i = 0; i < n; i++)
             {
                 var elem = Variabili.L.GetElem(i);
-                if (!string.IsNullOrEmpty(elem.id_link)) continue;
+                if (!string.IsNullOrEmpty(elem.IdLink)) continue;
                 Variabili.L.Remove(i);
 
                 i--;
@@ -234,8 +233,8 @@ namespace JsonPolimi
             {
                 var elem = Variabili.L.GetElem(i);
 
-                var nome = AggiustaNome(elem.classe);
-                elem.classe = nome;
+                var nome = AggiustaNome(elem.Classe);
+                elem.Classe = nome;
 
                 Variabili.L.SetElem(i, elem);
             }
@@ -245,7 +244,7 @@ namespace JsonPolimi
         {
             if (s.Contains("<="))
             {
-                var n = s.IndexOf("<=");
+                var n = s.IndexOf("<=", StringComparison.Ordinal);
                 var r = "";
                 r += s.Substring(0, n);
                 r += s.Substring(n + 2);
@@ -253,7 +252,7 @@ namespace JsonPolimi
             }
             else if (s.Contains("&lt;="))
             {
-                var n = s.IndexOf("&lt;=");
+                var n = s.IndexOf("&lt;=", StringComparison.Ordinal);
                 var r = "";
                 r += s.Substring(0, n);
                 r += s.Substring(n + 5);
@@ -267,7 +266,7 @@ namespace JsonPolimi
 
         private void Button4_Click(object sender, EventArgs e)
         {
-            var x = new Aggiungi_Form();
+            var x = new AggiungiForm();
             x.ShowDialog();
         }
 
@@ -285,7 +284,7 @@ namespace JsonPolimi
 
         private static void Apri_ODS(string file, string year)
         {
-            Independentsoft.Office.Odf.Spreadsheet x = null;
+            Independentsoft.Office.Odf.Spreadsheet x;
             try
             {
                 x = new Independentsoft.Office.Odf.Spreadsheet();
@@ -306,7 +305,7 @@ namespace JsonPolimi
                 return;
             }
 
-            var nome_old = new Gruppo();
+            var nomeOld = new Gruppo();
 
             foreach (var y in x.Tables)
             {
@@ -314,7 +313,7 @@ namespace JsonPolimi
                 {
                     //Console.WriteLine("----- NUOVA RIGA ------");
 
-                    var g = new InsiemeDiGruppi { gruppo_di_base = { year = year }, nome_old = nome_old };
+                    var g = new InsiemeDiGruppi { GruppoDiBase = { Year = year }, NomeOld = nomeOld };
 
                     foreach (var y3 in y2.Cells)
                     {
@@ -341,34 +340,34 @@ namespace JsonPolimi
                         Variabili.L.Add(g3);
                     }
 
-                    if (!string.IsNullOrEmpty(g.nome_old.classe))
+                    if (!string.IsNullOrEmpty(g.NomeOld.Classe))
                     {
-                        nome_old.classe = g.nome_old.classe;
+                        nomeOld.Classe = g.NomeOld.Classe;
                     }
 
-                    if (!string.IsNullOrEmpty(g.nome_old.language))
+                    if (!string.IsNullOrEmpty(g.NomeOld.Language))
                     {
-                        nome_old.language = g.nome_old.language;
+                        nomeOld.Language = g.NomeOld.Language;
                     }
 
-                    if (!string.IsNullOrEmpty(g.nome_old.degree))
+                    if (!string.IsNullOrEmpty(g.NomeOld.Degree))
                     {
-                        nome_old.degree = g.nome_old.degree;
+                        nomeOld.Degree = g.NomeOld.Degree;
                     }
 
-                    if (!string.IsNullOrEmpty(g.nome_old.school))
+                    if (!string.IsNullOrEmpty(g.NomeOld.School))
                     {
-                        nome_old.school = g.nome_old.school;
+                        nomeOld.School = g.NomeOld.School;
                     }
 
-                    if (!string.IsNullOrEmpty(g.nome_old.office))
+                    if (!string.IsNullOrEmpty(g.NomeOld.Office))
                     {
-                        nome_old.office = g.nome_old.office;
+                        nomeOld.Office = g.NomeOld.Office;
                     }
 
-                    if (!string.IsNullOrEmpty(g.nome_old.year))
+                    if (!string.IsNullOrEmpty(g.NomeOld.Year))
                     {
-                        nome_old.year = g.nome_old.year;
+                        nomeOld.Year = g.NomeOld.Year;
                     }
                 }
             }

@@ -3,9 +3,9 @@ using System.Windows.Forms;
 
 namespace JsonPolimi
 {
-    public partial class Aggiungi_Form : Form
+    public partial class AggiungiForm : Form
     {
-        public Aggiungi_Form()
+        public AggiungiForm()
         {
             InitializeComponent();
         }
@@ -26,15 +26,15 @@ namespace JsonPolimi
 
             var G = new Gruppo
             {
-                classe = t_classe.Text,
-                degree = t_degree.Text,
-                id = t_id.Text,
-                language = t_lang.Text,
-                office = t_office.Text,
-                platform = t_platform.Text,
-                school = t_school.Text,
-                tipo = t_type.Text,
-                year = t_year.Text
+                Classe = t_classe.Text,
+                Degree = t_degree.Text,
+                Id = t_id.Text,
+                Language = t_lang.Text,
+                Office = t_office.Text,
+                Platform = t_platform.Text,
+                School = t_school.Text,
+                Tipo = t_type.Text,
+                Year = t_year.Text
             };
 
             if (Variabili.L == null)

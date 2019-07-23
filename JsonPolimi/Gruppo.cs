@@ -1,59 +1,61 @@
-﻿namespace JsonPolimi
+﻿using System;
+
+namespace JsonPolimi
 {
     public class Gruppo
     {
-        public string classe;
-        public string office;   // esempio: LEONARDO
-        public string id_link;  // esempio: 21432583243205
-        public string id;       // esempio: FB/2018/2019/LEONARDO/21432583243205
-        public string degree;
-        public string school;
-        public string language;
-        public string platform; // esempio: FB
-        public string tipo;
-        public string year;     // esempio: 2018/2019
+        public string Classe;
+        public string Office;   // esempio: LEONARDO
+        public string IdLink;  // esempio: 21432583243205
+        public string Id;       // esempio: FB/2018/2019/LEONARDO/21432583243205
+        public string Degree;
+        public string School;
+        public string Language;
+        public string Platform; // esempio: FB
+        public string Tipo;
+        public string Year;     // esempio: 2018/2019
 
         internal void Aggiusta()
         {
-            classe = string.IsNullOrEmpty(classe) ? "" : classe.Replace('\n', ' ');
+            Classe = string.IsNullOrEmpty(Classe) ? "" : Classe.Replace('\n', ' ');
 
-            if (string.IsNullOrEmpty(tipo))
+            if (string.IsNullOrEmpty(Tipo))
             {
-                tipo = "S";
+                Tipo = "S";
             }
 
-            if (string.IsNullOrEmpty(year))
+            if (string.IsNullOrEmpty(Year))
             {
-                year = "2018/2019";
+                Year = "2018/2019";
             }
 
-            if (string.IsNullOrEmpty(language))
+            if (string.IsNullOrEmpty(Language))
             {
-                language = IndovinaLaLinguaDalNome();
+                Language = IndovinaLaLinguaDalNome();
             }
 
-            if (string.IsNullOrEmpty(school))
-                school = IndovinaLaSchool();
+            if (string.IsNullOrEmpty(School))
+                School = IndovinaLaSchool();
 
-            if (string.IsNullOrEmpty(degree))
-                degree = IndovinaIlDegree();
+            if (string.IsNullOrEmpty(Degree))
+                Degree = IndovinaIlDegree();
 
-            if (string.IsNullOrEmpty(id))
-                id = CreaId();
+            if (string.IsNullOrEmpty(Id))
+                Id = CreaId();
         }
 
         private string CreaId()
         {
-            return platform + "/" + year + "/" + office + "/" + id_link;
+            return Platform + "/" + Year + "/" + Office + "/" + IdLink;
         }
 
-        private string IndovinaIlDegree()
+        private static string IndovinaIlDegree()
         {
             //throw new NotImplementedException();
             return null;
         }
 
-        private string IndovinaLaSchool()
+        private static string IndovinaLaSchool()
         {
             //throw new NotImplementedException();
             return null;
@@ -61,7 +63,7 @@
 
         private string IndovinaLaLinguaDalNome(string default_language = "ITA")
         {
-            var c = classe.ToLower();
+            var c = Classe.ToLower();
 
             if (c.Contains("and"))
                 return "ENG";
@@ -73,25 +75,25 @@
             var json = "{";
 
             json += "\"class\":\"";
-            json += classe;
+            json += Classe;
             json += "\",\"office\":\"";
-            json += office;
+            json += Office;
             json += "\",\"id\":\"";
-            json += id;
+            json += Id;
             json += "\",\"degree\":\"";
-            json += degree;
+            json += Degree;
             json += "\",\"school\":\"";
-            json += school;
+            json += School;
             json += "\",\"id_link\":\"";
-            json += id_link;
+            json += IdLink;
             json += "\",\"language\":\"";
-            json += language;
+            json += Language;
             json += "\",\"type\":\"";
-            json += tipo;
+            json += Tipo;
             json += "\",\"year\":\"";
-            json += year;
+            json += Year;
             json += "\",\"platform\":\"";
-            json += platform;
+            json += Platform;
             json += "\"";
 
             json += "}";
@@ -129,7 +131,7 @@
             }
             else if (v.StartsWith("<text:a"))
             {
-                var n1 = v.IndexOf("xlink:href");
+                var n1 = v.IndexOf("xlink:href", StringComparison.Ordinal);
                 var s1 = v.Substring(n1 + 12);
                 var s2 = s1.Split('"');
 
@@ -182,20 +184,20 @@
 
         private static void AggiungiLingua(string v_upper, ref InsiemeDiGruppi g)
         {
-            g.gruppo_di_base.language = v_upper;
-            g.nome_old.language = v_upper;
+            g.GruppoDiBase.Language = v_upper;
+            g.NomeOld.Language = v_upper;
         }
 
         private static void AggiungiScuola(string v_upper, ref InsiemeDiGruppi g)
         {
-            g.gruppo_di_base.school = v_upper;
-            g.nome_old.school = v_upper;
+            g.GruppoDiBase.School = v_upper;
+            g.NomeOld.School = v_upper;
         }
 
         private static void AggiungiTriennaleMagistrale(string v_upper, ref InsiemeDiGruppi g)
         {
-            g.gruppo_di_base.degree = v_upper;
-            g.nome_old.degree = v_upper;
+            g.GruppoDiBase.Degree = v_upper;
+            g.NomeOld.Degree = v_upper;
         }
 
         private static void AggiungiNome(string v, ref InsiemeDiGruppi g)
@@ -205,32 +207,32 @@
                 return;
             }
 
-            if (string.IsNullOrEmpty(g.gruppo_di_base.classe))
+            if (string.IsNullOrEmpty(g.GruppoDiBase.Classe))
             {
-                g.gruppo_di_base.classe = v;
+                g.GruppoDiBase.Classe = v;
             }
             else
             {
-                g.gruppo_di_base.classe += " ";
-                g.gruppo_di_base.classe += v;
+                g.GruppoDiBase.Classe += " ";
+                g.GruppoDiBase.Classe += v;
             }
-            g.nome_old.classe = g.gruppo_di_base.classe;
+            g.NomeOld.Classe = g.GruppoDiBase.Classe;
         }
 
         private static void AggiungiSede(string v, ref InsiemeDiGruppi g)
         {
-            g.gruppo_di_base.office = v;
-            g.nome_old.office = v;
+            g.GruppoDiBase.Office = v;
+            g.NomeOld.Office = v;
         }
 
         private static void AggiungiLink(string v, ref InsiemeDiGruppi g)
         {
             var g2 = new Gruppo();
 
-            var n1 = v.IndexOf("://");
+            var n1 = v.IndexOf("://", StringComparison.Ordinal);
             var s1 = v.Substring(n1 + 3);
 
-            var n2 = s1.IndexOf("www.");
+            var n2 = s1.IndexOf("www.", StringComparison.Ordinal);
             if (n2 >= 0 && n2 < s1.Length)
             {
                 s1 = s1.Substring(4);
@@ -238,33 +240,33 @@
 
             if (s1[0] == 'f') // facebook
             {
-                g2.platform = "FB";
+                g2.Platform = "FB";
 
                 var s2 = s1.Split('/');
-                g2.id_link = s2[1] == "groups" ? s2[2] : s2[1];
+                g2.IdLink = s2[1] == "groups" ? s2[2] : s2[1];
             }
             else if (s1[0] == 't') // telegram
             {
-                g2.platform = "TG";
+                g2.Platform = "TG";
 
                 var s2 = s1.Split('/');
-                g2.id_link = s2[1] == "joinchat" ? s2[2] : s2[1];
+                g2.IdLink = s2[1] == "joinchat" ? s2[2] : s2[1];
             }
             else if (s1[0] == 'i') // instagram
             {
-                g2.platform = "IG";
+                g2.Platform = "IG";
 
                 var s2 = s1.Split('/');
 
-                g2.id_link = s2[1];
+                g2.IdLink = s2[1];
             }
             else if (s1[0] == 'c') //whatsapp
             {
-                g2.platform = "WA";
+                g2.Platform = "WA";
 
                 var s2 = s1.Split('/');
 
-                g2.id_link = s2[1];
+                g2.IdLink = s2[1];
             }
             else
             {

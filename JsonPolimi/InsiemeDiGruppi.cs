@@ -4,46 +4,46 @@ namespace JsonPolimi
 {
     public class InsiemeDiGruppi
     {
-        public Gruppo gruppo_di_base;
+        public Gruppo GruppoDiBase;
         public List<Gruppo> L;
-        public Gruppo nome_old;
+        public Gruppo NomeOld;
 
         public InsiemeDiGruppi()
         {
-            gruppo_di_base = new Gruppo();
+            GruppoDiBase = new Gruppo();
             L = new List<Gruppo>();
-            nome_old = new Gruppo();
+            NomeOld = new Gruppo();
         }
 
         internal void Aggiusta()
         {
             for (var i = 0; i < L.Count; i++)
             {
-                L[i].classe = gruppo_di_base.classe;
-                L[i].degree = gruppo_di_base.degree;
-                L[i].language = gruppo_di_base.language;
-                L[i].office = gruppo_di_base.office;
-                L[i].school = gruppo_di_base.school;
-                L[i].tipo = gruppo_di_base.tipo;
-                L[i].year = gruppo_di_base.year;
+                L[i].Classe = GruppoDiBase.Classe;
+                L[i].Degree = GruppoDiBase.Degree;
+                L[i].Language = GruppoDiBase.Language;
+                L[i].Office = GruppoDiBase.Office;
+                L[i].School = GruppoDiBase.School;
+                L[i].Tipo = GruppoDiBase.Tipo;
+                L[i].Year = GruppoDiBase.Year;
 
-                if (string.IsNullOrEmpty(L[i].classe))
-                    L[i].classe = nome_old.classe;
+                if (string.IsNullOrEmpty(L[i].Classe))
+                    L[i].Classe = NomeOld.Classe;
 
-                if (string.IsNullOrEmpty(L[i].language))
-                    L[i].language = nome_old.language;
+                if (string.IsNullOrEmpty(L[i].Language))
+                    L[i].Language = NomeOld.Language;
 
-                if (string.IsNullOrEmpty(L[i].degree))
-                    L[i].degree = nome_old.degree;
+                if (string.IsNullOrEmpty(L[i].Degree))
+                    L[i].Degree = NomeOld.Degree;
 
-                if (string.IsNullOrEmpty(L[i].school))
-                    L[i].school = nome_old.school;
+                if (string.IsNullOrEmpty(L[i].School))
+                    L[i].School = NomeOld.School;
 
-                if (string.IsNullOrEmpty(L[i].office))
-                    L[i].office = nome_old.office;
+                if (string.IsNullOrEmpty(L[i].Office))
+                    L[i].Office = NomeOld.Office;
 
-                if (string.IsNullOrEmpty(L[i].year))
-                    L[i].year = nome_old.year;
+                if (string.IsNullOrEmpty(L[i].Year))
+                    L[i].Year = NomeOld.Year;
 
                 L[i].Aggiusta();
             }

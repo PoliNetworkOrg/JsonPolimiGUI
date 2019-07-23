@@ -23,7 +23,7 @@ namespace JsonPolimi
 
         internal void Add(Gruppo g)
         {
-            var a = this.Contiene(g.id);
+            var a = this.Contiene(g.Id);
             if (!a)
             {
                 _l.Add(g);
@@ -34,7 +34,7 @@ namespace JsonPolimi
         {
             foreach (var i in _l)
             {
-                if (i.id == id)
+                if (i.Id == id)
                     return true;
             }
             return false;

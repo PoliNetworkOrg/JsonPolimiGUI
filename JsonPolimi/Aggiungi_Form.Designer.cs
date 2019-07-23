@@ -1,6 +1,6 @@
 ﻿namespace JsonPolimi
 {
-    partial class Aggiungi_Form
+    partial class AggiungiForm
     {
         /// <summary>
         /// Required designer variable.
@@ -360,7 +360,7 @@
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.Name = "Aggiungi_Form";
+            this.Name = "AggiungiForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Aggiungi Form";
             this.Load += new System.EventHandler(this.Aggiungi_Form_Load);
