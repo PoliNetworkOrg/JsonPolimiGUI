@@ -259,6 +259,8 @@ namespace JsonPolimi
 
                 Variabili.L.SetElem(i, elem);
             }
+
+            Variabili.L.Sort();
         }
 
         private static string AggiustaNome(string s)
@@ -443,6 +445,8 @@ namespace JsonPolimi
                 MessageBox.Show("Lista vuota!");
                 return;
             }
+
+            Variabili.L.Sort();
 
             var x = new ListaGruppiModificaForm();
             x.ShowDialog();
