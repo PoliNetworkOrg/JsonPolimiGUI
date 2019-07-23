@@ -106,25 +106,25 @@ namespace JsonPolimi
             if (v == null)
                 return;
 
-            var v_upper = v.ToUpper();
+            var vUpper = v.ToUpper();
 
             //bisogna capire che tipo di informazione stiamo ricevendo
             if (v.StartsWith("https://") || v.StartsWith("http://"))
             {
                 AggiungiLink(v, ref g);
             }
-            else if (v_upper == "LEONARDO" || v_upper == "MANTOVA" || v_upper == "BOVISA" || v_upper == "PIACENZA" ||
-                        v_upper == "LECCO" || v_upper == "COMO" || v_upper == "CREMONA" || v_upper == "LEONARDO-CREMONA" ||
-                        v_upper == "LEONARDO*")
+            else if (vUpper == "LEONARDO" || vUpper == "MANTOVA" || vUpper == "BOVISA" || vUpper == "PIACENZA" ||
+                        vUpper == "LECCO" || vUpper == "COMO" || vUpper == "CREMONA" || vUpper == "LEONARDO-CREMONA" ||
+                        vUpper == "LEONARDO*")
             {
                 AggiungiSede(v, ref g);
             }
-            else if (v_upper == "FACEBOOK" || v_upper == "TELEGRAM" || v_upper == "NON ANCORA CREATO" || v_upper == "CORSI" || v_upper == "LUOGO" || v_upper.StartsWith("LAUREE"))
+            else if (vUpper == "FACEBOOK" || vUpper == "TELEGRAM" || vUpper == "NON ANCORA CREATO" || vUpper == "CORSI" || vUpper == "LUOGO" || vUpper.StartsWith("LAUREE"))
             {
                 //è una cella inutile
                 ;
             }
-            else if (v_upper == "<=")
+            else if (vUpper == "<=")
             {
                 //è una cella inutile
                 ;
@@ -150,12 +150,12 @@ namespace JsonPolimi
             }
             else
             {
-                switch (v_upper)
+                switch (vUpper)
                 {
                     case "LT":
                     case "LM":
                     case "LU":
-                        AggiungiTriennaleMagistrale(v_upper, ref g);
+                        AggiungiTriennaleMagistrale(vUpper, ref g);
                         break;
 
                     case "3I":
@@ -165,13 +165,13 @@ namespace JsonPolimi
                     case "3I+AUIC":
                     case "ICAT+3I":
                     case "DES+3I":
-                        AggiungiScuola(v_upper, ref g);
+                        AggiungiScuola(vUpper, ref g);
                         break;
 
                     case "ITA":
                     case "ENG":
                     case "ITA-ENG":
-                        AggiungiLingua(v_upper, ref g);
+                        AggiungiLingua(vUpper, ref g);
                         break;
 
                     default:

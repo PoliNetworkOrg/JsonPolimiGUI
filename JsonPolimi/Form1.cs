@@ -240,7 +240,7 @@ namespace JsonPolimi
             }
         }
 
-        private string AggiustaNome(string s)
+        private static string AggiustaNome(string s)
         {
             if (s.Contains("<="))
             {
@@ -371,6 +371,10 @@ namespace JsonPolimi
                     }
                 }
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
         }
     }
 }
