@@ -1,28 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace JsonPolimi
 {
     public class ListaGruppo
     {
-        private List<Gruppo> L = null;
+        private readonly List<Gruppo> _l = null;
 
         public ListaGruppo()
         {
-            L = new List<Gruppo>();
+            _l = new List<Gruppo>();
         }
 
         internal int GetCount()
         {
-            return L.Count;
+            return _l.Count;
         }
 
         internal Gruppo GetElem(int i)
         {
-            return L[i];
+            return _l[i];
         }
 
         internal void Add(Gruppo g)
@@ -30,13 +26,13 @@ namespace JsonPolimi
             var a = this.Contiene(g.id);
             if (!a)
             {
-                L.Add(g);
+                _l.Add(g);
             }
         }
 
         private bool Contiene(string id)
         {
-            foreach (var i in L)
+            foreach (var i in _l)
             {
                 if (i.id == id)
                     return true;
@@ -46,12 +42,12 @@ namespace JsonPolimi
 
         internal void Remove(int i)
         {
-            L.RemoveAt(i);
+            _l.RemoveAt(i);
         }
 
         internal void SetElem(int i, Gruppo elem)
         {
-            L[i] = elem;
+            _l[i] = elem;
         }
     }
 }

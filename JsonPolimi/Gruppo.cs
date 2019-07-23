@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace JsonPolimi
+﻿namespace JsonPolimi
 {
     public class Gruppo
     {
