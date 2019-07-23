@@ -317,7 +317,7 @@ namespace JsonPolimi
                         foreach (var y4 in y3.Content)
                             if (y4 is Paragraph y5)
                                 foreach (var y6 in y5.Content)
-                                    Gruppo.AggiungiInformazioneAmbigua(y6.ToString(), ref g);
+                                    Gruppo.AggiungiInformazioneAmbigua(y6.ToString(), ref g, TODO);
                             else
                                 Console.WriteLine(y4.ToString());
 

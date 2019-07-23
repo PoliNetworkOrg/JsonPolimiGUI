@@ -61,13 +61,13 @@ namespace JsonPolimi
             return null;
         }
 
-        private string IndovinaLaLinguaDalNome(string default_language = "ITA")
+        private string IndovinaLaLinguaDalNome(string defaultLanguage = "ITA")
         {
             var c = Classe.ToLower();
 
             if (c.Contains("and"))
                 return "ENG";
-            return c.Contains("for") ? "ENG" : default_language;
+            return c.Contains("for") ? "ENG" : defaultLanguage;
         }
 
         internal string To_json()
@@ -113,9 +113,7 @@ namespace JsonPolimi
             {
                 AggiungiLink(v, ref g);
             }
-            else if (vUpper == "LEONARDO" || vUpper == "MANTOVA" || vUpper == "BOVISA" || vUpper == "PIACENZA" ||
-                        vUpper == "LECCO" || vUpper == "COMO" || vUpper == "CREMONA" || vUpper == "LEONARDO-CREMONA" ||
-                        vUpper == "LEONARDO*")
+            else if (IsSede(vUpper))
             {
                 AggiungiSede(v, ref g);
             }
@@ -152,6 +150,13 @@ namespace JsonPolimi
             {
                 AggiungiAltro(ref vUpper, ref g, ref v);
             }
+        }
+
+        private static bool IsSede(string vUpper)
+        {
+            return (vUpper == "LEONARDO" || vUpper == "MANTOVA" || vUpper == "BOVISA" || vUpper == "PIACENZA" ||
+                    vUpper == "LECCO" || vUpper == "COMO" || vUpper == "CREMONA" || vUpper == "LEONARDO-CREMONA" ||
+                    vUpper == "LEONARDO*");
         }
 
         private static void AggiungiAltro(ref string vUpper, ref InsiemeDiGruppi g, ref string v)

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+// ReSharper disable ForCanBeConvertedToForeach
+
 namespace JsonPolimi
 {
     public class InsiemeDiGruppi
