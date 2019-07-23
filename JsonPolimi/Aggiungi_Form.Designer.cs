@@ -194,7 +194,7 @@
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.Location = new System.Drawing.Point(12, 289);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(553, 53);
+            this.button1.Size = new System.Drawing.Size(610, 53);
             this.button1.TabIndex = 16;
             this.button1.Text = "Aggiungi";
             this.button1.UseVisualStyleBackColor = true;
@@ -223,9 +223,9 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(406, 71);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(162, 13);
+            this.label11.Size = new System.Drawing.Size(220, 13);
             this.label11.TabIndex = 19;
-            this.label11.Text = "FB/LEONARDO/243535897435";
+            this.label11.Text = "FB/2018/2019/LEONARDO/243535897435";
             // 
             // label12
             // 
@@ -250,27 +250,27 @@
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(407, 178);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(24, 13);
+            this.label14.Size = new System.Drawing.Size(65, 13);
             this.label14.TabIndex = 22;
-            this.label14.Text = "ITA";
+            this.label14.Text = "ITA (o ENG)";
             // 
             // label15
             // 
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(407, 230);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(39, 13);
+            this.label15.Size = new System.Drawing.Size(130, 13);
             this.label15.TabIndex = 23;
-            this.label15.Text = "S (o E)";
+            this.label15.Text = "S (o E) [scolastico o extra]";
             // 
             // label16
             // 
             this.label16.AutoSize = true;
             this.label16.Location = new System.Drawing.Point(407, 204);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(53, 13);
+            this.label16.Size = new System.Drawing.Size(77, 13);
             this.label16.TabIndex = 24;
-            this.label16.Text = "FB (o TG)";
+            this.label16.Text = "FB (o TG, WA)";
             // 
             // label17
             // 
@@ -326,7 +326,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(577, 354);
+            this.ClientSize = new System.Drawing.Size(634, 354);
             this.Controls.Add(this.label19);
             this.Controls.Add(this.t_idlink);
             this.Controls.Add(this.label20);

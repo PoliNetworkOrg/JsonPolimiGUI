@@ -57,6 +57,8 @@ namespace JsonPolimi
 
         private void Aggiungi_Form_Load(object sender, EventArgs e)
         {
+            t_id.Enabled = false;
+
             if (!edit || g == null) return;
 
             t_classe.Text = g.Classe;
@@ -70,7 +72,7 @@ namespace JsonPolimi
             t_year.Text = g.Year;
             t_idlink.Text = g.IdLink;
 
-            t_id.Enabled = false;
+            button1.Text = "Modifica";
         }
     }
 }
