@@ -14,6 +14,7 @@ namespace JsonPolimi
         public string Platform; // esempio: FB
         public string Tipo;
         public string Year;     // esempio: 2018/2019
+        public string PermanentID; //per telegram, esempio -1000345953
 
         internal void Aggiusta()
         {
@@ -107,6 +108,8 @@ namespace JsonPolimi
             json += Tipo;
             json += "\",\"year\":\"";
             json += Year;
+            json += "\",\"permanentId\":\"";
+            json += PermanentID;
             json += "\",\"platform\":\"";
             json += Platform;
             json += "\"";

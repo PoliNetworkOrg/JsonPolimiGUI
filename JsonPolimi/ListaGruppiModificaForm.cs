@@ -42,6 +42,7 @@ namespace JsonPolimi
             var x = new AggiungiForm(true, g);
             x.ShowDialog();
             listBox1.Items[i] = AggiungiForm.g;
+            Variabili.L.SetElem(i, AggiungiForm.g);
         }
     }
 }

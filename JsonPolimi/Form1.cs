@@ -116,6 +116,10 @@ namespace JsonPolimi
                 html += elem.IdLink;
                 html += "</td>";
 
+                html += "<td>";
+                html += elem.PermanentID;
+                html += "</td>";
+
                 html += "</tr>";
             }
 
