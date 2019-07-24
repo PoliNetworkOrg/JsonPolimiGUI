@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace JsonPolimi
@@ -22,15 +15,12 @@ namespace JsonPolimi
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
 
-            foreach (var variable in Variabili.L)
-            {
-                listBox1.Items.Add(variable);
-            }
+            foreach (var variable in Variabili.L) listBox1.Items.Add(variable);
         }
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            int i = listBox1.SelectedIndex;
+            var i = listBox1.SelectedIndex;
             if (i < 0 || i >= listBox1.Items.Count)
             {
                 MessageBox.Show("Devi selezionare un gruppo!");
