@@ -80,6 +80,8 @@
     <Compile Include="ListaGruppo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tipi\FileSalvare.cs" />
+    <Compile Include="Tipi\GruppoTelegram.cs" />
     <Compile Include="Variabili.cs" />
     <EmbeddedResource Include="Aggiungi_Form.resx">
       <DependentUpon>Aggiungi_Form.cs</DependentUpon>

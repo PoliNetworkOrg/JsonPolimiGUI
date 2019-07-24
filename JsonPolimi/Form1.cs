@@ -3,7 +3,11 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using JsonPolimi.Tipi;
+using Newtonsoft.Json;
+using Telegram.Bot.Types.Enums;
 
 namespace JsonPolimi
 {
@@ -117,7 +121,7 @@ namespace JsonPolimi
                 html += "</td>";
 
                 html += "<td>";
-                html += elem.PermanentID;
+                html += elem.PermanentId;
                 html += "</td>";
 
                 html += "</tr>";
@@ -168,6 +172,15 @@ namespace JsonPolimi
             catch
             {
                 g.Year = null;
+            }
+
+            try
+            {
+                g.PermanentId = i["permanentID"].ToString();
+            }
+            catch
+            {
+                g.PermanentId = null;
             }
 
             g.Aggiusta();
@@ -454,6 +467,71 @@ namespace JsonPolimi
 
             var x = new ListaGruppiModificaForm();
             x.ShowDialog();
+        }
+
+        private void Button8_Click(object sender, EventArgs e)
+        {
+            LoadGruppi();
+
+            if (FileSalvare == null)
+                FileSalvare = new FileSalvare();
+
+            if (Variabili.L == null)
+                Variabili.L = new ListaGruppo();
+
+            foreach (var r in FileSalvare.Gruppi)
+            {
+                if (r.Chat.Type == ChatType.Private)
+                    continue;
+
+                var g = new Gruppo
+                {
+                    Classe = r.Chat.Title,
+                    PermanentId = r.Chat.Id.ToString(),
+                    Platform = "TG",
+                    IdLink = TelegramLinkLastPart(r.Chat.InviteLink)
+                };
+                g.Aggiusta();
+                Variabili.L.Add(g);
+            }
+        }
+
+        private static string TelegramLinkLastPart(string chatInviteLink)
+        {
+            var r = chatInviteLink.Split('/');
+            return r[r.Length - 1];
+        }
+
+        public static FileSalvare FileSalvare = null;
+
+        private static void LoadGruppi()
+        {
+            var ofd = new OpenFileDialog();
+            var rDialog = ofd.ShowDialog();
+            if (rDialog != DialogResult.OK) return;
+
+            string content;
+            try
+            {
+                content = File.ReadAllText(ofd.FileName);
+            }
+            catch (Exception e2)
+            {
+                MessageBox.Show("Lettura fallita! \n\n" + e2.Message);
+                return;
+            }
+
+            try
+            {
+                FileSalvare = JsonConvert.DeserializeObject<FileSalvare>(content);
+            }
+            catch
+            {
+                ;
+            }
+
+            if (FileSalvare == null)
+                FileSalvare = new FileSalvare();
         }
     }
 }

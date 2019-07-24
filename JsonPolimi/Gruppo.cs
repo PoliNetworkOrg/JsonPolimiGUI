@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace JsonPolimi
 {
@@ -14,7 +15,7 @@ namespace JsonPolimi
         public string Platform; // esempio: FB
         public string Tipo;
         public string Year;     // esempio: 2018/2019
-        public string PermanentID; //per telegram, esempio -1000345953
+        public string PermanentId; //per telegram, esempio -1000345953
 
         internal void Aggiusta()
         {
@@ -25,10 +26,7 @@ namespace JsonPolimi
                 Tipo = "S";
             }
 
-            if (string.IsNullOrEmpty(Year))
-            {
-                Year = "2018/2019";
-            }
+            AggiustaAnno();
 
             if (string.IsNullOrEmpty(Language))
             {
@@ -45,6 +43,40 @@ namespace JsonPolimi
                 IdLink = CreaIdLink();
 
             Id = CreaId();
+        }
+
+        private void AggiustaAnno()
+        {
+            if (!string.IsNullOrEmpty(Year)) return;
+
+            var title = Classe.Replace("/", "-");
+            var t2 = title.Split('-');
+            var a = AnnoInTitolo(t2);
+            if (a < 0) return;
+
+            Year = t2[a] + "/" + t2[a + 1];
+        }
+
+        private static int AnnoInTitolo(IReadOnlyList<string> t)
+        {
+            if (t.Count <= 1) return -1;
+
+            for (var i = 0; i < t.Count - 1; i++)
+            {
+                try
+                {
+                    var a = Convert.ToInt32(t[i]);
+                    var b = Convert.ToInt32(t[i + 1]);
+                    if (a >= 2016 && b >= 2016)
+                        return i;
+                }
+                catch
+                {
+                    ;
+                }
+            }
+
+            return -1;
         }
 
         private string CreaIdLink()
@@ -109,7 +141,7 @@ namespace JsonPolimi
             json += "\",\"year\":\"";
             json += Year;
             json += "\",\"permanentId\":\"";
-            json += PermanentID;
+            json += PermanentId;
             json += "\",\"platform\":\"";
             json += Platform;
             json += "\"";
