@@ -13,6 +13,11 @@ namespace JsonPolimi
             _l = new List<Gruppo>();
         }
 
+        public IEnumerator GetEnumerator()
+        {
+            return _l.GetEnumerator();
+        }
+
         internal int GetCount()
         {
             return _l.Count;
@@ -33,10 +38,8 @@ namespace JsonPolimi
         {
             foreach (var i in _l)
             {
-                if (!string.IsNullOrEmpty(i.PermanentId) && !string.IsNullOrEmpty(g.PermanentId))
-                {
+                if (!IsNullOrEmpty(i.PermanentId) && !IsNullOrEmpty(g.PermanentId))
                     return i.PermanentId == g.PermanentId && i.Platform == g.Platform;
-                }
 
                 if (i.Id == g.Id)
                     return true;
@@ -55,15 +58,10 @@ namespace JsonPolimi
             _l[i] = elem;
         }
 
-        public IEnumerator GetEnumerator()
-        {
-            return this._l.GetEnumerator();
-        }
-
         public void Sort()
         {
             IComparer<Gruppo> cc = new CoordinatesBasedComparer();
-            this._l.Sort(cc.Compare);
+            _l.Sort(cc.Compare);
         }
 
         public class CoordinatesBasedComparer : IComparer<Gruppo>

@@ -5,8 +5,8 @@ namespace JsonPolimi
 {
     public partial class AggiungiForm : Form
     {
-        private readonly bool edit;
         public static Gruppo g;
+        private readonly bool edit;
 
         public AggiungiForm(bool edit, Gruppo g2 = null)
         {
@@ -46,13 +46,9 @@ namespace JsonPolimi
             g.Aggiusta();
 
             if (edit == false) //new
-            {
                 Variabili.L.Add(g);
-            }
             else
-            {
-                this.Close();
-            }
+                Close();
         }
 
         private void Aggiungi_Form_Load(object sender, EventArgs e)

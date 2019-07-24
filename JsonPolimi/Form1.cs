@@ -1,18 +1,21 @@
 ﻿using Independentsoft.Office.Odf;
+using JsonPolimi.Tipi;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using JsonPolimi.Tipi;
-using Newtonsoft.Json;
 using Telegram.Bot.Types.Enums;
+using Size = System.Drawing.Size;
 
 namespace JsonPolimi
 {
     public partial class Form1 : Form
     {
+        public static FileSalvare FileSalvare;
+
         public Form1()
         {
             InitializeComponent();
@@ -316,16 +319,10 @@ namespace JsonPolimi
 
             var o = new OpenFileDialog();
             var r = o.ShowDialog();
-            if (r != DialogResult.OK)
-            {
-                return;
-            }
+            if (r != DialogResult.OK) return;
 
             var (item1, item2) = ShowInputDialog("Anno");
-            if (item1 != DialogResult.OK)
-            {
-                return;
-            }
+            if (item1 != DialogResult.OK) return;
 
             Apri_ODS(o.FileName, item2);
 
@@ -338,10 +335,10 @@ namespace JsonPolimi
 
         private static Tuple<DialogResult, string> ShowInputDialog(string title)
         {
-            var size = new System.Drawing.Size(200, 70);
+            var size = new Size(200, 70);
             var inputBox = new Form
             {
-                FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
                 ClientSize = size,
                 Text = title,
                 MaximizeBox = false,
@@ -350,29 +347,29 @@ namespace JsonPolimi
 
             var textBox = new TextBox
             {
-                Size = new System.Drawing.Size(size.Width - 10, 23),
-                Location = new System.Drawing.Point(5, 5),
+                Size = new Size(size.Width - 10, 23),
+                Location = new Point(5, 5),
                 Text = ""
             };
             inputBox.Controls.Add(textBox);
 
             var okButton = new Button
             {
-                DialogResult = System.Windows.Forms.DialogResult.OK,
+                DialogResult = DialogResult.OK,
                 Name = "okButton",
-                Size = new System.Drawing.Size(75, 23),
+                Size = new Size(75, 23),
                 Text = "&OK",
-                Location = new System.Drawing.Point(size.Width - 80 - 80, 39)
+                Location = new Point(size.Width - 80 - 80, 39)
             };
             inputBox.Controls.Add(okButton);
 
             var cancelButton = new Button
             {
-                DialogResult = System.Windows.Forms.DialogResult.Cancel,
+                DialogResult = DialogResult.Cancel,
                 Name = "cancelButton",
-                Size = new System.Drawing.Size(75, 23),
+                Size = new Size(75, 23),
                 Text = "&Cancel",
-                Location = new System.Drawing.Point(size.Width - 80, 39)
+                Location = new Point(size.Width - 80, 39)
             };
             inputBox.Controls.Add(cancelButton);
 
@@ -443,19 +440,14 @@ namespace JsonPolimi
 
         private void Button6_Click(object sender, EventArgs e)
         {
-            var dialogResult = MessageBox.Show("Vuoi davvero eliminare la lista in RAM?", "Sicuro?", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
-            {
-                Variabili.L = new ListaGruppo();
-            }
+            var dialogResult = MessageBox.Show("Vuoi davvero eliminare la lista in RAM?", "Sicuro?",
+                MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes) Variabili.L = new ListaGruppo();
         }
 
         private void Button7_Click(object sender, EventArgs e)
         {
-            if (Variabili.L == null)
-            {
-                Variabili.L = new ListaGruppo();
-            }
+            if (Variabili.L == null) Variabili.L = new ListaGruppo();
 
             if (Variabili.L.GetCount() <= 0)
             {
@@ -501,8 +493,6 @@ namespace JsonPolimi
             var r = chatInviteLink.Split('/');
             return r[r.Length - 1];
         }
-
-        public static FileSalvare FileSalvare = null;
 
         private static void LoadGruppi()
         {

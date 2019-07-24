@@ -6,32 +6,26 @@ namespace JsonPolimi
     public class Gruppo
     {
         public string Classe;
-        public string Office;   // esempio: LEONARDO
-        public string IdLink;  // esempio: 21432583243205
-        public string Id;       // esempio: FB/2018/2019/LEONARDO/21432583243205
         public string Degree;
-        public string School;
+        public string Id; // esempio: FB/2018/2019/LEONARDO/21432583243205
+        public string IdLink; // esempio: 21432583243205
         public string Language;
-        public string Platform; // esempio: FB
-        public string Tipo;
-        public string Year;     // esempio: 2018/2019
+        public string Office; // esempio: LEONARDO
         public string PermanentId; //per telegram, esempio -1000345953
+        public string Platform; // esempio: FB
+        public string School;
+        public string Tipo;
+        public string Year; // esempio: 2018/2019
 
         internal void Aggiusta()
         {
             Classe = string.IsNullOrEmpty(Classe) ? "" : Classe.Replace('\n', ' ');
 
-            if (string.IsNullOrEmpty(Tipo))
-            {
-                Tipo = "S";
-            }
+            if (string.IsNullOrEmpty(Tipo)) Tipo = "S";
 
             AggiustaAnno();
 
-            if (string.IsNullOrEmpty(Language))
-            {
-                Language = IndovinaLaLinguaDalNome();
-            }
+            if (string.IsNullOrEmpty(Language)) Language = IndovinaLaLinguaDalNome();
 
             if (string.IsNullOrEmpty(School))
                 School = IndovinaLaSchool();
@@ -62,7 +56,6 @@ namespace JsonPolimi
             if (t.Count <= 1) return -1;
 
             for (var i = 0; i < t.Count - 1; i++)
-            {
                 try
                 {
                     var a = Convert.ToInt32(t[i]);
@@ -74,7 +67,6 @@ namespace JsonPolimi
                 {
                     ;
                 }
-            }
 
             return -1;
         }
@@ -83,7 +75,7 @@ namespace JsonPolimi
         {
             try
             {
-                var r = this.Id.Split('/');
+                var r = Id.Split('/');
                 return r[r.Length - 1];
             }
             catch
@@ -167,7 +159,8 @@ namespace JsonPolimi
             {
                 AggiungiSede(v, ref g);
             }
-            else if (vUpper == "FACEBOOK" || vUpper == "TELEGRAM" || vUpper == "NON ANCORA CREATO" || vUpper == "CORSI" || vUpper == "LUOGO" || vUpper.StartsWith("LAUREE", StringComparison.Ordinal))
+            else if (vUpper == "FACEBOOK" || vUpper == "TELEGRAM" || vUpper == "NON ANCORA CREATO" ||
+                     vUpper == "CORSI" || vUpper == "LUOGO" || vUpper.StartsWith("LAUREE", StringComparison.Ordinal))
             {
                 //è una cella inutile
                 ;
@@ -189,7 +182,9 @@ namespace JsonPolimi
                 var nome = s4[0];
 
                 if (nome.StartsWith("http", StringComparison.Ordinal))
+                {
                     AggiungiLink(s2[0], ref g);
+                }
                 else
                 {
                     AggiungiNome(nome, ref g);
@@ -204,9 +199,9 @@ namespace JsonPolimi
 
         private static bool IsSede(string vUpper)
         {
-            return (vUpper == "LEONARDO" || vUpper == "MANTOVA" || vUpper == "BOVISA" || vUpper == "PIACENZA" ||
-                    vUpper == "LECCO" || vUpper == "COMO" || vUpper == "CREMONA" || vUpper == "LEONARDO-CREMONA" ||
-                    vUpper == "LEONARDO*");
+            return vUpper == "LEONARDO" || vUpper == "MANTOVA" || vUpper == "BOVISA" || vUpper == "PIACENZA" ||
+                   vUpper == "LECCO" || vUpper == "COMO" || vUpper == "CREMONA" || vUpper == "LEONARDO-CREMONA" ||
+                   vUpper == "LEONARDO*";
         }
 
         private static void AggiungiAltro(ref string vUpper, ref InsiemeDiGruppi g, ref string v)
@@ -262,10 +257,7 @@ namespace JsonPolimi
 
         private static void AggiungiNome(string v, ref InsiemeDiGruppi g)
         {
-            if (v == "<=")
-            {
-                return;
-            }
+            if (v == "<=") return;
 
             if (string.IsNullOrEmpty(g.GruppoDiBase.Classe))
             {
@@ -276,6 +268,7 @@ namespace JsonPolimi
                 g.GruppoDiBase.Classe += " ";
                 g.GruppoDiBase.Classe += v;
             }
+
             g.NomeOld.Classe = g.GruppoDiBase.Classe;
         }
 
@@ -293,10 +286,7 @@ namespace JsonPolimi
             var s1 = v.Substring(n1 + 3);
 
             var n2 = s1.IndexOf("www.", StringComparison.Ordinal);
-            if (n2 >= 0 && n2 < s1.Length)
-            {
-                s1 = s1.Substring(4);
-            }
+            if (n2 >= 0 && n2 < s1.Length) s1 = s1.Substring(4);
 
             if (s1[0] == 'f') // facebook
             {
@@ -338,7 +328,7 @@ namespace JsonPolimi
 
         public override string ToString()
         {
-            return this.To_json() + " " + base.ToString();
+            return To_json() + " " + base.ToString();
         }
     }
 }
