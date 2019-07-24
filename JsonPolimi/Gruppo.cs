@@ -44,7 +44,9 @@ namespace JsonPolimi
             if (!string.IsNullOrEmpty(Year)) return;
 
             var title = Classe.Replace("/", "-");
+            title = title.Replace(" ", "-");
             var t2 = title.Split('-');
+
             var a = AnnoInTitolo(t2);
             if (a < 0) return;
 
@@ -329,6 +331,42 @@ namespace JsonPolimi
         public override string ToString()
         {
             return To_json() + " " + base.ToString();
+        }
+
+        public void Merge(Gruppo gruppo)
+        {
+            if (!string.IsNullOrEmpty(gruppo.Classe))
+                this.Classe = gruppo.Classe;
+
+            if (!string.IsNullOrEmpty(gruppo.Degree))
+                this.Degree = gruppo.Degree;
+
+            if (!string.IsNullOrEmpty(gruppo.Id))
+                this.Id = gruppo.Id;
+
+            if (!string.IsNullOrEmpty(gruppo.IdLink))
+                this.IdLink = gruppo.IdLink;
+
+            if (!string.IsNullOrEmpty(gruppo.Language))
+                this.Language = gruppo.Language;
+
+            if (!string.IsNullOrEmpty(gruppo.Office))
+                this.Office = gruppo.Office;
+
+            if (!string.IsNullOrEmpty(gruppo.PermanentId))
+                this.PermanentId = gruppo.PermanentId;
+
+            if (!string.IsNullOrEmpty(gruppo.Platform))
+                this.Platform = gruppo.Platform;
+
+            if (!string.IsNullOrEmpty(gruppo.School))
+                this.School = gruppo.School;
+
+            if (!string.IsNullOrEmpty(gruppo.Tipo))
+                this.Tipo = gruppo.Tipo;
+
+            if (!string.IsNullOrEmpty(gruppo.Year))
+                this.Year = gruppo.Year;
         }
     }
 }

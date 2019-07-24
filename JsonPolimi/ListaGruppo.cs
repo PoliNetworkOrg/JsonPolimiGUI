@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using static System.String;
 
@@ -31,21 +32,39 @@ namespace JsonPolimi
         internal void Add(Gruppo g)
         {
             var a = Contiene(g);
-            if (!a) _l.Add(g);
-        }
 
-        private bool Contiene(Gruppo g)
-        {
-            foreach (var i in _l)
+            if (!a.Item1)
             {
-                if (!IsNullOrEmpty(i.PermanentId) && !IsNullOrEmpty(g.PermanentId))
-                    return i.PermanentId == g.PermanentId && i.Platform == g.Platform;
-
-                if (i.Id == g.Id)
-                    return true;
+                _l.Add(g);
+                return;
             }
 
-            return false;
+            Merge(a.Item2, g);
+        }
+
+        private void Merge(int i, Gruppo g)
+        {
+            this._l[i].Merge(g);
+        }
+
+        private Tuple<bool, int> Contiene(Gruppo g)
+        {
+            for (var i = 0; i < _l.Count; i++)
+            {
+                if (!IsNullOrEmpty(_l[i].PermanentId) && !IsNullOrEmpty(g.PermanentId))
+                    if (_l[i].PermanentId == g.PermanentId && _l[i].Platform == g.Platform)
+                        return new Tuple<bool, int>(true, i);
+
+                if (_l[i].Id == g.Id)
+                    return new Tuple<bool, int>(true, i);
+
+                var bt = (_l[i].Platform == "TG" && g.Platform == "TG" && _l[i].Classe == g.Classe);
+                bt &= !IsNullOrEmpty(_l[i].PermanentId) || !IsNullOrEmpty(g.PermanentId);
+                if (bt)
+                    return new Tuple<bool, int>(true, i);
+            }
+
+            return new Tuple<bool, int>(false, 0);
         }
 
         internal void Remove(int i)

@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Telegram.Bot.Types;
 
 namespace JsonPolimi.Tipi
 {
+    [Serializable]
     public class GruppoTelegram
     {
         public List<ChatMember> Admins;
