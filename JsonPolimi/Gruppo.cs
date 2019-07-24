@@ -339,37 +339,37 @@ namespace JsonPolimi
         public void Merge(Gruppo gruppo)
         {
             if (!string.IsNullOrEmpty(gruppo.Classe))
-                this.Classe = gruppo.Classe;
+                Classe = gruppo.Classe;
 
             if (!string.IsNullOrEmpty(gruppo.Degree))
-                this.Degree = gruppo.Degree;
+                Degree = gruppo.Degree;
 
             if (!string.IsNullOrEmpty(gruppo.Id))
-                this.Id = gruppo.Id;
+                Id = gruppo.Id;
 
             if (!string.IsNullOrEmpty(gruppo.IdLink))
-                this.IdLink = gruppo.IdLink;
+                IdLink = gruppo.IdLink;
 
             if (!string.IsNullOrEmpty(gruppo.Language))
-                this.Language = gruppo.Language;
+                Language = gruppo.Language;
 
             if (!string.IsNullOrEmpty(gruppo.Office))
-                this.Office = gruppo.Office;
+                Office = gruppo.Office;
 
             if (!string.IsNullOrEmpty(gruppo.PermanentId))
-                this.PermanentId = gruppo.PermanentId;
+                PermanentId = gruppo.PermanentId;
 
             if (!string.IsNullOrEmpty(gruppo.Platform))
-                this.Platform = gruppo.Platform;
+                Platform = gruppo.Platform;
 
             if (!string.IsNullOrEmpty(gruppo.School))
-                this.School = gruppo.School;
+                School = gruppo.School;
 
             if (!string.IsNullOrEmpty(gruppo.Tipo))
-                this.Tipo = gruppo.Tipo;
+                Tipo = gruppo.Tipo;
 
             if (!string.IsNullOrEmpty(gruppo.Year))
-                this.Year = gruppo.Year;
+                Year = gruppo.Year;
         }
     }
 }

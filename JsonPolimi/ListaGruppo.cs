@@ -58,7 +58,7 @@ namespace JsonPolimi
                 if (_l[i].Id == g.Id)
                     return new Tuple<bool, int>(true, i);
 
-                var bt = (_l[i].Platform == "TG" && g.Platform == "TG" && _l[i].Classe == g.Classe);
+                var bt = _l[i].Platform == "TG" && g.Platform == "TG" && _l[i].Classe == g.Classe;
                 bt &= !IsNullOrEmpty(_l[i].PermanentId) || !IsNullOrEmpty(g.PermanentId);
                 if (bt)
                     return new Tuple<bool, int>(true, i);

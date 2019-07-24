@@ -3,7 +3,6 @@ using JsonPolimi.Tipi;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -505,10 +504,7 @@ namespace JsonPolimi
             {
                 if (variable.Status != ChatMemberStatus.Creator) continue;
 
-                if (ListaAdminAutorizzati.List.Contains(variable.User.Id))
-                {
-                    return true;
-                }
+                if (ListaAdminAutorizzati.List.Contains(variable.User.Id)) return true;
             }
 
             return false;
