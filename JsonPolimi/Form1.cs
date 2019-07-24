@@ -481,7 +481,8 @@ namespace JsonPolimi
                     Classe = r.Chat.Title,
                     PermanentId = r.Chat.Id.ToString(),
                     Platform = "TG",
-                    IdLink = TelegramLinkLastPart(r.Chat.InviteLink)
+                    IdLink = TelegramLinkLastPart(r.Chat.InviteLink),
+                    Tipo = "C"
                 };
                 g.Aggiusta();
                 Variabili.L.Add(g);
