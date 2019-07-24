@@ -3,6 +3,7 @@ using JsonPolimi.Tipi;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -476,6 +477,9 @@ namespace JsonPolimi
                 if (r.Chat.Type == ChatType.Private)
                     continue;
 
+                if (!AdminValidi(r))
+                    continue;
+
                 var g = new Gruppo
                 {
                     Classe = r.Chat.Title,
@@ -487,6 +491,27 @@ namespace JsonPolimi
                 g.Aggiusta();
                 Variabili.L.Add(g);
             }
+        }
+
+        private static bool AdminValidi(GruppoTelegram gruppoTelegram)
+        {
+            if (gruppoTelegram.Admins == null)
+                return false;
+
+            if (gruppoTelegram.Admins.Count == 0)
+                return false;
+
+            foreach (var variable in gruppoTelegram.Admins)
+            {
+                if (variable.Status != ChatMemberStatus.Creator) continue;
+
+                if (ListaAdminAutorizzati.list.Contains(variable.User.Id))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static string TelegramLinkLastPart(string chatInviteLink)
@@ -523,6 +548,11 @@ namespace JsonPolimi
 
             if (FileSalvare == null)
                 FileSalvare = new FileSalvare();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            ;
         }
     }
 }
