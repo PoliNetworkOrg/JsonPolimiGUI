@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Microsoft.SqlServer.Server;
 using static System.String;
 
 namespace JsonPolimi
@@ -25,15 +27,23 @@ namespace JsonPolimi
 
         internal void Add(Gruppo g)
         {
-            var a = Contiene(g.Id);
+            var a = Contiene(g);
             if (!a) _l.Add(g);
         }
 
-        private bool Contiene(string id)
+        private bool Contiene(Gruppo g)
         {
             foreach (var i in _l)
-                if (i.Id == id)
+            {
+                if (!string.IsNullOrEmpty(i.PermanentId) && !string.IsNullOrEmpty(g.PermanentId))
+                {
+                    return i.PermanentId == g.PermanentId && i.Platform == g.Platform;
+                }
+
+                if (i.Id == g.Id)
                     return true;
+            }
+
             return false;
         }
 
