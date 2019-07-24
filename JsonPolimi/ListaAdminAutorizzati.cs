@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace JsonPolimi
 {
     public static class ListaAdminAutorizzati
     {
-        public static List<long> list = new List<long>()
+        public static List<long> List = new List<long>
         {
             349275135 //@PoliCreator
         };

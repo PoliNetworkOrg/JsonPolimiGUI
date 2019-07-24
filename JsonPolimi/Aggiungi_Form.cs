@@ -6,11 +6,11 @@ namespace JsonPolimi
     public partial class AggiungiForm : Form
     {
         public static Gruppo g;
-        private readonly bool edit;
+        private readonly bool _edit;
 
         public AggiungiForm(bool edit, Gruppo g2 = null)
         {
-            this.edit = edit;
+            _edit = edit;
             g = g2;
 
             InitializeComponent();
@@ -25,6 +25,18 @@ namespace JsonPolimi
                 MessageBox.Show("Non hai compilato qualche campo!");
                 return;
             }
+
+            if (t_year.Text == "-")
+                t_year.Text = "";
+
+            if (t_degree.Text == "-")
+                t_degree.Text = "";
+
+            if (t_school.Text == "-")
+                t_school.Text = "";
+
+            if (t_office.Text == "-")
+                t_office.Text = "";
 
             g = new Gruppo
             {
@@ -45,7 +57,7 @@ namespace JsonPolimi
 
             g.Aggiusta();
 
-            if (edit == false) //new
+            if (_edit == false) //new
                 Variabili.L.Add(g);
             else
                 Close();
@@ -55,7 +67,7 @@ namespace JsonPolimi
         {
             t_id.Enabled = false;
 
-            if (!edit || g == null) return;
+            if (!_edit || g == null) return;
 
             t_classe.Text = g.Classe;
             t_degree.Text = g.Degree;

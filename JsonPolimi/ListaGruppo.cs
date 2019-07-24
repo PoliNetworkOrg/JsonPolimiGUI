@@ -31,20 +31,20 @@ namespace JsonPolimi
 
         internal void Add(Gruppo g)
         {
-            var a = Contiene(g);
+            var (item1, item2) = Contiene(g);
 
-            if (!a.Item1)
+            if (!item1)
             {
                 _l.Add(g);
                 return;
             }
 
-            Merge(a.Item2, g);
+            Merge(item2, g);
         }
 
         private void Merge(int i, Gruppo g)
         {
-            this._l[i].Merge(g);
+            _l[i].Merge(g);
         }
 
         private Tuple<bool, int> Contiene(Gruppo g)

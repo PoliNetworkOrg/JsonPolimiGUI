@@ -505,7 +505,7 @@ namespace JsonPolimi
             {
                 if (variable.Status != ChatMemberStatus.Creator) continue;
 
-                if (ListaAdminAutorizzati.list.Contains(variable.User.Id))
+                if (ListaAdminAutorizzati.List.Contains(variable.User.Id))
                 {
                     return true;
                 }
