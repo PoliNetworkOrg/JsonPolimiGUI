@@ -96,7 +96,11 @@ namespace JsonPolimi
                     return i1;
 
                 i1 = CompareOrdinal(a.Classe, b.Classe);
-                return i1 != 0 ? i1 : CompareOrdinal(a.Platform, b.Platform);
+                if (i1 != 0)
+                    return i1;
+
+                i1 = CompareOrdinal(a.Platform, b.Platform);
+                return i1 != 0 ? i1 : CompareOrdinal(a.Office, b.Office);
             }
         }
     }
