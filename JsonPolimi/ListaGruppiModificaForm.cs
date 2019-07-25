@@ -29,14 +29,14 @@ namespace JsonPolimi
 
             var r = (Riga)listBox1.Items[i];
 
-            r.g.Aggiusta();
-            var x = new AggiungiForm(true, r.g);
+            r.G.Aggiusta();
+            var x = new AggiungiForm(true, r.G);
             x.ShowDialog();
 
-            r.g = AggiungiForm.g;
+            r.G = AggiungiForm.g;
 
             listBox1.Items[i] = r;
-            Variabili.L.SetElem(r.i, AggiungiForm.g);
+            Variabili.L.SetElem(r.I, AggiungiForm.g);
         }
 
         private void TextBox1_TextChanged(object sender, EventArgs e)
@@ -57,10 +57,7 @@ namespace JsonPolimi
             {
                 var variable = Variabili.L.GetElem(i);
 
-                if (variable.Classe.ToLower().Contains(text))
-                {
-                    listBox1.Items.Add(new Riga(variable, i));
-                }
+                if (variable.Classe.ToLower().Contains(text)) listBox1.Items.Add(new Riga(variable, i));
             }
         }
     }

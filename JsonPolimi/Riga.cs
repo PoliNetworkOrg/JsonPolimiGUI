@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace JsonPolimi
+﻿namespace JsonPolimi
 {
     public class Riga
     {
-        public Gruppo g;
-        public int i;
+        public Gruppo G;
+        public int I;
 
         public Riga(Gruppo g, int i)
         {
-            this.g = g;
-            this.i = i;
+            G = g;
+            I = i;
         }
 
         public override string ToString()
         {
-            return this.g.ToString() + " " + this.i.ToString();
+            return G + " " + I;
         }
     }
 }
