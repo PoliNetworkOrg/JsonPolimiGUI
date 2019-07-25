@@ -338,37 +338,37 @@ namespace JsonPolimi
 
         public void Merge(Gruppo gruppo)
         {
-            if (!string.IsNullOrEmpty(gruppo.Classe))
+            if (!string.IsNullOrEmpty(gruppo.Classe) && string.IsNullOrEmpty(this.Classe))
                 Classe = gruppo.Classe;
 
-            if (!string.IsNullOrEmpty(gruppo.Degree))
+            if (!string.IsNullOrEmpty(gruppo.Degree) && string.IsNullOrEmpty(this.Degree))
                 Degree = gruppo.Degree;
 
-            if (!string.IsNullOrEmpty(gruppo.Id))
+            if (!string.IsNullOrEmpty(gruppo.Id) && string.IsNullOrEmpty(this.Id))
                 Id = gruppo.Id;
 
-            if (!string.IsNullOrEmpty(gruppo.IdLink))
+            if (!string.IsNullOrEmpty(gruppo.IdLink) && string.IsNullOrEmpty(this.IdLink))
                 IdLink = gruppo.IdLink;
 
-            if (!string.IsNullOrEmpty(gruppo.Language))
+            if (!string.IsNullOrEmpty(gruppo.Language) && string.IsNullOrEmpty(this.Language))
                 Language = gruppo.Language;
 
-            if (!string.IsNullOrEmpty(gruppo.Office))
+            if (!string.IsNullOrEmpty(gruppo.Office) && string.IsNullOrEmpty(this.Office))
                 Office = gruppo.Office;
 
-            if (!string.IsNullOrEmpty(gruppo.PermanentId))
+            if (!string.IsNullOrEmpty(gruppo.PermanentId) && string.IsNullOrEmpty(this.PermanentId))
                 PermanentId = gruppo.PermanentId;
 
-            if (!string.IsNullOrEmpty(gruppo.Platform))
+            if (!string.IsNullOrEmpty(gruppo.Platform) && string.IsNullOrEmpty(this.Platform))
                 Platform = gruppo.Platform;
 
-            if (!string.IsNullOrEmpty(gruppo.School))
+            if (!string.IsNullOrEmpty(gruppo.School) && string.IsNullOrEmpty(this.School))
                 School = gruppo.School;
 
-            if (!string.IsNullOrEmpty(gruppo.Tipo))
+            if (!string.IsNullOrEmpty(gruppo.Tipo) && string.IsNullOrEmpty(this.Tipo))
                 Tipo = gruppo.Tipo;
 
-            if (!string.IsNullOrEmpty(gruppo.Year))
+            if (!string.IsNullOrEmpty(gruppo.Year) && string.IsNullOrEmpty(this.Year))
                 Year = gruppo.Year;
         }
     }
