@@ -208,6 +208,7 @@ namespace JsonPolimi
             }
 
             Aggiusta();
+            Variabili.L.Sort();
 
             var json = "{\"info_data\":{";
             var n = Variabili.L.GetCount();
