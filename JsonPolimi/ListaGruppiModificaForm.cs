@@ -15,7 +15,7 @@ namespace JsonPolimi
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
 
-            foreach (var variable in Variabili.L) listBox1.Items.Add(variable);
+            Filtra(null);
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -27,12 +27,41 @@ namespace JsonPolimi
                 return;
             }
 
-            var g = (Gruppo) listBox1.Items[i];
-            g.Aggiusta();
-            var x = new AggiungiForm(true, g);
+            var r = (Riga)listBox1.Items[i];
+
+            r.g.Aggiusta();
+            var x = new AggiungiForm(true, r.g);
             x.ShowDialog();
-            listBox1.Items[i] = AggiungiForm.g;
-            Variabili.L.SetElem(i, AggiungiForm.g);
+
+            r.g = AggiungiForm.g;
+
+            listBox1.Items[i] = r;
+            Variabili.L.SetElem(r.i, AggiungiForm.g);
+        }
+
+        private void TextBox1_TextChanged(object sender, EventArgs e)
+        {
+            Filtra(textBox1.Text);
+        }
+
+        private void Filtra(string text)
+        {
+            listBox1.Items.Clear();
+
+            if (text == null)
+                text = "";
+
+            text = text.ToLower();
+
+            for (var i = 0; i < Variabili.L.GetCount(); i++)
+            {
+                var variable = Variabili.L.GetElem(i);
+
+                if (variable.Classe.ToLower().Contains(text))
+                {
+                    listBox1.Items.Add(new Riga(variable, i));
+                }
+            }
         }
     }
 }
