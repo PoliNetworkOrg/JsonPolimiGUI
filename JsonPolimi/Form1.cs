@@ -179,7 +179,7 @@ namespace JsonPolimi
 
             try
             {
-                g.PermanentId = i["permanentID"].ToString();
+                g.PermanentId = i["permanentId"].ToString();
             }
             catch
             {
