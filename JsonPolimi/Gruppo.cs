@@ -120,7 +120,7 @@ namespace JsonPolimi
             var json = "{";
 
             json += "\"class\":\"";
-            json += Classe;
+            json += EscapeQuotes(Classe);
             json += "\",\"office\":\"";
             json += Office;
             json += "\",\"id\":\"";
@@ -146,6 +146,58 @@ namespace JsonPolimi
             json += "}";
 
             return json;
+        }
+
+        private static string EscapeQuotes(string s)
+        {
+            for (var i = 0; i < 3; i++)
+            {
+                s = UnEscapeQuotes(s);
+            }
+
+            var s2 = "";
+            foreach (var t in s)
+            {
+                if (t == '"')
+                {
+                    s2 += '\\';
+                    s2 += '"';
+                    //  =>    \"
+                }
+                else
+                {
+                    s2 += t;
+                }
+            }
+
+            return s2;
+        }
+
+        private static string UnEscapeQuotes(string s)
+        {
+            var s2 = "";
+            var i = 0;
+            while (i < s.Length - 1)
+            {
+                if (s[i] == '\\' && s[i + 1] == '"')
+                {
+                    s2 += '"';
+                    i += 2;
+                }
+                else
+                {
+                    s2 += s[i];
+                    i++;
+                }
+            }
+
+            while (i < s.Length)
+            {
+                s2 += s[i];
+                i++;
+            }
+
+            return s2;
         }
 
         public static void AggiungiInformazioneAmbigua(string v, ref InsiemeDiGruppi g)
