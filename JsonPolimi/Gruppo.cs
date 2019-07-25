@@ -347,7 +347,7 @@ namespace JsonPolimi
             if (!string.IsNullOrEmpty(gruppo.Id) && string.IsNullOrEmpty(Id))
                 Id = gruppo.Id;
 
-            if (!string.IsNullOrEmpty(gruppo.IdLink) && string.IsNullOrEmpty(IdLink))
+            if (!string.IsNullOrEmpty(gruppo.IdLink))
                 IdLink = gruppo.IdLink;
 
             if (!string.IsNullOrEmpty(gruppo.Language) && string.IsNullOrEmpty(Language))
