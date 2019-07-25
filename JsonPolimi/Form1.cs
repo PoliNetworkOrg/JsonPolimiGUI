@@ -58,6 +58,8 @@ namespace JsonPolimi
 
                 Aggiungi(i3);
             }
+
+            Variabili.L.Sort();
         }
 
         private static void Refresh_Tabella()
