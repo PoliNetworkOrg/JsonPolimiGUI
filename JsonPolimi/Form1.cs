@@ -490,6 +490,8 @@ namespace JsonPolimi
                 g.Aggiusta();
                 Variabili.L.Add(g);
             }
+
+            Variabili.L.Sort();
         }
 
         private static bool AdminValidi(GruppoTelegram gruppoTelegram)
