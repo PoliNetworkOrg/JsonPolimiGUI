@@ -197,18 +197,39 @@ namespace JsonPolimi
                 g.PermanentId = null;
             }
 
+            var data = i["LastUpdateInviteLinkTime"].ToString();
             try
             {
-                g.LastUpdateInviteLinkTime = (DateTime?)i["LastUpdateInviteLinkTime"];
+                g.LastUpdateInviteLinkTime = DataFromString(data);
             }
-            catch
+            catch (Exception e)
             {
                 g.LastUpdateInviteLinkTime = null;
+                throw e;
             }
 
             g.Aggiusta();
 
             Variabili.L.Add(g);
+        }
+
+        private static DateTime? DataFromString(string data)
+        {
+            if (string.IsNullOrEmpty(data))
+                return null;
+            if (data == "null")
+                return null;
+
+            //27/07/2019 11:42:24
+            var s1 = data.Split(' ');
+
+            //27/07/2019
+            var s2 = s1[0].Split('/');
+
+            //11:42:24
+            var s3 = s1[1].Split(':');
+
+            return new DateTime(Convert.ToInt32(s2[2]), Convert.ToInt32(s2[1]), Convert.ToInt32(s2[0]), Convert.ToInt32(s3[0]), Convert.ToInt32(s3[1]), Convert.ToInt32(s3[2]));
         }
 
         private void Button2_Click(object sender, EventArgs e)
