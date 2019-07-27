@@ -111,9 +111,9 @@ namespace JsonPolimi
                 return;
             }
 
-            var dialogResult = MessageBox.Show("Sei sicuro di volerli unire?", "Sicuro?", MessageBoxButtons.YesNo);
+            var dialogResult = MessageBox.Show("Sei sicuro di voler far diventare il link del gruppo 1 quello del gruppo 2?", "Sicuro?", MessageBoxButtons.YesNo);
             if (dialogResult != DialogResult.Yes) return;
-            Variabili.L.MergeLink(v1, v2);
+            Variabili.L.MergeLink((int)v1, (int)v2);
             Filtra(textBox1.Text, comboBox1.SelectedIndex, textBox2.Text);
         }
     }

@@ -122,13 +122,43 @@ namespace JsonPolimi
         public void MergeUnione(decimal v1, decimal v2)
         {
             Merge((int)v1, this.GetElem((int)v2));
-            this._l.RemoveAt((int)v2);
+            _l.RemoveAt((int)v2);
         }
 
-        public void MergeLink(decimal v1, decimal v2)
+        public void MergeLink(int v1, int v2)
         {
-            this._l[(int)v1].IdLink = this._l[(int)v2].IdLink;
-            this._l[(int)v1].Aggiusta();
+            _l[v1].IdLink = _l[v2].IdLink;
+
+            switch (_l[v1].LastUpdateInviteLinkTime)
+            {
+                case null when _l[v2].LastUpdateInviteLinkTime == null:
+                    _l[v1].LastUpdateInviteLinkTime = _l[v2].LastUpdateInviteLinkTime;
+                    break;
+
+                case null:
+                    _l[v1].LastUpdateInviteLinkTime = _l[v2].LastUpdateInviteLinkTime;
+                    break;
+
+                default:
+                    {
+                        if (_l[v2].LastUpdateInviteLinkTime != null)
+                        {
+                            var r = DateTime.Compare(_l[v1].LastUpdateInviteLinkTime.Value,
+                                _l[v2].LastUpdateInviteLinkTime.Value);
+                            if (r < 0)
+                            {
+                                _l[v1].LastUpdateInviteLinkTime = _l[v2].LastUpdateInviteLinkTime;
+                            }
+                        }
+
+                        break;
+                    }
+            }
+
+            if (_l[v1].LastUpdateInviteLinkTime == null)
+                _l[v1].LastUpdateInviteLinkTime = DateTime.Now;
+
+            _l[v1].Aggiusta();
         }
     }
 }
