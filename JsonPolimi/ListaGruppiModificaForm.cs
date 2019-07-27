@@ -15,7 +15,7 @@ namespace JsonPolimi
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
 
-            Filtra(null);
+            Filtra(null, 0);
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -41,15 +41,18 @@ namespace JsonPolimi
 
         private void TextBox1_TextChanged(object sender, EventArgs e)
         {
-            Filtra(textBox1.Text);
+            Filtra(textBox1.Text, comboBox1.SelectedIndex);
         }
 
-        private void Filtra(string text)
+        private void Filtra(string text, int selectedIndex)
         {
             listBox1.Items.Clear();
 
             if (text == null)
                 text = "";
+
+            if (selectedIndex < 0)
+                selectedIndex = 0;
 
             text = text.ToLower();
 
@@ -57,8 +60,32 @@ namespace JsonPolimi
             {
                 var variable = Variabili.L.GetElem(i);
 
-                if (variable.Classe.ToLower().Contains(text)) listBox1.Items.Add(new Riga(variable, i));
+                if (!variable.Classe.ToLower().Contains(text)) continue;
+
+                if (selectedIndex == 0 || variable.Platform.ToUpper() == comboBox1.Items[selectedIndex].ToString())
+                    listBox1.Items.Add(new Riga(variable, i));
             }
+        }
+
+        private void Button2_Click(object sender, EventArgs e)
+        {
+            var v1 = numericUpDown1.Value;
+            var v2 = numericUpDown2.Value;
+            if (v1 == -1 || v2 == -1)
+            {
+                MessageBox.Show("Devi selezionare dei valori validi!");
+                return;
+            }
+
+            var dialogResult = MessageBox.Show("Sei sicuro di volerli unire?", "Sicuro?", MessageBoxButtons.YesNo);
+            if (dialogResult != DialogResult.Yes) return;
+            Variabili.L.MergeUnione(v1, v2);
+            Filtra(textBox1.Text, comboBox1.SelectedIndex);
+        }
+
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Filtra(textBox1.Text, comboBox1.SelectedIndex);
         }
     }
 }

@@ -118,5 +118,11 @@ namespace JsonPolimi
                 return CompareOrdinal(a.PermanentId, b.PermanentId);
             }
         }
+
+        public void MergeUnione(decimal v1, decimal v2)
+        {
+            Merge((int)v1, this.GetElem((int)v2));
+            this._l.RemoveAt((int)v2);
+        }
     }
 }
