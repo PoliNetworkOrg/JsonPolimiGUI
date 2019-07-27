@@ -53,7 +53,7 @@ namespace JsonPolimi
             Id = CreaId();
         }
 
-        private void AggiustaAnno()
+        public void AggiustaAnno()
         {
             if (!string.IsNullOrEmpty(Year)) return;
 

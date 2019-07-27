@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Windows.Forms;
 
 namespace JsonPolimi
@@ -14,6 +15,12 @@ namespace JsonPolimi
         {
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
+
+            foreach (Gruppo variable in Variabili.L)
+            {
+                if (string.IsNullOrEmpty(variable.Year))
+                    variable.AggiustaAnno();
+            }
 
             Filtra(null, 0, null);
         }
@@ -70,7 +77,9 @@ namespace JsonPolimi
 
                 if (selectedIndex != 0 && variable.Platform.ToUpper() != comboBox1.Items[selectedIndex].ToString()) continue;
 
-                if (variable.Year.Contains(anno))
+                var anno2 = variable.Year ?? "";
+
+                if (anno2.Contains(anno))
                     listBox1.Items.Add(new Riga(variable, i));
             }
         }
