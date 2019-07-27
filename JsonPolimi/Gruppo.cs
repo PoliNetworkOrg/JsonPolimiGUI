@@ -16,6 +16,8 @@ namespace JsonPolimi
         public string School;
         public string Tipo;
         public string Year; // esempio: 2018/2019
+        public DateTime? LastUpdateInviteLinkTime;
+        public bool? isBot;
 
         internal void Aggiusta()
         {
@@ -38,6 +40,15 @@ namespace JsonPolimi
 
             if (string.IsNullOrEmpty(IdLink))
                 IdLink = CreaIdLink();
+
+            if (!string.IsNullOrEmpty(IdLink))
+            {
+                if (LastUpdateInviteLinkTime == null)
+                    LastUpdateInviteLinkTime = DateTime.Now;
+            }
+
+            if (isBot == null)
+                isBot = false;
 
             Id = CreaId();
         }
@@ -139,6 +150,8 @@ namespace JsonPolimi
             json += Year;
             json += "\",\"permanentId\":\"";
             json += PermanentId;
+            json += "\",\"lastupdate\":\"";
+            json += LastUpdateInviteLinkTime;
             json += "\",\"platform\":\"";
             json += Platform;
             json += "\"";
@@ -294,22 +307,22 @@ namespace JsonPolimi
             }
         }
 
-        private static void AggiungiLingua(string v_upper, ref InsiemeDiGruppi g)
+        private static void AggiungiLingua(string vUpper, ref InsiemeDiGruppi g)
         {
-            g.GruppoDiBase.Language = v_upper;
-            g.NomeOld.Language = v_upper;
+            g.GruppoDiBase.Language = vUpper;
+            g.NomeOld.Language = vUpper;
         }
 
-        private static void AggiungiScuola(string v_upper, ref InsiemeDiGruppi g)
+        private static void AggiungiScuola(string vUpper, ref InsiemeDiGruppi g)
         {
-            g.GruppoDiBase.School = v_upper;
-            g.NomeOld.School = v_upper;
+            g.GruppoDiBase.School = vUpper;
+            g.NomeOld.School = vUpper;
         }
 
-        private static void AggiungiTriennaleMagistrale(string v_upper, ref InsiemeDiGruppi g)
+        private static void AggiungiTriennaleMagistrale(string vUpper, ref InsiemeDiGruppi g)
         {
-            g.GruppoDiBase.Degree = v_upper;
-            g.NomeOld.Degree = v_upper;
+            g.GruppoDiBase.Degree = vUpper;
+            g.NomeOld.Degree = vUpper;
         }
 
         private static void AggiungiNome(string v, ref InsiemeDiGruppi g)
@@ -400,7 +413,47 @@ namespace JsonPolimi
                 Id = gruppo.Id;
 
             if (!string.IsNullOrEmpty(gruppo.IdLink))
-                IdLink = gruppo.IdLink;
+            {
+                if (string.IsNullOrEmpty(IdLink))
+                {
+                    IdLink = gruppo.IdLink;
+                    LastUpdateInviteLinkTime = gruppo.LastUpdateInviteLinkTime;
+                }
+                else
+                {
+                    switch (LastUpdateInviteLinkTime)
+                    {
+                        case null when gruppo.LastUpdateInviteLinkTime == null:
+                            IdLink = gruppo.IdLink;
+                            LastUpdateInviteLinkTime = gruppo.LastUpdateInviteLinkTime;
+                            break;
+
+                        case null:
+                            IdLink = gruppo.IdLink;
+                            LastUpdateInviteLinkTime = gruppo.LastUpdateInviteLinkTime;
+                            break;
+
+                        default:
+                            {
+                                if (gruppo.LastUpdateInviteLinkTime != null)
+                                {
+                                    var r = DateTime.Compare(LastUpdateInviteLinkTime.Value,
+                                        gruppo.LastUpdateInviteLinkTime.Value);
+                                    if (r < 0)
+                                    {
+                                        IdLink = gruppo.IdLink;
+                                        LastUpdateInviteLinkTime = gruppo.LastUpdateInviteLinkTime;
+                                    }
+                                }
+
+                                break;
+                            }
+                    }
+                }
+            }
+
+            if (LastUpdateInviteLinkTime == null)
+                LastUpdateInviteLinkTime = DateTime.Now;
 
             if (!string.IsNullOrEmpty(gruppo.Language) && string.IsNullOrEmpty(Language))
                 Language = gruppo.Language;
@@ -422,6 +475,8 @@ namespace JsonPolimi
 
             if (!string.IsNullOrEmpty(gruppo.Year) && string.IsNullOrEmpty(Year))
                 Year = gruppo.Year;
+
+            isBot = gruppo.isBot;
         }
     }
 }

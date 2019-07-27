@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using Telegram.Bot.Types;
 
 namespace JsonPolimi.Tipi
@@ -9,11 +10,16 @@ namespace JsonPolimi.Tipi
     {
         public List<ChatMember> Admins;
         public Chat Chat;
+        public bool IsBot;
+        public DateTime? LastUpdateInviteLinkTime;
 
-        public GruppoTelegram(Chat messageChat, List<ChatMember> admins)
+        [JsonConstructor]
+        public GruppoTelegram(Chat messageChat, List<ChatMember> admins, bool isBot, DateTime? lastUpdateInviteLinkTime)
         {
             Chat = messageChat;
             Admins = admins;
+            IsBot = isBot;
+            LastUpdateInviteLinkTime = lastUpdateInviteLinkTime;
         }
     }
 }

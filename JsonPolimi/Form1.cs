@@ -3,6 +3,7 @@ using JsonPolimi.Tipi;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Data.Odbc;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -28,7 +29,11 @@ namespace JsonPolimi
 
             var ofd = new OpenFileDialog();
             var rDialog = ofd.ShowDialog();
-            if (rDialog != DialogResult.OK) return;
+            if (rDialog != DialogResult.OK)
+            {
+                ofd.Dispose();
+                return;
+            }
 
             string content;
             try
@@ -38,12 +43,14 @@ namespace JsonPolimi
             catch (Exception e2)
             {
                 MessageBox.Show("Lettura fallita! \n\n" + e2.Message);
+                ofd.Dispose();
                 return;
             }
 
             if (content.Length < 1)
             {
                 MessageBox.Show("Il file letto sembra vuoto!");
+                ofd.Dispose();
                 return;
             }
 
@@ -60,6 +67,8 @@ namespace JsonPolimi
             }
 
             Variabili.L.Sort();
+
+            ofd.Dispose();
         }
 
         private static void Refresh_Tabella()
@@ -188,6 +197,15 @@ namespace JsonPolimi
                 g.PermanentId = null;
             }
 
+            try
+            {
+                g.LastUpdateInviteLinkTime = (DateTime?)i["LastUpdateInviteLinkTime"];
+            }
+            catch
+            {
+                g.LastUpdateInviteLinkTime = null;
+            }
+
             g.Aggiusta();
 
             Variabili.L.Add(g);
@@ -251,9 +269,13 @@ namespace JsonPolimi
             var o = new SaveFileDialog();
             var r = o.ShowDialog();
             if (r != DialogResult.OK)
+            {
+                o.Dispose();
                 return;
+            }
 
             File.WriteAllText(o.FileName, json);
+            o.Dispose();
         }
 
         private static void Aggiusta()
@@ -313,6 +335,7 @@ namespace JsonPolimi
         {
             var x = new AggiungiForm(false);
             x.ShowDialog();
+            x.Dispose();
         }
 
         private void Button5_Click(object sender, EventArgs e)
@@ -322,12 +345,22 @@ namespace JsonPolimi
 
             var o = new OpenFileDialog();
             var r = o.ShowDialog();
-            if (r != DialogResult.OK) return;
+            if (r != DialogResult.OK)
+            {
+                o.Dispose();
+                return;
+            }
 
             var (item1, item2) = ShowInputDialog("Anno");
-            if (item1 != DialogResult.OK) return;
+            if (item1 != DialogResult.OK)
+            {
+                o.Dispose();
+                return;
+            }
 
             Apri_ODS(o.FileName, item2);
+
+            o.Dispose();
 
             /*
             Apri_ODS("C:\\Users\\Arme\\Downloads\\pm3.ods", "2017/2018");
@@ -380,6 +413,8 @@ namespace JsonPolimi
             inputBox.CancelButton = cancelButton;
 
             var result = inputBox.ShowDialog();
+
+            inputBox.Dispose();
             return new Tuple<DialogResult, string>(result, textBox.Text);
         }
 
@@ -462,6 +497,8 @@ namespace JsonPolimi
 
             var x = new ListaGruppiModificaForm();
             x.ShowDialog();
+
+            x.Dispose();
         }
 
         private void Button8_Click(object sender, EventArgs e)
@@ -488,8 +525,11 @@ namespace JsonPolimi
                     PermanentId = r.Chat.Id.ToString(),
                     Platform = "TG",
                     IdLink = TelegramLinkLastPart(r.Chat.InviteLink),
-                    Tipo = "C"
+                    Tipo = "C",
+                    LastUpdateInviteLinkTime = r.LastUpdateInviteLinkTime,
+                    isBot = r.IsBot
                 };
+
                 g.Aggiusta();
                 Variabili.L.Add(g);
             }
@@ -521,11 +561,15 @@ namespace JsonPolimi
             return r[r.Length - 1];
         }
 
-        private static void LoadGruppi()
+        public static void LoadGruppi()
         {
             var ofd = new OpenFileDialog();
             var rDialog = ofd.ShowDialog();
-            if (rDialog != DialogResult.OK) return;
+            if (rDialog != DialogResult.OK)
+            {
+                ofd.Dispose();
+                return;
+            }
 
             string content;
             try
@@ -535,6 +579,7 @@ namespace JsonPolimi
             catch (Exception e2)
             {
                 MessageBox.Show("Lettura fallita! \n\n" + e2.Message);
+                ofd.Dispose();
                 return;
             }
 
@@ -549,6 +594,8 @@ namespace JsonPolimi
 
             if (FileSalvare == null)
                 FileSalvare = new FileSalvare();
+
+            ofd.Dispose();
         }
 
         private void Form1_Load(object sender, EventArgs e)
