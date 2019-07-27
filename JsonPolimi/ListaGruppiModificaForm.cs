@@ -100,5 +100,21 @@ namespace JsonPolimi
         {
             Filtra(textBox1.Text, comboBox1.SelectedIndex, textBox2.Text);
         }
+
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            var v1 = numericUpDown1.Value;
+            var v2 = numericUpDown2.Value;
+            if (v1 == -1 || v2 == -1)
+            {
+                MessageBox.Show("Devi selezionare dei valori validi!");
+                return;
+            }
+
+            var dialogResult = MessageBox.Show("Sei sicuro di volerli unire?", "Sicuro?", MessageBoxButtons.YesNo);
+            if (dialogResult != DialogResult.Yes) return;
+            Variabili.L.MergeLink(v1, v2);
+            Filtra(textBox1.Text, comboBox1.SelectedIndex, textBox2.Text);
+        }
     }
 }

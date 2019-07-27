@@ -124,5 +124,11 @@ namespace JsonPolimi
             Merge((int)v1, this.GetElem((int)v2));
             this._l.RemoveAt((int)v2);
         }
+
+        public void MergeLink(decimal v1, decimal v2)
+        {
+            this._l[(int)v1].IdLink = this._l[(int)v2].IdLink;
+            this._l[(int)v1].Aggiusta();
+        }
     }
 }
