@@ -15,7 +15,7 @@ namespace JsonPolimi
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
 
-            Filtra(null, 0);
+            Filtra(null, 0, null);
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -37,24 +37,30 @@ namespace JsonPolimi
 
             listBox1.Items[i] = r;
             Variabili.L.SetElem(r.I, AggiungiForm.g);
+
+            x.Dispose();
         }
 
         private void TextBox1_TextChanged(object sender, EventArgs e)
         {
-            Filtra(textBox1.Text, comboBox1.SelectedIndex);
+            Filtra(textBox1.Text, comboBox1.SelectedIndex, textBox2.Text);
         }
 
-        private void Filtra(string text, int selectedIndex)
+        private void Filtra(string text, int selectedIndex, string anno)
         {
             listBox1.Items.Clear();
 
             if (text == null)
                 text = "";
 
+            if (anno == null)
+                anno = "";
+
             if (selectedIndex < 0)
                 selectedIndex = 0;
 
             text = text.ToLower();
+            anno = anno.ToLower();
 
             for (var i = 0; i < Variabili.L.GetCount(); i++)
             {
@@ -62,7 +68,9 @@ namespace JsonPolimi
 
                 if (!variable.Classe.ToLower().Contains(text)) continue;
 
-                if (selectedIndex == 0 || variable.Platform.ToUpper() == comboBox1.Items[selectedIndex].ToString())
+                if (selectedIndex != 0 && variable.Platform.ToUpper() != comboBox1.Items[selectedIndex].ToString()) continue;
+
+                if (variable.Year.Contains(anno))
                     listBox1.Items.Add(new Riga(variable, i));
             }
         }
@@ -80,12 +88,17 @@ namespace JsonPolimi
             var dialogResult = MessageBox.Show("Sei sicuro di volerli unire?", "Sicuro?", MessageBoxButtons.YesNo);
             if (dialogResult != DialogResult.Yes) return;
             Variabili.L.MergeUnione(v1, v2);
-            Filtra(textBox1.Text, comboBox1.SelectedIndex);
+            Filtra(textBox1.Text, comboBox1.SelectedIndex, textBox2.Text);
         }
 
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Filtra(textBox1.Text, comboBox1.SelectedIndex);
+            Filtra(textBox1.Text, comboBox1.SelectedIndex, textBox2.Text);
+        }
+
+        private void TextBox2_TextChanged(object sender, EventArgs e)
+        {
+            Filtra(textBox1.Text, comboBox1.SelectedIndex, textBox2.Text);
         }
     }
 }
