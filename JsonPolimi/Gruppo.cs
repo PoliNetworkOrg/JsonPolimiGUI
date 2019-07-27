@@ -150,7 +150,7 @@ namespace JsonPolimi
             json += Year;
             json += "\",\"permanentId\":\"";
             json += PermanentId;
-            json += "\",\"lastupdate\":\"";
+            json += "\",\"LastUpdateInviteLinkTime\":\"";
             json += LastUpdateInviteLinkTime;
             json += "\",\"platform\":\"";
             json += Platform;
