@@ -213,7 +213,7 @@ namespace JsonPolimi
             Variabili.L.Add(g);
         }
 
-        private static DateTime? DataFromString(string data)
+        public static DateTime? DataFromString(string data)
         {
             if (string.IsNullOrEmpty(data))
                 return null;
@@ -537,9 +537,6 @@ namespace JsonPolimi
                 if (r.Chat.Type == ChatType.Private)
                     continue;
 
-                if (!AdminValidi(r))
-                    continue;
-
                 var g = new Gruppo
                 {
                     Classe = r.Chat.Title,
@@ -548,7 +545,6 @@ namespace JsonPolimi
                     IdLink = TelegramLinkLastPart(r.Chat.InviteLink),
                     Tipo = "C",
                     LastUpdateInviteLinkTime = r.LastUpdateInviteLinkTime,
-                    isBot = r.IsBot
                 };
 
                 g.Aggiusta();
@@ -556,24 +552,6 @@ namespace JsonPolimi
             }
 
             Variabili.L.Sort();
-        }
-
-        private static bool AdminValidi(GruppoTelegram gruppoTelegram)
-        {
-            if (gruppoTelegram.Admins == null)
-                return false;
-
-            if (gruppoTelegram.Admins.Count == 0)
-                return false;
-
-            foreach (var variable in gruppoTelegram.Admins)
-            {
-                if (variable.Status != ChatMemberStatus.Creator) continue;
-
-                if (ListaAdminAutorizzati.List.Contains(variable.User.Id)) return true;
-            }
-
-            return false;
         }
 
         private static string TelegramLinkLastPart(string chatInviteLink)

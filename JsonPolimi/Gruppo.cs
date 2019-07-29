@@ -17,7 +17,6 @@ namespace JsonPolimi
         public string Tipo;
         public string Year; // esempio: 2018/2019
         public DateTime? LastUpdateInviteLinkTime;
-        public bool? isBot;
 
         internal void Aggiusta()
         {
@@ -46,9 +45,6 @@ namespace JsonPolimi
                 if (LastUpdateInviteLinkTime == null)
                     LastUpdateInviteLinkTime = DateTime.Now;
             }
-
-            if (isBot == null)
-                isBot = false;
 
             Id = CreaId();
         }
@@ -475,8 +471,6 @@ namespace JsonPolimi
 
             if (!string.IsNullOrEmpty(gruppo.Year) && string.IsNullOrEmpty(Year))
                 Year = gruppo.Year;
-
-            isBot = gruppo.isBot;
         }
     }
 }
