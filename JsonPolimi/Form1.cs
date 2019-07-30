@@ -245,12 +245,13 @@ namespace JsonPolimi
                 //2019-07-29 18:26:55.034083
                 data = data.Split('.')[0];
 
+                //2019-07-29 18:26:55
                 var b1 = data.Split(' ');
 
-                //27/07/2019
+                //2019-07-29
                 var b2 = b1[0].Split('-');
 
-                //11:42:24
+                //18:26:55
                 var b3 = b1[1].Split(':');
 
                 return new DateTime(Convert.ToInt32(b2[0]), Convert.ToInt32(b2[1]), Convert.ToInt32(b2[2]), Convert.ToInt32(b3[0]), Convert.ToInt32(b3[1]), Convert.ToInt32(b3[2]));
