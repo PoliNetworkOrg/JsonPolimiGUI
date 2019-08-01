@@ -283,6 +283,7 @@ namespace JsonPolimi
                 return;
             }
 
+            Variabili.L.Sort();
             Aggiusta();
             Variabili.L.Sort();
 
@@ -385,6 +386,9 @@ namespace JsonPolimi
                 r += s.Substring(n + 5);
                 return r;
             }
+
+            s = s.Replace("&apos;", "'");
+            s = s.Replace("&amp;", "&");
 
             return s;
         }
