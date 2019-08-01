@@ -593,6 +593,9 @@ namespace JsonPolimi
 
         private static string TelegramLinkLastPart(string chatInviteLink)
         {
+            if (string.IsNullOrEmpty(chatInviteLink))
+                return null;
+
             var r = chatInviteLink.Split('/');
             return r[r.Length - 1];
         }
