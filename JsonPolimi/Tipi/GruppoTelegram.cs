@@ -10,12 +10,14 @@ namespace JsonPolimi.Tipi
     {
         public Chat Chat;
         public DateTime? LastUpdateInviteLinkTime;
+        public bool? we_are_admin;
 
         [JsonConstructor]
-        public GruppoTelegram(Chat messageChat, string lastUpdateInviteLinkTime)
+        public GruppoTelegram(Chat messageChat, string lastUpdateInviteLinkTime, bool? we_are_admin)
         {
             Chat = messageChat;
             LastUpdateInviteLinkTime = Form1.DataFromString(lastUpdateInviteLinkTime);
+            this.we_are_admin = we_are_admin;
         }
     }
 }

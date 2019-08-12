@@ -578,6 +578,9 @@ namespace JsonPolimi
                 if (r.Chat.Type == ChatType.Private)
                     continue;
 
+                if (r.we_are_admin == false)
+                    continue;
+
                 var g = new Gruppo
                 {
                     Classe = r.Chat.Title,
