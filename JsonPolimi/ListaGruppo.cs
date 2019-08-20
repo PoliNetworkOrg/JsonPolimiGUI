@@ -160,5 +160,376 @@ namespace JsonPolimi
 
             _l[v1].Aggiusta();
         }
+
+        internal void ProvaAdUnire()
+        {
+            for (int i = 0; i < this._l.Count; i++)
+            {
+                this._l[i].Aggiusta();
+                for (int j = 0; j < this._l.Count; j++)
+                {
+                    if (i != j)
+                    {
+                        Tuple<bool, Gruppo> r = Equivalenti(i, j);
+                        if (r.Item1)
+                        {
+                            if (i > j)
+                            {
+                                this._l.RemoveAt(i);
+                                this._l.RemoveAt(j);
+                            }
+                            else
+                            {
+                                this._l.RemoveAt(j);
+                                this._l.RemoveAt(i);
+                            }
+
+                            this._l.Add(r.Item2);
+
+                            i--;
+                            j--;
+
+                            if (i < 0)
+                                i = 0;
+
+                            if (j < 0)
+                                j = 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        private Tuple<bool, Gruppo> Equivalenti(int i, int j)
+        {
+            Gruppo a1 = this._l[i];
+            Gruppo a2 = this._l[j];
+
+            if (a1.PermanentId == a2.PermanentId && !String.IsNullOrEmpty(a1.PermanentId))
+                return Unisci(i, j);
+            else
+            {
+                if (!String.IsNullOrEmpty(a1.PermanentId))
+                {
+                    if (!String.IsNullOrEmpty(a2.PermanentId))
+                    {
+                        if (a1.PermanentId != a2.PermanentId)
+                            return new Tuple<bool, Gruppo>(false, null);
+                    }
+                }
+            }
+
+            if (a1.Id == a2.Id && !String.IsNullOrEmpty(a1.Id))
+                return Unisci(i, j);
+
+            if (!String.IsNullOrEmpty(a1.Year))
+            {
+                if (!String.IsNullOrEmpty(a2.Year))
+                {
+                    if (a1.Year != a2.Year)
+                        return new Tuple<bool, Gruppo>(false, null);
+                }
+            }
+
+            if (!String.IsNullOrEmpty(a1.Platform))
+            {
+                if (!String.IsNullOrEmpty(a2.Platform))
+                {
+                    if (a1.Platform != a2.Platform)
+                        return new Tuple<bool, Gruppo>(false, null);
+                }
+            }
+
+            if (String.IsNullOrEmpty(a1.Classe))
+                return new Tuple<bool, Gruppo>(false, null);
+
+            if (String.IsNullOrEmpty(a2.Classe))
+                return new Tuple<bool, Gruppo>(false, null);
+
+            string[] s1 = a1.Classe.ToLower().Split(' ');
+            string[] s2 = a2.Classe.ToLower().Split(' ');
+            List<string> sa1 = new List<string>();
+            List<string> sa2 = new List<string>();
+            sa1.AddRange(s1);
+            sa2.AddRange(s2);
+            if (sa1.Contains("magistrale"))
+            {
+                if (String.IsNullOrEmpty(a2.Degree))
+                    return new Tuple<bool, Gruppo>(false, null);
+                if (a2.Degree.ToLower() != "lm")
+                    return new Tuple<bool, Gruppo>(false, null);
+            }
+            else if (sa1.Contains("triennale"))
+            {
+                if (String.IsNullOrEmpty(a2.Degree))
+                    return new Tuple<bool, Gruppo>(false, null);
+                if (a2.Degree.ToLower() != "lt")
+                    return new Tuple<bool, Gruppo>(false, null);
+            }
+            else if (sa2.Contains("magistrale"))
+            {
+                if (String.IsNullOrEmpty(a1.Degree))
+                    return new Tuple<bool, Gruppo>(false, null);
+                if (a1.Degree.ToLower() != "lm")
+                    return new Tuple<bool, Gruppo>(false, null);
+            }
+            else if (sa2.Contains("triennale"))
+            {
+                if (String.IsNullOrEmpty(a1.Degree))
+                    return new Tuple<bool, Gruppo>(false, null);
+                if (a1.Degree.ToLower() != "lt")
+                    return new Tuple<bool, Gruppo>(false, null);
+            }
+
+            if (NomiSimili(a1.Classe, a2.Classe))
+                return Unisci(i, j);
+
+            return new Tuple<bool, Gruppo>(false, null);
+        }
+
+        private bool NomiSimili(string n1, string n2)
+        {
+            if (n1.Length == 0 || n2.Length == 0)
+                return false;
+
+            if (n1 == n2)
+                return true;
+
+            try
+            {
+                string[] s1 = n1.Split(' ');
+                string[] s2 = n2.Split(' ');
+
+                List<string> l1 = new List<string>();
+                List<string> l2 = new List<string>();
+
+                l1.AddRange(s1);
+                l2.AddRange(s2);
+
+                //lower words
+                for (int i = 0; i < l1.Count; i++)
+                {
+                    l1[i] = l1[i].ToLower();
+                }
+                for (int i = 0; i < l2.Count; i++)
+                {
+                    l2[i] = l2[i].ToLower();
+                }
+
+                //remove duplicate
+                List<string> la1 = new List<string>();
+                List<string> la2 = new List<string>();
+                for (int i = 0; i < l1.Count; i++)
+                {
+                    if (!la1.Contains(l1[i]))
+                        la1.Add(l1[i]);
+                }
+                for (int i = 0; i < l2.Count; i++)
+                {
+                    if (!la2.Contains(l2[i]))
+                        la2.Add(l2[i]);
+                }
+                l1 = la1;
+                l2 = la2;
+
+                List<string> no_merge = new List<string>() { "analisi", "vehicles", "440" };
+                foreach (string no_merge_s in no_merge)
+                {
+                    if (l1.Contains(no_merge_s) || l2.Contains(no_merge_s))
+                        return false;
+                }
+
+                List<Tuple<string, string>> no_merge2 = new List<Tuple<string, string>>();
+                no_merge2.Add(new Tuple<string, string>("chimica", "elettrica"));
+
+                foreach (var no_merge_s2 in no_merge2)
+                {
+                    if (l1.Contains(no_merge_s2.Item1) && l1.Contains(no_merge_s2.Item2))
+                        return false;
+                    if (l2.Contains(no_merge_s2.Item1) && l2.Contains(no_merge_s2.Item2))
+                        return false;
+                }
+
+                //remove useless words
+                List<string> useless = new List<string>() { "polimi", "politecnico", "and", "engineering", "in", "generale", "gruppo", "for", "the", "e", "delle", "dei" };
+                TryRemove(ref l1, ref l2, useless);
+
+                bool? r2 = ManualCheck(n1, n2);
+                if (r2 != null)
+                {
+                    return r2.Value;
+                }
+
+                //count how many words are in common
+                int quanti = 0;
+                for (int i = 0; i < l1.Count; i++)
+                {
+                    if (l2.Contains(l1[i]))
+                        quanti++;
+                }
+
+                int minimo = 0;
+                if (l1.Count + l2.Count > 5)
+                {
+                    minimo = 2;
+                }
+                else
+                {
+                    minimo = 1;
+                }
+
+                if (quanti >= minimo)
+                    return true;
+            }
+            catch
+            {
+                return false;
+            }
+
+            return false;
+        }
+
+        private bool? ManualCheck(string n1, string n2)
+        {
+            if (n1[n1.Length - 1] == ' ')
+                n1 = n1.Remove(n1.Length - 1);
+
+            if (n2[n2.Length - 1] == ' ')
+                n2 = n2.Remove(n2.Length - 1);
+
+            if (n1 == "Civil Engineering MAGISTRALE" && n2 == "Civil Engineering for Risk Mitigation")
+                return false;
+
+            if (n2 == "Civil Engineering MAGISTRALE" && n1 == "Civil Engineering for Risk Mitigation")
+                return false;
+
+            if (n1 == "Digital and Interaction Design")
+            {
+                if (n2.Contains("Systems"))
+                    return false;
+            }
+
+            if (n2 == "Digital and Interaction Design")
+            {
+                if (n1.Contains("Systems"))
+                    return false;
+            }
+
+            if (n1 == "Economia e Organiz. Aziendale B - Elettrica")
+                return false;
+
+            if (n2 == "Economia e Organiz. Aziendale B - Elettrica")
+                return false;
+
+            if (n1 == "Fisica 1" || n2 == "Fisica 1")
+                return false;
+
+            return null;
+        }
+
+        private void TryRemove(ref List<string> l1, ref List<string> l2, List<string> to_remove)
+        {
+            foreach (string s in to_remove)
+            {
+                try
+                {
+                    l1.Remove(s);
+                }
+                catch
+                {
+                    ;
+                }
+
+                try
+                {
+                    l2.Remove(s);
+                }
+                catch
+                {
+                    ;
+                }
+            }
+        }
+
+        private Tuple<bool, Gruppo> Unisci(int i, int j)
+        {
+            Gruppo g = Unisci2(i, j);
+            return new Tuple<bool, Gruppo>(true, g);
+        }
+
+        private Gruppo Unisci2(int i, int j)
+        {
+            Gruppo a1 = this._l[i];
+            Gruppo a2 = this._l[j];
+
+            if (String.IsNullOrEmpty(a1.Classe))
+                a1.Classe = a2.Classe;
+            else
+            {
+                if (!String.IsNullOrEmpty(a2.Classe))
+                {
+                    bool done = false;
+                    if (String.IsNullOrEmpty(a1.Year))
+                    {
+                        if (!String.IsNullOrEmpty(a2.Year))
+                        {
+                            if (a2.Classe.Length > a1.Classe.Length)
+                            {
+                                a1.Classe = a2.Classe;
+                                done = true;
+                            }
+                        }
+                    }
+                    else if (String.IsNullOrEmpty(a2.Year))
+                    {
+                        if (!String.IsNullOrEmpty(a1.Year))
+                        {
+                            if (a1.Classe.Length > a2.Classe.Length)
+                            {
+                                done = true;
+                            }
+                        }
+                    }
+
+                    if (!done)
+                        a1.Classe += " " + a2.Classe;
+                }
+            }
+
+            if (String.IsNullOrEmpty(a1.Degree))
+                a1.Degree = a2.Degree;
+            if (String.IsNullOrEmpty(a1.Id))
+                a1.Id = a2.Id;
+            if (String.IsNullOrEmpty(a1.IdLink))
+                a1.IdLink = a2.IdLink;
+            if (String.IsNullOrEmpty(a1.Language))
+                a1.Language = a2.Language;
+            if (String.IsNullOrEmpty(a1.Office))
+                a1.Office = a2.Office;
+            if (String.IsNullOrEmpty(a1.PermanentId))
+                a1.PermanentId = a2.PermanentId;
+            if (String.IsNullOrEmpty(a1.Platform))
+                a1.Platform = a2.Platform;
+            if (String.IsNullOrEmpty(a1.School))
+                a1.School = a2.School;
+            if (String.IsNullOrEmpty(a1.Tipo))
+                a1.Tipo = a2.Tipo;
+            if (String.IsNullOrEmpty(a1.Year))
+                a1.Year = a2.Year;
+            if (a1.LastUpdateInviteLinkTime == null)
+                a1.LastUpdateInviteLinkTime = a2.LastUpdateInviteLinkTime;
+            else
+            {
+                if (a2.LastUpdateInviteLinkTime != null)
+                {
+                    if (DateTime.Compare(a1.LastUpdateInviteLinkTime.Value, a2.LastUpdateInviteLinkTime.Value) < 0)
+                        a1.LastUpdateInviteLinkTime = a2.LastUpdateInviteLinkTime;
+                }
+            }
+
+            a1.Aggiusta();
+
+            return a1;
+        }
     }
 }
