@@ -240,6 +240,24 @@ namespace JsonPolimi
                 }
             }
 
+            if (!String.IsNullOrEmpty(a1.Office))
+            {
+                if (!String.IsNullOrEmpty(a2.Office))
+                {
+                    if (a1.Office != a2.Office)
+                        return new Tuple<bool, Gruppo>(false, null);
+                }
+            }
+
+            if (!String.IsNullOrEmpty(a1.Degree))
+            {
+                if (!String.IsNullOrEmpty(a2.Degree))
+                {
+                    if (a1.Degree != a2.Degree)
+                        return new Tuple<bool, Gruppo>(false, null);
+                }
+            }
+
             if (String.IsNullOrEmpty(a1.Classe))
                 return new Tuple<bool, Gruppo>(false, null);
 
@@ -316,6 +334,8 @@ namespace JsonPolimi
                     l2[i] = l2[i].ToLower();
                 }
 
+                TryRename(ref l1, ref l2);
+
                 //remove duplicate
                 List<string> la1 = new List<string>();
                 List<string> la2 = new List<string>();
@@ -351,7 +371,12 @@ namespace JsonPolimi
                 }
 
                 //remove useless words
-                List<string> useless = new List<string>() { "polimi", "politecnico", "and", "engineering", "in", "generale", "gruppo", "for", "the", "e", "delle", "dei" };
+                List<string> useless = new List<string>() {
+                    "polimi", "politecnico", "and",
+                    "engineering", "in",
+                    "generale", "gruppo", "for", "the",
+                    "e", "delle", "dei",
+                    "ingegneria", "della", "-", "" };
                 TryRemove(ref l1, ref l2, useless);
 
                 bool? r2 = ManualCheck(n1, n2);
@@ -361,11 +386,11 @@ namespace JsonPolimi
                 }
 
                 //count how many words are in common
-                int quanti = 0;
+                List<string> quanti = new List<string>();
                 for (int i = 0; i < l1.Count; i++)
                 {
                     if (l2.Contains(l1[i]))
-                        quanti++;
+                        quanti.Add(l1[i]);
                 }
 
                 int minimo = 0;
@@ -378,7 +403,15 @@ namespace JsonPolimi
                     minimo = 1;
                 }
 
-                if (quanti >= minimo)
+                if (quanti.Count == 1)
+                {
+                    if (quanti[0] == "design")
+                        return false;
+                    if (quanti[0] == "architettura")
+                        return false;
+                }
+
+                if (quanti.Count >= minimo)
                     return true;
             }
             catch
@@ -389,6 +422,26 @@ namespace JsonPolimi
             return false;
         }
 
+        private void TryRename(ref List<string> l1, ref List<string> l2)
+        {
+            List<Tuple<string, string>> rename = new List<Tuple<string, string>>();
+            rename.Add(new Tuple<string, string>("informatica", "info"));
+            foreach (var ren in rename)
+            {
+                for (int i = 0; i < l1.Count; i++)
+                {
+                    if (l1[i] == ren.Item1)
+                        l1[i] = ren.Item2;
+                }
+
+                for (int i = 0; i < l2.Count; i++)
+                {
+                    if (l2[i] == ren.Item1)
+                        l2[i] = ren.Item2;
+                }
+            }
+        }
+
         private bool? ManualCheck(string n1, string n2)
         {
             if (n1[n1.Length - 1] == ' ')
@@ -397,31 +450,175 @@ namespace JsonPolimi
             if (n2[n2.Length - 1] == ' ')
                 n2 = n2.Remove(n2.Length - 1);
 
-            if (n1 == "Civil Engineering MAGISTRALE" && n2 == "Civil Engineering for Risk Mitigation")
+            n1 = n1.ToLower();
+            n2 = n2.ToLower();
+
+            if (n1 == "civil engineering magistrale" && n2 == "civil engineering for risk mitigation")
                 return false;
 
-            if (n2 == "Civil Engineering MAGISTRALE" && n1 == "Civil Engineering for Risk Mitigation")
+            if (n2 == "civil engineering magistrale" && n1 == "civil engineering for risk mitigation")
                 return false;
 
-            if (n1 == "Digital and Interaction Design")
+            if (n1 == "telecomunicazioni - informatica polimi" && n2 == "ingegneria informatica")
+                return false;
+
+            if (n2 == "telecomunicazioni - informatica polimi" && n1 == "ingegneria informatica")
+                return false;
+
+            if (n1 == "computer science and engineering - ingegneria informatica" && n2 == "telecomunicazioni - informatica polimi")
+                return false;
+
+            if (n2 == "computer science and engineering - ingegneria informatica" && n1 == "telecomunicazioni - informatica polimi")
+                return false;
+
+            if (n1 == "design & engineering - progetto e ingegnerizzazione del prodotto industriale" && n2 == "design del prodotto industriale")
+                return false;
+
+            if (n2 == "design & engineering - progetto e ingegnerizzazione del prodotto industriale" && n1 == "design del prodotto industriale")
+                return false;
+
+            if (n1 == "ingegneria per l'ambiente e il territorio - environmental and land planning engineering" && n2 == "urban planning and policy design - pianificazione urbana e politiche territoriali")
+                return false;
+
+            if (n2 == "ingegneria per l'ambiente e il territorio - environmental and land planning engineering" && n1 == "urban planning and policy design - pianificazione urbana e politiche territoriali")
+                return false;
+
+            if (n1 == "architettura e disegno urbano - architecture and urban design" && n2 == "urban planning and policy design - pianificazione urbana e politiche territoriali")
+                return false;
+
+            if (n2 == "architettura e disegno urbano - architecture and urban design" && n1 == "urban planning and policy design - pianificazione urbana e politiche territoriali")
+                return false;
+;
+            if (n1 == "design & engineering - progetto e ingegnerizzazione del prodotto industriale" && n2 == "product service system design - design per il sistema prodotto servizio")
+                return false;
+
+            if (n2 == "design & engineering - progetto e ingegnerizzazione del prodotto industriale" && n1 == "product service system design - design per il sistema prodotto servizio")
+                return false;
+
+            if (n1 == "design for the fashion system - design per il sistema moda" && 
+                n2 == "design & engineering - progetto e ingegnerizzazione del prodotto industriale product service system design - design per il sistema prodotto servizio")
+                return false;
+
+            if (n2 == "design for the fashion system - design per il sistema moda" &&
+                n1 == "design & engineering - progetto e ingegnerizzazione del prodotto industriale product service system design - design per il sistema prodotto servizio")
+                return false;
+
+            if (n1 == "integrated product design" &&
+                n2 == "design for the fashion system - design per il sistema moda design & engineering - progetto e ingegnerizzazione del prodotto industriale product service system design - design per il sistema prodotto servizio")
+                return false;
+
+            if (n2 == "integrated product design" &&
+                n1 == "design for the fashion system - design per il sistema moda design & engineering - progetto e ingegnerizzazione del prodotto industriale product service system design - design per il sistema prodotto servizio")
+                return false;
+
+            if (n1 == "design for the fashion system - design per il sistema moda" && n2 == "product service system design - design per il sistema prodotto servizio")
+                return false;
+
+            if (n2 == "design for the fashion system - design per il sistema moda" && n1 == "product service system design - design per il sistema prodotto servizio")
+                return false;
+
+            if (n1 == "integrated product design" && n2 == "design for the fashion system - design per il sistema moda product service system design - design per il sistema prodotto servizio")
+                return false;
+
+            if (n2 == "integrated product design" && n1 == "design for the fashion system - design per il sistema moda product service system design - design per il sistema prodotto servizio")
+                return false;
+
+            if (n1 == "integrated product design" && n2 == "product service system design - design per il sistema prodotto servizio")
+                return false;
+
+            if (n2 == "integrated product design" && n1 == "product service system design - design per il sistema prodotto servizio")
+                return false;
+
+            if (n1 == "integrated product design design for the fashion system - design per il sistema moda product service system design - design per il sistema prodotto servizio" && 
+                n2 == "design & engineering - progetto e ingegnerizzazione del prodotto industriale")
+                return false;
+
+            if (n2 == "integrated product design design for the fashion system - design per il sistema moda product service system design - design per il sistema prodotto servizio" &&
+                n1 == "design & engineering - progetto e ingegnerizzazione del prodotto industriale")
+                return false;
+
+            if (n1 == "digital and interaction design")
             {
-                if (n2.Contains("Systems"))
+                if (n2.Contains("systems"))
                     return false;
             }
 
-            if (n2 == "Digital and Interaction Design")
+            if (n2 == "digital and interaction design")
             {
-                if (n1.Contains("Systems"))
+                if (n1.Contains("systems"))
                     return false;
             }
 
-            if (n1 == "Economia e Organiz. Aziendale B - Elettrica")
+            if (n1 == "economia e organiz. aziendale b - elettrica")
                 return false;
 
-            if (n2 == "Economia e Organiz. Aziendale B - Elettrica")
+            if (n2 == "economia e organiz. aziendale b - elettrica")
                 return false;
 
-            if (n1 == "Fisica 1" || n2 == "Fisica 1")
+            if (n1 == "fisica 1" || n2 == "fisica 1")
+                return false;
+
+            if (n1 == "fisica tecnica" || n2 == "fisica tecnica")
+                return false;
+
+            if (n1 == "fisica tecnica e macchine" || n2 == "fisica tecnica e macchine")
+                return false;
+
+            if (n1 == "fondamenti di chimica - elettrotecnica" || n2 == "fondamenti di chimica - elettrotecnica")
+                return false;
+
+            if (n1 == "fondamenti di elettronica" || n2 == "fondamenti di elettronica")
+                return false;
+
+            if (n1 == "communication network design" || n2 == "communication network design")
+                return false;
+
+            if (n1 == "informatica online polimi" || n2 == "informatica online polimi")
+                return false;
+
+            if (n1 == "informatica e diritto" || n2 == "informatica e diritto")
+                return false;
+
+            if (n1 == "meccanica (per ing informatica)" || n2 == "meccanica (per ing informatica)")
+                return false;
+
+            if (n1 == "philosophical issues of computer science" || n2 == "philosophical issues of computer science")
+                return false;
+
+            if (n1 == "progetto di ingegneria del software" || n2 == "progetto di ingegneria del software")
+                return false;
+
+            if (n1 == "progetto di ingegneria informatica" || n2 == "progetto di ingegneria informatica")
+                return false;
+
+            if (n1 == "sistemi informatici" || n2 == "sistemi informatici")
+                return false;
+
+            if (n1 == "informatica" || n2 == "informatica")
+                return false;
+
+            if (n1 == "theoretical computer science" || n2 == "theoretical computer science")
+                return false;
+
+            if (n1 == "algebra and mathematical logic" || n2 == "algebra and mathematical logic")
+                return false;
+
+            if (n1 == "computer ethics" || n2 == "computer ethics")
+                return false;
+
+            if (n1 == "computer graphics" || n2 == "computer graphics")
+                return false;
+
+            if (n1 == "data management for the web" || n2 == "data management for the web")
+                return false;
+
+            if (n1 == "digital project management" || n2 == "digital project management")
+                return false;
+
+            if (n1 == "progetto sistemi informativi" || n2 == "progetto sistemi informativi")
+                return false;
+
+            if (n1 == "computer security" || n2 == "computer security")
                 return false;
 
             return null;
@@ -524,6 +721,15 @@ namespace JsonPolimi
                 {
                     if (DateTime.Compare(a1.LastUpdateInviteLinkTime.Value, a2.LastUpdateInviteLinkTime.Value) < 0)
                         a1.LastUpdateInviteLinkTime = a2.LastUpdateInviteLinkTime;
+                }
+            }
+
+            if (!String.IsNullOrEmpty(a1.Year))
+            {
+                if (!String.IsNullOrEmpty(a1.Tipo) && !String.IsNullOrEmpty(a2.Tipo))
+                {
+                    if (a1.Tipo.ToLower() == "s" || a2.Tipo.ToLower() == "s")
+                        a1.Tipo = "S";
                 }
             }
 
