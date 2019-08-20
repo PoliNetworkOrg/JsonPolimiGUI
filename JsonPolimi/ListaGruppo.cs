@@ -488,14 +488,14 @@ namespace JsonPolimi
 
             if (n2 == "architettura e disegno urbano - architecture and urban design" && n1 == "urban planning and policy design - pianificazione urbana e politiche territoriali")
                 return false;
-;
+            ;
             if (n1 == "design & engineering - progetto e ingegnerizzazione del prodotto industriale" && n2 == "product service system design - design per il sistema prodotto servizio")
                 return false;
 
             if (n2 == "design & engineering - progetto e ingegnerizzazione del prodotto industriale" && n1 == "product service system design - design per il sistema prodotto servizio")
                 return false;
 
-            if (n1 == "design for the fashion system - design per il sistema moda" && 
+            if (n1 == "design for the fashion system - design per il sistema moda" &&
                 n2 == "design & engineering - progetto e ingegnerizzazione del prodotto industriale product service system design - design per il sistema prodotto servizio")
                 return false;
 
@@ -529,12 +529,18 @@ namespace JsonPolimi
             if (n2 == "integrated product design" && n1 == "product service system design - design per il sistema prodotto servizio")
                 return false;
 
-            if (n1 == "integrated product design design for the fashion system - design per il sistema moda product service system design - design per il sistema prodotto servizio" && 
+            if (n1 == "integrated product design design for the fashion system - design per il sistema moda product service system design - design per il sistema prodotto servizio" &&
                 n2 == "design & engineering - progetto e ingegnerizzazione del prodotto industriale")
                 return false;
 
             if (n2 == "integrated product design design for the fashion system - design per il sistema moda product service system design - design per il sistema prodotto servizio" &&
                 n1 == "design & engineering - progetto e ingegnerizzazione del prodotto industriale")
+                return false;
+
+            if (n1 == "computer science and engineering - ingegneria informatica" && n2 == "polimi info 2019/2020")
+                return false;
+
+            if (n2 == "computer science and engineering - ingegneria informatica" && n1 == "polimi info 2019/2020")
                 return false;
 
             if (n1 == "digital and interaction design")
