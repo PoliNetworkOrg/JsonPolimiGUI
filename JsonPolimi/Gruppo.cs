@@ -472,5 +472,63 @@ namespace JsonPolimi
             if (!string.IsNullOrEmpty(gruppo.Year) && string.IsNullOrEmpty(Year))
                 Year = gruppo.Year;
         }
+
+        internal string To_json_Tg()
+        {
+            /*
+             {"Chat": {"id": -1001452418598, "type": "supergroup", "title": "Polimi Piacenza \ud83c\uddee\ud83c\uddf9\ud83d\udc48",
+             "invite_link": "https://t.me/joinchat/LclXl1aSJiYbzl7wCW5WZg"}, "LastUpdateInviteLinkTime": "2019-08-20 08:47:55.368966", "we_are_admin": true}
+            */
+
+            if (String.IsNullOrEmpty(this.PermanentId))
+                return null;
+
+            if (String.IsNullOrEmpty(this.Classe))
+                return null;
+
+            string json = "{" + '"' + "Chat" + '"' + ":{";
+
+            json += '"' + "id" + '"' + ": ";
+            json += this.PermanentId;
+            json += ", " + '"' + "type" + '"' + ": \"supergroup\", \"title\": ";
+            json += '"';
+            json += this.Classe;
+            json += '"';
+            json += ", \"invite_link\": ";
+            json += '"';
+            json += this.getLink();
+            json += '"';
+            json += "}, ";
+            json += '"' + "LastUpdateInviteLinkTime" + '"';
+            json += ": ";
+            json += '"';
+            json += this.getTelegramTime();
+            json += '"';
+            json += ", ";
+            json += '"' + "we_are_admin" + '"';
+            json += ": true}";
+            return json;
+        }
+
+        private string getTelegramTime()
+        {
+            if (this.LastUpdateInviteLinkTime == null)
+                return null;
+
+            //   2019-08-20 08:47:55.368966
+            return this.LastUpdateInviteLinkTime.Value.Year.ToString().PadLeft(4, '0') + "-" +
+                    this.LastUpdateInviteLinkTime.Value.Month.ToString().PadLeft(2, '0') + "-" +
+                    this.LastUpdateInviteLinkTime.Value.Day.ToString().PadLeft(2, '0') + " " +
+                    this.LastUpdateInviteLinkTime.Value.Hour.ToString().PadLeft(2, '0') + ":" +
+                    this.LastUpdateInviteLinkTime.Value.Minute.ToString().PadLeft(2, '0') + ":" +
+                    this.LastUpdateInviteLinkTime.Value.Second.ToString().PadLeft(2, '0') + "." +
+                    this.LastUpdateInviteLinkTime.Value.Millisecond.ToString();
+        }
+
+        private string getLink()
+        {
+            //   https://t.me/joinchat/LclXl1aSJiYbzl7wCW5WZg
+            throw new NotImplementedException();
+        }
     }
 }

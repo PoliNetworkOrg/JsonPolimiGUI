@@ -653,5 +653,34 @@ namespace JsonPolimi
         {
             Variabili.L.ProvaAdUnire();
         }
+
+        private void Button10_Click(object sender, EventArgs e)
+        {
+            if (Variabili.L == null)
+            {
+                MessageBox.Show("Lista vuota!");
+                return;
+            }
+
+            Variabili.L.Sort();
+            Aggiusta();
+            Variabili.L.Sort();
+
+            var json = "{\"Gruppi\": [";
+            var n = Variabili.L.GetCount();
+            for (var i = 0; i < n; i++)
+            {
+                var elem = Variabili.L.GetElem(i);
+
+                json += elem.To_json_Tg();
+
+                if (i != n - 1)
+                    json += ",";
+            }
+
+            json += "]}";
+
+            Salva(json);
+        }
     }
 }

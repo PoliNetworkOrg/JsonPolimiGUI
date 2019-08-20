@@ -39,6 +39,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -68,11 +69,11 @@
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(161, 253);
+            this.button3.Location = new System.Drawing.Point(161, 232);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(244, 51);
+            this.button3.Size = new System.Drawing.Size(244, 72);
             this.button3.TabIndex = 2;
-            this.button3.Text = "Salva file";
+            this.button3.Text = "Salva file per sito";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.Button3_Click);
             // 
@@ -101,9 +102,9 @@
             // button6
             // 
             this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button6.Location = new System.Drawing.Point(12, 253);
+            this.button6.Location = new System.Drawing.Point(12, 232);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(143, 51);
+            this.button6.Size = new System.Drawing.Size(143, 72);
             this.button6.TabIndex = 5;
             this.button6.Text = "Svuota lista";
             this.button6.UseVisualStyleBackColor = true;
@@ -136,7 +137,7 @@
             this.groupBox2.Controls.Add(this.button8);
             this.groupBox2.Location = new System.Drawing.Point(473, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(107, 244);
+            this.groupBox2.Size = new System.Drawing.Size(107, 170);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Altro";
@@ -146,7 +147,7 @@
             this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button8.Location = new System.Drawing.Point(6, 19);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(93, 219);
+            this.button8.Size = new System.Drawing.Size(93, 137);
             this.button8.TabIndex = 9;
             this.button8.Text = "Carica json da bot telegram";
             this.button8.UseVisualStyleBackColor = true;
@@ -163,11 +164,23 @@
             this.button9.UseVisualStyleBackColor = true;
             this.button9.Click += new System.EventHandler(this.Button9_Click);
             // 
+            // button10
+            // 
+            this.button10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button10.Location = new System.Drawing.Point(411, 232);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(169, 72);
+            this.button10.TabIndex = 10;
+            this.button10.Text = "Salva file per bot telegram";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.Button10_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(586, 316);
+            this.Controls.Add(this.button10);
             this.Controls.Add(this.button9);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.button7);
@@ -199,6 +212,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.Button button10;
     }
 }
 
