@@ -672,11 +672,19 @@ namespace JsonPolimi
             {
                 var elem = Variabili.L.GetElem(i);
 
-                json += elem.To_json_Tg();
+                var j = elem.To_json_Tg();
+
+                if (j == null)
+                    continue;
+
+                json += j;
 
                 if (i != n - 1)
                     json += ",";
             }
+
+            if (json[json.Length - 1] == ',')
+                json = json.Remove(json.Length - 1);
 
             json += "]}";
 

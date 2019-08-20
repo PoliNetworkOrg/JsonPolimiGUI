@@ -166,7 +166,7 @@ namespace JsonPolimi
             for (int i = 0; i < this._l.Count; i++)
             {
                 this._l[i].Aggiusta();
-                for (int j = 0; j < this._l.Count; j++)
+                for (int j = this._l.Count - 1; j >= 0; j--)
                 {
                     if (i != j)
                     {
@@ -187,13 +187,13 @@ namespace JsonPolimi
                             this._l.Add(r.Item2);
 
                             i--;
-                            j--;
+                            j++;
 
                             if (i < 0)
                                 i = 0;
 
-                            if (j < 0)
-                                j = 0;
+                            if (j > this._l.Count - 1)
+                                j = this._l.Count - 1;
                         }
                     }
                 }
@@ -359,8 +359,10 @@ namespace JsonPolimi
                         return false;
                 }
 
-                List<Tuple<string, string>> no_merge2 = new List<Tuple<string, string>>();
-                no_merge2.Add(new Tuple<string, string>("chimica", "elettrica"));
+                List<Tuple<string, string>> no_merge2 = new List<Tuple<string, string>>
+                {
+                    new Tuple<string, string>("chimica", "elettrica")
+                };
 
                 foreach (var no_merge_s2 in no_merge2)
                 {
@@ -424,8 +426,11 @@ namespace JsonPolimi
 
         private void TryRename(ref List<string> l1, ref List<string> l2)
         {
-            List<Tuple<string, string>> rename = new List<Tuple<string, string>>();
-            rename.Add(new Tuple<string, string>("informatica", "info"));
+            List<Tuple<string, string>> rename = new List<Tuple<string, string>>
+            {
+                new Tuple<string, string>("informatica", "info")
+            };
+
             foreach (var ren in rename)
             {
                 for (int i = 0; i < l1.Count; i++)
@@ -542,6 +547,13 @@ namespace JsonPolimi
 
             if (n2 == "computer science and engineering - ingegneria informatica" && n1 == "polimi info 2019/2020")
                 return false;
+
+            if (n1 == "ingegneria per l'ambiente e il territorio - polimi" && n2 == "product service system design - design per il sistema prodotto servizio")
+                return false;
+
+            if (n2 == "ingegneria per l'ambiente e il territorio - polimi" && n1 == "product service system design - design per il sistema prodotto servizio")
+                return false;
+
 
             if (n1 == "digital and interaction design")
             {

@@ -486,23 +486,29 @@ namespace JsonPolimi
             if (String.IsNullOrEmpty(this.Classe))
                 return null;
 
+            if (String.IsNullOrEmpty(this.Platform))
+                return null;
+
+            if (this.Platform != "TG")
+                return null;
+
             string json = "{" + '"' + "Chat" + '"' + ":{";
 
             json += '"' + "id" + '"' + ": ";
             json += this.PermanentId;
             json += ", " + '"' + "type" + '"' + ": \"supergroup\", \"title\": ";
             json += '"';
-            json += this.Classe;
+            json += Escape(this.Classe);
             json += '"';
             json += ", \"invite_link\": ";
             json += '"';
-            json += this.getLink();
+            json += this.GetLink();
             json += '"';
             json += "}, ";
             json += '"' + "LastUpdateInviteLinkTime" + '"';
             json += ": ";
             json += '"';
-            json += this.getTelegramTime();
+            json += this.GetTelegramTime();
             json += '"';
             json += ", ";
             json += '"' + "we_are_admin" + '"';
@@ -510,7 +516,17 @@ namespace JsonPolimi
             return json;
         }
 
-        private string getTelegramTime()
+        private string Escape(string classe)
+        {
+            string a = "" + '\\' + '"';
+            string b = "" + '"';
+            classe = classe.Replace(a, b);
+            classe = classe.Replace(a, b);
+            classe = classe.Replace(b, a);
+            return classe;
+        }
+
+        private string GetTelegramTime()
         {
             if (this.LastUpdateInviteLinkTime == null)
                 return null;
@@ -525,10 +541,10 @@ namespace JsonPolimi
                     this.LastUpdateInviteLinkTime.Value.Millisecond.ToString();
         }
 
-        private string getLink()
+        private string GetLink()
         {
             //   https://t.me/joinchat/LclXl1aSJiYbzl7wCW5WZg
-            throw new NotImplementedException();
+            return "https://t.me/joinchat/" + this.IdLink;
         }
     }
 }
