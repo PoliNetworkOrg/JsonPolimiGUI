@@ -554,7 +554,6 @@ namespace JsonPolimi
             if (n2 == "ingegneria per l'ambiente e il territorio - polimi" && n1 == "product service system design - design per il sistema prodotto servizio")
                 return false;
 
-
             if (n1 == "digital and interaction design")
             {
                 if (n2.Contains("systems"))
