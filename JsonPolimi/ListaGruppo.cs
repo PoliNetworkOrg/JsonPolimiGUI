@@ -60,6 +60,10 @@ namespace JsonPolimi
 
                 var bt = _l[i].Platform == "TG" && g.Platform == "TG" && _l[i].Classe == g.Classe;
                 bt &= !IsNullOrEmpty(_l[i].PermanentId) || !IsNullOrEmpty(g.PermanentId);
+                bt &= IsNullOrEmpty(_l[i].Year) || IsNullOrEmpty(g.Year);
+
+                if ()
+
                 if (bt)
                     return new Tuple<bool, int>(true, i);
             }
