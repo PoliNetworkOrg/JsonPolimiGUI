@@ -538,7 +538,7 @@ namespace JsonPolimi
                     this.LastUpdateInviteLinkTime.Value.Hour.ToString().PadLeft(2, '0') + ":" +
                     this.LastUpdateInviteLinkTime.Value.Minute.ToString().PadLeft(2, '0') + ":" +
                     this.LastUpdateInviteLinkTime.Value.Second.ToString().PadLeft(2, '0') + "." +
-                    this.LastUpdateInviteLinkTime.Value.Millisecond.ToString();
+                    this.LastUpdateInviteLinkTime.Value.Millisecond.ToString().PadLeft(3, '0');
         }
 
         private string GetLink()
