@@ -49,7 +49,7 @@ namespace JsonPolimi
 
         private void TextBox1_TextChanged(object sender, EventArgs e)
         {
-            Filtra(textBox1.Text, comboBox1.SelectedIndex, textBox2.Text);
+            Filtra2();
         }
 
         private void Filtra(string text, int selectedIndex, string anno)
@@ -96,17 +96,17 @@ namespace JsonPolimi
             var dialogResult = MessageBox.Show("Sei sicuro di volerli unire?", "Sicuro?", MessageBoxButtons.YesNo);
             if (dialogResult != DialogResult.Yes) return;
             Variabili.L.MergeUnione(v1, v2);
-            Filtra(textBox1.Text, comboBox1.SelectedIndex, textBox2.Text);
+            Filtra2();
         }
 
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Filtra(textBox1.Text, comboBox1.SelectedIndex, textBox2.Text);
+            Filtra2();
         }
 
         private void TextBox2_TextChanged(object sender, EventArgs e)
         {
-            Filtra(textBox1.Text, comboBox1.SelectedIndex, textBox2.Text);
+            Filtra2();
         }
 
         private void Button3_Click(object sender, EventArgs e)
@@ -122,6 +122,29 @@ namespace JsonPolimi
             var dialogResult = MessageBox.Show("Sei sicuro di voler far diventare il link del gruppo 1 quello del gruppo 2?", "Sicuro?", MessageBoxButtons.YesNo);
             if (dialogResult != DialogResult.Yes) return;
             Variabili.L.MergeLink((int)v1, (int)v2);
+            Filtra2();
+        }
+
+        private void Button4_Click(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedIndex < 0 || listBox1.SelectedIndex >= listBox1.Items.Count)
+            {
+                MessageBox.Show("Devi selezionare un gruppo da eliminare!");
+                return;
+            }
+
+            DialogResult dialogResult = MessageBox.Show("Vuoi eliminare il gruppo? Sicuro?", "Sicuro?", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                Riga g = (Riga)listBox1.Items[listBox1.SelectedIndex];
+                Variabili.L.Remove(g.I);
+                MessageBox.Show("Eliminato!");
+                Filtra2();
+            }
+        }
+
+        private void Filtra2()
+        {
             Filtra(textBox1.Text, comboBox1.SelectedIndex, textBox2.Text);
         }
     }
