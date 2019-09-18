@@ -130,7 +130,7 @@ namespace JsonPolimi
             json += StringCheckNull(EscapeQuotes(Classe));
             json += ",\"office\":";
             json += StringCheckNull(Office);
-            json += ",\"id\":\"";
+            json += ",\"id\":";
             json += StringCheckNull(Id);
             json += "\",\"degree\":";
             json += StringCheckNull(Degree);
