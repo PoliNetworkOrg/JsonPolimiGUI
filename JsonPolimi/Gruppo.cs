@@ -126,35 +126,42 @@ namespace JsonPolimi
         {
             var json = "{";
 
-            json += "\"class\":\"";
-            json += EscapeQuotes(Classe);
-            json += "\",\"office\":\"";
-            json += Office;
-            json += "\",\"id\":\"";
-            json += Id;
-            json += "\",\"degree\":\"";
-            json += Degree;
-            json += "\",\"school\":\"";
-            json += School;
-            json += "\",\"id_link\":\"";
-            json += IdLink;
-            json += "\",\"language\":\"";
-            json += Language;
-            json += "\",\"type\":\"";
-            json += Tipo;
-            json += "\",\"year\":\"";
-            json += Year;
-            json += "\",\"permanentId\":\"";
-            json += PermanentId;
-            json += "\",\"LastUpdateInviteLinkTime\":\"";
-            json += LastUpdateInviteLinkTime;
-            json += "\",\"platform\":\"";
-            json += Platform;
-            json += "\"";
+            json += "\"class\":";
+            json += StringCheckNull(EscapeQuotes(Classe));
+            json += ",\"office\":";
+            json += StringCheckNull(Office);
+            json += ",\"id\":\"";
+            json += StringCheckNull(Id);
+            json += "\",\"degree\":";
+            json += StringCheckNull(Degree);
+            json += ",\"school\":";
+            json += StringCheckNull(School);
+            json += ",\"id_link\":";
+            json += StringCheckNull(IdLink);
+            json += ",\"language\":";
+            json += StringCheckNull(Language);
+            json += ",\"type\":";
+            json += StringCheckNull(Tipo);
+            json += ",\"year\":";
+            json += StringCheckNull(Year);
+            json += ",\"permanentId\":";
+            json += StringCheckNull(PermanentId);
+            json += ",\"LastUpdateInviteLinkTime\":";
+            json += StringCheckNull(LastUpdateInviteLinkTime.ToString());
+            json += ",\"platform\":";
+            json += StringCheckNull(Platform);
 
             json += "}";
 
             return json;
+        }
+
+        private string StringCheckNull(string s)
+        {
+            if (String.IsNullOrEmpty(s))
+                return "null";
+
+            return '"' + s + '"';
         }
 
         private static string EscapeQuotes(string s)
