@@ -132,7 +132,7 @@ namespace JsonPolimi
             json += StringCheckNull(Office);
             json += ",\"id\":";
             json += StringCheckNull(Id);
-            json += "\",\"degree\":";
+            json += ",\"degree\":";
             json += StringCheckNull(Degree);
             json += ",\"school\":";
             json += StringCheckNull(School);
