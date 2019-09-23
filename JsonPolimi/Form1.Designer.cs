@@ -40,6 +40,7 @@
             this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
+            this.button11 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -134,10 +135,11 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button11);
             this.groupBox2.Controls.Add(this.button8);
-            this.groupBox2.Location = new System.Drawing.Point(473, 12);
+            this.groupBox2.Location = new System.Drawing.Point(442, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(107, 170);
+            this.groupBox2.Size = new System.Drawing.Size(225, 170);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Altro";
@@ -169,17 +171,28 @@
             this.button10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button10.Location = new System.Drawing.Point(411, 232);
             this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(169, 72);
+            this.button10.Size = new System.Drawing.Size(256, 72);
             this.button10.TabIndex = 10;
             this.button10.Text = "Salva file per bot telegram";
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.Button10_Click);
             // 
+            // button11
+            // 
+            this.button11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button11.Location = new System.Drawing.Point(105, 19);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(114, 137);
+            this.button11.TabIndex = 9;
+            this.button11.Text = "Load gruppi polimi";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.Button8_Click2);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(586, 316);
+            this.ClientSize = new System.Drawing.Size(679, 316);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.button9);
             this.Controls.Add(this.groupBox2);
@@ -213,6 +226,7 @@
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Button button11;
     }
 }
 

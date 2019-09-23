@@ -9,6 +9,8 @@ using System.IO;
 using System.Windows.Forms;
 using Telegram.Bot.Types.Enums;
 using Size = System.Drawing.Size;
+using HtmlAgilityPack;
+using System.Collections.Generic;
 
 namespace JsonPolimi
 {
@@ -688,6 +690,120 @@ namespace JsonPolimi
             json += "]}";
 
             Salva(json);
+        }
+
+        private void Button8_Click2(object sender, EventArgs e)
+        {
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+            using (OpenFileDialog o = new OpenFileDialog())
+            {
+                var r = o.ShowDialog();
+                if (r != DialogResult.OK)
+                {
+                    return;
+                }
+
+                doc.Load(o.FileName);
+            }
+
+            List<Gruppo> L = GetGruppiFromDocument(doc);
+        }
+
+        private List<Gruppo> GetGruppiFromDocument(HtmlAgilityPack.HtmlDocument doc)
+        {
+            List<HtmlNode> L = new List<HtmlNode>();
+            List<HtmlNode> L2 = new List<HtmlNode>();
+            L.AddRange(doc.DocumentNode.ChildNodes);
+            while (L.Count > 0)
+            {
+                if (L[0].Name == "tr")
+                {
+                    if (L[0].ChildNodes.Count > 0)
+                    {
+                        L2.Add(L[0]);
+                    }
+                }
+                else
+                {
+                    L.AddRange(L[0].ChildNodes);
+                }
+
+                L.RemoveAt(0);
+            }
+
+            return GetGruppiFromDocument2(L2);
+        }
+
+        private List<Gruppo> GetGruppiFromDocument2(List<HtmlNode> l2)
+        {
+            List<Gruppo> LG = new List<Gruppo>();
+            foreach (var x in l2)
+            {
+                Gruppo x2 = GetGruppiFromDocument3(x);
+                if (x2 != null)
+                    LG.Add(x2);
+            }
+
+            return LG;
+        }
+
+        private Gruppo GetGruppiFromDocument3(HtmlNode x)
+        {
+            List<HtmlNode> L = new List<HtmlNode>();
+            for (int i = 0; i < x.ChildNodes.Count; i++)
+            {
+                if (x.ChildNodes[i].Name == "td")
+                {
+                    L.Add(x.ChildNodes[i]);
+                }
+            }
+
+            for (int i = 0; i < L.Count; i++)
+            {
+                L[i] = GetGruppiFromDocument4(L[i]);
+            }
+
+            if (L.Count < 2)
+            {
+                return null;
+            }
+            else
+            {
+                Gruppo g = new Gruppo();
+                g.Classe = L[0].InnerText;
+                g.Id = L[1].InnerText;
+                return g;
+            }
+        }
+
+        private HtmlNode GetGruppiFromDocument4(HtmlNode htmlNode)
+        {
+            if (htmlNode.ChildNodes.Count == 0)
+                return htmlNode;
+
+            List<char> LC = new List<char>
+            {
+                '\t',
+                '\r'
+            };
+
+            foreach (var x in htmlNode.ChildNodes)
+            {
+                bool buono = true;
+                foreach (var x2 in x.InnerText)
+                {
+                    if (LC.Contains(x2))
+                    {
+                        buono = false;
+                        break;
+                    }
+                }
+
+                if (buono)
+                    return x;
+            }
+
+            return htmlNode;
         }
     }
 }
