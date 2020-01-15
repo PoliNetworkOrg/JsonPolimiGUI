@@ -147,7 +147,7 @@ namespace JsonPolimi
             json += ",\"permanentId\":";
             json += StringCheckNull(PermanentId);
             json += ",\"LastUpdateInviteLinkTime\":";
-            json += StringCheckNull(LastUpdateInviteLinkTime.ToString());
+            json += StringCheckNull(this.GetTelegramTime());
             json += ",\"platform\":";
             json += StringCheckNull(Platform);
 
