@@ -26,8 +26,16 @@ namespace JsonPolimi
 
             AggiustaAnno();
 
-            if (!string.IsNullOrEmpty(Year))
+
+            if (!string.IsNullOrEmpty(Year) && !string.IsNullOrEmpty(this.Classe) && !string.IsNullOrEmpty(this.Degree) &&
+                !string.IsNullOrEmpty(this.Id) && !string.IsNullOrEmpty(this.IdLink) && !string.IsNullOrEmpty(this.Language) && !string.IsNullOrEmpty( this.Office))
+            {
+                ;
+            }
+            else if (!string.IsNullOrEmpty(Year))
+            {
                 Tipo = "S";
+            }
 
             if (string.IsNullOrEmpty(Language)) Language = IndovinaLaLinguaDalNome();
 
