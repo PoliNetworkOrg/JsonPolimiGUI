@@ -30,7 +30,10 @@ namespace JsonPolimi
             if (!string.IsNullOrEmpty(Year) && !string.IsNullOrEmpty(this.Classe) && !string.IsNullOrEmpty(this.Degree) &&
                 !string.IsNullOrEmpty(this.Id) && !string.IsNullOrEmpty(this.IdLink) && !string.IsNullOrEmpty(this.Language) && !string.IsNullOrEmpty( this.Office))
             {
-                ;
+                if (string.IsNullOrEmpty(Tipo))
+                {
+                    Tipo = "S";
+                }
             }
             else if (!string.IsNullOrEmpty(Year))
             {
