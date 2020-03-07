@@ -689,6 +689,21 @@ namespace JsonPolimi
                         return null; //sicuro
                     }
 
+                    if (infoParteDiGruppo_list[0].testo_selvaggio == "Classe di Laurea")
+                    {
+                        return null; //sicuro
+                    }
+
+                    if (infoParteDiGruppo_list[0].testo_selvaggio == "Coordinatore CCS")
+                    {
+                        return null; //sicuro
+                    }
+
+                    if (infoParteDiGruppo_list[0].testo_selvaggio == "Lingua/e ufficiali")
+                    {
+                        return null; //sicuro
+                    }
+
                     return null;
                 }
                 
@@ -743,6 +758,15 @@ namespace JsonPolimi
                     Gruppo g = new Gruppo
                     {
                         Classe = infoParteDiGruppo_list[3].link.v,
+                        IDCorsoPolimi = infoParteDiGruppo_list[0].testo_selvaggio
+                    };
+                    return g;
+                }
+                else if (infoParteDiGruppo_list[4] != null && infoParteDiGruppo_list[4].link != null && !string.IsNullOrEmpty(infoParteDiGruppo_list[4].link.v))
+                {
+                    Gruppo g = new Gruppo
+                    {
+                        Classe = infoParteDiGruppo_list[4].link.v,
                         IDCorsoPolimi = infoParteDiGruppo_list[0].testo_selvaggio
                     };
                     return g;

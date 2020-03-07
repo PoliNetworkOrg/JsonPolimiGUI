@@ -893,7 +893,12 @@ namespace JsonPolimi
                                 }
                                 else
                                 {
-                                    return null;
+                                    return new InfoParteDiGruppo(
+                                        link: new LinkGruppo(
+                                            htmlNode.ChildNodes[1].Attributes,
+                                            htmlNode.ChildNodes[1].InnerHtml.Trim()
+                                            )
+                                        );
                                 }
                             }
                         }
@@ -913,9 +918,13 @@ namespace JsonPolimi
                         {
                             return null; //sicuro
                         }
+                        else if (s3 == "1<sup><small>o</small></sup>Anno")
+                        {
+                            return null; //sicuro
+                        }
                         else
                         {
-                            return null;
+                            return null; 
                         }
                     }
                 }
@@ -1058,7 +1067,7 @@ namespace JsonPolimi
                 string s1 = htmlNode.InnerHtml.Trim();
                 if (string.IsNullOrEmpty(s1))
                 {
-                    return null;
+                    return null; //sicuro
                 }
                 else
                 {
