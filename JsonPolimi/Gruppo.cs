@@ -647,6 +647,15 @@ namespace JsonPolimi
 
             if (infoParteDiGruppo_list.Count == 3)
             {
+                if (infoParteDiGruppo_list[1] == null && infoParteDiGruppo_list[2] == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return null;
+                }
+
                 return null; //da fare maggiori controlli
             }
 
