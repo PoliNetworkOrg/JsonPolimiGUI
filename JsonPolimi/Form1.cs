@@ -837,7 +837,38 @@ namespace JsonPolimi
                     htmlNode.ChildNodes[1].Name != "#text" &&
                     htmlNode.ChildNodes[2].Name == "#text" )
                 {
-                    ;
+                    string s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
+                    string s2 = htmlNode.ChildNodes[2].InnerHtml.Trim();
+                    if (string.IsNullOrEmpty(s1) && string.IsNullOrEmpty(s2))
+                    {
+                        if (htmlNode.ChildNodes[1].Name == "div")
+                        {
+                            var x1 = htmlNode.ChildNodes[1];
+                            if (x1.ChildNodes.Count == 1)
+                            {
+                                if (x1.ChildNodes[0].Name == "#text")
+                                {
+                                    return new InfoParteDiGruppo(testo_selvaggio: x1.ChildNodes[0].InnerHtml.Trim());
+                                }
+                                else
+                                {
+                                    ;
+                                }
+                            }
+                            else
+                            {
+                                ;
+                            }
+                        }
+                        else
+                        {
+                            ;
+                        }
+                    }
+                    else
+                    {
+                        ;
+                    }
                 }
                 else if (htmlNode.ChildNodes[0].Name == "img" &&
                         htmlNode.ChildNodes[1].Name == "#text" &&
@@ -972,7 +1003,21 @@ namespace JsonPolimi
                 }
                 else if (htmlNode.ChildNodes[0].Name == "a" && htmlNode.ChildNodes[1].Name == "a")
                 {
-                    ;
+                    string s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
+                    string s2 = htmlNode.ChildNodes[1].InnerHtml.Trim();
+                    if (string.IsNullOrEmpty(s1) && !string.IsNullOrEmpty(s2))
+                    {
+                        LinkGruppo link2 = new LinkGruppo(htmlNode.ChildNodes[1].Attributes, s2);
+                        return new InfoParteDiGruppo(link: link2);
+                    }
+                    else if (!string.IsNullOrEmpty(s1) && string.IsNullOrEmpty(s2))
+                    {
+                        ;
+                    }
+                    else
+                    {
+                        ;
+                    }
                 }
                 else
                 {

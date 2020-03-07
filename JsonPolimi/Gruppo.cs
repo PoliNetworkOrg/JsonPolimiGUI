@@ -574,7 +574,24 @@ namespace JsonPolimi
                 return null;
 
             if (infoParteDiGruppo_list.Count < 3)
+            {
+                if (infoParteDiGruppo_list.Count == 2)
+                {
+                    if (infoParteDiGruppo_list[0] == null && infoParteDiGruppo_list[1] == null)
+                    {
+                        return null;
+                    }
+                    else if (string.IsNullOrEmpty(infoParteDiGruppo_list[0].testo_selvaggio) && 
+                        string.IsNullOrEmpty(infoParteDiGruppo_list[1].testo_selvaggio))
+                    {
+                        return null;
+                    }
+
+                    return null;
+                }
+                
                 return null;
+            }
 
             if (infoParteDiGruppo_list[0] == null && infoParteDiGruppo_list[1] == null)
                 return null;
@@ -606,7 +623,11 @@ namespace JsonPolimi
                 return null;
             }
 
-            ;
+            if (infoParteDiGruppo_list.Count == 3)
+            {
+                return null;
+            }
+
 
             return null;
         }
