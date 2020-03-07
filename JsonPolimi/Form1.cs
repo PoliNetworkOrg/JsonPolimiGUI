@@ -937,7 +937,47 @@ namespace JsonPolimi
             }
             else if (htmlNode.ChildNodes.Count == 2)
             {
-                ;
+                if (htmlNode.ChildNodes[0].Name == "#text" && htmlNode.ChildNodes[1].Name == "div")
+                {
+                    ;
+                }
+                else if (htmlNode.ChildNodes[0].Name == "#text" && htmlNode.ChildNodes[1].Name == "a")
+                {
+                    string s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
+                    if (string.IsNullOrEmpty(s1))
+                    {
+                        var x1 = htmlNode.ChildNodes[1];
+                        if (x1.ChildNodes.Count == 1)
+                        {
+                            if (x1.ChildNodes[0].Name == "#text")
+                            {
+                                LinkGruppo link2 = new LinkGruppo(htmlNode.ChildNodes[1].Attributes, x1.ChildNodes[0].InnerHtml.Trim());
+                                return new InfoParteDiGruppo(link: link2);
+                            }
+                            else
+                            {
+                                ;
+                            }
+                        }
+                        else
+                        {
+                            ;
+                        }
+
+                    }
+                    else
+                    {
+                        ;
+                    }
+                }
+                else if (htmlNode.ChildNodes[0].Name == "a" && htmlNode.ChildNodes[1].Name == "a")
+                {
+                    ;
+                }
+                else
+                {
+                    ;
+                }
             }
             else
             {
