@@ -2,7 +2,7 @@
 {
     internal class InfoParteDiGruppo
     {
-        private string testo_selvaggio;
+        public string testo_selvaggio;
 
         public InfoParteDiGruppo(string testo_selvaggio)
         {

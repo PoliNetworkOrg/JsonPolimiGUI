@@ -576,10 +576,25 @@ namespace JsonPolimi
             if (infoParteDiGruppo_list[0] == null && infoParteDiGruppo_list[1] == null)
                 return null;
 
+
+            if (infoParteDiGruppo_list.Count == 9)
+            {
+                if (infoParteDiGruppo_list[0].testo_selvaggio == "--" &&
+                    infoParteDiGruppo_list[1].testo_selvaggio == "--")
+                {
+                    return null;
+                }
+                else
+                {
+                    ;
+                }
+
+                return null;
+            }
+
             ;
 
-
-            throw new NotImplementedException();
+            return null;
         }
 
         internal bool isValido()

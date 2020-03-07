@@ -867,7 +867,7 @@ namespace JsonPolimi
                     ;
                 }
             }
-            else if (htmlNode.ChildNodes.Count > 5)
+            else if (htmlNode.ChildNodes.Count == 6)
             {
                 ;
             }
@@ -875,9 +875,17 @@ namespace JsonPolimi
             {
                 ;
             }
-            else
+            else if (htmlNode.ChildNodes.Count == 0)
             {
-                ;
+                string s1 = htmlNode.InnerHtml.Trim();
+                if (string.IsNullOrEmpty(s1))
+                {
+                    return null;
+                }
+                else
+                {
+                    ;
+                }
             }
 
 
