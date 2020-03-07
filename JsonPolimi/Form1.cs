@@ -903,14 +903,33 @@ namespace JsonPolimi
                         htmlNode.ChildNodes[1].Name == "#text" &&
                         htmlNode.ChildNodes[2].Name == "img")
                 {
-                    if (htmlNode.ChildNodes[0].Attributes["src"].Value.Contains("/it.png"))
-                    {
-                        ;
-                    }
-                    else
-                    {
-                        ;
-                    }
+                        if (htmlNode.ChildNodes[0].Attributes["src"].Value.Contains("/it.png"))
+                        {
+                            if (htmlNode.ChildNodes[2].Attributes["src"].Value.Contains("/en.png"))
+                            {
+                                string s = htmlNode.ChildNodes[1].InnerHtml.Trim();
+                                if (string.IsNullOrEmpty(s))
+                                {
+                                    ;
+                                }
+                                else if (s == "/")
+                                {
+                                    return null; //sicuro
+                                }
+                                else
+                                {
+                                    ;
+                                }
+                            }
+                            else
+                            {
+                                ;
+                            }
+                        }
+                        else
+                        {
+                            ;
+                        }
                 }
                 else
                 {

@@ -586,12 +586,78 @@ namespace JsonPolimi
                     }
                     else if (infoParteDiGruppo_list[0] == null)
                     {
-                        return null;
+                        if (infoParteDiGruppo_list[1] != null)
+                        {
+                            if (string.IsNullOrEmpty(infoParteDiGruppo_list[1].testo_selvaggio))
+                            {
+                                return null;
+                            }
+                            else if (infoParteDiGruppo_list[1].testo_selvaggio == "Insegnamenti in Sequenza")
+                            {
+                                return null; //sicuro
+                            }
+                            else if (infoParteDiGruppo_list[1].testo_selvaggio == "Insegnamento completamente offerto in lingua italiana")
+                            {
+                                return null; //sicuro
+                            }
+                            else if (infoParteDiGruppo_list[1].testo_selvaggio == "Insegnamento completamente offerto in lingua inglese")
+                            {
+                                return null; //sicuro
+                            }
+                            else if (infoParteDiGruppo_list[1].testo_selvaggio == "Insegnamento offerto in lingua italiana e inglese")
+                            {
+                                return null; //sicuro
+                            }
+                            else
+                            {
+                                return null;
+                            }
+                        }
+                        else
+                        {
+                            return null;
+                        }
+
                     }
                     else if (string.IsNullOrEmpty(infoParteDiGruppo_list[0].testo_selvaggio) && 
                         string.IsNullOrEmpty(infoParteDiGruppo_list[1].testo_selvaggio))
                     {
                         return null;
+                    }
+
+                    if (infoParteDiGruppo_list[1].testo_selvaggio == "Primo Semestre")
+                    {
+                        return null; //sicuro
+                    }
+
+                    if (infoParteDiGruppo_list[1].testo_selvaggio == "Secondo Semestre")
+                    {
+                        return null; //sicuro
+                    }
+
+                    if (infoParteDiGruppo_list[1].testo_selvaggio == "Insegnamento Annuale")
+                    {
+                        return null; //sicuro
+                    }
+
+                    if (infoParteDiGruppo_list[1].testo_selvaggio == "Corso Integrato")
+                    {
+                        return null; //sicuro
+                    }
+
+                    if (infoParteDiGruppo_list[1].testo_selvaggio == "Monodisciplinare")
+                    {
+                        return null; //sicuro
+                    }
+
+                    if (infoParteDiGruppo_list[1].testo_selvaggio == "Prova Finale")
+                    {
+                        return null; //sicuro
+                    }
+
+                    if (infoParteDiGruppo_list[1].testo_selvaggio == "Non definita")
+                    {
+                        return null; //sicuro
                     }
 
                     return null;
@@ -609,7 +675,18 @@ namespace JsonPolimi
                         return null; //sono sicuro
                     }
 
-                    return null;
+                    if (string.IsNullOrEmpty(infoParteDiGruppo_list[0].testo_selvaggio))
+                    {
+                        return null;
+                    }
+                    else if (infoParteDiGruppo_list[0].testo_selvaggio == "Legenda")
+                    {
+                        return null; //sicuro
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
 
                 return null;
@@ -649,7 +726,27 @@ namespace JsonPolimi
             {
                 if (infoParteDiGruppo_list[1] == null && infoParteDiGruppo_list[2] == null)
                 {
-                    return null;
+                    if (infoParteDiGruppo_list[0] == null)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        if (string.IsNullOrEmpty(infoParteDiGruppo_list[0].testo_selvaggio))
+                        {
+                            return null; //sicuro
+                        }
+                        else 
+                        {
+                            return null;
+                        }
+
+                    }
+
+                }
+                else if (infoParteDiGruppo_list[1] != null && infoParteDiGruppo_list[1].testo_selvaggio == "Area Servizi ICT")
+                {
+                    return null; //sicuro
                 }
                 else
                 {
