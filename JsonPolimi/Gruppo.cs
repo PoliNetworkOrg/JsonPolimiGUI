@@ -602,6 +602,11 @@ namespace JsonPolimi
                 return null;
             }
 
+            if (infoParteDiGruppo_list.Count == 11)
+            {
+                return null;
+            }
+
             ;
 
             return null;

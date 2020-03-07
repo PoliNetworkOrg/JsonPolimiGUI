@@ -854,11 +854,35 @@ namespace JsonPolimi
                 }
                 else if (htmlNode.ChildNodes[0].Name == "a")
                 {
-                    ;
+                    var x1 = htmlNode.ChildNodes[0];
+                    if (x1.ChildNodes.Count == 3)
+                    {
+                        ;
+                    }
+                    else if (x1.ChildNodes.Count == 1)
+                    {
+                        var x2 = x1.ChildNodes[0];
+                        if (x2.ChildNodes.Count == 0)
+                        {
+                            ;
+                        }
+                        else
+                        {
+                            ;
+                        }
+                    }
+                    else
+                    {
+                        ;
+                    }
                 }
                 else if(htmlNode.ChildNodes[0].Name == "#text")
                 {
                     return new InfoParteDiGruppo(testo_selvaggio: s1);
+                }
+                else if (htmlNode.ChildNodes[0].Name == "select")
+                {
+                    ;
                 }
                 else
                 {
@@ -884,6 +908,10 @@ namespace JsonPolimi
                 {
                     ;
                 }
+            }
+            else if (htmlNode.ChildNodes.Count == 2)
+            {
+                ;
             }
             else
             {
