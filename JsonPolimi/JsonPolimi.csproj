@@ -75,6 +75,7 @@
     <Compile Include="Gruppo.cs" />
     <Compile Include="InfoParteDiGruppo.cs" />
     <Compile Include="InsiemeDiGruppi.cs" />
+    <Compile Include="LinkGruppo.cs" />
     <Compile Include="ListaAdminAutorizzati.cs" />
     <Compile Include="ListaGruppiModificaForm.cs">
       <SubType>Form</SubType>

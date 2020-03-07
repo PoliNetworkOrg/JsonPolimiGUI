@@ -599,6 +599,12 @@ namespace JsonPolimi
 
             if (infoParteDiGruppo_list.Count == 10)
             {
+                if (infoParteDiGruppo_list[3].link != null)
+                {
+
+                    return null;
+                }
+
                 return null;
             }
 

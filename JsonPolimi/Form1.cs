@@ -857,14 +857,34 @@ namespace JsonPolimi
                     var x1 = htmlNode.ChildNodes[0];
                     if (x1.ChildNodes.Count == 3)
                     {
-                        ;
+                        if (x1.ChildNodes[0].Name == "#text" &&
+                            x1.ChildNodes[1].Name == "div" &&
+                            x1.ChildNodes[2].Name == "#text" )
+                        {
+                            string s11 = x1.ChildNodes[0].InnerHtml.Trim();
+                            string s22 = x1.ChildNodes[2].InnerHtml.Trim();
+
+                            if (string.IsNullOrEmpty(s11) && string.IsNullOrEmpty(s22))
+                            {
+                                ;
+                            }
+                            else
+                            {
+                                ;
+                            }
+                        }
+                        else
+                        {
+                            ;
+                        }
                     }
                     else if (x1.ChildNodes.Count == 1)
                     {
                         var x2 = x1.ChildNodes[0];
                         if (x2.ChildNodes.Count == 0)
                         {
-                            ;
+                            LinkGruppo link2 = new LinkGruppo(htmlNode.ChildNodes[0].Attributes, x2.InnerHtml.Trim());
+                            return new InfoParteDiGruppo(link: link2);
                         }
                         else
                         {
