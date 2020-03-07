@@ -564,5 +564,27 @@ namespace JsonPolimi
             //   https://t.me/joinchat/LclXl1aSJiYbzl7wCW5WZg
             return "https://t.me/joinchat/" + this.IdLink;
         }
+
+        internal static Gruppo FromInfoParteList(List<InfoParteDiGruppo> infoParteDiGruppo_list)
+        {
+            if (infoParteDiGruppo_list == null)
+                return null;
+
+            if (infoParteDiGruppo_list.Count < 3)
+                return null;
+
+            if (infoParteDiGruppo_list[0] == null && infoParteDiGruppo_list[1] == null)
+                return null;
+
+            ;
+
+
+            throw new NotImplementedException();
+        }
+
+        internal bool isValido()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -707,13 +707,16 @@ namespace JsonPolimi
             }
 
             List<Gruppo> L = GetGruppiFromDocument(doc);
+            ;
         }
 
         private List<Gruppo> GetGruppiFromDocument(HtmlAgilityPack.HtmlDocument doc)
         {
             List<HtmlNode> L = new List<HtmlNode>();
             List<HtmlNode> L2 = new List<HtmlNode>();
-            L.AddRange(doc.DocumentNode.ChildNodes);
+
+            L = GetTables(doc.DocumentNode.ChildNodes);
+
             while (L.Count > 0)
             {
                 if (L[0].Name == "tr")
@@ -734,6 +737,28 @@ namespace JsonPolimi
             return GetGruppiFromDocument2(L2);
         }
 
+        private List<HtmlNode> GetTables(HtmlNodeCollection childNodes)
+        {
+            List<HtmlNode> L = new List<HtmlNode>();
+            List<HtmlNode> L2 = new List<HtmlNode>();
+            L.AddRange(childNodes);
+
+            while (L.Count > 0)
+            {
+                if (L[0].Name == "table")
+                {
+                    L2.Add(L[0]);                  
+                }
+
+                L.AddRange(L[0].ChildNodes);
+                
+
+                L.RemoveAt(0);
+            }
+
+            return L2;
+        }
+
         private List<Gruppo> GetGruppiFromDocument2(List<HtmlNode> l2)
         {
             List<Gruppo> LG = new List<Gruppo>();
@@ -741,7 +766,14 @@ namespace JsonPolimi
             {
                 Gruppo x2 = GetGruppiFromDocument3(x);
                 if (x2 != null)
-                    LG.Add(x2);
+                {
+                    string x3 = x2.Classe.Trim();
+                    if (!string.IsNullOrEmpty(x3))
+                    {
+                        if (!x2.Id.Contains("Area Servizi ICT") && !x2.Classe.Contains("Anno Corso") && !x2.Classe.Contains("Corso di Studi"))
+                            LG.Add(x2);
+                    }
+                }
             }
 
             return LG;
@@ -758,22 +790,98 @@ namespace JsonPolimi
                 }
             }
 
+            List<InfoParteDiGruppo> infoParteDiGruppo_list = new List<InfoParteDiGruppo>();
+
             for (int i = 0; i < L.Count; i++)
             {
-                L[i] = GetGruppiFromDocument4(L[i]);
+                infoParteDiGruppo_list.Add(GetGruppiFromDocument5(L[i]));
             }
 
-            if (L.Count < 2)
+            Gruppo g = Gruppo.FromInfoParteList(infoParteDiGruppo_list);
+            if (g != null  && g.isValido())
             {
-                return null;
+                return g;
             }
             else
             {
-                Gruppo g = new Gruppo();
-                g.Classe = L[0].InnerText;
-                g.Id = L[1].InnerText;
-                return g;
+                return null;
             }
+        }
+        
+        private bool contiene_table2(HtmlNode htmlNode)
+        {
+            foreach (var x in htmlNode.ChildNodes)
+            {
+                if (x.Name == "table")
+                    return true;
+            }
+
+            return false;
+        }
+
+        private InfoParteDiGruppo GetGruppiFromDocument5(HtmlNode htmlNode)
+        {
+
+            ;
+            bool contiene_table = contiene_table2(htmlNode);
+            if (contiene_table)
+                return null;
+
+            if (htmlNode.ChildNodes.Count == 3)
+            {
+                if (htmlNode.ChildNodes[0].Name == "#text" &&
+                    htmlNode.ChildNodes[1].Name != "#text" &&
+                    htmlNode.ChildNodes[2].Name == "#text" )
+                {
+                    ;
+                }
+                else if (htmlNode.ChildNodes[0].Name == "img" &&
+                        htmlNode.ChildNodes[1].Name == "#text" &&
+                        htmlNode.ChildNodes[2].Name == "img")
+                {
+                    ;
+                }
+                else
+                {
+                    ;
+                }
+
+            }
+            else if (htmlNode.ChildNodes.Count == 1)
+            {
+                string s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
+                if (string.IsNullOrEmpty(s1))
+                {
+                    return null;
+                }
+                else if (htmlNode.ChildNodes[0].Name == "a")
+                {
+                    ;
+                }
+                else if(htmlNode.ChildNodes[0].Name == "#text")
+                {
+                    return new InfoParteDiGruppo(testo_selvaggio: s1);
+                }
+                else
+                {
+                    ;
+                }
+            }
+            else if (htmlNode.ChildNodes.Count > 5)
+            {
+                ;
+            }
+            else if (htmlNode.ChildNodes.Count == 4)
+            {
+                ;
+            }
+            else
+            {
+                ;
+            }
+
+
+            return null;
         }
 
         private HtmlNode GetGruppiFromDocument4(HtmlNode htmlNode)
