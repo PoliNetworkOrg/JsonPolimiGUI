@@ -592,6 +592,16 @@ namespace JsonPolimi
                 return null;
             }
 
+            if (infoParteDiGruppo_list.Count == 4)
+            {
+                return null;
+            }
+
+            if (infoParteDiGruppo_list.Count == 10)
+            {
+                return null;
+            }
+
             ;
 
             return null;

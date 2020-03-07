@@ -821,8 +821,6 @@ namespace JsonPolimi
 
         private InfoParteDiGruppo GetGruppiFromDocument5(HtmlNode htmlNode)
         {
-
-            ;
             bool contiene_table = contiene_table2(htmlNode);
             if (contiene_table)
                 return null;
@@ -886,6 +884,10 @@ namespace JsonPolimi
                 {
                     ;
                 }
+            }
+            else
+            {
+                ;
             }
 
 
