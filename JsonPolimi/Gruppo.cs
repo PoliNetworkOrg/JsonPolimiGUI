@@ -625,6 +625,25 @@ namespace JsonPolimi
                         return null;
                     }
 
+                    if (infoParteDiGruppo_list[1] == null)
+                    {
+                        if (infoParteDiGruppo_list[0] == null)
+                        {
+                            return null;
+                        }
+                        else
+                        {
+                            if (string.IsNullOrEmpty(infoParteDiGruppo_list[0].testo_selvaggio))
+                            {
+                                return null;
+                            }
+                            else
+                            {
+                                return null;
+                            }
+                        }
+                    }
+
                     if (infoParteDiGruppo_list[1].testo_selvaggio == "Primo Semestre")
                     {
                         return null; //sicuro
@@ -656,6 +675,16 @@ namespace JsonPolimi
                     }
 
                     if (infoParteDiGruppo_list[1].testo_selvaggio == "Non definita")
+                    {
+                        return null; //sicuro
+                    }
+
+                    if (infoParteDiGruppo_list[0].testo_selvaggio == "Preside")
+                    {
+                        return null; //sicuro
+                    }
+
+                    if (infoParteDiGruppo_list[0].testo_selvaggio == "Livello")
                     {
                         return null; //sicuro
                     }
@@ -698,7 +727,7 @@ namespace JsonPolimi
 
             if (infoParteDiGruppo_list.Count == 4)
             {
-                return null;
+                return null; //info interessanti
             }
 
             if (infoParteDiGruppo_list.Count == 10 || infoParteDiGruppo_list.Count == 9 || infoParteDiGruppo_list.Count == 11)

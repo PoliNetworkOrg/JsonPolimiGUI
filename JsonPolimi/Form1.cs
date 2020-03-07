@@ -886,7 +886,15 @@ namespace JsonPolimi
                             }
                             else
                             {
-                                ;
+                                string s = htmlNode.InnerHtml.Trim();
+                                if (string.IsNullOrEmpty(s))
+                                {
+                                    return null;
+                                }
+                                else
+                                {
+                                    return null;
+                                }
                             }
                         }
                         else
@@ -896,7 +904,19 @@ namespace JsonPolimi
                     }
                     else
                     {
-                        ;
+                        string s3 = htmlNode.InnerHtml.Trim();
+                        if (string.IsNullOrEmpty(s3))
+                        {
+                            return null;
+                        }
+                        else if (s3.StartsWith("Ingegneria Industriale e dell'Informazione"))
+                        {
+                            return null; //sicuro
+                        }
+                        else
+                        {
+                            return null;
+                        }
                     }
                 }
                 else if (htmlNode.ChildNodes[0].Name == "img" &&
@@ -1015,11 +1035,23 @@ namespace JsonPolimi
             }
             else if (htmlNode.ChildNodes.Count == 6)
             {
-                ;
+                string s = htmlNode.InnerHtml.Trim();
+                if (string.IsNullOrEmpty(s))
+                {
+                    ;
+                }
+                else if (s.StartsWith("I CFU riportati a fianco a questo"))
+                {
+                    return null; //sicuro
+                }
+                else
+                {
+                    ;
+                }
             }
             else if (htmlNode.ChildNodes.Count == 4)
             {
-                ;
+                return null;
             }
             else if (htmlNode.ChildNodes.Count == 0)
             {
