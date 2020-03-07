@@ -770,8 +770,14 @@ namespace JsonPolimi
                     string x3 = x2.Classe.Trim();
                     if (!string.IsNullOrEmpty(x3))
                     {
-                        if (!x2.Id.Contains("Area Servizi ICT") && !x2.Classe.Contains("Anno Corso") && !x2.Classe.Contains("Corso di Studi"))
+                        if (x2.Id == null)
+                        {
                             LG.Add(x2);
+                        }
+                        else if (!x2.Id.Contains("Area Servizi ICT") && !x2.Classe.Contains("Anno Corso") && !x2.Classe.Contains("Corso di Studi"))
+                        { 
+                            LG.Add(x2); 
+                        }
                     }
                 }
             }

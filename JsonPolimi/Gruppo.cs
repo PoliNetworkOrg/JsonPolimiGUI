@@ -6,6 +6,9 @@ namespace JsonPolimi
     public class Gruppo
     {
         public string Classe;
+
+        public string IDCorsoPolimi { get; private set; }
+
         public string Degree;
         public string Id; // esempio: FB/2018/2019/LEONARDO/21432583243205
         public string IdLink; // esempio: 21432583243205
@@ -577,39 +580,29 @@ namespace JsonPolimi
                 return null;
 
 
-            if (infoParteDiGruppo_list.Count == 9)
+            if (infoParteDiGruppo_list.Count == 4)
+            {
+                return null;
+            }
+
+            if (infoParteDiGruppo_list.Count == 10 || infoParteDiGruppo_list.Count == 9 || infoParteDiGruppo_list.Count == 11)
             {
                 if (infoParteDiGruppo_list[0].testo_selvaggio == "--" &&
                     infoParteDiGruppo_list[1].testo_selvaggio == "--")
                 {
                     return null;
                 }
-                else
+
+                if (infoParteDiGruppo_list[3] != null && infoParteDiGruppo_list[3].link != null && !string.IsNullOrEmpty( infoParteDiGruppo_list[3].link.v))
                 {
-                    ;
+                    Gruppo g = new Gruppo
+                    {
+                        Classe = infoParteDiGruppo_list[3].link.v,
+                        IDCorsoPolimi = infoParteDiGruppo_list[0].testo_selvaggio
+                    };
+                    return g;
                 }
 
-                return null;
-            }
-
-            if (infoParteDiGruppo_list.Count == 4)
-            {
-                return null;
-            }
-
-            if (infoParteDiGruppo_list.Count == 10)
-            {
-                if (infoParteDiGruppo_list[3].link != null)
-                {
-
-                    return null;
-                }
-
-                return null;
-            }
-
-            if (infoParteDiGruppo_list.Count == 11)
-            {
                 return null;
             }
 
@@ -620,7 +613,12 @@ namespace JsonPolimi
 
         internal bool isValido()
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(this.Classe))
+                return false;
+
+            //todo: fare altri controlli per vedere se il gruppo è valido
+
+            return true;
         }
     }
 }

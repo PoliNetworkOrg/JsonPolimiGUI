@@ -4,8 +4,8 @@ namespace JsonPolimi
 {
     internal class LinkGruppo
     {
-        private HtmlAttributeCollection attributes;
-        private string v;
+        public HtmlAttributeCollection attributes;
+        public string v;
 
         public LinkGruppo(HtmlAttributeCollection attributes, string v)
         {
