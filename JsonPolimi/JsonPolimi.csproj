@@ -73,6 +73,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Gruppo.cs" />
+    <Compile Include="ImmagineGruppo.cs" />
     <Compile Include="InfoParteDiGruppo.cs" />
     <Compile Include="InsiemeDiGruppi.cs" />
     <Compile Include="LinkGruppo.cs" />

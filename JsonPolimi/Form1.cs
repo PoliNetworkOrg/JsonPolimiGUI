@@ -860,6 +860,35 @@ namespace JsonPolimi
                                 ;
                             }
                         }
+                        else if (htmlNode.ChildNodes[1].Name == "a")
+                        {
+                            var x1 = htmlNode.ChildNodes[1];
+                            if (x1.ChildNodes.Count == 3)
+                            {
+                                if (x1.ChildNodes[0].Name == "#text" &&
+                                    x1.ChildNodes[1].Name != "#text" &&
+                                    x1.ChildNodes[2].Name == "#text")
+                                {
+                                    if (x1.ChildNodes[1].Name == "img")
+                                    {
+                                        ImmagineGruppo immagine2 = new ImmagineGruppo(x1.ChildNodes[1]);
+                                        return new InfoParteDiGruppo(immagine: immagine2);
+                                    }
+                                    else
+                                    {
+                                        ;
+                                    }
+                                }
+                                else
+                                {
+                                    ;
+                                }
+                            }
+                            else
+                            {
+                                ;
+                            }
+                        }
                         else
                         {
                             ;
@@ -887,7 +916,7 @@ namespace JsonPolimi
                 string s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
                 if (string.IsNullOrEmpty(s1))
                 {
-                    return null;
+                    return null; //sono sicuro
                 }
                 else if (htmlNode.ChildNodes[0].Name == "a")
                 {
@@ -903,7 +932,19 @@ namespace JsonPolimi
 
                             if (string.IsNullOrEmpty(s11) && string.IsNullOrEmpty(s22))
                             {
-                                ;
+                                var x2 = x1.ChildNodes[1];
+                                if (x2.ChildNodes.Count == 3)
+                                {
+                                    ;
+                                }
+                                else if (x2.ChildNodes.Count == 5)
+                                {
+                                    return null;
+                                }
+                                else
+                                {
+                                    ;
+                                }
                             }
                             else
                             {

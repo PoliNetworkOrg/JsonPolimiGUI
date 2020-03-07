@@ -573,11 +573,18 @@ namespace JsonPolimi
             if (infoParteDiGruppo_list == null)
                 return null;
 
+            if (infoParteDiGruppo_list.Count == 0)
+                return null;
+
             if (infoParteDiGruppo_list.Count < 3)
             {
                 if (infoParteDiGruppo_list.Count == 2)
                 {
                     if (infoParteDiGruppo_list[0] == null && infoParteDiGruppo_list[1] == null)
+                    {
+                        return null; //sono sicuro
+                    }
+                    else if (infoParteDiGruppo_list[0] == null)
                     {
                         return null;
                     }
@@ -590,6 +597,21 @@ namespace JsonPolimi
                     return null;
                 }
                 
+                if (infoParteDiGruppo_list.Count == 1)
+                {
+                    if (infoParteDiGruppo_list[0]==null)
+                    {
+                        return null; //sono sicuro
+                    }
+
+                    if (infoParteDiGruppo_list[0].link != null)
+                    {
+                        return null; //sono sicuro
+                    }
+
+                    return null;
+                }
+
                 return null;
             }
 
@@ -625,7 +647,7 @@ namespace JsonPolimi
 
             if (infoParteDiGruppo_list.Count == 3)
             {
-                return null;
+                return null; //da fare maggiori controlli
             }
 
 
