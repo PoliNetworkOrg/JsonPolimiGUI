@@ -817,6 +817,29 @@ namespace JsonPolimi
             return null;
         }
 
+        internal Gruppo Clone()
+        {
+            Gruppo g = new Gruppo
+            {
+                Classe = this.Classe,
+                Degree = this.Degree,
+                Id = this.Id,
+                IDCorsoPolimi = this.IDCorsoPolimi,
+                IdLink = this.IdLink,
+                Language = this.Language,
+                LastUpdateInviteLinkTime = this.LastUpdateInviteLinkTime,
+                Office = this.Office,
+                PermanentId = this.PermanentId,
+                Platform = this.Platform,
+                School = this.School,
+                GruppoTabellaInsegnamenti = this.GruppoTabellaInsegnamenti,
+                Tipo = this.Tipo,
+                Year = this.Year
+            };
+
+            return g;
+        }
+
         private static List<string> GetGruppoTabellaInsegnamenti(InfoParteDiGruppo infoParteDiGruppo)
         {
             if (infoParteDiGruppo == null)

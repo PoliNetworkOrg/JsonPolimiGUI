@@ -217,8 +217,20 @@ namespace JsonPolimi
             Gruppo a1 = this._l[i];
             Gruppo a2 = j;
 
-            if (a1.PermanentId == a2.PermanentId && !String.IsNullOrEmpty(a1.PermanentId))
+            bool eq = Equivalenti3(a1, a2);
+            if (eq)
+            {
+                ;
                 return Unisci3(i, j);
+            }
+
+            return new Tuple<bool, Gruppo>(false, null);       
+        }
+
+        private bool Equivalenti3(Gruppo a1, Gruppo a2)
+        {
+            if (a1.PermanentId == a2.PermanentId && !String.IsNullOrEmpty(a1.PermanentId))
+                return true;
             else
             {
                 if (!string.IsNullOrEmpty(a1.PermanentId))
@@ -226,20 +238,20 @@ namespace JsonPolimi
                     if (!string.IsNullOrEmpty(a2.PermanentId))
                     {
                         if (a1.PermanentId != a2.PermanentId)
-                            return new Tuple<bool, Gruppo>(false, null);
+                            return false;
                     }
                 }
             }
 
             if (a1.Id == a2.Id && !String.IsNullOrEmpty(a1.Id))
-                return Unisci3(i, j);
+                return true;
 
             if (!String.IsNullOrEmpty(a1.Year))
             {
                 if (!String.IsNullOrEmpty(a2.Year))
                 {
                     if (a1.Year != a2.Year)
-                        return new Tuple<bool, Gruppo>(false, null);
+                        return false;
                 }
             }
 
@@ -248,7 +260,7 @@ namespace JsonPolimi
                 if (!String.IsNullOrEmpty(a2.Platform))
                 {
                     if (a1.Platform != a2.Platform)
-                        return new Tuple<bool, Gruppo>(false, null);
+                        return false;
                 }
             }
 
@@ -257,7 +269,7 @@ namespace JsonPolimi
                 if (!String.IsNullOrEmpty(a2.Office))
                 {
                     if (a1.Office != a2.Office)
-                        return new Tuple<bool, Gruppo>(false, null);
+                        return false;
                 }
             }
 
@@ -266,15 +278,15 @@ namespace JsonPolimi
                 if (!String.IsNullOrEmpty(a2.Degree))
                 {
                     if (a1.Degree != a2.Degree)
-                        return new Tuple<bool, Gruppo>(false, null);
+                        return false;
                 }
             }
 
             if (String.IsNullOrEmpty(a1.Classe))
-                return new Tuple<bool, Gruppo>(false, null);
+                return false;
 
             if (String.IsNullOrEmpty(a2.Classe))
-                return new Tuple<bool, Gruppo>(false, null);
+                return false;
 
             string[] s1 = a1.Classe.ToLower().Split(' ');
             string[] s2 = a2.Classe.ToLower().Split(' ');
@@ -285,36 +297,36 @@ namespace JsonPolimi
             if (sa1.Contains("magistrale"))
             {
                 if (String.IsNullOrEmpty(a2.Degree))
-                    return new Tuple<bool, Gruppo>(false, null);
+                    return false;
                 if (a2.Degree.ToLower() != "lm")
-                    return new Tuple<bool, Gruppo>(false, null);
+                    return false;
             }
             else if (sa1.Contains("triennale"))
             {
                 if (String.IsNullOrEmpty(a2.Degree))
-                    return new Tuple<bool, Gruppo>(false, null);
+                    return false;
                 if (a2.Degree.ToLower() != "lt")
-                    return new Tuple<bool, Gruppo>(false, null);
+                    return false;
             }
             else if (sa2.Contains("magistrale"))
             {
                 if (String.IsNullOrEmpty(a1.Degree))
-                    return new Tuple<bool, Gruppo>(false, null);
+                    return false;
                 if (a1.Degree.ToLower() != "lm")
-                    return new Tuple<bool, Gruppo>(false, null);
+                    return false;
             }
             else if (sa2.Contains("triennale"))
             {
                 if (String.IsNullOrEmpty(a1.Degree))
-                    return new Tuple<bool, Gruppo>(false, null);
+                    return false;
                 if (a1.Degree.ToLower() != "lt")
-                    return new Tuple<bool, Gruppo>(false, null);
+                    return false;
             }
 
             if (NomiSimili(a1.Classe, a2.Classe))
-                return Unisci3(i, j);
+                return true;
 
-            return new Tuple<bool, Gruppo>(false, null);
+            return false;
         }
 
         private Tuple<bool, Gruppo> Unisci3(int i, Gruppo j)
@@ -680,6 +692,7 @@ namespace JsonPolimi
             }
 
             ;
+            this._l.Add(l3);
         }
 
         private void TryRemove(ref List<string> l1, ref List<string> l2, List<string> to_remove)
@@ -706,40 +719,36 @@ namespace JsonPolimi
             }
         }
 
-        private Gruppo Unisci2(int i, int j)
-        {
-            return Unisci4(i, this._l[j]);
-            
-        }
-
         private Gruppo Unisci4(int i, Gruppo j)
         {
             Gruppo a1 = this._l[i];
             Gruppo a2 = j;
 
-            if (String.IsNullOrEmpty(a1.Classe))
-                a1.Classe = a2.Classe;
+            Gruppo r = a1.Clone();
+
+            if (String.IsNullOrEmpty(r.Classe))
+                r.Classe = a2.Classe;
             else
             {
                 if (!String.IsNullOrEmpty(a2.Classe))
                 {
                     bool done = false;
-                    if (String.IsNullOrEmpty(a1.Year))
+                    if (String.IsNullOrEmpty(r.Year))
                     {
                         if (!String.IsNullOrEmpty(a2.Year))
                         {
-                            if (a2.Classe.Length > a1.Classe.Length)
+                            if (a2.Classe.Length > r.Classe.Length)
                             {
-                                a1.Classe = a2.Classe;
+                                r.Classe = a2.Classe;
                                 done = true;
                             }
                         }
                     }
                     else if (String.IsNullOrEmpty(a2.Year))
                     {
-                        if (!String.IsNullOrEmpty(a1.Year))
+                        if (!String.IsNullOrEmpty(r.Year))
                         {
-                            if (a1.Classe.Length > a2.Classe.Length)
+                            if (r.Classe.Length > a2.Classe.Length)
                             {
                                 done = true;
                             }
@@ -747,53 +756,53 @@ namespace JsonPolimi
                     }
 
                     if (!done)
-                        a1.Classe += " " + a2.Classe;
+                        r.Classe += " " + a2.Classe;
                 }
             }
 
-            if (String.IsNullOrEmpty(a1.Degree))
-                a1.Degree = a2.Degree;
-            if (String.IsNullOrEmpty(a1.Id))
-                a1.Id = a2.Id;
-            if (String.IsNullOrEmpty(a1.IdLink))
-                a1.IdLink = a2.IdLink;
-            if (String.IsNullOrEmpty(a1.Language))
-                a1.Language = a2.Language;
-            if (String.IsNullOrEmpty(a1.Office))
-                a1.Office = a2.Office;
-            if (String.IsNullOrEmpty(a1.PermanentId))
-                a1.PermanentId = a2.PermanentId;
-            if (String.IsNullOrEmpty(a1.Platform))
-                a1.Platform = a2.Platform;
-            if (String.IsNullOrEmpty(a1.School))
-                a1.School = a2.School;
-            if (String.IsNullOrEmpty(a1.Tipo))
-                a1.Tipo = a2.Tipo;
-            if (String.IsNullOrEmpty(a1.Year))
-                a1.Year = a2.Year;
-            if (a1.LastUpdateInviteLinkTime == null)
-                a1.LastUpdateInviteLinkTime = a2.LastUpdateInviteLinkTime;
+            if (String.IsNullOrEmpty(r.Degree))
+                r.Degree = a2.Degree;
+            if (String.IsNullOrEmpty(r.Id))
+                r.Id = a2.Id;
+            if (String.IsNullOrEmpty(r.IdLink))
+                r.IdLink = a2.IdLink;
+            if (String.IsNullOrEmpty(r.Language))
+                r.Language = a2.Language;
+            if (String.IsNullOrEmpty(r.Office))
+                r.Office = a2.Office;
+            if (String.IsNullOrEmpty(r.PermanentId))
+                r.PermanentId = a2.PermanentId;
+            if (String.IsNullOrEmpty(r.Platform))
+                r.Platform = a2.Platform;
+            if (String.IsNullOrEmpty(r.School))
+                r.School = a2.School;
+            if (String.IsNullOrEmpty(r.Tipo))
+                r.Tipo = a2.Tipo;
+            if (String.IsNullOrEmpty(r.Year))
+                r.Year = a2.Year;
+            if (r.LastUpdateInviteLinkTime == null)
+                r.LastUpdateInviteLinkTime = a2.LastUpdateInviteLinkTime;
             else
             {
                 if (a2.LastUpdateInviteLinkTime != null)
                 {
-                    if (DateTime.Compare(a1.LastUpdateInviteLinkTime.Value, a2.LastUpdateInviteLinkTime.Value) < 0)
-                        a1.LastUpdateInviteLinkTime = a2.LastUpdateInviteLinkTime;
+                    if (DateTime.Compare(r.LastUpdateInviteLinkTime.Value, a2.LastUpdateInviteLinkTime.Value) < 0)
+                        r.LastUpdateInviteLinkTime = a2.LastUpdateInviteLinkTime;
                 }
             }
 
-            if (!String.IsNullOrEmpty(a1.Year))
+            if (!String.IsNullOrEmpty(r.Year))
             {
-                if (!String.IsNullOrEmpty(a1.Tipo) && !String.IsNullOrEmpty(a2.Tipo))
+                if (!String.IsNullOrEmpty(r.Tipo) && !String.IsNullOrEmpty(a2.Tipo))
                 {
-                    if (a1.Tipo.ToLower() == "s" || a2.Tipo.ToLower() == "s")
-                        a1.Tipo = "S";
+                    if (r.Tipo.ToLower() == "s" || a2.Tipo.ToLower() == "s")
+                        r.Tipo = "S";
                 }
             }
 
-            a1.Aggiusta();
+            r.Aggiusta();
 
-            return a1;
+            return r;
         }
     }
 }
