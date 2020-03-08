@@ -176,9 +176,21 @@ namespace JsonPolimi
                 {
                     if (i != j)
                     {
-                        Tuple<bool, Gruppo> r = Equivalenti(i, j);
-                        if (r.Item1)
+                        Tuple<Somiglianza, Gruppo> r = Equivalenti(i, j);
+
+                        bool do_that = false;
+                        if (r.Item1 == Somiglianza.IDENTITICI)
                         {
+                            do_that = true;
+                        }
+                        else if (r.Item1 == Somiglianza.DUBBIO)
+                        {
+                            //TODO: chiedere all'utente
+                        }
+
+
+                        if (do_that) 
+                        { 
                             if (i > j)
                             {
                                 this._l.RemoveAt(i);
@@ -206,31 +218,31 @@ namespace JsonPolimi
             }
         }
 
-        private Tuple<bool, Gruppo> Equivalenti(int i, int j)
+        private Tuple<Somiglianza, Gruppo> Equivalenti(int i, int j)
         {
             return Equivalenti2(i, this._l[j]);
             
         }
 
-        private Tuple<bool, Gruppo> Equivalenti2(int i, Gruppo j)
+        private Tuple<Somiglianza, Gruppo> Equivalenti2(int i, Gruppo j)
         {
             Gruppo a1 = this._l[i];
             Gruppo a2 = j;
 
-            bool eq = Equivalenti3(a1, a2);
-            if (eq)
+            Somiglianza eq = Equivalenti3(a1, a2);
+            if (eq == Somiglianza.IDENTITICI || eq == Somiglianza.DUBBIO)
             {
                 ;
-                return Unisci3(i, j);
+                return new Tuple<Somiglianza, Gruppo>(eq, Unisci4(i, j));
             }
 
-            return new Tuple<bool, Gruppo>(false, null);       
+            return new Tuple<Somiglianza, Gruppo>(Somiglianza.DIVERSI, null);       
         }
 
-        private bool Equivalenti3(Gruppo a1, Gruppo a2)
+        private Somiglianza Equivalenti3(Gruppo a1, Gruppo a2)
         {
             if (a1.PermanentId == a2.PermanentId && !String.IsNullOrEmpty(a1.PermanentId))
-                return true;
+                return Somiglianza.IDENTITICI;
             else
             {
                 if (!string.IsNullOrEmpty(a1.PermanentId))
@@ -238,20 +250,20 @@ namespace JsonPolimi
                     if (!string.IsNullOrEmpty(a2.PermanentId))
                     {
                         if (a1.PermanentId != a2.PermanentId)
-                            return false;
+                            return Somiglianza.DIVERSI;
                     }
                 }
             }
 
             if (a1.Id == a2.Id && !String.IsNullOrEmpty(a1.Id))
-                return true;
+                return Somiglianza.IDENTITICI;
 
             if (!String.IsNullOrEmpty(a1.Year))
             {
                 if (!String.IsNullOrEmpty(a2.Year))
                 {
                     if (a1.Year != a2.Year)
-                        return false;
+                        return Somiglianza.DIVERSI;
                 }
             }
 
@@ -260,7 +272,7 @@ namespace JsonPolimi
                 if (!String.IsNullOrEmpty(a2.Platform))
                 {
                     if (a1.Platform != a2.Platform)
-                        return false;
+                        return Somiglianza.DIVERSI;
                 }
             }
 
@@ -269,7 +281,7 @@ namespace JsonPolimi
                 if (!String.IsNullOrEmpty(a2.Office))
                 {
                     if (a1.Office != a2.Office)
-                        return false;
+                        return Somiglianza.DIVERSI;
                 }
             }
 
@@ -278,15 +290,15 @@ namespace JsonPolimi
                 if (!String.IsNullOrEmpty(a2.Degree))
                 {
                     if (a1.Degree != a2.Degree)
-                        return false;
+                        return Somiglianza.DIVERSI;
                 }
             }
 
             if (String.IsNullOrEmpty(a1.Classe))
-                return false;
+                return Somiglianza.DUBBIO;
 
             if (String.IsNullOrEmpty(a2.Classe))
-                return false;
+                return Somiglianza.DUBBIO;
 
             string[] s1 = a1.Classe.ToLower().Split(' ');
             string[] s2 = a2.Classe.ToLower().Split(' ');
@@ -297,36 +309,50 @@ namespace JsonPolimi
             if (sa1.Contains("magistrale"))
             {
                 if (String.IsNullOrEmpty(a2.Degree))
-                    return false;
+                    return Somiglianza.DIVERSI;
                 if (a2.Degree.ToLower() != "lm")
-                    return false;
+                    return Somiglianza.DIVERSI;
             }
             else if (sa1.Contains("triennale"))
             {
                 if (String.IsNullOrEmpty(a2.Degree))
-                    return false;
+                    return Somiglianza.DIVERSI;
                 if (a2.Degree.ToLower() != "lt")
-                    return false;
+                    return Somiglianza.DIVERSI;
             }
             else if (sa2.Contains("magistrale"))
             {
                 if (String.IsNullOrEmpty(a1.Degree))
-                    return false;
+                    return Somiglianza.DIVERSI;
                 if (a1.Degree.ToLower() != "lm")
-                    return false;
+                    return Somiglianza.DIVERSI;
             }
             else if (sa2.Contains("triennale"))
             {
                 if (String.IsNullOrEmpty(a1.Degree))
-                    return false;
+                    return Somiglianza.DIVERSI;
                 if (a1.Degree.ToLower() != "lt")
-                    return false;
+                    return Somiglianza.DIVERSI;
             }
 
-            if (NomiSimili(a1.Classe, a2.Classe))
-                return true;
+            var b1 = (NomiSimili(a1.Classe, a2.Classe));
 
-            return false;
+            if (b1 == Somiglianza.DUBBIO)
+            {
+                return Somiglianza.DUBBIO;
+            }
+            else if (b1 == Somiglianza.IDENTITICI) 
+            { 
+                if (!string.IsNullOrEmpty(a1.IdLink) && string.IsNullOrEmpty(a2.IdLink) &&
+                        string.IsNullOrEmpty(a1.IDCorsoPolimi) && !string.IsNullOrEmpty(a2.IDCorsoPolimi))
+                {
+                    return Somiglianza.DUBBIO;
+                }
+
+                return Somiglianza.IDENTITICI;
+            }
+
+            return Somiglianza.DIVERSI;
         }
 
         private Tuple<bool, Gruppo> Unisci3(int i, Gruppo j)
@@ -335,13 +361,13 @@ namespace JsonPolimi
             return new Tuple<bool, Gruppo>(true, g);
         }
 
-        private bool NomiSimili(string n1, string n2)
+        private Somiglianza NomiSimili(string n1, string n2)
         {
             if (n1.Length == 0 || n2.Length == 0)
-                return false;
+                return Somiglianza.DIVERSI;
 
             if (n1 == n2)
-                return true;
+                return Somiglianza.IDENTITICI;
 
             try
             {
@@ -386,7 +412,7 @@ namespace JsonPolimi
                 foreach (string no_merge_s in no_merge)
                 {
                     if (l1.Contains(no_merge_s) || l2.Contains(no_merge_s))
-                        return false;
+                        return Somiglianza.DIVERSI;
                 }
 
                 List<Tuple<string, string>> no_merge2 = new List<Tuple<string, string>>
@@ -397,9 +423,9 @@ namespace JsonPolimi
                 foreach (var no_merge_s2 in no_merge2)
                 {
                     if (l1.Contains(no_merge_s2.Item1) && l1.Contains(no_merge_s2.Item2))
-                        return false;
+                        return Somiglianza.DIVERSI;
                     if (l2.Contains(no_merge_s2.Item1) && l2.Contains(no_merge_s2.Item2))
-                        return false;
+                        return Somiglianza.DIVERSI;
                 }
 
                 //remove useless words
@@ -414,7 +440,7 @@ namespace JsonPolimi
                 bool? r2 = ManualCheck(n1, n2);
                 if (r2 != null)
                 {
-                    return r2.Value;
+                    return r2.Value ? Somiglianza.IDENTITICI : Somiglianza.DIVERSI;
                 }
 
                 //count how many words are in common
@@ -446,20 +472,26 @@ namespace JsonPolimi
                 if (quanti.Count == 1)
                 {
                     if (quanti[0] == "design")
-                        return false;
+                        return Somiglianza.DIVERSI;
                     if (quanti[0] == "architettura")
-                        return false;
+                        return Somiglianza.DIVERSI;
                 }
 
+                if (quanti.Count == minimo - 1)
+                    return Somiglianza.DUBBIO;
+                if (quanti.Count == minimo)
+                    return Somiglianza.DUBBIO;
+                if (quanti.Count == minimo + 1)
+                    return Somiglianza.DUBBIO;
                 if (quanti.Count >= minimo)
-                    return true;
+                    return Somiglianza.IDENTITICI;
             }
             catch
             {
-                return false;
+                return Somiglianza.DUBBIO;
             }
 
-            return false;
+            return Somiglianza.DIVERSI;
         }
 
         private void TryRename(ref List<string> l1, ref List<string> l2)
@@ -628,6 +660,9 @@ namespace JsonPolimi
             if (n1 == "fondamenti di informatica" || n2 == "fondamenti di comunicazioni e internet")
                 return false;
 
+            if (n1 == "fondamenti di automatica" || n2 == "fondamenti di informatica")
+                return false;
+
             if (n1 == "communication network design" || n2 == "communication network design")
                 return false;
 
@@ -694,11 +729,15 @@ namespace JsonPolimi
         {
             for (int i = 0; i < _l.Count; i++)
             {
-                Tuple<bool, Gruppo> r = Equivalenti2(i, l3);
-                if (r.Item1)
+                Tuple<Somiglianza, Gruppo> r = Equivalenti2(i, l3);
+                if (r.Item1 == Somiglianza.IDENTITICI)
                 {
                     this._l[i] = r.Item2;
                     return;
+                }
+                else if (r.Item1 == Somiglianza.DUBBIO)
+                {
+                    return; //TODO: ASK THE USER
                 }
             }
 
