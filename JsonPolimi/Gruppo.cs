@@ -8,7 +8,7 @@ namespace JsonPolimi
         public string Classe;
 
         public string IDCorsoPolimi { get; private set; }
-        public string GruppoTabellaInsegnamenti { get; private set; }
+        public List<string> GruppoTabellaInsegnamenti { get; private set; }
 
         public string Degree;
         public string Id; // esempio: FB/2018/2019/LEONARDO/21432583243205
@@ -770,7 +770,7 @@ namespace JsonPolimi
                     {
                         Classe = classe,
                         IDCorsoPolimi = infoParteDiGruppo_list[0].testo_selvaggio,
-                        GruppoTabellaInsegnamenti = infoParteDiGruppo_list[1].testo_selvaggio,
+                        GruppoTabellaInsegnamenti = GetGruppoTabellaInsegnamenti(infoParteDiGruppo_list[1]),
                         Office = GetSede(infoParteDiGruppo_list[5])
                     };
                     return g;
@@ -817,6 +817,26 @@ namespace JsonPolimi
             return null;
         }
 
+        private static List<string> GetGruppoTabellaInsegnamenti(InfoParteDiGruppo infoParteDiGruppo)
+        {
+            if (infoParteDiGruppo == null)
+                return null;
+
+            List<string> L = new List<string>();
+            if (string.IsNullOrEmpty(infoParteDiGruppo.testo_selvaggio) && infoParteDiGruppo.sottopezzi != null)
+            {
+
+                foreach (var x1 in infoParteDiGruppo.sottopezzi)
+                {
+                    L.Add(x1.testo_selvaggio);
+                }
+                return L;
+            }
+
+            L.Add(infoParteDiGruppo.testo_selvaggio);
+            return L;
+        }
+
         private static string GetSede(InfoParteDiGruppo infoParteDiGruppo)
         {
             if (infoParteDiGruppo == null)
@@ -829,6 +849,9 @@ namespace JsonPolimi
             {
                 case "BV":
                     return "Bovisa";
+
+                case "MI":
+                    return "Leonardo";
             }
 
             return null;

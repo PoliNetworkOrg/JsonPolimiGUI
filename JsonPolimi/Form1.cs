@@ -922,9 +922,28 @@ namespace JsonPolimi
                         {
                             return null; //sicuro
                         }
+                        else if (s3 == "2<sup><small>o</small></sup>Anno")
+                        {
+                            return null; //sicuro
+                        }
+                        else if (s3 == "3<sup><small>o</small></sup>Anno")
+                        {
+                            return null; //sicuro
+                        }
                         else
                         {
-                            return null; 
+                            string s4 = s1 + "<br>" + s2;
+                            if (s4 == s3)
+                            {
+                                List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>();
+                                sottopezzi2.Add(new InfoParteDiGruppo(testo_selvaggio: s1));
+                                sottopezzi2.Add(new InfoParteDiGruppo(testo_selvaggio: s2));
+                                return new InfoParteDiGruppo(sottopezzi: sottopezzi2);
+                            }
+                            else
+                            {
+                                return null;
+                            }
                         }
                     }
                 }
@@ -1082,6 +1101,10 @@ namespace JsonPolimi
                     if (string.IsNullOrEmpty(s1))
                     {
                         ;
+                    }
+                    else if (s1 == "10.0")
+                    {
+                        return null;
                     }
                     else
                     {
