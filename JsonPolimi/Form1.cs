@@ -692,6 +692,7 @@ namespace JsonPolimi
             Salva(json);
         }
 
+        public static InfoManifesto infoManifesto = null;
         private void Button8_Click2(object sender, EventArgs e)
         {
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
@@ -706,7 +707,12 @@ namespace JsonPolimi
                 doc.Load(o.FileName);
             }
 
+            infoManifesto = new InfoManifesto();
             List<Gruppo> L2 = GetGruppiFromDocument(doc);
+            for (int i = 0; i < L2.Count; i++)
+            {
+                L2[i].AggiungiInfoDaManifesto(infoManifesto);
+            }
 
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
@@ -1083,7 +1089,15 @@ namespace JsonPolimi
             }
             else if (htmlNode.ChildNodes.Count == 4)
             {
-                return null;
+                string s = htmlNode.InnerHtml.Trim();
+                if (s.StartsWith("<span id=\"infocard"))
+                {
+                    return null; //sicuro
+                }
+                else
+                {
+                    return null;
+                }
             }
             else if (htmlNode.ChildNodes.Count == 0)
             {

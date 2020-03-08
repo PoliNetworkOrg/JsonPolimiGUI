@@ -743,7 +743,38 @@ namespace JsonPolimi
 
             if (infoParteDiGruppo_list.Count == 4)
             {
-                return null; //info interessanti
+                if (infoParteDiGruppo_list[0].testo_selvaggio == "Corso di Studio")
+                {
+                    string x1 = infoParteDiGruppo_list[1].testo_selvaggio.Trim();
+                    string x2 = x1.Replace('\r', '\t');
+                    x2 = x2.Replace('\n', '\t');
+                    var x3 = x2.Split('\t');
+                    List<string> x4 = new List<string>();
+                    foreach (var x3a in x3)
+                    {
+                        if (!string.IsNullOrEmpty(x3a.Trim()))
+                        {
+                            x4.Add(x3a);
+                        }
+                    }
+
+                    Form1.infoManifesto.corso_di_studio = x4;
+                    return null; //sicuro
+                }
+                else if (infoParteDiGruppo_list[2].testo_selvaggio == "Sede del corso")
+                {
+                    ;
+                }
+                else if (infoParteDiGruppo_list[0].testo_selvaggio == "Anni di Corso Attivi")
+                {
+                    string x1 = infoParteDiGruppo_list[1].testo_selvaggio.Trim();
+                    Form1.infoManifesto.anni_di_corso_attivi = x1.Split(',');
+                    return null;
+                }
+                else
+                {
+                    return null; //info interessanti
+                }
             }
 
             if (infoParteDiGruppo_list.Count == 10 || infoParteDiGruppo_list.Count == 9 || infoParteDiGruppo_list.Count == 11)
@@ -815,6 +846,11 @@ namespace JsonPolimi
 
 
             return null;
+        }
+
+        internal void AggiungiInfoDaManifesto(InfoManifesto infoManifesto)
+        {
+            throw new NotImplementedException();
         }
 
         internal Gruppo Clone()
