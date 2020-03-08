@@ -221,9 +221,9 @@ namespace JsonPolimi
                 return Unisci3(i, j);
             else
             {
-                if (!String.IsNullOrEmpty(a1.PermanentId))
+                if (!string.IsNullOrEmpty(a1.PermanentId))
                 {
-                    if (!String.IsNullOrEmpty(a2.PermanentId))
+                    if (!string.IsNullOrEmpty(a2.PermanentId))
                     {
                         if (a1.PermanentId != a2.PermanentId)
                             return new Tuple<bool, Gruppo>(false, null);

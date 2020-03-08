@@ -1208,7 +1208,7 @@ namespace JsonPolimi
 
         private void Button12_Click(object sender, EventArgs e)
         {
-
+            //todo: fare questo tasto
         }
     }
 }
