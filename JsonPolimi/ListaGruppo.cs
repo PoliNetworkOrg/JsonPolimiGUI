@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using static System.String;
 
 namespace JsonPolimi
@@ -369,6 +370,9 @@ namespace JsonPolimi
             if (n1 == n2)
                 return SomiglianzaEnum.IDENTITICI;
 
+            if (n1.ToLower() == n2.ToLower())
+                return SomiglianzaEnum.DUBBIO;
+
             try
             {
                 string[] s1 = n1.Split(' ');
@@ -477,8 +481,6 @@ namespace JsonPolimi
                         return SomiglianzaEnum.DIVERSI;
                 }
 
-                if (quanti.Count == minimo - 1)
-                    return SomiglianzaEnum.DUBBIO;
                 if (quanti.Count == minimo)
                     return SomiglianzaEnum.DUBBIO;
                 if (quanti.Count == minimo + 1)
@@ -730,14 +732,36 @@ namespace JsonPolimi
             for (int i = 0; i < _l.Count; i++)
             {
                 Tuple<SomiglianzaClasse, Gruppo> r = Equivalenti2(i, l3);
+                bool do_that = false;
                 if (r.Item1.somiglianzaEnum == SomiglianzaEnum.IDENTITICI)
                 {
-                    this._l[i] = r.Item2;
-                    return;
+                    do_that = true;
                 }
                 else if (r.Item1.somiglianzaEnum == SomiglianzaEnum.DUBBIO)
                 {
-                    return; //TODO: ASK THE USER
+                    string s = "Sono da unire?";
+                    s += '\n';
+                    s += '\n';
+
+                    s += r.Item1.a1.To_json();
+
+                    s += '\n';
+                    s += '\n';
+
+                    s += r.Item1.a2.To_json();
+
+                    DialogResult dialogResult = MessageBox.Show(s, "Sono da unire?", MessageBoxButtons.YesNo);
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        do_that = true;
+                    }
+
+                }
+
+                if (do_that)
+                {
+                    this._l[i] = r.Item2;
+                    return;
                 }
             }
 
@@ -778,6 +802,10 @@ namespace JsonPolimi
 
             if (String.IsNullOrEmpty(r.Classe))
                 r.Classe = a2.Classe;
+            else if (r.Classe.ToLower() == a2.Classe.ToLower())
+            {
+                ;
+            }
             else
             {
                 if (!String.IsNullOrEmpty(a2.Classe))
