@@ -152,6 +152,8 @@ namespace JsonPolimi
             json += StringCheckNull(Degree);
             json += ",\"school\":";
             json += StringCheckNull(School);
+            json += ",\"idcorso\":";
+            json += StringCheckNull(IDCorsoPolimi);
             json += ",\"id_link\":";
             json += StringCheckNull(IdLink);
             json += ",\"language\":";
