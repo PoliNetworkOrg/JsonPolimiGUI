@@ -1124,6 +1124,10 @@ namespace JsonPolimi
                     {
                         return null;
                     }
+                    else if (s1.StartsWith("1.0"))
+                    {
+                        return null;
+                    }
                     else
                     {
                         ;
@@ -1155,7 +1159,19 @@ namespace JsonPolimi
                     }
                     else
                     {
-                        ;
+                        string s = htmlNode.InnerHtml.Trim();
+                        if (string.IsNullOrEmpty(s))
+                        {
+                            ;
+                        }
+                        else if (s.StartsWith("Insegnamenti a scelta dal"))
+                        {
+                            return null; //sicuro
+                        }
+                        else
+                        {
+                            ;
+                        }
                     }
                 }
                 else if (htmlNode.ChildNodes[0].Name == "a" && htmlNode.ChildNodes[1].Name == "a")

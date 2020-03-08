@@ -728,6 +728,10 @@ namespace JsonPolimi
                     {
                         return null; //sicuro
                     }
+                    else if (infoParteDiGruppo_list[0].testo_selvaggio == "Insegnamenti del Gruppo  TABA")
+                    {
+                        return null; //sicuro
+                    }
                     else
                     {
                         return null;
@@ -761,28 +765,35 @@ namespace JsonPolimi
                     Form1.infoManifesto.corso_di_studio = x4;
                     return null; //sicuro
                 }
-                else if (infoParteDiGruppo_list[2].testo_selvaggio == "Sede del corso")
+                
+                if (infoParteDiGruppo_list[2].testo_selvaggio == "Sede del corso")
                 {
                     ;
                 }
-                else if (infoParteDiGruppo_list[0].testo_selvaggio == "Anni di Corso Attivi")
+                
+                if (infoParteDiGruppo_list[0].testo_selvaggio == "Anni di Corso Attivi")
                 {
                     string x1 = infoParteDiGruppo_list[1].testo_selvaggio.Trim();
                     Form1.infoManifesto.anni_di_corso_attivi = x1.Split(',');
-                    return null;
+                    return null; //sicuro
                 }
-                else
-                {
-                    return null; //info interessanti
-                }
+
+
+
+                return null; //info interessanti
+
             }
 
             if (infoParteDiGruppo_list.Count == 10 || infoParteDiGruppo_list.Count == 9 || infoParteDiGruppo_list.Count == 11)
             {
                 if (infoParteDiGruppo_list[0].testo_selvaggio == "--" &&
-                    infoParteDiGruppo_list[1].testo_selvaggio == "--")
+                    infoParteDiGruppo_list[1].testo_selvaggio == "--" &&
+                    infoParteDiGruppo_list[2].testo_selvaggio == "--" &&
+                    infoParteDiGruppo_list[4].testo_selvaggio == "--" &&
+                    infoParteDiGruppo_list[5].testo_selvaggio == "--" &&
+                    infoParteDiGruppo_list[6].testo_selvaggio == "--")
                 {
-                    return null;
+                    return null; //sicuro
                 }
 
                 string classe = null;
