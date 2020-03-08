@@ -89,7 +89,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Riga.cs" />
-    <Compile Include="Somiglianza.cs" />
+    <Compile Include="SomiglianzaClasse.cs" />
+    <Compile Include="SomiglianzaEnum.cs" />
     <Compile Include="Tipi\FileSalvare.cs" />
     <Compile Include="Tipi\GruppoTelegram.cs" />
     <Compile Include="Variabili.cs" />

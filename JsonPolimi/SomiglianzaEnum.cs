@@ -1,6 +1,6 @@
 ﻿namespace JsonPolimi
 {
-    public enum Somiglianza
+    public enum SomiglianzaEnum
     {
         IDENTITICI, DIVERSI, DUBBIO
     }
