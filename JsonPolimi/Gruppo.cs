@@ -9,6 +9,7 @@ namespace JsonPolimi
 
         public string IDCorsoPolimi { get; private set; }
         public List<string> GruppoTabellaInsegnamenti { get; private set; }
+        public InfoManifesto manifesto { get; private set; }
 
         public string Degree;
         public string Id; // esempio: FB/2018/2019/LEONARDO/21432583243205
@@ -758,26 +759,60 @@ namespace JsonPolimi
                     {
                         if (!string.IsNullOrEmpty(x3a.Trim()))
                         {
-                            x4.Add(x3a);
+                            x4.Add(x3a.Trim());
                         }
                     }
 
                     Form1.infoManifesto.corso_di_studio = x4;
-                    return null; //sicuro
                 }
                 
                 if (infoParteDiGruppo_list[2].testo_selvaggio == "Sede del corso")
                 {
-                    ;
+                    string x1 = infoParteDiGruppo_list[3].testo_selvaggio.Trim();
+                    Form1.infoManifesto.sede_del_corso = x1.Split(',');
                 }
                 
                 if (infoParteDiGruppo_list[0].testo_selvaggio == "Anni di Corso Attivi")
                 {
                     string x1 = infoParteDiGruppo_list[1].testo_selvaggio.Trim();
                     Form1.infoManifesto.anni_di_corso_attivi = x1.Split(',');
-                    return null; //sicuro
                 }
 
+                if (infoParteDiGruppo_list[0].testo_selvaggio == "Anno Accademico")
+                {
+                    string x1 = null;
+                    try
+                    {
+                        x1 = infoParteDiGruppo_list[1].testo_selvaggio.Trim();
+                    }
+                    catch
+                    {
+                        ;
+                    }
+
+                    Form1.infoManifesto.anno_accademico = x1;
+                }
+
+                if (infoParteDiGruppo_list[2].testo_selvaggio == "Sede")
+                {
+                    string x1 = null;
+                    try
+                    {
+                        x1 = infoParteDiGruppo_list[3].testo_selvaggio.Trim();
+                    }
+                    catch
+                    {
+                        ;
+                    }
+
+                    Form1.infoManifesto.sede = x1;
+                }
+
+                if (infoParteDiGruppo_list[2].testo_selvaggio == "Durata nominale del Corso")
+                {
+                    string x1 = infoParteDiGruppo_list[3].testo_selvaggio.Trim();
+                    Form1.infoManifesto.durata_nominale_corso = x1;
+                }
 
 
                 return null; //info interessanti
@@ -861,7 +896,7 @@ namespace JsonPolimi
 
         internal void AggiungiInfoDaManifesto(InfoManifesto infoManifesto)
         {
-            throw new NotImplementedException();
+            this.manifesto = infoManifesto;
         }
 
         internal Gruppo Clone()

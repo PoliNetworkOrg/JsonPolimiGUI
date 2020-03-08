@@ -1094,6 +1094,10 @@ namespace JsonPolimi
                 {
                     return null; //sicuro
                 }
+                else if (htmlNode.ChildNodes[0].Name == "select")
+                {
+                    return null; //sicuro
+                }
                 else
                 {
                     return null;
@@ -1194,7 +1198,10 @@ namespace JsonPolimi
                 }
                 else
                 {
-                    ;
+                    string s = htmlNode.InnerHtml.Trim();
+                    var s2 = s.Split('<');
+                    Form1.infoManifesto.scuola = s2[0].Trim();
+                    return null;
                 }
             }
             else

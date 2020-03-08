@@ -426,7 +426,15 @@ namespace JsonPolimi
                 }
 
                 int minimo = 0;
-                if (l1.Count + l2.Count > 5)
+                if (l1.Count + l2.Count > 14)
+                {
+                    minimo = 5;
+                }
+                else if (l1.Count + l2.Count > 11)
+                {
+                    minimo = 4;
+                }
+                else if (l1.Count + l2.Count > 5)
                 {
                     minimo = 2;
                 }
@@ -615,6 +623,9 @@ namespace JsonPolimi
                 return false;
 
             if (n1 == "fondamenti di elettronica" || n2 == "fondamenti di elettronica")
+                return false;
+
+            if (n1 == "fondamenti di informatica" || n2 == "fondamenti di comunicazioni e internet")
                 return false;
 
             if (n1 == "communication network design" || n2 == "communication network design")
