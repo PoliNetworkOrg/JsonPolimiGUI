@@ -8,6 +8,7 @@ namespace JsonPolimi
         public string Classe;
 
         public string IDCorsoPolimi { get; private set; }
+        public string GruppoTabellaInsegnamenti { get; private set; }
 
         public string Degree;
         public string Id; // esempio: FB/2018/2019/LEONARDO/21432583243205
@@ -753,21 +754,24 @@ namespace JsonPolimi
                     return null;
                 }
 
-                if (infoParteDiGruppo_list[3] != null && infoParteDiGruppo_list[3].link != null && !string.IsNullOrEmpty( infoParteDiGruppo_list[3].link.v))
+                string classe = null;
+                if (infoParteDiGruppo_list[3] != null && infoParteDiGruppo_list[3].link != null && !string.IsNullOrEmpty(infoParteDiGruppo_list[3].link.v))
                 {
-                    Gruppo g = new Gruppo
-                    {
-                        Classe = infoParteDiGruppo_list[3].link.v,
-                        IDCorsoPolimi = infoParteDiGruppo_list[0].testo_selvaggio
-                    };
-                    return g;
+                    classe = infoParteDiGruppo_list[3].link.v;
                 }
                 else if (infoParteDiGruppo_list[4] != null && infoParteDiGruppo_list[4].link != null && !string.IsNullOrEmpty(infoParteDiGruppo_list[4].link.v))
                 {
+                    classe = infoParteDiGruppo_list[4].link.v;
+                }
+
+                if (!string.IsNullOrEmpty(classe))
+                {
                     Gruppo g = new Gruppo
                     {
-                        Classe = infoParteDiGruppo_list[4].link.v,
-                        IDCorsoPolimi = infoParteDiGruppo_list[0].testo_selvaggio
+                        Classe = classe,
+                        IDCorsoPolimi = infoParteDiGruppo_list[0].testo_selvaggio,
+                        GruppoTabellaInsegnamenti = infoParteDiGruppo_list[1].testo_selvaggio,
+                        Office = GetSede(infoParteDiGruppo_list[5])
                     };
                     return g;
                 }
@@ -809,6 +813,23 @@ namespace JsonPolimi
                 return null; //da fare maggiori controlli
             }
 
+
+            return null;
+        }
+
+        private static string GetSede(InfoParteDiGruppo infoParteDiGruppo)
+        {
+            if (infoParteDiGruppo == null)
+                return null;
+
+            if (string.IsNullOrEmpty(infoParteDiGruppo.testo_selvaggio))
+                return null;
+
+            switch (infoParteDiGruppo.testo_selvaggio)
+            {
+                case "BV":
+                    return "Bovisa";
+            }
 
             return null;
         }

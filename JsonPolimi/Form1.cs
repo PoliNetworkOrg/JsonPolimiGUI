@@ -1078,7 +1078,15 @@ namespace JsonPolimi
             {
                 if (htmlNode.ChildNodes[0].Name == "#text" && htmlNode.ChildNodes[1].Name == "div")
                 {
-                    ;
+                    string s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
+                    if (string.IsNullOrEmpty(s1))
+                    {
+                        ;
+                    }
+                    else
+                    {
+                        ;
+                    }
                 }
                 else if (htmlNode.ChildNodes[0].Name == "#text" && htmlNode.ChildNodes[1].Name == "a")
                 {
