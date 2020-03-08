@@ -857,7 +857,7 @@ namespace JsonPolimi
             return null;
         }
 
-        internal bool isValido()
+        internal bool IsValido()
         {
             if (string.IsNullOrEmpty(this.Classe))
                 return false;

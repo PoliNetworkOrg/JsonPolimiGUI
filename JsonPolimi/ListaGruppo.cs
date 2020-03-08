@@ -208,11 +208,17 @@ namespace JsonPolimi
 
         private Tuple<bool, Gruppo> Equivalenti(int i, int j)
         {
+            return Equivalenti2(i, this._l[j]);
+            
+        }
+
+        private Tuple<bool, Gruppo> Equivalenti2(int i, Gruppo j)
+        {
             Gruppo a1 = this._l[i];
-            Gruppo a2 = this._l[j];
+            Gruppo a2 = j;
 
             if (a1.PermanentId == a2.PermanentId && !String.IsNullOrEmpty(a1.PermanentId))
-                return Unisci(i, j);
+                return Unisci3(i, j);
             else
             {
                 if (!String.IsNullOrEmpty(a1.PermanentId))
@@ -226,7 +232,7 @@ namespace JsonPolimi
             }
 
             if (a1.Id == a2.Id && !String.IsNullOrEmpty(a1.Id))
-                return Unisci(i, j);
+                return Unisci3(i, j);
 
             if (!String.IsNullOrEmpty(a1.Year))
             {
@@ -306,9 +312,15 @@ namespace JsonPolimi
             }
 
             if (NomiSimili(a1.Classe, a2.Classe))
-                return Unisci(i, j);
+                return Unisci3(i, j);
 
             return new Tuple<bool, Gruppo>(false, null);
+        }
+
+        private Tuple<bool, Gruppo> Unisci3(int i, Gruppo j)
+        {
+            Gruppo g =  Unisci4(i, j);
+            return new Tuple<bool, Gruppo>(true, g);
         }
 
         private bool NomiSimili(string n1, string n2)
@@ -647,6 +659,29 @@ namespace JsonPolimi
             return null;
         }
 
+        internal void Importa(List<Gruppo> l2)
+        {
+            foreach (var l3 in l2)
+            {
+                Importa2(l3);
+            }
+        }
+
+        private void Importa2(Gruppo l3)
+        {
+            for (int i = 0; i < _l.Count; i++)
+            {
+                Tuple<bool, Gruppo> r = Equivalenti2(i, l3);
+                if (r.Item1)
+                {
+                    this._l[i] = r.Item2;
+                    return;
+                }
+            }
+
+            ;
+        }
+
         private void TryRemove(ref List<string> l1, ref List<string> l2, List<string> to_remove)
         {
             foreach (string s in to_remove)
@@ -671,16 +706,16 @@ namespace JsonPolimi
             }
         }
 
-        private Tuple<bool, Gruppo> Unisci(int i, int j)
-        {
-            Gruppo g = Unisci2(i, j);
-            return new Tuple<bool, Gruppo>(true, g);
-        }
-
         private Gruppo Unisci2(int i, int j)
         {
+            return Unisci4(i, this._l[j]);
+            
+        }
+
+        private Gruppo Unisci4(int i, Gruppo j)
+        {
             Gruppo a1 = this._l[i];
-            Gruppo a2 = this._l[j];
+            Gruppo a2 = j;
 
             if (String.IsNullOrEmpty(a1.Classe))
                 a1.Classe = a2.Classe;

@@ -706,16 +706,18 @@ namespace JsonPolimi
                 doc.Load(o.FileName);
             }
 
-            List<Gruppo> L = GetGruppiFromDocument(doc);
-            ;
+            List<Gruppo> L2 = GetGruppiFromDocument(doc);
+
+            if (Variabili.L == null)
+                Variabili.L = new ListaGruppo();
+
+            Variabili.L.Importa(L2);
         }
 
         private List<Gruppo> GetGruppiFromDocument(HtmlAgilityPack.HtmlDocument doc)
         {
-            List<HtmlNode> L = new List<HtmlNode>();
+            List<HtmlNode> L = GetTables(doc.DocumentNode.ChildNodes);
             List<HtmlNode> L2 = new List<HtmlNode>();
-
-            L = GetTables(doc.DocumentNode.ChildNodes);
 
             while (L.Count > 0)
             {
@@ -804,7 +806,7 @@ namespace JsonPolimi
             }
 
             Gruppo g = Gruppo.FromInfoParteList(infoParteDiGruppo_list);
-            if (g != null  && g.isValido())
+            if (g != null  && g.IsValido())
             {
                 return g;
             }
@@ -814,7 +816,7 @@ namespace JsonPolimi
             }
         }
         
-        private bool contiene_table2(HtmlNode htmlNode)
+        private bool Contiene_table2(HtmlNode htmlNode)
         {
             foreach (var x in htmlNode.ChildNodes)
             {
@@ -827,7 +829,7 @@ namespace JsonPolimi
 
         private InfoParteDiGruppo GetGruppiFromDocument5(HtmlNode htmlNode)
         {
-            bool contiene_table = contiene_table2(htmlNode);
+            bool contiene_table = Contiene_table2(htmlNode);
             if (contiene_table)
                 return null;
 
@@ -935,9 +937,11 @@ namespace JsonPolimi
                             string s4 = s1 + "<br>" + s2;
                             if (s4 == s3)
                             {
-                                List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>();
-                                sottopezzi2.Add(new InfoParteDiGruppo(testo_selvaggio: s1));
-                                sottopezzi2.Add(new InfoParteDiGruppo(testo_selvaggio: s2));
+                                List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>
+                                {
+                                    new InfoParteDiGruppo(testo_selvaggio: s1),
+                                    new InfoParteDiGruppo(testo_selvaggio: s2)
+                                };
                                 return new InfoParteDiGruppo(sottopezzi: sottopezzi2);
                             }
                             else
@@ -1200,6 +1204,11 @@ namespace JsonPolimi
             }
 
             return htmlNode;
+        }
+
+        private void Button12_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
