@@ -806,6 +806,14 @@ namespace JsonPolimi
             {
                 ;
             }
+            else if (r.Classe.ToLower().Contains(a2.Classe.ToLower()))
+            {
+                ;
+            }
+            else if (a2.Classe.ToLower().Contains(r.Classe.ToLower()))
+            {
+                r.Classe = a2.Classe;
+            }
             else
             {
                 if (!String.IsNullOrEmpty(a2.Classe))
