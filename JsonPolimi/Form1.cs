@@ -1054,7 +1054,7 @@ namespace JsonPolimi
                 }
                 else if (htmlNode.ChildNodes[0].Name == "select")
                 {
-                    ;
+                    return null;
                 }
                 else
                 {
