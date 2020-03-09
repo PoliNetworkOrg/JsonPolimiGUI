@@ -860,6 +860,10 @@ namespace JsonPolimi
                     {
                         to_show = false;
                     }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Edile"))
+                    {
+                        to_show = false;
+                    }
                     //FINE TEMP
 
                     if (to_show)
