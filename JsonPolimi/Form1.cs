@@ -1170,6 +1170,10 @@ namespace JsonPolimi
                     {
                         return null;
                     }
+                    else if (s1.StartsWith("8.0"))
+                    {
+                        return null;
+                    }
                     else
                     {
                         ;
@@ -1244,7 +1248,20 @@ namespace JsonPolimi
             }
             else
             {
-                ;
+                string s = htmlNode.InnerHtml.Trim();
+                if (string.IsNullOrEmpty(s))
+                {
+                    ;
+                }
+                else if (s.StartsWith("4.0"))
+                {
+                    return null;
+                }
+                else
+                {
+                    ;
+                }
+                   
             }
 
 
@@ -1294,22 +1311,28 @@ namespace JsonPolimi
         private void button13_Click(object sender, EventArgs e)
         {
             string[] f = null;
-            using (OpenFileDialog o = new OpenFileDialog())
+            using (var fbd = new FolderBrowserDialog())
             {
-                var r = o.ShowDialog();
-                if (r != DialogResult.OK)
-                {
-                    return;
-                }
+                DialogResult result = fbd.ShowDialog();
 
-                f = o.FileNames;
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    f = Directory.GetFiles(fbd.SelectedPath);
+
+                }
             }
+
+            if (f == null)
+                return;
 
             foreach (var f2 in f)
             {
-                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-                doc.Load(f2);
-                LoadManifesto(doc);
+                if (f2.EndsWith(".htm"))
+                {
+                    HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                    doc.Load(f2);
+                    LoadManifesto(doc);
+                }
             }
 
         }

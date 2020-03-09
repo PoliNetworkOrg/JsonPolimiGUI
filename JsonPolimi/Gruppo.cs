@@ -743,6 +743,23 @@ namespace JsonPolimi
                         return null; //sicuro
                     }
 
+                    if (infoParteDiGruppo_list[1].testo_selvaggio == "Gruppo di insegnamenti a preferenza")
+                    {
+                        return null; //sicuro
+                    }
+
+
+                    if (infoParteDiGruppo_list[1].testo_selvaggio == "Italiano/Inglese")
+                    {
+                        return null; //sicuro
+                    }
+
+
+                    if (infoParteDiGruppo_list[1].testo_selvaggio == "Laboratorio")
+                    {
+                        return null; //sicuro
+                    }
+
                     return null;
                 }
                 
@@ -767,6 +784,14 @@ namespace JsonPolimi
                         return null; //sicuro
                     }
                     else if (infoParteDiGruppo_list[0].testo_selvaggio == "Insegnamenti del Gruppo  TABA")
+                    {
+                        return null; //sicuro
+                    }
+                    else if (infoParteDiGruppo_list[0].testo_selvaggio.StartsWith("(¹) Il corso di laurea offre "))
+                    {
+                        return null; //sicuro
+                    }
+                    else if (infoParteDiGruppo_list[0].testo_selvaggio.StartsWith("Nessun insegnamento per"))
                     {
                         return null; //sicuro
                     }
