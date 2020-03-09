@@ -167,7 +167,7 @@ namespace JsonPolimi
 
             g.Id = i["id"].ToString();
             g.Language = i["language"].ToString();
-            g.Office = i["office"].ToString();
+            g.Office = new List<string>() { i["office"].ToString() };
             g.School = i["school"].ToString();
             g.IdLink = i["id_link"].ToString();
 
@@ -533,7 +533,7 @@ namespace JsonPolimi
 
                     if (!string.IsNullOrEmpty(g.NomeOld.School)) nomeOld.School = g.NomeOld.School;
 
-                    if (!string.IsNullOrEmpty(g.NomeOld.Office)) nomeOld.Office = g.NomeOld.Office;
+                    if (!Gruppo.IsEmpty(g.NomeOld.Office)) nomeOld.Office = g.NomeOld.Office;
 
                     if (!string.IsNullOrEmpty(g.NomeOld.Year)) nomeOld.Year = g.NomeOld.Year;
                 }
@@ -1136,6 +1136,34 @@ namespace JsonPolimi
                 {
                     return null;
                 }
+                else if (s.StartsWith("I1A"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("U1L"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("A1A"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("XEN"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("PSS"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("FOE"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("MOB"))
+                {
+                    return null;
+                }
                 else
                 {
                     ;
@@ -1424,6 +1452,29 @@ namespace JsonPolimi
                     }
                     return new InfoParteDiGruppo(sottopezzi: sottopezzi2);
                 }
+                else if (s.StartsWith("Ingegneria Civile"))
+                {
+                    return null; //sicuro
+                }
+
+
+                else if (s.StartsWith("ING-INF"))
+                {
+                    List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>();
+                    var s2 = s.Split('<');
+                    foreach (var s3 in s2)
+                    {
+                        string s4 = s3;
+                        if (s3.StartsWith("br>"))
+                        {
+                            s4 = s3.Substring(3);
+                        }
+
+                        sottopezzi2.Add(new InfoParteDiGruppo(testo_selvaggio: s4));
+                    }
+                    return new InfoParteDiGruppo(sottopezzi: sottopezzi2);
+                }
+
                 else
                 {
                     ;
@@ -1475,7 +1526,7 @@ namespace JsonPolimi
 
         }
 
-        private void button13_Click(object sender, EventArgs e)
+        private void Button13_Click(object sender, EventArgs e)
         {
             string[] f = null;
             using (var fbd = new FolderBrowserDialog())

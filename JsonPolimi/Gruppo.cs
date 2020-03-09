@@ -9,13 +9,13 @@ namespace JsonPolimi
 
         public string IDCorsoPolimi { get; private set; }
         public List<string> GruppoTabellaInsegnamenti { get; private set; }
-        public InfoManifesto manifesto { get; private set; }
+        public InfoManifesto Manifesto { get; private set; }
 
         public string Degree;
         public string Id; // esempio: FB/2018/2019/LEONARDO/21432583243205
         public string IdLink; // esempio: 21432583243205
         public string Language;
-        public string Office; // esempio: LEONARDO
+        public List<string> Office; // esempio: LEONARDO
         public string PermanentId; //per telegram, esempio -1000345953
         public string Platform; // esempio: FB
         public string School;
@@ -33,7 +33,7 @@ namespace JsonPolimi
 
 
             if (!string.IsNullOrEmpty(Year) && !string.IsNullOrEmpty(this.Classe) && !string.IsNullOrEmpty(this.Degree) &&
-                !string.IsNullOrEmpty(this.Id) && !string.IsNullOrEmpty(this.IdLink) && !string.IsNullOrEmpty(this.Language) && !string.IsNullOrEmpty( this.Office))
+                !string.IsNullOrEmpty(this.Id) && !string.IsNullOrEmpty(this.IdLink) && !string.IsNullOrEmpty(this.Language) && !IsEmpty( this.Office))
             {
                 if (string.IsNullOrEmpty(Tipo))
                 {
@@ -63,6 +63,23 @@ namespace JsonPolimi
             }
 
             Id = CreaId();
+        }
+
+        public static bool IsEmpty(List<string> office)
+        {
+            if (office == null)
+                return true;
+
+            if (office.Count == 0)
+                return true;
+
+            foreach (var x in office)
+            {
+                if (string.IsNullOrEmpty(x))
+                    return true;
+            }
+
+            return false;
         }
 
         public void AggiustaAnno()
@@ -172,6 +189,21 @@ namespace JsonPolimi
             json += "}";
 
             return json;
+        }
+
+        private string StringCheckNull(List<string> office)
+        {
+            if (office == null)
+                return "null";
+
+            string r = "";
+            foreach (string v in office)
+            {
+                r += v;
+                r += ", ";
+            }
+            r = r.Substring(r.Length - 2);
+            return r;
         }
 
         private string StringCheckNull(string s)
@@ -365,8 +397,8 @@ namespace JsonPolimi
 
         private static void AggiungiSede(string v, ref InsiemeDiGruppi g)
         {
-            g.GruppoDiBase.Office = v;
-            g.NomeOld.Office = v;
+            g.GruppoDiBase.Office = new List<string>() { v };
+            g.NomeOld.Office = new List<string>() { v };
         }
 
         private static void AggiungiLink(string v, ref InsiemeDiGruppi g)
@@ -479,7 +511,7 @@ namespace JsonPolimi
             if (!string.IsNullOrEmpty(gruppo.Language) && string.IsNullOrEmpty(Language))
                 Language = gruppo.Language;
 
-            if (!string.IsNullOrEmpty(gruppo.Office) && string.IsNullOrEmpty(Office))
+            if (!IsEmpty(gruppo.Office) && IsEmpty(Office))
                 Office = gruppo.Office;
 
             if (!string.IsNullOrEmpty(gruppo.PermanentId) && string.IsNullOrEmpty(PermanentId))
@@ -824,6 +856,10 @@ namespace JsonPolimi
                     {
                         return null; //sicuro
                     }
+                    else if (infoParteDiGruppo_list[0].testo_selvaggio.StartsWith("Corso di Studi"))
+                    {
+                        return null; //sicuro
+                    }
                     else
                     {
                         return null;
@@ -987,7 +1023,7 @@ namespace JsonPolimi
 
         internal void AggiungiInfoDaManifesto(InfoManifesto infoManifesto)
         {
-            this.manifesto = infoManifesto;
+            this.Manifesto = infoManifesto;
         }
 
         internal Gruppo Clone()
@@ -1033,7 +1069,7 @@ namespace JsonPolimi
             return L;
         }
 
-        private static string GetSede(InfoParteDiGruppo infoParteDiGruppo)
+        private static List<string> GetSede(InfoParteDiGruppo infoParteDiGruppo)
         {
             if (infoParteDiGruppo == null)
                 return null;
@@ -1044,22 +1080,31 @@ namespace JsonPolimi
             switch (infoParteDiGruppo.testo_selvaggio)
             {
                 case "BV":
-                    return "Bovisa";
+                    return new List<string>() { "Bovisa" };
 
                 case "MI":
-                    return "Leonardo";
+                    return new List<string>() { "Leonardo" };
 
                 case "--":
                     return null;
 
                 case "MN":
-                    return "Mantova";
+                    return new List<string>() { "Mantova" };
 
                 case "PC":
-                    return "Piacenza";
+                    return new List<string>() { "Piacenza" };
 
                 case "LC":
-                    return "Lecco";
+                    return new List<string> { "Lecco" };
+
+                case "CR":
+                    return new List<string> { "Cremona" };
+
+                case "CO":
+                    return new List<string>() { "Como" };
+
+                case "BV, MI":
+                    return new List<string>() { "Bovisa", "Leonardo" };
             }
 
             return null;

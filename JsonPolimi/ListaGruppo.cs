@@ -110,7 +110,7 @@ namespace JsonPolimi
                 if (i1 != 0)
                     return i1;
 
-                i1 = CompareOrdinal(a.Office, b.Office);
+                i1 = CompareOrdinal2(a.Office, b.Office);
                 if (i1 != 0)
                     return i1;
 
@@ -123,6 +123,55 @@ namespace JsonPolimi
                     return i1;
 
                 return CompareOrdinal(a.PermanentId, b.PermanentId);
+            }
+
+            private int CompareOrdinal2(List<string> office1, List<string> office2)
+            {
+                if (office1 == null && office2 == null)
+                    return 0;
+
+                if (office1 == null)
+                    return -1;
+
+                if (office2 == null)
+                    return 1;
+
+                if (office1.Count == office2.Count)
+                {
+                    for (int i=0; i<office1.Count; i++)
+                    {
+                        int i1 = CompareOrdinal(office1[i], office2[i]);
+                        if (i1 != 0)
+                            return i1;
+                    }
+
+                    return 0;
+                }
+                else
+                {
+                    if (office1.Count > office2.Count)
+                    {
+                        for (int i = 0; i < office2.Count; i++)
+                        {
+                            int i1 = CompareOrdinal(office1[i], office2[i]);
+                            if (i1 != 0)
+                                return i1;
+                        }
+
+                        return 1;
+                    }
+                    else
+                    {
+                        for (int i = 0; i < office1.Count; i++)
+                        {
+                            int i1 = CompareOrdinal(office1[i], office2[i]);
+                            if (i1 != 0)
+                                return i1;
+                        }
+
+                        return -1;
+                    }
+                }
             }
         }
 
@@ -308,12 +357,12 @@ namespace JsonPolimi
                 }
             }
 
-            if (!String.IsNullOrEmpty(a1.Office))
+            if (!Gruppo.IsEmpty(a1.Office))
             {
-                if (!String.IsNullOrEmpty(a2.Office))
+                if (!Gruppo.IsEmpty(a2.Office))
                 {
                     if (a1.Office != a2.Office)
-                        return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
+                        return new SomiglianzaClasse( SomiglianzaEnum.DUBBIO);
                 }
             }
 
@@ -385,12 +434,6 @@ namespace JsonPolimi
             }
 
             return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
-        }
-
-        private Tuple<bool, Gruppo> Unisci3(int i, Gruppo j)
-        {
-            Gruppo g =  Unisci4(i, j);
-            return new Tuple<bool, Gruppo>(true, g);
         }
 
         private SomiglianzaEnum NomiSimili(string n1, string n2)
@@ -885,7 +928,7 @@ namespace JsonPolimi
                 r.IdLink = a2.IdLink;
             if (String.IsNullOrEmpty(r.Language))
                 r.Language = a2.Language;
-            if (String.IsNullOrEmpty(r.Office))
+            if (Gruppo.IsEmpty(r.Office))
                 r.Office = a2.Office;
             if (String.IsNullOrEmpty(r.PermanentId))
                 r.PermanentId = a2.PermanentId;
