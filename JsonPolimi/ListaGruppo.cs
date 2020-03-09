@@ -376,7 +376,7 @@ namespace JsonPolimi
                 if (!Gruppo.IsEmpty(a2.Office))
                 {
                     if (a1.Office != a2.Office)
-                        return new SomiglianzaClasse( SomiglianzaEnum.DUBBIO);
+                        return new SomiglianzaClasse( SomiglianzaEnum.DUBBIO, a1, a2);
                 }
             }
 

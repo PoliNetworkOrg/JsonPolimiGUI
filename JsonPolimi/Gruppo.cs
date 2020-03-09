@@ -195,7 +195,7 @@ namespace JsonPolimi
             json += ",\"year\":";
             json += StringCheckNull(Year);
             json += ",\"ccs\":";
-            json += StringCheckNull2(this.Manifesto.corso_di_studio);
+            json += StringCheckNull2_ccs(this.Manifesto);
             json += ",\"permanentId\":";
             json += StringCheckNull(PermanentId);
             json += ",\"LastUpdateInviteLinkTime\":";
@@ -206,6 +206,14 @@ namespace JsonPolimi
             json += "}";
 
             return json;
+        }
+
+        private string StringCheckNull2_ccs(InfoManifesto manifesto)
+        {
+            if (manifesto == null)
+                return "null";
+
+            return StringCheckNull2(manifesto.corso_di_studio);
         }
 
         private string StringCheckNull(int? annoCorsoStudio)
