@@ -11,7 +11,7 @@ namespace JsonPolimi
         public List<string> GruppoTabellaInsegnamenti { get;  set; }
         public InfoManifesto Manifesto { get;  set; }
         public int? AnnoCorsoStudio { get;  set; }
-        public List<string> CCS { get; internal set; }
+        public OfficeSede CCS { get; internal set; }
 
         public string Degree;
         public string Id; // esempio: FB/2018/2019/LEONARDO/21432583243205
@@ -196,7 +196,7 @@ namespace JsonPolimi
             json += ",\"year\":";
             json += StringCheckNull(Year);
             json += ",\"ccs\":";
-            json += StringCheckNull_ccs(this.CCS);
+            json += StringCheckNull(this.CCS);
             json += ",\"permanentId\":";
             json += StringCheckNull(PermanentId);
             json += ",\"LastUpdateInviteLinkTime\":";
@@ -209,23 +209,8 @@ namespace JsonPolimi
             return json;
         }
 
-        private string StringCheckNull_ccs(List<string> c)
-        {
-            if (c == null)
-                return "null";
+ 
 
-            if (c.Count == 0)
-                return "null";
-
-            string r = "";
-            foreach (var s2 in c)
-            {
-                r += s2;
-                r += " ";
-            }
-
-            return '"' + r.Trim() + '"';
-        }
 
 
         private string StringCheckNull(int? annoCorsoStudio)

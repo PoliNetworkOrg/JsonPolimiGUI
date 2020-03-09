@@ -200,7 +200,7 @@ namespace JsonPolimi
 
             try
             {
-                g.CCS = new List<string>() { i["ccs"].ToString() };
+                g.CCS = new OfficeSede( i["ccs"].ToString() );
             }
             catch
             {
@@ -751,7 +751,7 @@ namespace JsonPolimi
             for (int i = 0; i < L2.Count; i++)
             {
                 L2[i].AggiungiInfoDaManifesto(infoManifesto);
-                L2[i].CCS = infoManifesto.corso_di_studio;
+                L2[i].CCS = new OfficeSede( infoManifesto.corso_di_studio);
             }
 
             if (Variabili.L == null)

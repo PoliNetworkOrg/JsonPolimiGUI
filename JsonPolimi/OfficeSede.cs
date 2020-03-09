@@ -57,5 +57,19 @@ namespace JsonPolimi
 
             return this.ToString();
         }
+
+        internal bool Contains_In_Uno(string v)
+        {
+            if (o == null)
+                return false;
+
+            foreach (var s2 in o)
+            {
+                if (s2.Contains(v))
+                    return true;
+            }
+
+            return false;
+        }
     }
 }

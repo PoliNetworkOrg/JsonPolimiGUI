@@ -856,7 +856,7 @@ namespace JsonPolimi
                     bool to_show = true;
 
                     //todo: E' TEMPORANEA QUESTA COSA
-                    if (r.Item1.a2.CCS.Contains("Architettura"))
+                    if (r.Item1.a2.CCS.Contains_In_Uno("Architettura"))
                     {
                         to_show = false;
                     }
