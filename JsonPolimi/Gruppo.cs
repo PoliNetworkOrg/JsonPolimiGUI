@@ -7,10 +7,10 @@ namespace JsonPolimi
     {
         public string Classe;
 
-        public string IDCorsoPolimi { get; private set; }
-        public List<string> GruppoTabellaInsegnamenti { get; private set; }
-        public InfoManifesto Manifesto { get; private set; }
-        public int? AnnoCorsoStudio { get; private set; }
+        public string IDCorsoPolimi { get; set; }
+        public List<string> GruppoTabellaInsegnamenti { get;  set; }
+        public InfoManifesto Manifesto { get;  set; }
+        public int? AnnoCorsoStudio { get;  set; }
 
         public string Degree;
         public string Id; // esempio: FB/2018/2019/LEONARDO/21432583243205

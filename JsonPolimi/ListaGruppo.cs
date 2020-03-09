@@ -903,6 +903,18 @@ namespace JsonPolimi
 
             Gruppo r = a1.Clone();
 
+            if (String.IsNullOrEmpty(r.IDCorsoPolimi))
+                r.IDCorsoPolimi = a2.IDCorsoPolimi;
+
+            if (r.Manifesto == null)
+                r.Manifesto = a2.Manifesto;
+
+            if (r.AnnoCorsoStudio == null)
+                r.AnnoCorsoStudio = a2.AnnoCorsoStudio;
+
+            if (r.GruppoTabellaInsegnamenti == null)
+                r.GruppoTabellaInsegnamenti = a2.GruppoTabellaInsegnamenti;
+
             if (String.IsNullOrEmpty(r.Classe))
                 r.Classe = a2.Classe;
             else if (r.Classe.ToLower() == a2.Classe.ToLower())
