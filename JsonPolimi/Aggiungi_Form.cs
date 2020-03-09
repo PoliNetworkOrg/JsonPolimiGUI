@@ -45,7 +45,7 @@ namespace JsonPolimi
                 Degree = t_degree.Text,
                 Id = t_id.Text,
                 Language = t_lang.Text,
-                Office = new System.Collections.Generic.List<string>() { t_office.Text },
+                Office = new OfficeSede( t_office.Text ),
                 Platform = t_platform.Text,
                 School = t_school.Text,
                 Tipo = t_type.Text,
@@ -84,19 +84,13 @@ namespace JsonPolimi
             button1.Text = "Modifica";
         }
 
-        private string StringCheckNull(List<string> office)
+        private string StringCheckNull(OfficeSede office)
         {
             if (office == null)
                 return null;
 
-            string r = "";
-            foreach (string v in office)
-            {
-                r += v;
-                r += ", ";
-            }
-            r = r.Substring(r.Length - 2);
-            return r;
+            return office.StringNotNull();
         }
+
     }
 }

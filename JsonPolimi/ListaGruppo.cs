@@ -125,7 +125,21 @@ namespace JsonPolimi
                 return CompareOrdinal(a.PermanentId, b.PermanentId);
             }
 
-            private int CompareOrdinal2(List<string> office1, List<string> office2)
+            private int CompareOrdinal2(OfficeSede office1, OfficeSede office2)
+            {
+                if (office1 == null && office2 == null)
+                    return 0;
+
+                if (office1 == null)
+                    return -1;
+
+                if (office2 == null)
+                    return +1;
+
+                return CompareOrdinal23(office1.o, office2.o);
+            }
+
+            private int CompareOrdinal23(List<string> office1, List<string> office2)
             {
                 if (office1 == null && office2 == null)
                     return 0;

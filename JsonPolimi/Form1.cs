@@ -167,7 +167,7 @@ namespace JsonPolimi
 
             g.Id = i["id"].ToString();
             g.Language = i["language"].ToString();
-            g.Office = new List<string>() { i["office"].ToString() };
+            g.Office = new OfficeSede( i["office"].ToString() );
             g.School = i["school"].ToString();
             g.IdLink = i["id_link"].ToString();
 
@@ -347,7 +347,7 @@ namespace JsonPolimi
             for (var i = 0; i < n; i++)
             {
                 var elem = Variabili.L.GetElem(i);
-                if (!string.IsNullOrEmpty(elem.IdLink)) continue;
+                if (!string.IsNullOrEmpty(elem.Id)) continue;
                 Variabili.L.Remove(i);
 
                 i--;

@@ -15,7 +15,7 @@ namespace JsonPolimi
         public string Id; // esempio: FB/2018/2019/LEONARDO/21432583243205
         public string IdLink; // esempio: 21432583243205
         public string Language;
-        public List<string> Office; // esempio: LEONARDO
+        public OfficeSede Office; // esempio: LEONARDO
         public string PermanentId; //per telegram, esempio -1000345953
         public string Platform; // esempio: FB
         public string School;
@@ -118,20 +118,31 @@ namespace JsonPolimi
 
         private string CreaIdLink()
         {
+            string r2 = null;
             try
             {
                 var r = Id.Split('/');
-                return r[r.Length - 1];
+                r2 =  r[3];
             }
             catch
             {
                 return null;
             }
+
+            return r2;
         }
 
         private string CreaId()
         {
-            return Platform + "/" + Year + "/" + Office + "/" + IdLink;
+            return Platform + "/" + Year + "/" + Office + "/" + IdLink + "/" + StringNotEmpty(IDCorsoPolimi);
+        }
+
+        private string StringNotEmpty(string a)
+        {
+            if (a == null)
+                return "";
+
+            return a;
         }
 
         private static string IndovinaIlDegree()
@@ -191,19 +202,12 @@ namespace JsonPolimi
             return json;
         }
 
-        private string StringCheckNull(List<string> office)
+        private string StringCheckNull(OfficeSede office)
         {
             if (office == null)
                 return "null";
 
-            string r = "";
-            foreach (string v in office)
-            {
-                r += v;
-                r += ", ";
-            }
-            r = r.Substring(r.Length - 2);
-            return r;
+            return office.StringNotNull();
         }
 
         private string StringCheckNull(string s)
@@ -397,8 +401,8 @@ namespace JsonPolimi
 
         private static void AggiungiSede(string v, ref InsiemeDiGruppi g)
         {
-            g.GruppoDiBase.Office = new List<string>() { v };
-            g.NomeOld.Office = new List<string>() { v };
+            g.GruppoDiBase.Office = new OfficeSede(v);
+            g.NomeOld.Office = new OfficeSede(v);
         }
 
         private static void AggiungiLink(string v, ref InsiemeDiGruppi g)
@@ -528,6 +532,14 @@ namespace JsonPolimi
 
             if (!string.IsNullOrEmpty(gruppo.Year) && string.IsNullOrEmpty(Year))
                 Year = gruppo.Year;
+        }
+
+        internal static bool IsEmpty(OfficeSede office)
+        {
+            if (office == null)
+                return true;
+
+            return office.IsEmpty();
         }
 
         internal string To_json_Tg()
@@ -979,7 +991,7 @@ namespace JsonPolimi
                     n1 = 4;
                 }
 
-                string lang = null;
+                string lang;
                 try
                 {
                     lang = infoParteDiGruppo_list[n1 + 1].lingua.Value.ToString();
@@ -996,10 +1008,16 @@ namespace JsonPolimi
                         Classe = classe,
                         IDCorsoPolimi = infoParteDiGruppo_list[0].testo_selvaggio,
                         GruppoTabellaInsegnamenti = GetGruppoTabellaInsegnamenti(infoParteDiGruppo_list[1]),
-                        Office = GetSede(infoParteDiGruppo_list[5]),
+                        Office = new OfficeSede( GetSede(infoParteDiGruppo_list[5])),
                         Language = lang,
                         Tipo = "C"
                     };
+                    g.IdLink = null;
+                    g.Aggiusta();
+                    if (g.IdLink != null)
+                    {
+                        ;
+                    }
                     return g;
                 }
 
@@ -1066,7 +1084,8 @@ namespace JsonPolimi
                 School = this.School,
                 GruppoTabellaInsegnamenti = this.GruppoTabellaInsegnamenti,
                 Tipo = this.Tipo,
-                Year = this.Year
+                Year = this.Year,
+                Manifesto = this.Manifesto
             };
 
             return g;

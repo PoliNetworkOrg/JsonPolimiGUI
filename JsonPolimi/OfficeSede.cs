@@ -1,0 +1,61 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace JsonPolimi
+{
+    public class OfficeSede
+    {
+        public List<string> o;
+
+        public OfficeSede(List<string> office)
+        {
+            this.o = office;
+        }
+
+        public OfficeSede(string v)
+        {
+            this.o = new List<string>() { v };
+        }
+
+        public override string ToString()
+        {
+            if (o == null)
+                return null;
+
+            string r = "";
+            foreach (string v in o)
+            {
+                r += v;
+                r += ", ";
+            }
+            r = r.Substring(0, r.Length - 2);
+            return r;
+        }
+
+
+        public bool IsEmpty()
+        {
+            if (o == null)
+                return true;
+
+            if (o.Count == 0)
+                return true;
+
+            foreach (var x in o)
+            {
+                if (string.IsNullOrEmpty(x))
+                    return true;
+            }
+
+            return false;
+        }
+
+        internal string StringNotNull()
+        {
+            if (o == null)
+                    return null;
+
+            return this.ToString();
+        }
+    }
+}

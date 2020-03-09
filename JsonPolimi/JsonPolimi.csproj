@@ -87,6 +87,7 @@
       <DependentUpon>ListaGruppiModificaForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ListaGruppo.cs" />
+    <Compile Include="OfficeSede.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Riga.cs" />
