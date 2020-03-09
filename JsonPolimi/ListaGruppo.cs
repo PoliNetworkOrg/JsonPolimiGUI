@@ -864,6 +864,18 @@ namespace JsonPolimi
                     {
                         to_show = false;
                     }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Urbanistica"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Design"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Architectural"))
+                    {
+                        to_show = false;
+                    }
                     //FINE TEMP
 
                     if (to_show)
