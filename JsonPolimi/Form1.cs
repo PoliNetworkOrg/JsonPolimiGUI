@@ -707,6 +707,12 @@ namespace JsonPolimi
                 doc.Load(o.FileName);
             }
 
+            LoadManifesto(doc);
+
+        }
+
+        private void LoadManifesto(HtmlAgilityPack.HtmlDocument doc)
+        {
             infoManifesto = new InfoManifesto();
             List<Gruppo> L2 = GetGruppiFromDocument(doc);
             for (int i = 0; i < L2.Count; i++)
@@ -1282,6 +1288,29 @@ namespace JsonPolimi
 
         private void Form1_Load_1(object sender, EventArgs e)
         {
+
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            string[] f = null;
+            using (OpenFileDialog o = new OpenFileDialog())
+            {
+                var r = o.ShowDialog();
+                if (r != DialogResult.OK)
+                {
+                    return;
+                }
+
+                f = o.FileNames;
+            }
+
+            foreach (var f2 in f)
+            {
+                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                doc.Load(f2);
+                LoadManifesto(doc);
+            }
 
         }
     }
