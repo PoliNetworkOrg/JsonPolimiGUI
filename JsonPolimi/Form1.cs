@@ -707,16 +707,16 @@ namespace JsonPolimi
                 doc.Load(o.FileName);
             }
 
-            LoadManifesto(doc);
+            LoadManifesto(doc, "TG");
 
         }
 
-        private void LoadManifesto(HtmlAgilityPack.HtmlDocument doc)
+        private void LoadManifesto(HtmlAgilityPack.HtmlDocument doc, string PLAT2)
         {
             infoManifesto = new InfoManifesto();
             Form1.anno = null;
 
-            List<Gruppo> L2 = GetGruppiFromDocument(doc);
+            List<Gruppo> L2 = GetGruppiFromDocument(doc, PLAT2);
             for (int i = 0; i < L2.Count; i++)
             {
                 L2[i].AggiungiInfoDaManifesto(infoManifesto);
@@ -728,7 +728,7 @@ namespace JsonPolimi
             Variabili.L.Importa(L2);
         }
 
-        private List<Gruppo> GetGruppiFromDocument(HtmlAgilityPack.HtmlDocument doc)
+        private List<Gruppo> GetGruppiFromDocument(HtmlAgilityPack.HtmlDocument doc, string pLAT2)
         {
             List<HtmlNode> L = GetTables(doc.DocumentNode.ChildNodes);
             List<HtmlNode> L2 = new List<HtmlNode>();
@@ -750,7 +750,7 @@ namespace JsonPolimi
                 L.RemoveAt(0);
             }
 
-            return GetGruppiFromDocument2(L2);
+            return GetGruppiFromDocument2(L2, pLAT2);
         }
 
         private List<HtmlNode> GetTables(HtmlNodeCollection childNodes)
@@ -775,12 +775,12 @@ namespace JsonPolimi
             return L2;
         }
 
-        private List<Gruppo> GetGruppiFromDocument2(List<HtmlNode> l2)
+        private List<Gruppo> GetGruppiFromDocument2(List<HtmlNode> l2, string pLAT2)
         {
             List<Gruppo> LG = new List<Gruppo>();
             foreach (var x in l2)
             {
-                Gruppo x2 = GetGruppiFromDocument3(x);
+                Gruppo x2 = GetGruppiFromDocument3(x, pLAT2);
                 if (x2 != null)
                 {
                     string x3 = x2.Classe.Trim();
@@ -801,7 +801,7 @@ namespace JsonPolimi
             return LG;
         }
 
-        private Gruppo GetGruppiFromDocument3(HtmlNode x)
+        private Gruppo GetGruppiFromDocument3(HtmlNode x, string pLAT2)
         {
             List<HtmlNode> L = new List<HtmlNode>();
             for (int i = 0; i < x.ChildNodes.Count; i++)
@@ -819,7 +819,7 @@ namespace JsonPolimi
                 infoParteDiGruppo_list.Add(GetGruppiFromDocument5(L[i]));
             }
 
-            Gruppo g = Gruppo.FromInfoParteList(infoParteDiGruppo_list);
+            Gruppo g = Gruppo.FromInfoParteList(infoParteDiGruppo_list, pLAT2);
             if (g != null  && g.IsValido())
             {
                 return g;
@@ -1652,10 +1652,10 @@ namespace JsonPolimi
                 {
                     HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
                     doc.Load(f2);
-                    LoadManifesto(doc);
+                    LoadManifesto(doc, "TG");
                 }
             }
             MessageBox.Show("Fatto!");
         }
-    }
 }
+    }

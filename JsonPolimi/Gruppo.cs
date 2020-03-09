@@ -653,7 +653,7 @@ namespace JsonPolimi
             return "https://t.me/joinchat/" + this.IdLink;
         }
 
-        internal static Gruppo FromInfoParteList(List<InfoParteDiGruppo> infoParteDiGruppo_list)
+        internal static Gruppo FromInfoParteList(List<InfoParteDiGruppo> infoParteDiGruppo_list, string pLAT2)
         {
             if (infoParteDiGruppo_list == null)
                 return null;
@@ -1048,7 +1048,8 @@ namespace JsonPolimi
                         Office = new OfficeSede( GetSede(infoParteDiGruppo_list[5])),
                         Language = lang,
                         Tipo = "C",
-                        AnnoCorsoStudio = Form1.anno
+                        AnnoCorsoStudio = Form1.anno,
+                        Platform = pLAT2
                     };
                     g.IdLink = null;
                     g.Aggiusta(false);

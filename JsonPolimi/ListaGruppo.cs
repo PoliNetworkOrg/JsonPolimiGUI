@@ -153,11 +153,14 @@ namespace JsonPolimi
             if (office2 == null)
                 return 1;
 
+            office1.Sort();
+            office2.Sort();
+
             if (office1.Count == office2.Count)
             {
                 for (int i = 0; i < office1.Count; i++)
                 {
-                    int i1 = CompareOrdinal(office1[i], office2[i]);
+                    int i1 = CompareOrdinal(office1[i].ToLower(), office2[i].ToLower());
                     if (i1 != 0)
                         return i1;
                 }
@@ -321,6 +324,15 @@ namespace JsonPolimi
                 }
             }
 
+            if (r1.somiglianzaEnum == SomiglianzaEnum.DUBBIO)
+            {
+                if (!string.IsNullOrEmpty(a1.Tipo) && !string.IsNullOrEmpty(a2.Tipo) &&
+                    a1.Tipo.ToLower() != a2.Tipo.ToLower())
+                {
+                    r1.somiglianzaEnum = SomiglianzaEnum.DIVERSI;
+                }
+            }
+
             return r1;
         }
 
@@ -379,7 +391,7 @@ namespace JsonPolimi
                 {
                     int i1 = ListaGruppo.CompareOrdinal2(a1.Office, a2.Office);
                     if (i1 != 0)
-                        return new SomiglianzaClasse( SomiglianzaEnum.DUBBIO, a1, a2);
+                        return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI, a1, a2);
                 }
             }
 
