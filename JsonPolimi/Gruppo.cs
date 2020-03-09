@@ -803,7 +803,10 @@ namespace JsonPolimi
                         return null; //sicuro
                     }
 
-
+                    if (infoParteDiGruppo_list[1].testo_selvaggio.StartsWith("Workshop"))
+                    {
+                        return null; //sicuro
+                    }
 
                     return null;
                 }
@@ -1105,6 +1108,9 @@ namespace JsonPolimi
 
                 case "BV, MI":
                     return new List<string>() { "Bovisa", "Leonardo" };
+
+                case "LC, MI":
+                    return new List<string>() { "Lecco", "Leonardo" };
             }
 
             return null;

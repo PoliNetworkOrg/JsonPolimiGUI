@@ -1006,6 +1006,12 @@ namespace JsonPolimi
                     {
                         return null;
                     }
+                    else if (htmlNode.ChildNodes[0].Name=="a" && htmlNode.ChildNodes[1].Name == "a" &&
+                        htmlNode.ChildNodes[2].Name == "span")
+                    {
+                        LinkGruppo link2 = new LinkGruppo(htmlNode.ChildNodes[1].Attributes, htmlNode.ChildNodes[1].InnerHtml.Trim());
+                        return new InfoParteDiGruppo(link: link2);
+                    }
                     else
                     {
                         ;
@@ -1161,6 +1167,18 @@ namespace JsonPolimi
                     return null;
                 }
                 else if (s.StartsWith("MOB"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("NDE"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("OA1"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("NDF"))
                 {
                     return null;
                 }
@@ -1459,6 +1477,26 @@ namespace JsonPolimi
 
 
                 else if (s.StartsWith("ING-INF"))
+                {
+                    List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>();
+                    var s2 = s.Split('<');
+                    foreach (var s3 in s2)
+                    {
+                        string s4 = s3;
+                        if (s3.StartsWith("br>"))
+                        {
+                            s4 = s3.Substring(3);
+                        }
+
+                        sottopezzi2.Add(new InfoParteDiGruppo(testo_selvaggio: s4));
+                    }
+                    return new InfoParteDiGruppo(sottopezzi: sottopezzi2);
+                }
+
+
+
+
+                else if (s.StartsWith("GEO"))
                 {
                     List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>();
                     var s2 = s.Split('<');
