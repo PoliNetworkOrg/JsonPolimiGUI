@@ -760,6 +760,19 @@ namespace JsonPolimi
                         return null; //sicuro
                     }
 
+
+                    if (infoParteDiGruppo_list[1].testo_selvaggio == "Mutuabile")
+                    {
+                        return null; //sicuro
+                    }
+
+                    if (infoParteDiGruppo_list[0].testo_selvaggio.StartsWith("Classe di Laurea"))
+                    {
+                        return null; //sicuro
+                    }
+
+
+
                     return null;
                 }
                 
@@ -800,6 +813,14 @@ namespace JsonPolimi
                         return null; //sicuro
                     }
                     else if (infoParteDiGruppo_list[0].testo_selvaggio.StartsWith("5<sup>"))
+                    {
+                        return null; //sicuro
+                    }
+                    else if (infoParteDiGruppo_list[0].testo_selvaggio.StartsWith("(¹) Lo studente a"))
+                    {
+                        return null; //sicuro
+                    }
+                    else if (infoParteDiGruppo_list[0].testo_selvaggio.StartsWith("Insegnamenti del Grupp"))
                     {
                         return null; //sicuro
                     }

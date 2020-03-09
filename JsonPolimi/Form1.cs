@@ -997,7 +997,19 @@ namespace JsonPolimi
                 }
                 else
                 {
-                    ;
+                    string s = htmlNode.InnerHtml.Trim();
+                    if (string.IsNullOrEmpty(s))
+                    {
+                        ;
+                    }
+                    else if (s.StartsWith("Insegnamenti a scelta dal"))
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        ;
+                    }
                 }
 
             }
@@ -1112,6 +1124,18 @@ namespace JsonPolimi
                 {
                     return null;
                 }
+                else if (s.StartsWith("N1L"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("R1O"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("E1A"))
+                {
+                    return null;
+                }
                 else
                 {
                     ;
@@ -1195,6 +1219,22 @@ namespace JsonPolimi
                         return null;
                     }
                     else if (s1.StartsWith("5.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("18.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("15.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("2.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("7.0"))
                     {
                         return null;
                     }
@@ -1358,6 +1398,31 @@ namespace JsonPolimi
                 else if (s.StartsWith("18.0"))
                 {
                     return null;
+                }
+                else if (s.StartsWith("22.0"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("Design"))
+                {
+                    return null;
+                }
+
+                else if (s.StartsWith("ING-IND"))
+                {
+                    List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>();
+                    var s2 = s.Split('<');
+                    foreach (var s3 in s2)
+                    {
+                        string s4 = s3;
+                        if (s3.StartsWith("br>"))
+                        {
+                            s4 = s3.Substring(3);
+                        }
+
+                        sottopezzi2.Add(new InfoParteDiGruppo(testo_selvaggio: s4));
+                    }
+                    return new InfoParteDiGruppo(sottopezzi: sottopezzi2);
                 }
                 else
                 {
