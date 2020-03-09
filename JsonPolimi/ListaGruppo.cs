@@ -876,6 +876,18 @@ namespace JsonPolimi
                     {
                         to_show = false;
                     }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Edilizi"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Architecture"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Management"))
+                    {
+                        to_show = false;
+                    }
                     //FINE TEMP
 
                     if (to_show)
