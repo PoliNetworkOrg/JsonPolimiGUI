@@ -798,6 +798,11 @@ namespace JsonPolimi
                         return null; //sicuro
                     }
 
+                    if (infoParteDiGruppo_list[1].testo_selvaggio != null && infoParteDiGruppo_list[1].testo_selvaggio.StartsWith("Insegnamento"))
+                    {
+                        return null; //sicuro
+                    }
+
                     if (infoParteDiGruppo_list[0].testo_selvaggio.StartsWith("Classe di Laurea"))
                     {
                         return null; //sicuro
@@ -962,13 +967,26 @@ namespace JsonPolimi
                 }
 
                 string classe = null;
+                int n1 = 0;
                 if (infoParteDiGruppo_list[3] != null && infoParteDiGruppo_list[3].link != null && !string.IsNullOrEmpty(infoParteDiGruppo_list[3].link.v))
                 {
                     classe = infoParteDiGruppo_list[3].link.v;
+                    n1 = 3;
                 }
                 else if (infoParteDiGruppo_list[4] != null && infoParteDiGruppo_list[4].link != null && !string.IsNullOrEmpty(infoParteDiGruppo_list[4].link.v))
                 {
                     classe = infoParteDiGruppo_list[4].link.v;
+                    n1 = 4;
+                }
+
+                string lang = null;
+                try
+                {
+                    lang = infoParteDiGruppo_list[n1 + 1].lingua.Value.ToString();
+                }
+                catch
+                {
+                    lang = "??";
                 }
 
                 if (!string.IsNullOrEmpty(classe))
@@ -978,7 +996,9 @@ namespace JsonPolimi
                         Classe = classe,
                         IDCorsoPolimi = infoParteDiGruppo_list[0].testo_selvaggio,
                         GruppoTabellaInsegnamenti = GetGruppoTabellaInsegnamenti(infoParteDiGruppo_list[1]),
-                        Office = GetSede(infoParteDiGruppo_list[5])
+                        Office = GetSede(infoParteDiGruppo_list[5]),
+                        Language = lang,
+                        Tipo = "C"
                     };
                     return g;
                 }

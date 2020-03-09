@@ -8,6 +8,7 @@ namespace JsonPolimi
         public LinkGruppo link;
         public ImmagineGruppo immagine;
         public List<InfoParteDiGruppo> sottopezzi;
+        public Lingua? lingua = null;
 
         public InfoParteDiGruppo(string testo_selvaggio)
         {
@@ -27,6 +28,11 @@ namespace JsonPolimi
         public InfoParteDiGruppo(List<InfoParteDiGruppo> sottopezzi)
         {
             this.sottopezzi = sottopezzi;
+        }
+
+        public InfoParteDiGruppo(Lingua lingua)
+        {
+            this.lingua = lingua;
         }
     }
 }

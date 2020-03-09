@@ -1021,6 +1021,23 @@ namespace JsonPolimi
             }
             else if (htmlNode.ChildNodes.Count == 1)
             {
+                if (htmlNode.ChildNodes[0].Name == "img")
+                {
+                    string src = htmlNode.ChildNodes[0].Attributes["src"].Value.ToString();
+                    if (src.EndsWith("it.png"))
+                        return new InfoParteDiGruppo(lingua: Lingua.IT);
+                    else if (src.EndsWith("en.png"))
+                        return new InfoParteDiGruppo(lingua: Lingua.EN);
+                    else if (src.EndsWith("innovativa.png"))
+                        return null;
+                    else if (src.EndsWith("sequenza.png"))
+                        return null;
+                    else
+                    {
+                        ;
+                    }
+                }
+
                 string s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
                 if (string.IsNullOrEmpty(s1))
                 {
