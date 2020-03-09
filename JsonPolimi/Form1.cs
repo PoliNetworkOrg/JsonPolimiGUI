@@ -209,7 +209,7 @@ namespace JsonPolimi
                 throw e;
             }
 
-            g.Aggiusta();
+            g.Aggiusta(true);
 
             Variabili.L.Add(g);
         }
@@ -592,7 +592,7 @@ namespace JsonPolimi
                     LastUpdateInviteLinkTime = r.LastUpdateInviteLinkTime,
                 };
 
-                g.Aggiusta();
+                g.Aggiusta(true);
                 Variabili.L.Add(g);
             }
 

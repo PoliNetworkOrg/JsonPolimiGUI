@@ -228,14 +228,14 @@ namespace JsonPolimi
             if (_l[v1].LastUpdateInviteLinkTime == null)
                 _l[v1].LastUpdateInviteLinkTime = DateTime.Now;
 
-            _l[v1].Aggiusta();
+            _l[v1].Aggiusta(true);
         }
 
         internal void ProvaAdUnire()
         {
             for (int i = 0; i < this._l.Count; i++)
             {
-                this._l[i].Aggiusta();
+                this._l[i].Aggiusta(true);
                 for (int j = this._l.Count - 1; j >= 0; j--)
                 {
                     if (i != j)
@@ -974,7 +974,7 @@ namespace JsonPolimi
                 }
             }
 
-            r.Aggiusta();
+            r.Aggiusta(true);
 
             return r;
         }

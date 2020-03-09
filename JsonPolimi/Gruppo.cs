@@ -23,13 +23,14 @@ namespace JsonPolimi
         public string Year; // esempio: 2018/2019
         public DateTime? LastUpdateInviteLinkTime;
 
-        internal void Aggiusta()
+        internal void Aggiusta(bool aggiusta_anno)
         {
             Classe = string.IsNullOrEmpty(Classe) ? "" : Classe.Replace('\n', ' ');
 
             if (string.IsNullOrEmpty(Tipo)) Tipo = "S";
 
-            AggiustaAnno();
+            if (aggiusta_anno)
+                AggiustaAnno();
 
 
             if (!string.IsNullOrEmpty(Year) && !string.IsNullOrEmpty(this.Classe) && !string.IsNullOrEmpty(this.Degree) &&
@@ -118,7 +119,7 @@ namespace JsonPolimi
 
         private string CreaIdLink()
         {
-            string r2 = null;
+            string r2;
             try
             {
                 var r = Id.Split('/');
@@ -1013,7 +1014,7 @@ namespace JsonPolimi
                         Tipo = "C"
                     };
                     g.IdLink = null;
-                    g.Aggiusta();
+                    g.Aggiusta(false);
                     if (g.IdLink != null)
                     {
                         ;

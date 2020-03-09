@@ -35,7 +35,7 @@ namespace JsonPolimi
 
             var r = (Riga)listBox1.Items[i];
 
-            r.G.Aggiusta();
+            r.G.Aggiusta(true);
             var x = new AggiungiForm(true, r.G);
             x.ShowDialog();
 
