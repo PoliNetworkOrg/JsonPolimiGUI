@@ -1108,6 +1108,10 @@ namespace JsonPolimi
                 {
                     return null;
                 }
+                else if (s.StartsWith("*** - URBAN PLANNING AND POLICY DESIGN"))
+                {
+                    return null;
+                }
                 else
                 {
                     ;
@@ -1183,6 +1187,14 @@ namespace JsonPolimi
                         return null;
                     }
                     else if (s1.StartsWith("16.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("14.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("5.0"))
                     {
                         return null;
                     }
@@ -1334,6 +1346,18 @@ namespace JsonPolimi
                         sottopezzi2.Add(new InfoParteDiGruppo(testo_selvaggio: s4));
                     }
                     return new InfoParteDiGruppo(sottopezzi: sottopezzi2);
+                }
+                else if (s.StartsWith("15.0"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("6.0"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("18.0"))
+                {
+                    return null;
                 }
                 else
                 {
