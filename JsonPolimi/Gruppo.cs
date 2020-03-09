@@ -11,13 +11,13 @@ namespace JsonPolimi
         public List<string> GruppoTabellaInsegnamenti { get;  set; }
         public InfoManifesto Manifesto { get;  set; }
         public int? AnnoCorsoStudio { get;  set; }
-        public OfficeSede CCS { get; internal set; }
+        public ListaStringhePerJSON CCS { get; internal set; }
 
         public string Degree;
         public string Id; // esempio: FB/2018/2019/LEONARDO/21432583243205
         public string IdLink; // esempio: 21432583243205
         public string Language;
-        public OfficeSede Office; // esempio: LEONARDO
+        public ListaStringhePerJSON Office; // esempio: LEONARDO
         public string PermanentId; //per telegram, esempio -1000345953
         public string Platform; // esempio: FB
         public string School;
@@ -223,7 +223,7 @@ namespace JsonPolimi
 
 
 
-        private string StringCheckNull(OfficeSede office)
+        private string StringCheckNull(ListaStringhePerJSON office)
         {
             if (office == null)
                 return "null";
@@ -422,8 +422,8 @@ namespace JsonPolimi
 
         private static void AggiungiSede(string v, ref InsiemeDiGruppi g)
         {
-            g.GruppoDiBase.Office = new OfficeSede(v);
-            g.NomeOld.Office = new OfficeSede(v);
+            g.GruppoDiBase.Office = new ListaStringhePerJSON(v);
+            g.NomeOld.Office = new ListaStringhePerJSON(v);
         }
 
         private static void AggiungiLink(string v, ref InsiemeDiGruppi g)
@@ -555,7 +555,7 @@ namespace JsonPolimi
                 Year = gruppo.Year;
         }
 
-        internal static bool IsEmpty(OfficeSede office)
+        internal static bool IsEmpty(ListaStringhePerJSON office)
         {
             if (office == null)
                 return true;
@@ -1029,7 +1029,7 @@ namespace JsonPolimi
                         Classe = classe,
                         IDCorsoPolimi = infoParteDiGruppo_list[0].testo_selvaggio,
                         GruppoTabellaInsegnamenti = GetGruppoTabellaInsegnamenti(infoParteDiGruppo_list[1]),
-                        Office = new OfficeSede( GetSede(infoParteDiGruppo_list[5])),
+                        Office = new ListaStringhePerJSON( GetSede(infoParteDiGruppo_list[5])),
                         Language = lang,
                         Tipo = "C",
                         AnnoCorsoStudio = Form1.anno,

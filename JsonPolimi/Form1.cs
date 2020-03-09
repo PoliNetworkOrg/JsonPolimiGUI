@@ -167,7 +167,7 @@ namespace JsonPolimi
 
             g.Id = i["id"].ToString();
             g.Language = i["language"].ToString();
-            g.Office = new OfficeSede( i["office"].ToString() );
+            g.Office = new ListaStringhePerJSON( i["office"].ToString() );
             g.School = i["school"].ToString();
             g.IdLink = i["id_link"].ToString();
 
@@ -200,7 +200,7 @@ namespace JsonPolimi
 
             try
             {
-                g.CCS = new OfficeSede( i["ccs"].ToString() );
+                g.CCS = new ListaStringhePerJSON( i["ccs"].ToString() );
             }
             catch
             {
@@ -751,7 +751,7 @@ namespace JsonPolimi
             for (int i = 0; i < L2.Count; i++)
             {
                 L2[i].AggiungiInfoDaManifesto(infoManifesto);
-                L2[i].CCS = new OfficeSede( infoManifesto.corso_di_studio);
+                L2[i].CCS = new ListaStringhePerJSON( infoManifesto.corso_di_studio);
             }
 
             if (Variabili.L == null)

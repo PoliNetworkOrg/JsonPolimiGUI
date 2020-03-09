@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace JsonPolimi
 {
-    public class OfficeSede
+    public class ListaStringhePerJSON
     {
         public List<string> o;
 
-        public OfficeSede(List<string> office)
+        public ListaStringhePerJSON(List<string> office)
         {
             this.o = office;
         }
 
-        public OfficeSede(string v)
+        public ListaStringhePerJSON(string v)
         {
             this.o = new List<string>() { v };
         }

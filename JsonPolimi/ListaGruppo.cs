@@ -128,7 +128,7 @@ namespace JsonPolimi
             
         }
 
-        public static int CompareOrdinal2(OfficeSede office1, OfficeSede office2)
+        public static int CompareOrdinal2(ListaStringhePerJSON office1, ListaStringhePerJSON office2)
         {
             if (office1 == null && office2 == null)
                 return 0;
