@@ -242,6 +242,25 @@ namespace JsonPolimi
 
         private SomiglianzaClasse Equivalenti3(Gruppo a1, Gruppo a2)
         {
+            var r1 = Equivalenti5(a1, a2);
+
+            if (r1.somiglianzaEnum == SomiglianzaEnum.IDENTITICI)
+            {
+                if (string.IsNullOrEmpty(a1.IDCorsoPolimi) && !string.IsNullOrEmpty(a2.IDCorsoPolimi))
+                {
+                    r1.somiglianzaEnum = SomiglianzaEnum.DUBBIO;
+                }
+                else if (!string.IsNullOrEmpty(a1.IDCorsoPolimi) && string.IsNullOrEmpty(a2.IDCorsoPolimi))
+                {
+                    r1.somiglianzaEnum = SomiglianzaEnum.DUBBIO;
+                }
+            }
+
+            return r1;
+        }
+
+        private SomiglianzaClasse Equivalenti5(Gruppo a1, Gruppo a2)
+        {
             if (!string.IsNullOrEmpty(a1.IDCorsoPolimi) && !string.IsNullOrEmpty(a2.IDCorsoPolimi) &&
                 a1.IDCorsoPolimi == a2.IDCorsoPolimi)
             {
