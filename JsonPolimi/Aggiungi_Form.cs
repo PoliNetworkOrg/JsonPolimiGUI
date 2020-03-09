@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace JsonPolimi
@@ -44,7 +45,7 @@ namespace JsonPolimi
                 Degree = t_degree.Text,
                 Id = t_id.Text,
                 Language = t_lang.Text,
-                Office = t_office.Text,
+                Office = new System.Collections.Generic.List<string>() { t_office.Text },
                 Platform = t_platform.Text,
                 School = t_school.Text,
                 Tipo = t_type.Text,
@@ -73,7 +74,7 @@ namespace JsonPolimi
             t_degree.Text = g.Degree;
             t_id.Text = g.Id;
             t_lang.Text = g.Language;
-            t_office.Text = g.Office;
+            t_office.Text =  StringCheckNull( g.Office);
             t_platform.Text = g.Platform;
             t_school.Text = g.School;
             t_type.Text = g.Tipo;
@@ -81,6 +82,21 @@ namespace JsonPolimi
             t_idlink.Text = g.IdLink;
 
             button1.Text = "Modifica";
+        }
+
+        private string StringCheckNull(List<string> office)
+        {
+            if (office == null)
+                return null;
+
+            string r = "";
+            foreach (string v in office)
+            {
+                r += v;
+                r += ", ";
+            }
+            r = r.Substring(r.Length - 2);
+            return r;
         }
     }
 }
