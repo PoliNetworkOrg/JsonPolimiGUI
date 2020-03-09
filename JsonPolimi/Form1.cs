@@ -919,6 +919,14 @@ namespace JsonPolimi
                 {
                     Form1.anno = 3;
                 }
+                else if (s.StartsWith("4<sup>"))
+                {
+                    Form1.anno = 4;
+                }
+                else if (s.StartsWith("5<sup>"))
+                {
+                    Form1.anno = 5;
+                }
                 else
                 {
                     ;

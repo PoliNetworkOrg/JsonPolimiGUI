@@ -853,10 +853,26 @@ namespace JsonPolimi
 
                     s += r.Item1.a2.To_json();
 
-                    DialogResult dialogResult = MessageBox.Show(s, "Sono da unire?", MessageBoxButtons.YesNo);
-                    if (dialogResult == DialogResult.Yes)
+                    bool to_show = true;
+
+                    //todo: E' TEMPORANEA QUESTA COSA
+                    if (r.Item1.a2.CCS.Contains("Architettura"))
                     {
-                        do_that = true;
+                        to_show = false;
+                    }
+                    //FINE TEMP
+
+                    if (to_show)
+                    {
+                        DialogResult dialogResult = MessageBox.Show(s, "Sono da unire?", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            do_that = true;
+                        }
+                    }
+                    else
+                    {
+                        do_that = false;
                     }
 
                 }
