@@ -10,6 +10,7 @@ namespace JsonPolimi
         public string IDCorsoPolimi { get; private set; }
         public List<string> GruppoTabellaInsegnamenti { get; private set; }
         public InfoManifesto Manifesto { get; private set; }
+        public int? AnnoCorsoStudio { get; private set; }
 
         public string Degree;
         public string Id; // esempio: FB/2018/2019/LEONARDO/21432583243205
@@ -181,6 +182,8 @@ namespace JsonPolimi
             json += StringCheckNull(Degree);
             json += ",\"school\":";
             json += StringCheckNull(School);
+            json += ",\"annocorso\":";
+            json += StringCheckNull(AnnoCorsoStudio);
             json += ",\"idcorso\":";
             json += StringCheckNull(IDCorsoPolimi);
             json += ",\"id_link\":";
@@ -191,6 +194,8 @@ namespace JsonPolimi
             json += StringCheckNull(Tipo);
             json += ",\"year\":";
             json += StringCheckNull(Year);
+            json += ",\"ccs\":";
+            json += StringCheckNull2(this.Manifesto.corso_di_studio);
             json += ",\"permanentId\":";
             json += StringCheckNull(PermanentId);
             json += ",\"LastUpdateInviteLinkTime\":";
@@ -203,12 +208,35 @@ namespace JsonPolimi
             return json;
         }
 
+        private string StringCheckNull(int? annoCorsoStudio)
+        {
+            if (annoCorsoStudio == null)
+                return "null";
+
+            return StringCheckNull(annoCorsoStudio.Value.ToString());
+        }
+
+        private string StringCheckNull2(List<string> corso_di_studio)
+        {
+            if (corso_di_studio == null)
+                return "null";
+
+            string s = "";
+            foreach (var s2 in corso_di_studio)
+            {
+                s += s2;
+                s += " ";
+            }
+            s = s.Substring(0, s.Length - 1);
+            return '"' +s + '"';
+        }
+
         private string StringCheckNull(OfficeSede office)
         {
             if (office == null)
                 return "null";
 
-            return office.StringNotNull();
+            return '"' +  office.StringNotNull() + '"';
         }
 
         private string StringCheckNull(string s)
@@ -1011,7 +1039,8 @@ namespace JsonPolimi
                         GruppoTabellaInsegnamenti = GetGruppoTabellaInsegnamenti(infoParteDiGruppo_list[1]),
                         Office = new OfficeSede( GetSede(infoParteDiGruppo_list[5])),
                         Language = lang,
-                        Tipo = "C"
+                        Tipo = "C",
+                        AnnoCorsoStudio = Form1.anno
                     };
                     g.IdLink = null;
                     g.Aggiusta(false);
@@ -1086,7 +1115,8 @@ namespace JsonPolimi
                 GruppoTabellaInsegnamenti = this.GruppoTabellaInsegnamenti,
                 Tipo = this.Tipo,
                 Year = this.Year,
-                Manifesto = this.Manifesto
+                Manifesto = this.Manifesto,
+                 AnnoCorsoStudio = this.AnnoCorsoStudio
             };
 
             return g;

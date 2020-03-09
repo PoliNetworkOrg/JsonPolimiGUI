@@ -714,6 +714,8 @@ namespace JsonPolimi
         private void LoadManifesto(HtmlAgilityPack.HtmlDocument doc)
         {
             infoManifesto = new InfoManifesto();
+            Form1.anno = null;
+
             List<Gruppo> L2 = GetGruppiFromDocument(doc);
             for (int i = 0; i < L2.Count; i++)
             {
@@ -839,11 +841,57 @@ namespace JsonPolimi
             return false;
         }
 
+        public static int? anno = null;
+
         private InfoParteDiGruppo GetGruppiFromDocument5(HtmlNode htmlNode)
         {
             bool contiene_table = Contiene_table2(htmlNode);
             if (contiene_table)
                 return null;
+
+            IEnumerable<string> classes = htmlNode.GetClasses();
+            bool ce = false;
+            foreach (var c2 in classes)
+            {
+                if (c2 == "TitleInfoCard")
+                {
+                    ce = true;
+                    break;
+                }
+            }
+
+            if (ce)
+            {
+                string s = htmlNode.InnerHtml.Trim();
+                if (string.IsNullOrEmpty(s))
+                {
+                    ;
+                }
+                else if (s == "Legenda")
+                {
+                    return null; //sicuro
+                }
+                else if (s.StartsWith("<span id="))
+                {
+                    ;
+                }
+                else if (s.StartsWith("1<sup>"))
+                {
+                    Form1.anno = 1;
+                }
+                else if (s.StartsWith("2<sup>"))
+                {
+                    Form1.anno = 2;
+                }
+                else if (s.StartsWith("3<sup>"))
+                {
+                    Form1.anno = 3;
+                }
+                else
+                {
+                    ;
+                }
+            }
 
             if (htmlNode.ChildNodes.Count == 3)
             {
