@@ -927,6 +927,10 @@ namespace JsonPolimi
                 {
                     Form1.anno = 5;
                 }
+                else if (s.StartsWith("Insegnamenti"))
+                {
+                    return null; //sicuro
+                }
                 else
                 {
                     ;

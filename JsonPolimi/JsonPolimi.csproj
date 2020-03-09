@@ -66,6 +66,12 @@
     <Compile Include="Aggiungi_Form.Designer.cs">
       <DependentUpon>Aggiungi_Form.cs</DependentUpon>
     </Compile>
+    <Compile Include="AskToUnifyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AskToUnifyForm.Designer.cs">
+      <DependentUpon>AskToUnifyForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,6 +104,9 @@
     <Compile Include="Variabili.cs" />
     <EmbeddedResource Include="Aggiungi_Form.resx">
       <DependentUpon>Aggiungi_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AskToUnifyForm.resx">
+      <DependentUpon>AskToUnifyForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

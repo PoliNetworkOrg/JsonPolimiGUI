@@ -888,12 +888,45 @@ namespace JsonPolimi
                     {
                         to_show = false;
                     }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Aerospaziale"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Biomedica"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Chimica"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Elettrica"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Elettronica"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Energetica"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Fisica"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Gestionale"))
+                    {
+                        to_show = false;
+                    }
                     //FINE TEMP
 
                     if (to_show)
                     {
-                        DialogResult dialogResult = MessageBox.Show(s, "Sono da unire?", MessageBoxButtons.YesNo);
-                        if (dialogResult == DialogResult.Yes)
+                        AskToUnifyForm askToUnifyForm = new AskToUnifyForm(r);
+                        askToUnifyForm.ShowDialog();
+                        if (askToUnifyForm.r != null && askToUnifyForm.r.Value)
                         {
                             do_that = true;
                         }
