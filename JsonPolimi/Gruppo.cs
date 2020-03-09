@@ -11,6 +11,7 @@ namespace JsonPolimi
         public List<string> GruppoTabellaInsegnamenti { get;  set; }
         public InfoManifesto Manifesto { get;  set; }
         public int? AnnoCorsoStudio { get;  set; }
+        public List<string> CCS { get; internal set; }
 
         public string Degree;
         public string Id; // esempio: FB/2018/2019/LEONARDO/21432583243205
@@ -195,7 +196,7 @@ namespace JsonPolimi
             json += ",\"year\":";
             json += StringCheckNull(Year);
             json += ",\"ccs\":";
-            json += StringCheckNull2_ccs(this.Manifesto);
+            json += StringCheckNull_ccs(this.CCS);
             json += ",\"permanentId\":";
             json += StringCheckNull(PermanentId);
             json += ",\"LastUpdateInviteLinkTime\":";
@@ -208,13 +209,24 @@ namespace JsonPolimi
             return json;
         }
 
-        private string StringCheckNull2_ccs(InfoManifesto manifesto)
+        private string StringCheckNull_ccs(List<string> c)
         {
-            if (manifesto == null)
+            if (c == null)
                 return "null";
 
-            return StringCheckNull2(manifesto.corso_di_studio);
+            if (c.Count == 0)
+                return "null";
+
+            string r = "";
+            foreach (var s2 in c)
+            {
+                r += s2;
+                r += " ";
+            }
+
+            return '"' + r.Trim() + '"';
         }
+
 
         private string StringCheckNull(int? annoCorsoStudio)
         {
@@ -224,20 +236,7 @@ namespace JsonPolimi
             return StringCheckNull(annoCorsoStudio.Value.ToString());
         }
 
-        private string StringCheckNull2(List<string> corso_di_studio)
-        {
-            if (corso_di_studio == null)
-                return "null";
 
-            string s = "";
-            foreach (var s2 in corso_di_studio)
-            {
-                s += s2;
-                s += " ";
-            }
-            s = s.Substring(0, s.Length - 1);
-            return '"' +s + '"';
-        }
 
         private string StringCheckNull(OfficeSede office)
         {
@@ -1125,7 +1124,8 @@ namespace JsonPolimi
                 Tipo = this.Tipo,
                 Year = this.Year,
                 Manifesto = this.Manifesto,
-                 AnnoCorsoStudio = this.AnnoCorsoStudio
+                AnnoCorsoStudio = this.AnnoCorsoStudio,
+                CCS = this.CCS
             };
 
             return g;

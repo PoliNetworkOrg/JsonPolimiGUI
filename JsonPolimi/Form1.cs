@@ -198,6 +198,37 @@ namespace JsonPolimi
                 g.PermanentId = null;
             }
 
+            try
+            {
+                g.CCS = new List<string>() { i["ccs"].ToString() };
+            }
+            catch
+            {
+                g.CCS = null;
+            }
+
+            try
+            {
+                string s = i["annocorso"].ToString();
+                if (string.IsNullOrEmpty(s))
+                    g.AnnoCorsoStudio = null;
+                else
+                    g.AnnoCorsoStudio = Convert.ToInt32(s);
+            }
+            catch
+            {
+                g.AnnoCorsoStudio = null;
+            }
+
+            try
+            {
+                g.IDCorsoPolimi = i["idcorso"].ToString();
+            }
+            catch
+            {
+                g.IDCorsoPolimi = null;
+            }
+
             var data = i["LastUpdateInviteLinkTime"].ToString();
             try
             {
@@ -720,6 +751,7 @@ namespace JsonPolimi
             for (int i = 0; i < L2.Count; i++)
             {
                 L2[i].AggiungiInfoDaManifesto(infoManifesto);
+                L2[i].CCS = infoManifesto.corso_di_studio;
             }
 
             if (Variabili.L == null)
