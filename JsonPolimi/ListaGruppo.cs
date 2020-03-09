@@ -248,6 +248,12 @@ namespace JsonPolimi
                 return new SomiglianzaClasse(SomiglianzaEnum.IDENTITICI);
             }
 
+            if (!string.IsNullOrEmpty(a1.IDCorsoPolimi) && !string.IsNullOrEmpty(a2.IDCorsoPolimi) &&
+                a1.IDCorsoPolimi != a2.IDCorsoPolimi)
+            {
+                return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI);
+            }
+
             if (a1.PermanentId == a2.PermanentId && !String.IsNullOrEmpty(a1.PermanentId))
                 return new SomiglianzaClasse(SomiglianzaEnum.IDENTITICI);
             else

@@ -612,6 +612,10 @@ namespace JsonPolimi
                             {
                                 return null; //sicuro
                             }
+                            else if (infoParteDiGruppo_list[1].testo_selvaggio == "Visualizza offerta non diversificata (***)")
+                            {
+                                return null; //sicuro
+                            }
                             else
                             {
                                 return null;
@@ -705,6 +709,37 @@ namespace JsonPolimi
 
                     if (infoParteDiGruppo_list[0].testo_selvaggio == "Lingua/e ufficiali")
                     {
+                        return null; //sicuro
+                    }
+
+                    if (infoParteDiGruppo_list[1].testo_selvaggio == "Tirocinio")
+                    {
+                        return null; //sicuro
+                    }
+
+                    if (infoParteDiGruppo_list[1].testo_selvaggio == "Gli insegnamenti possono essere scelti nell'anno di corso precedente")
+                    {
+                        return null; //sicuro
+                    }
+
+                    if (infoParteDiGruppo_list[1].testo_selvaggio == "Gli insegnamenti NON possono essere scelti nell'anno di corso precedente")
+                    {
+                        return null; //sicuro
+                    }
+
+                    if (infoParteDiGruppo_list[1].testo_selvaggio == "Non significativo")
+                    {
+                        return null; //sicuro
+                    }
+
+                    if (infoParteDiGruppo_list[1].testo_selvaggio == "Ordine di scelta insegnamenti in fase di composizione piano")
+                    {
+                        return null; //sicuro
+                    }
+
+                    if (infoParteDiGruppo_list[0].testo_selvaggio == "Scuola")
+                    {
+                        Form1.infoManifesto.scuola = infoParteDiGruppo_list[1].testo_selvaggio.Trim();
                         return null; //sicuro
                     }
 
@@ -959,6 +994,9 @@ namespace JsonPolimi
 
                 case "MI":
                     return "Leonardo";
+
+                case "--":
+                    return null;
             }
 
             return null;

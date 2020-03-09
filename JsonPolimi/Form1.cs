@@ -952,7 +952,7 @@ namespace JsonPolimi
                             }
                             else
                             {
-                                return null;
+                                return new InfoParteDiGruppo(testo_selvaggio: htmlNode.InnerHtml.Trim());
                             }
                         }
                     }
@@ -1068,7 +1068,19 @@ namespace JsonPolimi
                 }
                 else
                 {
-                    ;
+                    string s3 = htmlNode.InnerHtml.Trim();
+                    if (string.IsNullOrEmpty(s3))
+                    {
+                        ;
+                    }
+                    else if (s3.StartsWith("<span "))
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        ;
+                    }
                 }
             }
             else if (htmlNode.ChildNodes.Count == 6)
@@ -1129,6 +1141,26 @@ namespace JsonPolimi
                         return null;
                     }
                     else if (s1.StartsWith("1.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("9.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("12.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("6.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("4.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("3.0"))
                     {
                         return null;
                     }
