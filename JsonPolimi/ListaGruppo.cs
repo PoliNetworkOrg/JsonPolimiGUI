@@ -125,66 +125,68 @@ namespace JsonPolimi
                 return CompareOrdinal(a.PermanentId, b.PermanentId);
             }
 
-            private int CompareOrdinal2(OfficeSede office1, OfficeSede office2)
+            
+        }
+
+        public static int CompareOrdinal2(OfficeSede office1, OfficeSede office2)
+        {
+            if (office1 == null && office2 == null)
+                return 0;
+
+            if (office1 == null)
+                return -1;
+
+            if (office2 == null)
+                return +1;
+
+            return ListaGruppo.CompareOrdinal23(office1.o, office2.o);
+        }
+
+        private static int CompareOrdinal23(List<string> office1, List<string> office2)
+        {
+            if (office1 == null && office2 == null)
+                return 0;
+
+            if (office1 == null)
+                return -1;
+
+            if (office2 == null)
+                return 1;
+
+            if (office1.Count == office2.Count)
             {
-                if (office1 == null && office2 == null)
-                    return 0;
-
-                if (office1 == null)
-                    return -1;
-
-                if (office2 == null)
-                    return +1;
-
-                return CompareOrdinal23(office1.o, office2.o);
-            }
-
-            private int CompareOrdinal23(List<string> office1, List<string> office2)
-            {
-                if (office1 == null && office2 == null)
-                    return 0;
-
-                if (office1 == null)
-                    return -1;
-
-                if (office2 == null)
-                    return 1;
-
-                if (office1.Count == office2.Count)
+                for (int i = 0; i < office1.Count; i++)
                 {
-                    for (int i=0; i<office1.Count; i++)
+                    int i1 = CompareOrdinal(office1[i], office2[i]);
+                    if (i1 != 0)
+                        return i1;
+                }
+
+                return 0;
+            }
+            else
+            {
+                if (office1.Count > office2.Count)
+                {
+                    for (int i = 0; i < office2.Count; i++)
                     {
                         int i1 = CompareOrdinal(office1[i], office2[i]);
                         if (i1 != 0)
                             return i1;
                     }
 
-                    return 0;
+                    return 1;
                 }
                 else
                 {
-                    if (office1.Count > office2.Count)
+                    for (int i = 0; i < office1.Count; i++)
                     {
-                        for (int i = 0; i < office2.Count; i++)
-                        {
-                            int i1 = CompareOrdinal(office1[i], office2[i]);
-                            if (i1 != 0)
-                                return i1;
-                        }
-
-                        return 1;
+                        int i1 = CompareOrdinal(office1[i], office2[i]);
+                        if (i1 != 0)
+                            return i1;
                     }
-                    else
-                    {
-                        for (int i = 0; i < office1.Count; i++)
-                        {
-                            int i1 = CompareOrdinal(office1[i], office2[i]);
-                            if (i1 != 0)
-                                return i1;
-                        }
 
-                        return -1;
-                    }
+                    return -1;
                 }
             }
         }
@@ -375,7 +377,8 @@ namespace JsonPolimi
             {
                 if (!Gruppo.IsEmpty(a2.Office))
                 {
-                    if (a1.Office != a2.Office)
+                    int i1 = ListaGruppo.CompareOrdinal2(a1.Office, a2.Office);
+                    if (i1 != 0)
                         return new SomiglianzaClasse( SomiglianzaEnum.DUBBIO, a1, a2);
                 }
             }
@@ -526,7 +529,7 @@ namespace JsonPolimi
                     "engineering", "in",
                     "generale", "gruppo", "for", "the",
                     "e", "delle", "dei",
-                    "ingegneria", "della", "-", "" };
+                    "ingegneria", "della", "-", "", "per", "le" };
                 TryRemove(ref l1, ref l2, useless);
 
                 bool? r2 = ManualCheck(n1, n2);
