@@ -795,6 +795,14 @@ namespace JsonPolimi
                     {
                         return null; //sicuro
                     }
+                    else if (infoParteDiGruppo_list[0].testo_selvaggio.StartsWith("4<sup>"))
+                    {
+                        return null; //sicuro
+                    }
+                    else if (infoParteDiGruppo_list[0].testo_selvaggio.StartsWith("5<sup>"))
+                    {
+                        return null; //sicuro
+                    }
                     else
                     {
                         return null;
@@ -1022,6 +1030,15 @@ namespace JsonPolimi
 
                 case "--":
                     return null;
+
+                case "MN":
+                    return "Mantova";
+
+                case "PC":
+                    return "Piacenza";
+
+                case "LC":
+                    return "Lecco";
             }
 
             return null;

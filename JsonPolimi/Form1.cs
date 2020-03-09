@@ -1100,6 +1100,10 @@ namespace JsonPolimi
                 {
                     return null; //sicuro
                 }
+                else if (s.StartsWith("*** - Non diversificato"))
+                {
+                    return null;
+                }
                 else
                 {
                     ;
@@ -1171,6 +1175,10 @@ namespace JsonPolimi
                         return null;
                     }
                     else if (s1.StartsWith("8.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("16.0"))
                     {
                         return null;
                     }
@@ -1254,6 +1262,30 @@ namespace JsonPolimi
                     ;
                 }
                 else if (s.StartsWith("4.0"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("ICAR"))
+                {
+                    List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>();
+                    var s2 = s.Split('<');
+                    foreach (var s3 in s2)
+                    {
+                        string s4 = s3;
+                        if (s3.StartsWith("br>"))
+                        {
+                            s4 = s3.Substring(3);
+                        }
+
+                        sottopezzi2.Add(new InfoParteDiGruppo(testo_selvaggio: s4));
+                    }
+                    return new InfoParteDiGruppo(sottopezzi: sottopezzi2);
+                }
+                else if (s.StartsWith("12.0"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("8.0"))
                 {
                     return null;
                 }
