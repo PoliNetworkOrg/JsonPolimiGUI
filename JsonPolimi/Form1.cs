@@ -1104,6 +1104,10 @@ namespace JsonPolimi
                 {
                     return null;
                 }
+                else if (s.StartsWith("*** - offerta comune"))
+                {
+                    return null;
+                }
                 else
                 {
                     ;
@@ -1246,6 +1250,11 @@ namespace JsonPolimi
                         ;
                     }
                 }
+                else if (htmlNode.ChildNodes[0].Name == "a" && htmlNode.ChildNodes[1].Name == "span")
+                {
+                    LinkGruppo link2 = new LinkGruppo(htmlNode.ChildNodes[0].Attributes,htmlNode.ChildNodes[0].InnerHtml.Trim());
+                    return new InfoParteDiGruppo(link: link2);
+                }
                 else
                 {
                     string s = htmlNode.InnerHtml.Trim();
@@ -1288,6 +1297,43 @@ namespace JsonPolimi
                 else if (s.StartsWith("8.0"))
                 {
                     return null;
+                }
+                else if (s.StartsWith("AGR"))
+                {
+                    List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>();
+                    var s2 = s.Split('<');
+                    foreach (var s3 in s2)
+                    {
+                        string s4 = s3;
+                        if (s3.StartsWith("br>"))
+                        {
+                            s4 = s3.Substring(3);
+                        }
+
+                        sottopezzi2.Add(new InfoParteDiGruppo(testo_selvaggio: s4));
+                    }
+                    return new InfoParteDiGruppo(sottopezzi: sottopezzi2);
+                }
+                else if (s.StartsWith("Architettura Urbanistica Ingegneria delle Costruzioni"))
+                {
+                    return null; 
+                }
+
+                else if (s.StartsWith("BIO"))
+                {
+                    List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>();
+                    var s2 = s.Split('<');
+                    foreach (var s3 in s2)
+                    {
+                        string s4 = s3;
+                        if (s3.StartsWith("br>"))
+                        {
+                            s4 = s3.Substring(3);
+                        }
+
+                        sottopezzi2.Add(new InfoParteDiGruppo(testo_selvaggio: s4));
+                    }
+                    return new InfoParteDiGruppo(sottopezzi: sottopezzi2);
                 }
                 else
                 {
@@ -1366,7 +1412,7 @@ namespace JsonPolimi
                     LoadManifesto(doc);
                 }
             }
-
+            MessageBox.Show("Fatto!");
         }
     }
 }
