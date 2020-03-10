@@ -966,6 +966,26 @@ namespace JsonPolimi
                     {
                         to_show = false;
                     }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Matematica"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Meccanica"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Materiali"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Automazione"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Produzione"))
+                    {
+                        to_show = false;
+                    }
                     //FINE TEMP
 
                     if (chiedi2 == Chiedi.SI)
@@ -973,8 +993,10 @@ namespace JsonPolimi
 
                         if (to_show)
                         {
-                            AskToUnifyForm askToUnifyForm = new AskToUnifyForm(r);
-                            askToUnifyForm.StartPosition = FormStartPosition.CenterScreen;
+                            AskToUnifyForm askToUnifyForm = new AskToUnifyForm(r)
+                            {
+                                StartPosition = FormStartPosition.CenterScreen
+                            };
                             askToUnifyForm.ShowDialog();
                             if (askToUnifyForm.r != null && askToUnifyForm.r.Value)
                             {
