@@ -65,7 +65,7 @@ namespace JsonPolimi
             {
                 var i3 = i2.First;
 
-                Aggiungi(i3);
+                Aggiungi(i3, false);
             }
 
             Variabili.L.Sort();
@@ -148,7 +148,7 @@ namespace JsonPolimi
             Process.Start("temp.html");
         }
 
-        private static void Aggiungi(JToken i)
+        private static void Aggiungi(JToken i, bool aggiusta_Anno)
         {
             var g = new Gruppo
             {
@@ -241,7 +241,7 @@ namespace JsonPolimi
                 throw e;
             }
 
-            g.Aggiusta(true);
+            g.Aggiusta(aggiusta_Anno);
 
             Variabili.L.Add(g);
         }
