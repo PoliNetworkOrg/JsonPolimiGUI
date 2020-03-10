@@ -1756,5 +1756,10 @@ namespace JsonPolimi
                 MessageBox.Show("Fatto!");
             }
         }
+
+        private void button15_Click(object sender, EventArgs e)
+        {
+            Variabili.L.RicreaID();
+        }
     }
 }

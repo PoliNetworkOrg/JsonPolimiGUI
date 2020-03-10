@@ -138,7 +138,12 @@ namespace JsonPolimi
 
         private string CreaId()
         {
-            return Platform + "/" + Year + "/" + Office + "/" + IdLink + "/" + StringNotEmpty(IDCorsoPolimi);
+            return Platform + "/" + 
+                Year + "/" +
+                Office + "/" +
+                IdLink + "/" +
+                StringNotEmpty(IDCorsoPolimi) + "/" + 
+                CCS?.getCCSCode();
         }
 
         private string StringNotEmpty(string a)
@@ -1189,6 +1194,11 @@ namespace JsonPolimi
             //todo: fare altri controlli per vedere se il gruppo è valido
 
             return true;
+        }
+
+        internal void RicreaId()
+        {
+            this.Id = CreaId();
         }
     }
 }

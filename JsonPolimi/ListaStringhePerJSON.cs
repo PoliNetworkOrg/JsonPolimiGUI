@@ -72,5 +72,35 @@ namespace JsonPolimi
 
             return false;
         }
+
+        internal string getCCSCode()
+        {
+            if (this.o == null)
+                return null;
+
+            if (o.Count < 2)
+            {
+                var s2 = o[0].Split(' ');
+                return getCCSCode2(s2[s2.Length - 1]);
+            }
+
+            return getCCSCode2(o[1]);
+
+        }
+
+        private string getCCSCode2(string v)
+        {
+            string s = v.Trim();
+            if (s.StartsWith("(") && s.EndsWith(")"))
+            {
+                s = s.Substring(1);
+                s = s.Substring(0, s.Length - 1);
+
+                return s;
+            }
+
+            return null;
+
+        }
     }
 }

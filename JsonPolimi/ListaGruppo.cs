@@ -1111,5 +1111,13 @@ namespace JsonPolimi
 
             return r;
         }
+
+        internal void RicreaID()
+        {
+            for (int i =0; i<this._l.Count; i++)
+            {
+                _l[i].RicreaId();
+            }
+        }
     }
 }
