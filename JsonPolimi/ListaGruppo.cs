@@ -354,7 +354,7 @@ namespace JsonPolimi
                         return new SomiglianzaClasse(SomiglianzaEnum.DUBBIO, a1, a2);
                 }
                 else
-                    return new SomiglianzaClasse(SomiglianzaEnum.DUBBIO, a1, a2);
+                    return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI, a1, a2);
             }
 
             if (!string.IsNullOrEmpty(a1.IDCorsoPolimi) && !string.IsNullOrEmpty(a2.IDCorsoPolimi) &&
@@ -974,6 +974,7 @@ namespace JsonPolimi
                         if (to_show)
                         {
                             AskToUnifyForm askToUnifyForm = new AskToUnifyForm(r);
+                            askToUnifyForm.StartPosition = FormStartPosition.CenterScreen;
                             askToUnifyForm.ShowDialog();
                             if (askToUnifyForm.r != null && askToUnifyForm.r.Value)
                             {
