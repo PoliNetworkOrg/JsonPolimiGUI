@@ -351,7 +351,7 @@ namespace JsonPolimi
                     if (i2 == 0)
                         return new SomiglianzaClasse(SomiglianzaEnum.IDENTITICI);
                     else
-                        return new SomiglianzaClasse(SomiglianzaEnum.DUBBIO, a1, a2);
+                        return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI, a1, a2);
                 }
                 else
                     return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI, a1, a2);
@@ -1077,6 +1077,9 @@ namespace JsonPolimi
 
             if (r.PianoDiStudi == null)
                 r.PianoDiStudi = a2.PianoDiStudi;
+
+            if (r.NomeCorso == null)
+                r.NomeCorso = a2.NomeCorso;
 
             if (r.GruppoTabellaInsegnamenti == null)
                 r.GruppoTabellaInsegnamenti = a2.GruppoTabellaInsegnamenti;

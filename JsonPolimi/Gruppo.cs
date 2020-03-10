@@ -14,6 +14,7 @@ namespace JsonPolimi
         public int? AnnoCorsoStudio { get;  set; }
         public ListaStringhePerJSON CCS { get; internal set; }
         public string PianoDiStudi { get; set; }
+        public string NomeCorso { get; set; }
 
         public string Degree;
         public string Id; // esempio: FB/2018/2019/LEONARDO/21432583243205
@@ -26,6 +27,11 @@ namespace JsonPolimi
         public string Tipo;
         public string Year; // esempio: 2018/2019
         public DateTime? LastUpdateInviteLinkTime;
+
+        public Gruppo()
+        {
+            ;
+        }
 
         internal void Aggiusta(bool aggiusta_anno)
         {
@@ -193,6 +199,8 @@ namespace JsonPolimi
             json += StringCheckNull(School);
             json += ",\"annocorso\":";
             json += StringCheckNull(AnnoCorsoStudio);
+            json += ",\"nomecorso\":";
+            json += StringCheckNull(NomeCorso);
             json += ",\"idcorso\":";
             json += StringCheckNull(IDCorsoPolimi);
             json += ",\"pianostudi\":";
@@ -1044,7 +1052,8 @@ namespace JsonPolimi
                         Tipo = "C",
                         AnnoCorsoStudio = Form1.anno,
                         Platform = pLAT2,
-                        PianoDiStudi = Form1.pianostudi2
+                        PianoDiStudi = Form1.pianostudi2,
+                        NomeCorso = classe
                     };
                     g.IdLink = null;
                     g.Aggiusta(false);
@@ -1122,7 +1131,8 @@ namespace JsonPolimi
                 Manifesto = this.Manifesto,
                 AnnoCorsoStudio = this.AnnoCorsoStudio,
                 CCS = this.CCS,
-                PianoDiStudi = this.PianoDiStudi
+                PianoDiStudi = this.PianoDiStudi, 
+                NomeCorso = this.NomeCorso
             };
 
             return g;
