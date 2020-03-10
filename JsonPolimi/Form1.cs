@@ -755,6 +755,7 @@ namespace JsonPolimi
             {
                 L2[i].AggiungiInfoDaManifesto(infoManifesto);
                 L2[i].CCS = new ListaStringhePerJSON( infoManifesto.corso_di_studio);
+                L2[i].PianoDiStudi = pianostudi2;
             }
 
             return L2;
