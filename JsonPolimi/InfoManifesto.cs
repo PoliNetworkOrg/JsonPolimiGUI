@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace JsonPolimi
 {
+    [Serializable]
     public class InfoManifesto
     {
         public List<string> corso_di_studio { get; internal set; }

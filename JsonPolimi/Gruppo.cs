@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace JsonPolimi
 {
+    [Serializable]
     public class Gruppo
     {
         public string Classe;

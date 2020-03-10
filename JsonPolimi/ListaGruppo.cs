@@ -245,7 +245,7 @@ namespace JsonPolimi
                 {
                     if (i != j)
                     {
-                        Tuple<SomiglianzaClasse, Gruppo> r = Equivalenti(i, j);
+                        Tuple<SomiglianzaClasse, Gruppo> r = Equivalenti(i, j, true);
 
                         bool do_that = false;
                         if (r.Item1.somiglianzaEnum == SomiglianzaEnum.IDENTITICI)
@@ -287,13 +287,13 @@ namespace JsonPolimi
             }
         }
 
-        private Tuple<SomiglianzaClasse, Gruppo> Equivalenti(int i, int j)
+        private Tuple<SomiglianzaClasse, Gruppo> Equivalenti(int i, int j, bool aggiusta_Anno)
         {
-            return Equivalenti2(i, this._l[j]);
+            return Equivalenti2(i, this._l[j], aggiusta_Anno);
             
         }
 
-        private Tuple<SomiglianzaClasse, Gruppo> Equivalenti2(int i, Gruppo j)
+        private Tuple<SomiglianzaClasse, Gruppo> Equivalenti2(int i, Gruppo j, bool aggiusta_Annno)
         {
             Gruppo a1 = this._l[i];
             Gruppo a2 = j;
@@ -302,7 +302,7 @@ namespace JsonPolimi
             if (eq.somiglianzaEnum == SomiglianzaEnum.IDENTITICI || eq.somiglianzaEnum == SomiglianzaEnum.DUBBIO)
             {
                 ;
-                return new Tuple<SomiglianzaClasse, Gruppo>(eq, Unisci4(i, j));
+                return new Tuple<SomiglianzaClasse, Gruppo>(eq, Unisci4(i, j, aggiusta_Annno));
             }
 
             return new Tuple<SomiglianzaClasse, Gruppo>(new SomiglianzaClasse(SomiglianzaEnum.DIVERSI), null);       
@@ -822,19 +822,19 @@ namespace JsonPolimi
             return null;
         }
 
-        internal void Importa(List<Gruppo> l2)
+        internal void Importa(List<Gruppo> l2, bool aggiusta_Anno)
         {
             foreach (var l3 in l2)
             {
-                Importa2(l3);
+                Importa2(l3, aggiusta_Anno);
             }
         }
 
-        private void Importa2(Gruppo l3)
+        private void Importa2(Gruppo l3, bool aggiusta_anno)
         {
             for (int i = 0; i < _l.Count; i++)
             {
-                Tuple<SomiglianzaClasse, Gruppo> r = Equivalenti2(i, l3);
+                Tuple<SomiglianzaClasse, Gruppo> r = Equivalenti2(i, l3, aggiusta_anno);
                 bool do_that = false;
                 if (r.Item1.somiglianzaEnum == SomiglianzaEnum.IDENTITICI)
                 {
@@ -842,17 +842,6 @@ namespace JsonPolimi
                 }
                 else if (r.Item1.somiglianzaEnum == SomiglianzaEnum.DUBBIO)
                 {
-                    string s = "Sono da unire?";
-                    s += '\n';
-                    s += '\n';
-
-                    s += r.Item1.a1.To_json();
-
-                    s += '\n';
-                    s += '\n';
-
-                    s += r.Item1.a2.To_json();
-
                     bool to_show = true;
 
                     //todo: E' TEMPORANEA QUESTA COSA
@@ -920,6 +909,46 @@ namespace JsonPolimi
                     {
                         to_show = false;
                     }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Aero"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Automation"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Prevenzione"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Materials"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Mathematical"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Mechanical"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Nuclear"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Space"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Civil"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Ambiente"))
+                    {
+                        to_show = false;
+                    }
                     //FINE TEMP
 
                     if (to_show)
@@ -973,7 +1002,7 @@ namespace JsonPolimi
             }
         }
 
-        private Gruppo Unisci4(int i, Gruppo j)
+        private Gruppo Unisci4(int i, Gruppo j, bool aggiusta_anno)
         {
             Gruppo a1 = this._l[i];
             Gruppo a2 = j;
@@ -1078,7 +1107,7 @@ namespace JsonPolimi
                 }
             }
 
-            r.Aggiusta(true);
+            r.Aggiusta(aggiusta_anno);
 
             return r;
         }

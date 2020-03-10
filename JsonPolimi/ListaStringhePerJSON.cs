@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace JsonPolimi
 {
+    [Serializable]
     public class ListaStringhePerJSON
     {
         public List<string> o;

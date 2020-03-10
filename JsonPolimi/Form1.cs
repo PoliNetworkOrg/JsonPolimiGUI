@@ -11,6 +11,7 @@ using Telegram.Bot.Types.Enums;
 using Size = System.Drawing.Size;
 using HtmlAgilityPack;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace JsonPolimi
 {
@@ -738,11 +739,12 @@ namespace JsonPolimi
                 doc.Load(o.FileName);
             }
 
-            LoadManifesto(doc, "TG");
+            var x1 = LoadManifesto(doc, "TG");
+            Variabili.L.Importa(x1, false);
 
         }
 
-        private void LoadManifesto(HtmlAgilityPack.HtmlDocument doc, string PLAT2)
+        private List<Gruppo> LoadManifesto(HtmlAgilityPack.HtmlDocument doc, string PLAT2)
         {
             infoManifesto = new InfoManifesto();
             Form1.anno = null;
@@ -754,10 +756,9 @@ namespace JsonPolimi
                 L2[i].CCS = new ListaStringhePerJSON( infoManifesto.corso_di_studio);
             }
 
-            if (Variabili.L == null)
-                Variabili.L = new ListaGruppo();
+            return L2;
 
-            Variabili.L.Importa(L2);
+
         }
 
         private List<Gruppo> GetGruppiFromDocument(HtmlAgilityPack.HtmlDocument doc, string pLAT2)
@@ -1690,16 +1691,70 @@ namespace JsonPolimi
             if (f == null)
                 return;
 
+            List<Gruppo> L = new List<Gruppo>();
             foreach (var f2 in f)
             {
                 if (f2.EndsWith(".htm"))
                 {
                     HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
                     doc.Load(f2);
-                    LoadManifesto(doc, "TG");
+                    var L2 = LoadManifesto(doc, "TG");
+                    L.AddRange(L2);
                 }
             }
-            MessageBox.Show("Fatto!");
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            var r = saveFileDialog.ShowDialog();
+            if (r == DialogResult.OK)
+            {
+                var b2 = ObjectToByteArray(L);
+                File.WriteAllBytes(path: saveFileDialog.FileName, bytes: b2);
+            }
+
         }
-}
+
+        byte[] ObjectToByteArray(object obj)
+        {
+            if (obj == null)
+                return null;
+
+            BinaryFormatter bf = new BinaryFormatter();
+            using (MemoryStream ms = new MemoryStream())
+            {
+                bf.Serialize(ms, obj);
+                return ms.ToArray();
+            }
+        }
+
+        public T FromByteArray<T>(byte[] data)
+        {
+            if (data == null)
+#pragma warning disable IDE0034 // Semplifica l'espressione 'default'
+                return default(T);
+#pragma warning restore IDE0034 // Semplifica l'espressione 'default'
+            BinaryFormatter bf = new BinaryFormatter();
+            using (MemoryStream ms = new MemoryStream(data))
+            {
+                object obj = bf.Deserialize(ms);
+                return (T)obj;
+            }
+        }
+
+        private void Button14_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            var r = openFileDialog.ShowDialog();
+            if (r == DialogResult.OK)
+            {
+                byte[] o2 = File.ReadAllBytes(openFileDialog.FileName);
+                List<Gruppo> L2 = FromByteArray<List<Gruppo>>(o2);
+
+                if (Variabili.L == null)
+                    Variabili.L = new ListaGruppo();
+
+                Variabili.L.Importa(L2,false);
+                MessageBox.Show("Fatto!");
+            }
+        }
     }
+}
