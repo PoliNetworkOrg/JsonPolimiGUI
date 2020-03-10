@@ -50,7 +50,12 @@ namespace JsonPolimi
                 School = t_school.Text,
                 Tipo = t_type.Text,
                 Year = t_year.Text,
-                IdLink = t_idlink.Text
+                IdLink = t_idlink.Text,
+                AnnoCorsoStudio = ToInt(t_annocorso.Text),
+                CCS = new ListaStringhePerJSON(t_ccs.Text),
+                IDCorsoPolimi = t_idcorsopolimi.Text,
+                PianoDiStudi = t_pianostudi.Text
+
             };
 
             if (Variabili.L == null)
@@ -62,6 +67,23 @@ namespace JsonPolimi
                 Variabili.L.Add(g);
             else
                 Close();
+        }
+
+        private int? ToInt(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return null;
+
+            try
+            {
+                return Convert.ToInt32(text);
+            }
+            catch
+            {
+                ;
+            }
+
+            return null;
         }
 
         private void Aggiungi_Form_Load(object sender, EventArgs e)
@@ -80,8 +102,20 @@ namespace JsonPolimi
             t_type.Text = g.Tipo;
             t_year.Text = g.Year;
             t_idlink.Text = g.IdLink;
+            t_ccs.Text = g.CCS.StringNotNull();
+            t_idcorsopolimi.Text = g.IDCorsoPolimi;
+            t_annocorso.Text = ToText(g.AnnoCorsoStudio);
+            t_pianostudi.Text = g.PianoDiStudi;
 
             button1.Text = "Modifica";
+        }
+
+        private string ToText(int? annoCorsoStudio)
+        {
+            if (annoCorsoStudio == null)
+                return "";
+
+            return annoCorsoStudio.Value.ToString();
         }
 
         private string StringCheckNull(ListaStringhePerJSON office)

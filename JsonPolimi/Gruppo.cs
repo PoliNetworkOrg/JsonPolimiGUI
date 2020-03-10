@@ -13,6 +13,7 @@ namespace JsonPolimi
         public InfoManifesto Manifesto { get;  set; }
         public int? AnnoCorsoStudio { get;  set; }
         public ListaStringhePerJSON CCS { get; internal set; }
+        public string PianoDiStudi { get; set; }
 
         public string Degree;
         public string Id; // esempio: FB/2018/2019/LEONARDO/21432583243205
@@ -143,7 +144,8 @@ namespace JsonPolimi
                 Office + "/" +
                 IdLink + "/" +
                 StringNotEmpty(IDCorsoPolimi) + "/" + 
-                CCS?.getCCSCode();
+                CCS?.getCCSCode() + "/"+
+                PianoDiStudi;
         }
 
         private string StringNotEmpty(string a)
@@ -193,6 +195,8 @@ namespace JsonPolimi
             json += StringCheckNull(AnnoCorsoStudio);
             json += ",\"idcorso\":";
             json += StringCheckNull(IDCorsoPolimi);
+            json += ",\"pianostudi\":";
+            json += StringCheckNull(PianoDiStudi);
             json += ",\"id_link\":";
             json += StringCheckNull(IdLink);
             json += ",\"language\":";
@@ -1039,7 +1043,8 @@ namespace JsonPolimi
                         Language = lang,
                         Tipo = "C",
                         AnnoCorsoStudio = Form1.anno,
-                        Platform = pLAT2
+                        Platform = pLAT2,
+                        PianoDiStudi = Form1.pianostudi2
                     };
                     g.IdLink = null;
                     g.Aggiusta(false);
@@ -1116,7 +1121,8 @@ namespace JsonPolimi
                 Year = this.Year,
                 Manifesto = this.Manifesto,
                 AnnoCorsoStudio = this.AnnoCorsoStudio,
-                CCS = this.CCS
+                CCS = this.CCS,
+                PianoDiStudi = this.PianoDiStudi
             };
 
             return g;

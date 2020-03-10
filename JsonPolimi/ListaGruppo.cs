@@ -139,6 +139,9 @@ namespace JsonPolimi
             if (office2 == null)
                 return +1;
 
+            if (office1.StringNotNull() == office2.StringNotNull())
+                return 0;
+
             return ListaGruppo.CompareOrdinal23(office1.o, office2.o);
         }
 
@@ -341,7 +344,17 @@ namespace JsonPolimi
             if (!string.IsNullOrEmpty(a1.IDCorsoPolimi) && !string.IsNullOrEmpty(a2.IDCorsoPolimi) &&
                 a1.IDCorsoPolimi == a2.IDCorsoPolimi)
             {
-                return new SomiglianzaClasse(SomiglianzaEnum.IDENTITICI);
+                int i1 = (CompareOrdinal2(a1.CCS, a2.CCS));
+                if (i1 == 0)
+                {
+                    int i2 = CompareOrdinal(a1.PianoDiStudi, a2.PianoDiStudi);
+                    if (i2 == 0)
+                        return new SomiglianzaClasse(SomiglianzaEnum.IDENTITICI);
+                    else
+                        return new SomiglianzaClasse(SomiglianzaEnum.DUBBIO, a1, a2);
+                }
+                else
+                    return new SomiglianzaClasse(SomiglianzaEnum.DUBBIO, a1, a2);
             }
 
             if (!string.IsNullOrEmpty(a1.IDCorsoPolimi) && !string.IsNullOrEmpty(a2.IDCorsoPolimi) &&
@@ -822,15 +835,15 @@ namespace JsonPolimi
             return null;
         }
 
-        internal void Importa(List<Gruppo> l2, bool aggiusta_Anno)
+        internal void Importa(List<Gruppo> l2, bool aggiusta_Anno, Chiedi chiedi2)
         {
             foreach (var l3 in l2)
             {
-                Importa2(l3, aggiusta_Anno);
+                Importa2(l3, aggiusta_Anno, chiedi2);
             }
         }
 
-        private void Importa2(Gruppo l3, bool aggiusta_anno)
+        private void Importa2(Gruppo l3, bool aggiusta_anno, Chiedi chiedi2)
         {
             for (int i = 0; i < _l.Count; i++)
             {
@@ -845,7 +858,11 @@ namespace JsonPolimi
                     bool to_show = true;
 
                     //todo: E' TEMPORANEA QUESTA COSA
-                    if (r.Item1.a2.CCS.Contains_In_Uno("Architettura"))
+                    if (r.Item1.a2 == null)
+                    {
+                        to_show = true;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Architettura"))
                     {
                         to_show = false;
                     }
@@ -951,18 +968,30 @@ namespace JsonPolimi
                     }
                     //FINE TEMP
 
-                    if (to_show)
+                    if (chiedi2 == Chiedi.SI)
                     {
-                        AskToUnifyForm askToUnifyForm = new AskToUnifyForm(r);
-                        askToUnifyForm.ShowDialog();
-                        if (askToUnifyForm.r != null && askToUnifyForm.r.Value)
+
+                        if (to_show)
                         {
-                            do_that = true;
+                            AskToUnifyForm askToUnifyForm = new AskToUnifyForm(r);
+                            askToUnifyForm.ShowDialog();
+                            if (askToUnifyForm.r != null && askToUnifyForm.r.Value)
+                            {
+                                do_that = true;
+                            }
+                        }
+                        else
+                        {
+                            do_that = false;
                         }
                     }
-                    else
+                    else if (chiedi2 == Chiedi.NO_DIVERSI)
                     {
                         do_that = false;
+                    }
+                    else if (chiedi2 == Chiedi.NO_IDENTICI)
+                    {
+                        do_that = true;
                     }
 
                 }
@@ -1012,11 +1041,19 @@ namespace JsonPolimi
             if (String.IsNullOrEmpty(r.IDCorsoPolimi))
                 r.IDCorsoPolimi = a2.IDCorsoPolimi;
 
+            if (r.CCS == null || r.CCS.IsEmpty())
+            {
+                r.CCS = a2.CCS;
+            }
+
             if (r.Manifesto == null)
                 r.Manifesto = a2.Manifesto;
 
             if (r.AnnoCorsoStudio == null)
                 r.AnnoCorsoStudio = a2.AnnoCorsoStudio;
+
+            if (r.PianoDiStudi == null)
+                r.PianoDiStudi = a2.PianoDiStudi;
 
             if (r.GruppoTabellaInsegnamenti == null)
                 r.GruppoTabellaInsegnamenti = a2.GruppoTabellaInsegnamenti;

@@ -740,7 +740,7 @@ namespace JsonPolimi
             }
 
             var x1 = LoadManifesto(doc, "TG");
-            Variabili.L.Importa(x1, false);
+            Variabili.L.Importa(x1, false, Chiedi.SI);
 
         }
 
@@ -748,6 +748,7 @@ namespace JsonPolimi
         {
             infoManifesto = new InfoManifesto();
             Form1.anno = null;
+            Form1.pianostudi2 = null;
 
             List<Gruppo> L2 = GetGruppiFromDocument(doc, PLAT2);
             for (int i = 0; i < L2.Count; i++)
@@ -819,14 +820,7 @@ namespace JsonPolimi
                     string x3 = x2.Classe.Trim();
                     if (!string.IsNullOrEmpty(x3))
                     {
-                        if (x2.Id == null)
-                        {
-                            LG.Add(x2);
-                        }
-                        else if (!x2.Id.Contains("Area Servizi ICT") && !x2.Classe.Contains("Anno Corso") && !x2.Classe.Contains("Corso di Studi"))
-                        { 
-                            LG.Add(x2); 
-                        }
+                        LG.Add(x2);                  
                     }
                 }
             }
@@ -875,6 +869,7 @@ namespace JsonPolimi
         }
 
         public static int? anno = null;
+        public static string pianostudi2 = null;
 
         private InfoParteDiGruppo GetGruppiFromDocument5(HtmlNode htmlNode)
         {
@@ -936,6 +931,51 @@ namespace JsonPolimi
                 {
                     ;
                 }
+            }
+
+            int ce2 = 0;
+            foreach (var c2 in classes)
+            {
+                if (c2 == "ElementInfoCard2" || c2 == "left")
+                {
+                    ce2++;
+                }
+            }
+
+            if (ce2 == 2)
+            {
+                if (htmlNode.ChildNodes.Count >0)
+                {
+                    var x1 = htmlNode.ChildNodes[0];
+                    ;
+                    if (x1.Name == "select")
+                    {
+                        var x2 = GetPianoStudi(x1);
+                        if (x2.Item1)
+                        {
+                            pianostudi2 = x2.Item2;
+                            return null; //sicuro
+                        }
+                    }
+                    else if (htmlNode.InnerHtml.StartsWith("*** - "))
+                    {
+                        var s3 = htmlNode.InnerHtml.Trim().Split('<');
+                        var s4 = s3[0].Trim();
+                        var s5 = s4.Substring(5).Trim();
+                        pianostudi2 = s5;
+                        return null; //sicuro
+                    }
+                    else
+                    {
+                        pianostudi2 = htmlNode.ChildNodes[0].InnerHtml.Trim();
+                        return null;
+                    }
+                }
+                else
+                {
+                    ;
+                }
+                    
             }
 
             if (htmlNode.ChildNodes.Count == 3)
@@ -1634,6 +1674,48 @@ namespace JsonPolimi
             return null;
         }
 
+        private Tuple<bool, string> GetPianoStudi(HtmlNode x1)
+        {
+            if (x1.ChildNodes.Count == 0)
+                return new Tuple<bool, string>(false, null);
+
+            bool ce = true;
+            foreach (var x2 in x1.ChildNodes)
+            {
+                if (x2.Name != "option")
+                    ce = false;
+
+                if (x2.InnerHtml == "2019/2020" ||
+                    x2.InnerHtml == "Qualunque sede" ||
+                    x2.InnerHtml == "Scuola di Architettura Urbanistica Ingegneria delle Costruzioni (Arc. Urb. Ing. Cos.)" ||
+                    x2.InnerHtml == "1")
+                    return new Tuple<bool, string>(false, null);
+            }
+
+            if (!ce)
+            {
+                return new Tuple<bool, string>(false, null);
+            }
+
+            ;
+
+            foreach (var x3 in x1.ChildNodes)
+            {
+                if (x3.Name == "option")
+                {
+                    foreach (var x4 in x3.Attributes)
+                    {
+                        if (x4.Name == "selected" && x4.Value == "selected")
+                        {
+                            return new Tuple<bool, string>(true,x3.InnerHtml.Trim());
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
         private HtmlNode GetGruppiFromDocument4(HtmlNode htmlNode)
         {
             if (htmlNode.ChildNodes.Count == 0)
@@ -1742,6 +1824,11 @@ namespace JsonPolimi
 
         private void Button14_Click(object sender, EventArgs e)
         {
+            Importa2(Chiedi.SI);
+        }
+
+        private void Importa2(Chiedi chiedi2)
+        {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             var r = openFileDialog.ShowDialog();
             if (r == DialogResult.OK)
@@ -1752,14 +1839,19 @@ namespace JsonPolimi
                 if (Variabili.L == null)
                     Variabili.L = new ListaGruppo();
 
-                Variabili.L.Importa(L2,false);
+                Variabili.L.Importa(L2, false, chiedi2);
                 MessageBox.Show("Fatto!");
             }
         }
 
-        private void button15_Click(object sender, EventArgs e)
+        private void Button15_Click(object sender, EventArgs e)
         {
             Variabili.L.RicreaID();
+        }
+
+        private void Button16_Click(object sender, EventArgs e)
+        {
+            Importa2(Chiedi.NO_DIVERSI);
         }
     }
 }

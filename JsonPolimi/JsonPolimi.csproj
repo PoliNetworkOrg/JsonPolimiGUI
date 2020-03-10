@@ -72,6 +72,7 @@
     <Compile Include="AskToUnifyForm.Designer.cs">
       <DependentUpon>AskToUnifyForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Chiedi.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
