@@ -1212,5 +1212,28 @@ namespace JsonPolimi
                 }
             }
         }
+
+        internal void FixPianoStudi()
+        {
+            for (int i=0; i<this._l.Count; i++)
+            {
+                if (string.IsNullOrEmpty(this._l[i].PianoDiStudi))
+                {
+                    ;
+                }
+                else
+                {
+                    this._l[i].PianoDiStudi = this._l[i].PianoDiStudi.Trim();
+
+                    if (this._l[i].PianoDiStudi.EndsWith(":"))
+                    {
+                        this._l[i].PianoDiStudi = this._l[i].PianoDiStudi.Substring(0, this._l[i].PianoDiStudi.Length - 1);
+                    }
+
+                }
+
+                this._l[i].RicreaId();
+            }
+        }
     }
 }

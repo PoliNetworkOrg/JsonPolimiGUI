@@ -230,6 +230,15 @@ namespace JsonPolimi
                 g.IDCorsoPolimi = null;
             }
 
+            try
+            {
+                g.PianoDiStudi = i["pianostudi"].ToString();
+            }
+            catch
+            {
+                g.PianoDiStudi = null;
+            }
+
             var data = i["LastUpdateInviteLinkTime"].ToString();
             try
             {
@@ -1868,6 +1877,11 @@ namespace JsonPolimi
                 Variabili.L = new ListaGruppo();
 
             Variabili.L.Fix_link_IDCorsi_se_ce_uno_che_ha_il_link_con_id_corso_uguale();
+        }
+
+        private void button18_Click(object sender, EventArgs e)
+        {
+            Variabili.L.FixPianoStudi();
         }
     }
 }

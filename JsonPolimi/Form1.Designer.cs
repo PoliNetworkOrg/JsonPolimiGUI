@@ -47,6 +47,7 @@
             this.button10 = new System.Windows.Forms.Button();
             this.button15 = new System.Windows.Forms.Button();
             this.button17 = new System.Windows.Forms.Button();
+            this.button18 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -141,6 +142,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button18);
             this.groupBox2.Controls.Add(this.button17);
             this.groupBox2.Controls.Add(this.button16);
             this.groupBox2.Controls.Add(this.button14);
@@ -258,12 +260,23 @@
             this.button17.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button17.Location = new System.Drawing.Point(6, 220);
             this.button17.Name = "button17";
-            this.button17.Size = new System.Drawing.Size(521, 55);
+            this.button17.Size = new System.Drawing.Size(278, 77);
             this.button17.TabIndex = 14;
             this.button17.Text = "Nei gruppi con IDCORSO simile, se c\'è qualcuno che ha il link, lo si mette uguale" +
     " [quelli in ram]";
             this.button17.UseVisualStyleBackColor = true;
             this.button17.Click += new System.EventHandler(this.button17_Click);
+            // 
+            // button18
+            // 
+            this.button18.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button18.Location = new System.Drawing.Point(290, 220);
+            this.button18.Name = "button18";
+            this.button18.Size = new System.Drawing.Size(237, 77);
+            this.button18.TabIndex = 15;
+            this.button18.Text = "Fix piano studi in ram";
+            this.button18.UseVisualStyleBackColor = true;
+            this.button18.Click += new System.EventHandler(this.button18_Click);
             // 
             // Form1
             // 
@@ -313,6 +326,7 @@
         private System.Windows.Forms.Button button15;
         private System.Windows.Forms.Button button16;
         private System.Windows.Forms.Button button17;
+        private System.Windows.Forms.Button button18;
     }
 }
 
