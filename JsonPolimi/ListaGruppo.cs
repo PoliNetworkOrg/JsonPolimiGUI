@@ -1075,10 +1075,10 @@ namespace JsonPolimi
             if (r.AnnoCorsoStudio == null)
                 r.AnnoCorsoStudio = a2.AnnoCorsoStudio;
 
-            if (r.PianoDiStudi == null)
+            if (string.IsNullOrEmpty(r.PianoDiStudi))
                 r.PianoDiStudi = a2.PianoDiStudi;
 
-            if (r.NomeCorso == null)
+            if (string.IsNullOrEmpty(r.NomeCorso))
                 r.NomeCorso = a2.NomeCorso;
 
             if (r.GruppoTabellaInsegnamenti == null)

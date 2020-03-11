@@ -145,6 +145,11 @@ namespace JsonPolimi
 
         private string CreaId()
         {
+            if (string.IsNullOrEmpty(PianoDiStudi))
+            {
+                ;
+            }
+
             return Platform + "/" + 
                 Year + "/" +
                 Office + "/" +

@@ -752,7 +752,7 @@ namespace JsonPolimi
 
             List<Gruppo> L2 = GetGruppiFromDocument(doc, PLAT2);
 
-            if (string.IsNullOrEmpty(pianostudi2))
+            if (string.IsNullOrEmpty(pianostudi2) || pianostudi2.Length < 5)
             {
                 ;
             }
