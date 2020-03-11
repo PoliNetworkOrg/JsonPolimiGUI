@@ -81,12 +81,29 @@ namespace JsonPolimi
             if (o.Count < 2)
             {
                 var s2 = o[0].Split(' ');
+
+                foreach (var x1 in s2)
+                {
+                    if (x1.StartsWith("(") && x1.EndsWith("),"))
+                    {
+                        string s3 = x1.Substring(0, x1.Length - 1);
+                        return getCCSCode2(s3);
+                    }
+                    else if (x1.StartsWith("(") && x1.EndsWith(")"))
+                        return getCCSCode2(x1);
+                }
+
                 return getCCSCode2(s2[s2.Length - 1]);
             }
 
             foreach (var x1 in o)
             {
-                if (x1.StartsWith("(") && x1.EndsWith(")"))
+                if (x1.StartsWith("(") && x1.EndsWith("),"))
+                {
+                    string s3 = x1.Substring(0, x1.Length - 1);
+                    return getCCSCode2(s3);
+                }
+                else if (x1.StartsWith("(") && x1.EndsWith(")"))
                     return getCCSCode2(x1);
             }
 
