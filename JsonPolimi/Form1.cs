@@ -751,10 +751,17 @@ namespace JsonPolimi
             Form1.pianostudi2 = null;
 
             List<Gruppo> L2 = GetGruppiFromDocument(doc, PLAT2);
+
+            if (string.IsNullOrEmpty(pianostudi2))
+            {
+                ;
+            }
+
             for (int i = 0; i < L2.Count; i++)
             {
                 L2[i].AggiungiInfoDaManifesto(infoManifesto);
                 L2[i].CCS = new ListaStringhePerJSON( infoManifesto.corso_di_studio);
+                
                 L2[i].PianoDiStudi = pianostudi2;
             }
 
