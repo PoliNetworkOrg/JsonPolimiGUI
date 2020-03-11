@@ -84,7 +84,13 @@ namespace JsonPolimi
                 return getCCSCode2(s2[s2.Length - 1]);
             }
 
-            return getCCSCode2(o[1]);
+            foreach (var x1 in o)
+            {
+                if (x1.StartsWith("(") && x1.EndsWith(")"))
+                    return getCCSCode2(x1);
+            }
+
+            return null;
 
         }
 

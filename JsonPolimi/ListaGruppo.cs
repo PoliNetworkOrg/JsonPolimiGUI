@@ -1182,5 +1182,30 @@ namespace JsonPolimi
                 _l[i].RicreaId();
             }
         }
+
+        internal void Fix_link_IDCorsi_se_ce_uno_che_ha_il_link_con_id_corso_uguale()
+        {
+            for (int i = 0; i < _l.Count; i++)
+            {
+                for (int j =0; j< this._l.Count; j++)
+                {
+                    if (
+                        i!=j &&
+                        !string.IsNullOrEmpty(this._l[i].IDCorsoPolimi) &&
+                        !string.IsNullOrEmpty(this._l[j].IDCorsoPolimi) &&
+                        this._l[i].IDCorsoPolimi == this._l[j].IDCorsoPolimi &&
+                        string.IsNullOrEmpty(this._l[i].IdLink) &&
+                        !string.IsNullOrEmpty(this._l[j].IdLink) 
+
+                        )
+                    {
+                        this._l[i].IdLink = this._l[j].IdLink;
+                        this._l[i].Platform = this._l[j].Platform;
+
+                        this._l[i].RicreaId();
+                    }
+                }
+            }
+        }
     }
 }

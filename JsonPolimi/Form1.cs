@@ -1854,5 +1854,13 @@ namespace JsonPolimi
         {
             Importa2(Chiedi.NO_DIVERSI);
         }
+
+        private void button17_Click(object sender, EventArgs e)
+        {
+            if (Variabili.L == null)
+                Variabili.L = new ListaGruppo();
+
+            Variabili.L.Fix_link_IDCorsi_se_ce_uno_che_ha_il_link_con_id_corso_uguale();
+        }
     }
 }

@@ -37,6 +37,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button7 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button16 = new System.Windows.Forms.Button();
             this.button14 = new System.Windows.Forms.Button();
             this.button13 = new System.Windows.Forms.Button();
             this.button12 = new System.Windows.Forms.Button();
@@ -45,7 +46,7 @@
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
             this.button15 = new System.Windows.Forms.Button();
-            this.button16 = new System.Windows.Forms.Button();
+            this.button17 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -140,6 +141,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button17);
             this.groupBox2.Controls.Add(this.button16);
             this.groupBox2.Controls.Add(this.button14);
             this.groupBox2.Controls.Add(this.button13);
@@ -151,6 +153,17 @@
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Altro";
+            // 
+            // button16
+            // 
+            this.button16.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button16.Location = new System.Drawing.Point(7, 159);
+            this.button16.Name = "button16";
+            this.button16.Size = new System.Drawing.Size(521, 55);
+            this.button16.TabIndex = 13;
+            this.button16.Text = "Load gruppi polimi da manifesto\r\n (cartella) [load/importa] [nel dubbio NO]";
+            this.button16.UseVisualStyleBackColor = true;
+            this.button16.Click += new System.EventHandler(this.Button16_Click);
             // 
             // button14
             // 
@@ -240,16 +253,17 @@
             this.button15.UseVisualStyleBackColor = true;
             this.button15.Click += new System.EventHandler(this.Button15_Click);
             // 
-            // button16
+            // button17
             // 
-            this.button16.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button16.Location = new System.Drawing.Point(7, 159);
-            this.button16.Name = "button16";
-            this.button16.Size = new System.Drawing.Size(521, 55);
-            this.button16.TabIndex = 13;
-            this.button16.Text = "Load gruppi polimi da manifesto\r\n (cartella) [load/importa] [nel dubbio NO]";
-            this.button16.UseVisualStyleBackColor = true;
-            this.button16.Click += new System.EventHandler(this.Button16_Click);
+            this.button17.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button17.Location = new System.Drawing.Point(6, 220);
+            this.button17.Name = "button17";
+            this.button17.Size = new System.Drawing.Size(521, 55);
+            this.button17.TabIndex = 14;
+            this.button17.Text = "Nei gruppi con IDCORSO simile, se c\'è qualcuno che ha il link, lo si mette uguale" +
+    " [quelli in ram]";
+            this.button17.UseVisualStyleBackColor = true;
+            this.button17.Click += new System.EventHandler(this.button17_Click);
             // 
             // Form1
             // 
@@ -298,6 +312,7 @@
         private System.Windows.Forms.Button button14;
         private System.Windows.Forms.Button button15;
         private System.Windows.Forms.Button button16;
+        private System.Windows.Forms.Button button17;
     }
 }
 
