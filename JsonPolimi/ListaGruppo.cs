@@ -122,10 +122,44 @@ namespace JsonPolimi
                 if (i1 != 0)
                     return i1;
 
-                return CompareOrdinal(a.PermanentId, b.PermanentId);
+                i1 =  CompareOrdinal(a.PermanentId, b.PermanentId);
+                if (i1 != 0)
+                    return i1;
+
+                i1 = CompareOrdinal2(a.CCS, b.CCS);
+                if (i1 != 0)
+                    return i1;
+
+                i1 = CompareOrdinal(a.PianoDiStudi, b.PianoDiStudi);
+                if (i1 != 0)
+                    return i1;
+
+                i1 =  CompareInt(a.AnnoCorsoStudio, b.AnnoCorsoStudio);
+                if (i1 != 0)
+                    return i1;
+
+                return 0;
             }
 
-            
+            private int CompareInt(int? annoCorsoStudio1, int? annoCorsoStudio2)
+            {
+                if (annoCorsoStudio1 == null && annoCorsoStudio2 == null)
+                    return 0;
+
+                if (annoCorsoStudio1 == null)
+                    return -1;
+
+                if (annoCorsoStudio2 == null)
+                    return +1;
+
+                if (annoCorsoStudio1 == annoCorsoStudio2)
+                    return 0;
+
+                if (annoCorsoStudio1 > annoCorsoStudio2)
+                    return +1;
+
+                return -1;
+            }
         }
 
         public static int CompareOrdinal2(ListaStringhePerJSON office1, ListaStringhePerJSON office2)
