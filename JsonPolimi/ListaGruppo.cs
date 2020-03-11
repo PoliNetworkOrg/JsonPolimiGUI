@@ -1078,6 +1078,11 @@ namespace JsonPolimi
             if (string.IsNullOrEmpty(r.PianoDiStudi))
                 r.PianoDiStudi = a2.PianoDiStudi;
 
+            if (r.PianoDiStudi != null && r.PianoDiStudi.Length <5)
+            {
+                ;
+            }
+
             if (string.IsNullOrEmpty(r.NomeCorso))
                 r.NomeCorso = a2.NomeCorso;
 
