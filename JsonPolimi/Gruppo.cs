@@ -188,44 +188,48 @@ namespace JsonPolimi
             return c.Contains("for") ? "ENG" : defaultLanguage;
         }
 
-        internal string To_json(CheckGruppo v)
+        internal string To_json(CheckGruppo.E v)
         {
             var json = "{";
 
-            json += "\"class\":";
-            json += StringCheckNull(EscapeQuotes(Classe));
-            json += ",\"office\":";
-            json += StringCheckNull(Office);
-            json += ",\"id\":";
-            json += StringCheckNull(Id);
-            json += ",\"degree\":";
-            json += StringCheckNull(Degree);
-            json += ",\"school\":";
-            json += StringCheckNull(School);
-            json += ",\"annocorso\":";
-            json += StringCheckNull(AnnoCorsoStudio);
-            json += ",\"nomecorso\":";
-            json += StringCheckNull(NomeCorso);
-            json += ",\"idcorso\":";
-            json += StringCheckNull(IDCorsoPolimi);
-            json += ",\"pianostudi\":";
-            json += StringCheckNull(PianoDiStudi);
-            json += ",\"id_link\":";
-            json += StringCheckNull(IdLink);
-            json += ",\"language\":";
-            json += StringCheckNull(Language);
-            json += ",\"type\":";
-            json += StringCheckNull(Tipo);
-            json += ",\"year\":";
-            json += StringCheckNull(Year);
-            json += ",\"ccs\":";
-            json += StringCheckNull(this.CCS);
-            json += ",\"permanentId\":";
-            json += StringCheckNull(PermanentId);
-            json += ",\"LastUpdateInviteLinkTime\":";
-            json += StringCheckNull(this.GetTelegramTime());
-            json += ",\"platform\":";
-            json += StringCheckNull(Platform);
+            if (v == CheckGruppo.E.TUTTO)
+            {
+
+                json += "\"class\":";
+                json += StringCheckNull(EscapeQuotes(Classe));
+                json += ",\"office\":";
+                json += StringCheckNull(Office);
+                json += ",\"id\":";
+                json += StringCheckNull(Id);
+                json += ",\"degree\":";
+                json += StringCheckNull(Degree);
+                json += ",\"school\":";
+                json += StringCheckNull(School);
+                json += ",\"annocorso\":";
+                json += StringCheckNull(AnnoCorsoStudio);
+                json += ",\"nomecorso\":";
+                json += StringCheckNull(NomeCorso);
+                json += ",\"idcorso\":";
+                json += StringCheckNull(IDCorsoPolimi);
+                json += ",\"pianostudi\":";
+                json += StringCheckNull(PianoDiStudi);
+                json += ",\"id_link\":";
+                json += StringCheckNull(IdLink);
+                json += ",\"language\":";
+                json += StringCheckNull(Language);
+                json += ",\"type\":";
+                json += StringCheckNull(Tipo);
+                json += ",\"year\":";
+                json += StringCheckNull(Year);
+                json += ",\"ccs\":";
+                json += StringCheckNull(this.CCS);
+                json += ",\"permanentId\":";
+                json += StringCheckNull(PermanentId);
+                json += ",\"LastUpdateInviteLinkTime\":";
+                json += StringCheckNull(this.GetTelegramTime());
+                json += ",\"platform\":";
+                json += StringCheckNull(Platform);
+            }
 
             json += "}";
 
@@ -499,7 +503,7 @@ namespace JsonPolimi
 
         public override string ToString()
         {
-            return To_json() + " " + base.ToString();
+            return To_json(CheckGruppo.E.TUTTO) + " " + base.ToString();
         }
 
         public void Merge(Gruppo gruppo)

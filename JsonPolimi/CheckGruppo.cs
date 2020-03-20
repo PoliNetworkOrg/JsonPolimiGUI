@@ -2,15 +2,13 @@
 {
     internal class CheckGruppo
     {
-        public const int VECCHIA_RICERCA = 0;
-        public const int NUOVA_RICERCA = 1;
-        public const int TUTTO = 2;
-
 
         //value
-        public int n;
+        public E n;
 
-        public CheckGruppo(int a)
+        public enum E { VECCHIA_RICERCA, NUOVA_RICERCA, TUTTO }
+
+        public CheckGruppo(E a)
         {
             this.n = a;
         }

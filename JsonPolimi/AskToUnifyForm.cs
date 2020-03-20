@@ -13,7 +13,7 @@ namespace JsonPolimi
 {
     public partial class AskToUnifyForm : Form
     {
-        private Tuple<SomiglianzaClasse, Gruppo> d;
+        private readonly Tuple<SomiglianzaClasse, Gruppo> d;
         public bool? r = null;
 
         public AskToUnifyForm()
@@ -32,31 +32,31 @@ namespace JsonPolimi
             textBox2.Text = d.Item1.a1.Classe;
             textBox3.Text = d.Item1.a2.Classe;
 
-            textBox1.Text = d.Item1.a1.To_json();
-            textBox4.Text = d.Item1.a2.To_json();
+            textBox1.Text = d.Item1.a1.To_json(CheckGruppo.E.TUTTO);
+            textBox4.Text = d.Item1.a2.To_json(CheckGruppo.E.TUTTO);
 
             linkLabel1.Text = "https://t.me/joinchat/" + d.Item1.a1.IdLink;
             linkLabel2.Text = "https://t.me/joinchat/" + d.Item1.a2.IdLink;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             r = true;
             Close();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             r = false;
             Close();
         }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start(linkLabel1.Text);
         }
 
-        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start(linkLabel2.Text);
         }

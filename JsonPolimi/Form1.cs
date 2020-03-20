@@ -317,7 +317,7 @@ namespace JsonPolimi
             Refresh_Tabella();
         }
 
-        private void Button3_Click(int i)
+        private void Button3_Click(CheckGruppo.E i)
         {
             Salva_Generico(new CheckGruppo(i));
         }
@@ -347,7 +347,7 @@ namespace JsonPolimi
                     json += '"';
                     json += elem.Id;
                     json += '"' + ":";
-                    json += elem.To_json(v);
+                    json += elem.To_json(v.n);
                     json += ',';
                 }
             }
@@ -367,7 +367,7 @@ namespace JsonPolimi
                 if (tenere)
                 {
                     json += '\n';
-                    json += elem.To_json(v);
+                    json += elem.To_json(v.n);
                     json += ',';
                 }
             }
@@ -386,15 +386,19 @@ namespace JsonPolimi
         {
             switch(v.n)
             {
-                case 0:
+                case CheckGruppo.E.VECCHIA_RICERCA:
                     {
                         break;
                     }
-                case 1:
+                case CheckGruppo.E.NUOVA_RICERCA:
                     {
                         if (Empty(elem.CCS))
                             return false;
 
+                        break;
+                    }
+                case CheckGruppo.E.TUTTO:
+                    {
                         break;
                     }
             }
@@ -1961,19 +1965,19 @@ namespace JsonPolimi
 
                 case 1:
                     {
-                        Button3_Click(CheckGruppo.VECCHIA_RICERCA);
+                        Button3_Click(CheckGruppo.E.VECCHIA_RICERCA);
                         return;
                     }
 
                 case 2:
                     {
-                        Button3_Click(CheckGruppo.NUOVA_RICERCA);
+                        Button3_Click(CheckGruppo.E.NUOVA_RICERCA);
                         return;
                     }
 
                 case 3:
                     {
-                        Button3_Click(CheckGruppo.TUTTO);
+                        Button3_Click(CheckGruppo.E.TUTTO);
                         return;
                     }
             }
