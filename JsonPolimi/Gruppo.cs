@@ -192,43 +192,105 @@ namespace JsonPolimi
         {
             var json = "{";
 
-            if (v == CheckGruppo.E.TUTTO)
+            switch (v)
             {
+                case CheckGruppo.E.TUTTO:
+                    {
+                        json += "\"class\":";
+                        json += StringCheckNull(EscapeQuotes(Classe));
+                        json += ",\"office\":";
+                        json += StringCheckNull(Office);
+                        json += ",\"id\":";
+                        json += StringCheckNull(Id);
+                        json += ",\"degree\":";
+                        json += StringCheckNull(Degree);
+                        json += ",\"school\":";
+                        json += StringCheckNull(School);
+                        json += ",\"annocorso\":";
+                        json += StringCheckNull(AnnoCorsoStudio);
+                        json += ",\"nomecorso\":";
+                        json += StringCheckNull(NomeCorso);
+                        json += ",\"idcorso\":";
+                        json += StringCheckNull(IDCorsoPolimi);
+                        json += ",\"pianostudi\":";
+                        json += StringCheckNull(PianoDiStudi);
+                        json += ",\"id_link\":";
+                        json += StringCheckNull(IdLink);
+                        json += ",\"language\":";
+                        json += StringCheckNull(Language);
+                        json += ",\"type\":";
+                        json += StringCheckNull(Tipo);
+                        json += ",\"year\":";
+                        json += StringCheckNull(Year);
+                        json += ",\"ccs\":";
+                        json += StringCheckNull(CCS);
+                        json += ",\"permanentId\":";
+                        json += StringCheckNull(PermanentId);
+                        json += ",\"LastUpdateInviteLinkTime\":";
+                        json += StringCheckNull(GetTelegramTime());
+                        json += ",\"platform\":";
+                        json += StringCheckNull(Platform);
 
-                json += "\"class\":";
-                json += StringCheckNull(EscapeQuotes(Classe));
-                json += ",\"office\":";
-                json += StringCheckNull(Office);
-                json += ",\"id\":";
-                json += StringCheckNull(Id);
-                json += ",\"degree\":";
-                json += StringCheckNull(Degree);
-                json += ",\"school\":";
-                json += StringCheckNull(School);
-                json += ",\"annocorso\":";
-                json += StringCheckNull(AnnoCorsoStudio);
-                json += ",\"nomecorso\":";
-                json += StringCheckNull(NomeCorso);
-                json += ",\"idcorso\":";
-                json += StringCheckNull(IDCorsoPolimi);
-                json += ",\"pianostudi\":";
-                json += StringCheckNull(PianoDiStudi);
-                json += ",\"id_link\":";
-                json += StringCheckNull(IdLink);
-                json += ",\"language\":";
-                json += StringCheckNull(Language);
-                json += ",\"type\":";
-                json += StringCheckNull(Tipo);
-                json += ",\"year\":";
-                json += StringCheckNull(Year);
-                json += ",\"ccs\":";
-                json += StringCheckNull(this.CCS);
-                json += ",\"permanentId\":";
-                json += StringCheckNull(PermanentId);
-                json += ",\"LastUpdateInviteLinkTime\":";
-                json += StringCheckNull(this.GetTelegramTime());
-                json += ",\"platform\":";
-                json += StringCheckNull(Platform);
+                        break;
+                    }
+                case CheckGruppo.E.VECCHIA_RICERCA:
+                    {
+                        json += "\"class\":";
+                        json += StringCheckNull(EscapeQuotes(Classe));
+                        json += ",\"office\":";
+                        json += StringCheckNull(Office);
+                        json += ",\"id\":";
+                        json += StringCheckNull(Id);
+                        json += ",\"degree\":";
+                        json += StringCheckNull(Degree);
+                        json += ",\"school\":";
+                        json += StringCheckNull(School);
+                        json += ",\"id_link\":";
+                        json += StringCheckNull(IdLink);
+                        json += ",\"language\":";
+                        json += StringCheckNull(Language);
+                        json += ",\"type\":";
+                        json += StringCheckNull(Tipo);
+                        json += ",\"year\":";
+                        json += StringCheckNull(Year);
+                        json += ",\"platform\":";
+                        json += StringCheckNull(Platform);
+                        break;
+                    }
+                case CheckGruppo.E.NUOVA_RICERCA:
+                    {
+                        json += "\"class\":";
+                        json += StringCheckNull(EscapeQuotes(Classe));
+                        json += ",\"office\":";
+                        json += StringCheckNull(Office);
+                        json += ",\"id\":";
+                        json += StringCheckNull(Id);
+                        json += ",\"degree\":";
+                        json += StringCheckNull(Degree);
+                        json += ",\"school\":";
+                        json += StringCheckNull(School);
+                        json += ",\"annocorso\":";
+                        json += StringCheckNull(AnnoCorsoStudio);
+                        json += ",\"nomecorso\":";
+                        json += StringCheckNull(NomeCorso);
+                        json += ",\"idcorso\":";
+                        json += StringCheckNull(IDCorsoPolimi);
+                        json += ",\"pianostudi\":";
+                        json += StringCheckNull(PianoDiStudi);
+                        json += ",\"id_link\":";
+                        json += StringCheckNull(IdLink);
+                        json += ",\"language\":";
+                        json += StringCheckNull(Language);
+                        json += ",\"type\":";
+                        json += StringCheckNull(Tipo);
+                        json += ",\"year\":";
+                        json += StringCheckNull(Year);
+                        json += ",\"ccs\":";
+                        json += StringCheckNull(CCS);
+                        json += ",\"platform\":";
+                        json += StringCheckNull(Platform);
+                        break;
+                    }
             }
 
             json += "}";
