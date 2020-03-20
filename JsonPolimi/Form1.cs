@@ -317,7 +317,12 @@ namespace JsonPolimi
             Refresh_Tabella();
         }
 
-        private void Button3_Click(object sender, EventArgs e)
+        private void Button3_Click(int i)
+        {
+            Salva_Generico(new CheckGruppo(i));
+        }
+
+        private void Salva_Generico(CheckGruppo v)
         {
             if (Variabili.L == null)
             {
@@ -335,15 +340,21 @@ namespace JsonPolimi
             {
                 var elem = Variabili.L.GetElem(i);
 
-                json += '\n';
-                json += '"';
-                json += elem.Id;
-                json += '"' + ":";
+                bool tenere = DoCheckGruppo(v, elem);
+                if (tenere)
+                {
+                    json += '\n';
+                    json += '"';
+                    json += elem.Id;
+                    json += '"' + ":";
+                    json += elem.To_json(v);
+                    json += ',';
+                }
+            }
 
-                json += elem.To_json();
-
-                if (i != n - 1)
-                    json += ",";
+            if (json.EndsWith(","))
+            {
+                json = json.Substring(0, json.Length - 1);
             }
 
             json += "},";
@@ -352,17 +363,51 @@ namespace JsonPolimi
             for (var i = 0; i < n; i++)
             {
                 var elem = Variabili.L.GetElem(i);
+                bool tenere = DoCheckGruppo(v, elem);
+                if (tenere)
+                {
+                    json += '\n';
+                    json += elem.To_json(v);
+                    json += ',';
+                }
+            }
 
-                json += '\n';
-                json += elem.To_json();
-
-                if (i != n - 1)
-                    json += ",";
+            if (json.EndsWith(","))
+            {
+                json = json.Substring(0, json.Length - 1);
             }
 
             json += "]}";
 
             Salva(json);
+        }
+
+        private bool DoCheckGruppo(CheckGruppo v, Gruppo elem)
+        {
+            switch(v.n)
+            {
+                case 0:
+                    {
+                        break;
+                    }
+                case 1:
+                    {
+                        if (Empty(elem.CCS))
+                            return false;
+
+                        break;
+                    }
+            }
+
+            return true;
+        }
+
+        private bool Empty(ListaStringhePerJSON cCS)
+        {
+            if (cCS == null)
+                return true;
+
+            return cCS.IsEmpty();
         }
 
         private static void Salva(string json)
@@ -1733,7 +1778,9 @@ namespace JsonPolimi
             return null;
         }
 
+#pragma warning disable IDE0051 // Rimuovi i membri privati inutilizzati
         private HtmlNode GetGruppiFromDocument4(HtmlNode htmlNode)
+#pragma warning restore IDE0051 // Rimuovi i membri privati inutilizzati
         {
             if (htmlNode.ChildNodes.Count == 0)
                 return htmlNode;
@@ -1871,7 +1918,7 @@ namespace JsonPolimi
             Importa2(Chiedi.NO_DIVERSI);
         }
 
-        private void button17_Click(object sender, EventArgs e)
+        private void Button17_Click(object sender, EventArgs e)
         {
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
@@ -1879,9 +1926,57 @@ namespace JsonPolimi
             Variabili.L.Fix_link_IDCorsi_se_ce_uno_che_ha_il_link_con_id_corso_uguale();
         }
 
-        private void button18_Click(object sender, EventArgs e)
+        private void Button18_Click(object sender, EventArgs e)
         {
             Variabili.L.FixPianoStudi();
+        }
+
+        private void Button19_Click(object sender, EventArgs e)
+        {
+            List<string> L = new List<string>
+            {
+                "Bot telegram",
+                "Sito, ricerca vecchia",
+                "Sito, ricerca nuova",
+                "TUTTO"
+            };
+
+            AskFromList askFromList = new AskFromList(L);
+            askFromList.ShowDialog();
+
+            if (askFromList.r == null)
+            {
+                return;
+            }
+
+            int i = askFromList.r.Value;
+
+            switch (i)
+            {
+                case 0:
+                    {
+                        Button10_Click(null, null);
+                        return;
+                    }
+
+                case 1:
+                    {
+                        Button3_Click(CheckGruppo.VECCHIA_RICERCA);
+                        return;
+                    }
+
+                case 2:
+                    {
+                        Button3_Click(CheckGruppo.NUOVA_RICERCA);
+                        return;
+                    }
+
+                case 3:
+                    {
+                        Button3_Click(CheckGruppo.TUTTO);
+                        return;
+                    }
+            }
         }
     }
 }

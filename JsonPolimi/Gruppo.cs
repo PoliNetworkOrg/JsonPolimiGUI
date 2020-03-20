@@ -188,7 +188,7 @@ namespace JsonPolimi
             return c.Contains("for") ? "ENG" : defaultLanguage;
         }
 
-        internal string To_json()
+        internal string To_json(CheckGruppo v)
         {
             var json = "{";
 
