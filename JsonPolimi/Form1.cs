@@ -71,6 +71,8 @@ namespace JsonPolimi
             Variabili.L.Sort();
 
             ofd.Dispose();
+
+            MessageBox.Show("Finito!");
         }
 
         private static void Refresh_Tabella()
@@ -155,13 +157,19 @@ namespace JsonPolimi
                 Classe = i["class"].ToString(),
                 Degree = i["degree"].ToString()
             };
+
             try
             {
-                g.Platform = i["group_type"].ToString();
+                try
+                {
+                    g.Platform = i["group_type"].ToString();
+                }
+                catch
+                {
+                    g.Platform = i["platform"].ToString();
+                }
             }
-#pragma warning disable CS0168 // La variabile è dichiarata, ma non viene mai usata
-            catch (Exception)
-#pragma warning restore CS0168 // La variabile è dichiarata, ma non viene mai usata
+            catch
             {
                 g.Platform = i["platform"].ToString();
             }
