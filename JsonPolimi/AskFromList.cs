@@ -15,12 +15,15 @@ namespace JsonPolimi
         public int? r = null;
         public AskFromList(List<string> s)
         {
+            InitializeComponent();
+
+
             foreach (var s2 in s)
             {
                 listBox1.Items.Add(s2);
             }
 
-            InitializeComponent();
+
         }
 
         private void AskFromList_Load(object sender, EventArgs e)
