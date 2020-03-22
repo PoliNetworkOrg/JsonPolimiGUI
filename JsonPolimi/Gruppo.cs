@@ -33,7 +33,7 @@ namespace JsonPolimi
             ;
         }
 
-        internal void Aggiusta(bool aggiusta_anno)
+        internal void Aggiusta(bool aggiusta_anno, bool creaid)
         {
             Classe = string.IsNullOrEmpty(Classe) ? "" : Classe.Replace('\n', ' ');
 
@@ -73,7 +73,8 @@ namespace JsonPolimi
                     LastUpdateInviteLinkTime = DateTime.Now;
             }
 
-            Id = CreaId();
+            if (creaid)
+                Id = CreaId();
         }
 
         public static bool IsEmpty(List<string> office)
@@ -1127,7 +1128,7 @@ namespace JsonPolimi
                         NomeCorso = classe
                     };
                     g.IdLink = null;
-                    g.Aggiusta(false);
+                    g.Aggiusta(false, true);
                     if (g.IdLink != null)
                     {
                         ;

@@ -65,7 +65,7 @@ namespace JsonPolimi
             {
                 var i3 = i2.First;
 
-                Aggiungi(i3, false);
+                Aggiungi(i3, false, false);
             }
 
             Variabili.L.Sort();
@@ -150,7 +150,7 @@ namespace JsonPolimi
             Process.Start("temp.html");
         }
 
-        private static void Aggiungi(JToken i, bool aggiusta_Anno)
+        private static void Aggiungi(JToken i, bool aggiusta_Anno, bool merge)
         {
             var g = new Gruppo
             {
@@ -258,9 +258,9 @@ namespace JsonPolimi
                 throw e;
             }
 
-            g.Aggiusta(aggiusta_Anno);
+            g.Aggiusta(aggiusta_Anno, creaid : false);
 
-            Variabili.L.Add(g);
+            Variabili.L.Add(g, merge);
         }
 
         public static DateTime? DataFromString(string data)
@@ -604,7 +604,11 @@ namespace JsonPolimi
 
             var nomeOld = new Gruppo();
 
+
             foreach (var y in x.Tables)
+            {
+                int n2 = Variabili.L.GetCount();
+
                 foreach (var y2 in y.Rows)
                 {
                     //Console.WriteLine("----- NUOVA RIGA ------");
@@ -621,7 +625,7 @@ namespace JsonPolimi
 
                     g.Aggiusta();
 
-                    foreach (var g3 in g.L) Variabili.L.Add(g3);
+                    foreach (var g3 in g.L) Variabili.L.Add(g3, n2 != 0);
 
                     if (!string.IsNullOrEmpty(g.NomeOld.Classe)) nomeOld.Classe = g.NomeOld.Classe;
 
@@ -635,6 +639,7 @@ namespace JsonPolimi
 
                     if (!string.IsNullOrEmpty(g.NomeOld.Year)) nomeOld.Year = g.NomeOld.Year;
                 }
+            }
         }
 
         private void Button6_Click(object sender, EventArgs e)
@@ -672,6 +677,8 @@ namespace JsonPolimi
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
 
+            int n2 = Variabili.L.GetCount();
+
             foreach (var r in FileSalvare.Gruppi)
             {
                 if (r.Chat.Type == ChatType.Private)
@@ -690,8 +697,8 @@ namespace JsonPolimi
                     LastUpdateInviteLinkTime = r.LastUpdateInviteLinkTime,
                 };
 
-                g.Aggiusta(true);
-                Variabili.L.Add(g);
+                g.Aggiusta(true, true);
+                Variabili.L.Add(g, n2!=0);
             }
 
             Variabili.L.Sort();

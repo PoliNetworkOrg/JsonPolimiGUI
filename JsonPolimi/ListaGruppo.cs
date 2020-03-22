@@ -30,17 +30,24 @@ namespace JsonPolimi
             return _l[i];
         }
 
-        internal void Add(Gruppo g)
+        internal void Add(Gruppo g, bool merge)
         {
-            var (item1, item2) = Contiene(g);
+            if (merge == true)
+            {
+                var (item1, item2) = Contiene(g);
 
-            if (!item1)
+                if (!item1)
+                {
+                    _l.Add(g);
+                    return;
+                }
+
+                Merge(item2, g);
+            }
+            else
             {
                 _l.Add(g);
-                return;
             }
-
-            Merge(item2, g);
         }
 
         private void Merge(int i, Gruppo g)
@@ -270,14 +277,14 @@ namespace JsonPolimi
             if (_l[v1].LastUpdateInviteLinkTime == null)
                 _l[v1].LastUpdateInviteLinkTime = DateTime.Now;
 
-            _l[v1].Aggiusta(true);
+            _l[v1].Aggiusta(true, true);
         }
 
         internal void ProvaAdUnire()
         {
             for (int i = 0; i < this._l.Count; i++)
             {
-                this._l[i].Aggiusta(true);
+                this._l[i].Aggiusta(true, true);
                 for (int j = this._l.Count - 1; j >= 0; j--)
                 {
                     if (i != j)
@@ -1209,7 +1216,7 @@ namespace JsonPolimi
                 }
             }
 
-            r.Aggiusta(aggiusta_anno);
+            r.Aggiusta(aggiusta_anno, true);
 
             return r;
         }
