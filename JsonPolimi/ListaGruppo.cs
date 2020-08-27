@@ -748,6 +748,11 @@ namespace JsonPolimi
                         return SomiglianzaEnum.DIVERSI;
                     if (a2_cl.Contains("informatica") && !a1_cl.Contains("informatica"))
                         return SomiglianzaEnum.DIVERSI;
+
+                    if (a1_cl.Contains("monitoraggio") && !a2_cl.Contains("monitoraggio"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("monitoraggio") && !a1_cl.Contains("monitoraggio"))
+                        return SomiglianzaEnum.DIVERSI;
                 }
 
                 if (a1_cl.Contains("calcolatori") && a2_cl.Contains("calcolatori"))
@@ -793,6 +798,23 @@ namespace JsonPolimi
                     if (a2_cl.Contains("engineering") && !a1_cl.Contains("engineering"))
                         return SomiglianzaEnum.DIVERSI;
                 }
+
+                if (a1_cl.Contains("urbanistica") && a2_cl.Contains("urbanistica"))
+                {
+                    if (a1_cl.Contains("polimi") && !a2_cl.Contains("polimi"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("polimi") && !a1_cl.Contains("polimi"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("test") && a2_cl.Contains("test"))
+                {
+                    if (a1_cl.Contains("gruppo") && !a2_cl.Contains("gruppo"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("gruppo") && !a1_cl.Contains("gruppo"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
 
                 ;
             }

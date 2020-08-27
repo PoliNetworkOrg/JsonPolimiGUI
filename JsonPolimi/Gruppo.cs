@@ -383,10 +383,10 @@ namespace JsonPolimi
 
         public static void AggiungiInformazioneAmbigua(string v, ref InsiemeDiGruppi g)
         {
-            if (v == null)
+            if (string.IsNullOrEmpty(v))
                 return;
 
-            var vUpper = v.ToUpper();
+            var vUpper = v.ToUpper().Trim();
 
             //bisogna capire che tipo di informazione stiamo ricevendo
             if (v.StartsWith("https://", StringComparison.Ordinal) || v.StartsWith("http://", StringComparison.Ordinal))
@@ -505,7 +505,22 @@ namespace JsonPolimi
 
         private static void AggiungiNome(string v, ref InsiemeDiGruppi g)
         {
-            if (v == "<=") return;
+            if (v == "<=") 
+                return;
+
+            if (string.IsNullOrEmpty(v))
+                return;
+
+            if (v.Contains("<="))
+                return;
+
+            if (v.Contains("=>"))
+                return;
+
+            if (v.Contains(" vedasi PoliExtra"))
+                return;
+
+
 
             if (string.IsNullOrEmpty(g.GruppoDiBase.Classe))
             {

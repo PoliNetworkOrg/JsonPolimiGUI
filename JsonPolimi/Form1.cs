@@ -251,7 +251,18 @@ namespace JsonPolimi
                 g.PianoDiStudi = null;
             }
 
-            var data = i["LastUpdateInviteLinkTime"].ToString();
+            object data2 = i["LastUpdateInviteLinkTime"];
+
+            string data = null;
+            try
+            {
+                data = data2.ToString();
+            }
+            catch
+            {
+                ;
+            }
+
             try
             {
                 g.LastUpdateInviteLinkTime = DataFromString(data);
@@ -585,65 +596,45 @@ namespace JsonPolimi
 
         private static void Apri_ODS(string file, string year)
         {
-            Spreadsheet x;
-            try
-            {
-                x = new Spreadsheet();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-                return;
-            }
 
-            try
-            {
-                x.Open(file);
-            }
-            catch
-            {
-                MessageBox.Show("Non sono riuscito ad aprire il file!");
-                return;
-            }
+            var ods_read = ODS_Reader.Read2(file);
+
 
             var nomeOld = new Gruppo();
 
 
-            foreach (var y in x.Tables)
+
+            int n2 = Variabili.L.GetCount();
+
+            foreach (List<string> y2 in ods_read)
             {
-                int n2 = Variabili.L.GetCount();
+                //Console.WriteLine("----- NUOVA RIGA ------");
 
-                foreach (var y2 in y.Rows)
+                var g = new InsiemeDiGruppi { GruppoDiBase = { Year = year }, NomeOld = nomeOld };
+
+                foreach (string y3 in y2)
                 {
-                    //Console.WriteLine("----- NUOVA RIGA ------");
-
-                    var g = new InsiemeDiGruppi { GruppoDiBase = { Year = year }, NomeOld = nomeOld };
-
-                    foreach (var y3 in y2.Cells)
-                        foreach (var y4 in y3.Content)
-                            if (y4 is Paragraph y5)
-                                foreach (var y6 in y5.Content)
-                                    Gruppo.AggiungiInformazioneAmbigua(y6.ToString(), ref g);
-                            else
-                                Console.WriteLine(y4.ToString());
-
-                    g.Aggiusta();
-
-                    foreach (var g3 in g.L) Variabili.L.Add(g3, n2 != 0);
-
-                    if (!string.IsNullOrEmpty(g.NomeOld.Classe)) nomeOld.Classe = g.NomeOld.Classe;
-
-                    if (!string.IsNullOrEmpty(g.NomeOld.Language)) nomeOld.Language = g.NomeOld.Language;
-
-                    if (!string.IsNullOrEmpty(g.NomeOld.Degree)) nomeOld.Degree = g.NomeOld.Degree;
-
-                    if (!string.IsNullOrEmpty(g.NomeOld.School)) nomeOld.School = g.NomeOld.School;
-
-                    if (!Gruppo.IsEmpty(g.NomeOld.Office)) nomeOld.Office = g.NomeOld.Office;
-
-                    if (!string.IsNullOrEmpty(g.NomeOld.Year)) nomeOld.Year = g.NomeOld.Year;
+                    Gruppo.AggiungiInformazioneAmbigua(y3.ToString().Trim(), ref g);
                 }
+
+
+                g.Aggiusta();
+
+                foreach (var g3 in g.L) Variabili.L.Add(g3, n2 != 0);
+
+                if (!string.IsNullOrEmpty(g.NomeOld.Classe)) nomeOld.Classe = g.NomeOld.Classe;
+
+                if (!string.IsNullOrEmpty(g.NomeOld.Language)) nomeOld.Language = g.NomeOld.Language;
+
+                if (!string.IsNullOrEmpty(g.NomeOld.Degree)) nomeOld.Degree = g.NomeOld.Degree;
+
+                if (!string.IsNullOrEmpty(g.NomeOld.School)) nomeOld.School = g.NomeOld.School;
+
+                if (!Gruppo.IsEmpty(g.NomeOld.Office)) nomeOld.Office = g.NomeOld.Office;
+
+                if (!string.IsNullOrEmpty(g.NomeOld.Year)) nomeOld.Year = g.NomeOld.Year;
             }
+            
         }
 
         private void Button6_Click(object sender, EventArgs e)
