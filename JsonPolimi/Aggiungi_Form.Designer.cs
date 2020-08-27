@@ -59,6 +59,18 @@
             this.label19 = new System.Windows.Forms.Label();
             this.t_idlink = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.t_idcorsopolimi = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.t_ccs = new System.Windows.Forms.TextBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.t_annocorso = new System.Windows.Forms.TextBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.t_pianostudi = new System.Windows.Forms.TextBox();
+            this.label28 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -192,9 +204,9 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(12, 289);
+            this.button1.Location = new System.Drawing.Point(12, 387);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(610, 53);
+            this.button1.Size = new System.Drawing.Size(610, 30);
             this.button1.TabIndex = 16;
             this.button1.Text = "Aggiungi";
             this.button1.UseVisualStyleBackColor = true;
@@ -322,11 +334,123 @@
             this.label20.TabIndex = 28;
             this.label20.Text = "ID_LINK";
             // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(407, 282);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(43, 13);
+            this.label21.TabIndex = 33;
+            this.label21.Text = "051289";
+            // 
+            // t_idcorsopolimi
+            // 
+            this.t_idcorsopolimi.Location = new System.Drawing.Point(82, 279);
+            this.t_idcorsopolimi.Name = "t_idcorsopolimi";
+            this.t_idcorsopolimi.Size = new System.Drawing.Size(318, 20);
+            this.t_idcorsopolimi.TabIndex = 32;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(4, 282);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(72, 13);
+            this.label22.TabIndex = 31;
+            this.label22.Text = "IDCorsoPolimi";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(407, 308);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(139, 13);
+            this.label23.TabIndex = 36;
+            this.label23.Text = "Ingegneria Informatica (358)";
+            // 
+            // t_ccs
+            // 
+            this.t_ccs.Location = new System.Drawing.Point(82, 305);
+            this.t_ccs.Name = "t_ccs";
+            this.t_ccs.Size = new System.Drawing.Size(318, 20);
+            this.t_ccs.TabIndex = 35;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(48, 308);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(28, 13);
+            this.label24.TabIndex = 34;
+            this.label24.Text = "CCS";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(407, 334);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(13, 13);
+            this.label25.TabIndex = 39;
+            this.label25.Text = "2";
+            // 
+            // t_annocorso
+            // 
+            this.t_annocorso.Location = new System.Drawing.Point(82, 331);
+            this.t_annocorso.Name = "t_annocorso";
+            this.t_annocorso.Size = new System.Drawing.Size(318, 20);
+            this.t_annocorso.TabIndex = 38;
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(17, 334);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(59, 13);
+            this.label26.TabIndex = 37;
+            this.label26.Text = "AnnoCorso";
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(407, 360);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(217, 13);
+            this.label27.TabIndex = 42;
+            this.label27.Text = "IT1 - Ingegneria Informatica e Comunicazioni";
+            // 
+            // t_pianostudi
+            // 
+            this.t_pianostudi.Location = new System.Drawing.Point(82, 357);
+            this.t_pianostudi.Name = "t_pianostudi";
+            this.t_pianostudi.Size = new System.Drawing.Size(318, 20);
+            this.t_pianostudi.TabIndex = 41;
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(17, 360);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(58, 13);
+            this.label28.TabIndex = 40;
+            this.label28.Text = "PianoStudi";
+            // 
             // AggiungiForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(634, 354);
+            this.ClientSize = new System.Drawing.Size(634, 424);
+            this.Controls.Add(this.label27);
+            this.Controls.Add(this.t_pianostudi);
+            this.Controls.Add(this.label28);
+            this.Controls.Add(this.label25);
+            this.Controls.Add(this.t_annocorso);
+            this.Controls.Add(this.label26);
+            this.Controls.Add(this.label23);
+            this.Controls.Add(this.t_ccs);
+            this.Controls.Add(this.label24);
+            this.Controls.Add(this.label21);
+            this.Controls.Add(this.t_idcorsopolimi);
+            this.Controls.Add(this.label22);
             this.Controls.Add(this.label19);
             this.Controls.Add(this.t_idlink);
             this.Controls.Add(this.label20);
@@ -402,5 +526,17 @@
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.TextBox t_idlink;
         private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox t_idcorsopolimi;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.TextBox t_ccs;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.TextBox t_annocorso;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.TextBox t_pianostudi;
+        private System.Windows.Forms.Label label28;
     }
 }

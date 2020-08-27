@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace JsonPolimi
@@ -44,23 +45,45 @@ namespace JsonPolimi
                 Degree = t_degree.Text,
                 Id = t_id.Text,
                 Language = t_lang.Text,
-                Office = t_office.Text,
+                Office = new ListaStringhePerJSON( t_office.Text ),
                 Platform = t_platform.Text,
                 School = t_school.Text,
                 Tipo = t_type.Text,
                 Year = t_year.Text,
-                IdLink = t_idlink.Text
+                IdLink = t_idlink.Text,
+                AnnoCorsoStudio = ToInt(t_annocorso.Text),
+                CCS = new ListaStringhePerJSON(t_ccs.Text),
+                IDCorsoPolimi = t_idcorsopolimi.Text,
+                PianoDiStudi = t_pianostudi.Text
+
             };
 
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
 
-            g.Aggiusta();
+            g.Aggiusta(true, true);
 
             if (_edit == false) //new
-                Variabili.L.Add(g);
+                Variabili.L.Add(g, true);
             else
                 Close();
+        }
+
+        private int? ToInt(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return null;
+
+            try
+            {
+                return Convert.ToInt32(text);
+            }
+            catch
+            {
+                ;
+            }
+
+            return null;
         }
 
         private void Aggiungi_Form_Load(object sender, EventArgs e)
@@ -73,14 +96,35 @@ namespace JsonPolimi
             t_degree.Text = g.Degree;
             t_id.Text = g.Id;
             t_lang.Text = g.Language;
-            t_office.Text = g.Office;
+            t_office.Text =  StringCheckNull( g.Office);
             t_platform.Text = g.Platform;
             t_school.Text = g.School;
             t_type.Text = g.Tipo;
             t_year.Text = g.Year;
             t_idlink.Text = g.IdLink;
+            t_ccs.Text = g.CCS.StringNotNull();
+            t_idcorsopolimi.Text = g.IDCorsoPolimi;
+            t_annocorso.Text = ToText(g.AnnoCorsoStudio);
+            t_pianostudi.Text = g.PianoDiStudi;
 
             button1.Text = "Modifica";
         }
+
+        private string ToText(int? annoCorsoStudio)
+        {
+            if (annoCorsoStudio == null)
+                return "";
+
+            return annoCorsoStudio.Value.ToString();
+        }
+
+        private string StringCheckNull(ListaStringhePerJSON office)
+        {
+            if (office == null)
+                return null;
+
+            return office.StringNotNull();
+        }
+
     }
 }

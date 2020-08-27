@@ -41,13 +41,13 @@ namespace JsonPolimi
                 if (string.IsNullOrEmpty(L[i].School))
                     L[i].School = NomeOld.School;
 
-                if (string.IsNullOrEmpty(L[i].Office))
+                if (Gruppo.IsEmpty(L[i].Office))
                     L[i].Office = NomeOld.Office;
 
                 if (string.IsNullOrEmpty(L[i].Year))
                     L[i].Year = NomeOld.Year;
 
-                L[i].Aggiusta();
+                L[i].Aggiusta(true, true);
             }
         }
     }

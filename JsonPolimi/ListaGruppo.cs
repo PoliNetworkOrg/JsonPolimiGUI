@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using static System.String;
 
 namespace JsonPolimi
@@ -29,17 +30,24 @@ namespace JsonPolimi
             return _l[i];
         }
 
-        internal void Add(Gruppo g)
+        internal void Add(Gruppo g, bool merge)
         {
-            var (item1, item2) = Contiene(g);
+            if (merge == true)
+            {
+                var (item1, item2) = Contiene(g);
 
-            if (!item1)
+                if (!item1)
+                {
+                    _l.Add(g);
+                    return;
+                }
+
+                Merge(item2, g);
+            }
+            else
             {
                 _l.Add(g);
-                return;
             }
-
-            Merge(item2, g);
         }
 
         private void Merge(int i, Gruppo g)
@@ -109,7 +117,7 @@ namespace JsonPolimi
                 if (i1 != 0)
                     return i1;
 
-                i1 = CompareOrdinal(a.Office, b.Office);
+                i1 = CompareOrdinal2(a.Office, b.Office);
                 if (i1 != 0)
                     return i1;
 
@@ -121,7 +129,112 @@ namespace JsonPolimi
                 if (i1 != 0)
                     return i1;
 
-                return CompareOrdinal(a.PermanentId, b.PermanentId);
+                i1 =  CompareOrdinal(a.PermanentId, b.PermanentId);
+                if (i1 != 0)
+                    return i1;
+
+                i1 = CompareOrdinal2(a.CCS, b.CCS);
+                if (i1 != 0)
+                    return i1;
+
+                i1 = CompareOrdinal(a.PianoDiStudi, b.PianoDiStudi);
+                if (i1 != 0)
+                    return i1;
+
+                i1 =  CompareInt(a.AnnoCorsoStudio, b.AnnoCorsoStudio);
+                if (i1 != 0)
+                    return i1;
+
+                return 0;
+            }
+
+            private int CompareInt(int? annoCorsoStudio1, int? annoCorsoStudio2)
+            {
+                if (annoCorsoStudio1 == null && annoCorsoStudio2 == null)
+                    return 0;
+
+                if (annoCorsoStudio1 == null)
+                    return -1;
+
+                if (annoCorsoStudio2 == null)
+                    return +1;
+
+                if (annoCorsoStudio1 == annoCorsoStudio2)
+                    return 0;
+
+                if (annoCorsoStudio1 > annoCorsoStudio2)
+                    return +1;
+
+                return -1;
+            }
+        }
+
+        public static int CompareOrdinal2(ListaStringhePerJSON office1, ListaStringhePerJSON office2)
+        {
+            if (office1 == null && office2 == null)
+                return 0;
+
+            if (office1 == null)
+                return -1;
+
+            if (office2 == null)
+                return +1;
+
+            if (office1.StringNotNull() == office2.StringNotNull())
+                return 0;
+
+            return ListaGruppo.CompareOrdinal23(office1.o, office2.o);
+        }
+
+        private static int CompareOrdinal23(List<string> office1, List<string> office2)
+        {
+            if (office1 == null && office2 == null)
+                return 0;
+
+            if (office1 == null)
+                return -1;
+
+            if (office2 == null)
+                return 1;
+
+            office1.Sort();
+            office2.Sort();
+
+            if (office1.Count == office2.Count)
+            {
+                for (int i = 0; i < office1.Count; i++)
+                {
+                    int i1 = CompareOrdinal(office1[i].ToLower(), office2[i].ToLower());
+                    if (i1 != 0)
+                        return i1;
+                }
+
+                return 0;
+            }
+            else
+            {
+                if (office1.Count > office2.Count)
+                {
+                    for (int i = 0; i < office2.Count; i++)
+                    {
+                        int i1 = CompareOrdinal(office1[i], office2[i]);
+                        if (i1 != 0)
+                            return i1;
+                    }
+
+                    return 1;
+                }
+                else
+                {
+                    for (int i = 0; i < office1.Count; i++)
+                    {
+                        int i1 = CompareOrdinal(office1[i], office2[i]);
+                        if (i1 != 0)
+                            return i1;
+                    }
+
+                    return -1;
+                }
             }
         }
 
@@ -164,21 +277,33 @@ namespace JsonPolimi
             if (_l[v1].LastUpdateInviteLinkTime == null)
                 _l[v1].LastUpdateInviteLinkTime = DateTime.Now;
 
-            _l[v1].Aggiusta();
+            _l[v1].Aggiusta(true, true);
         }
 
         internal void ProvaAdUnire()
         {
             for (int i = 0; i < this._l.Count; i++)
             {
-                this._l[i].Aggiusta();
+                this._l[i].Aggiusta(true, true);
                 for (int j = this._l.Count - 1; j >= 0; j--)
                 {
                     if (i != j)
                     {
-                        Tuple<bool, Gruppo> r = Equivalenti(i, j);
-                        if (r.Item1)
+                        Tuple<SomiglianzaClasse, Gruppo> r = Equivalenti(i, j, true);
+
+                        bool do_that = false;
+                        if (r.Item1.somiglianzaEnum == SomiglianzaEnum.IDENTITICI)
                         {
+                            do_that = true;
+                        }
+                        else if (r.Item1.somiglianzaEnum == SomiglianzaEnum.DUBBIO)
+                        {
+                            //TODO: chiedere all'utente
+                        }
+
+
+                        if (do_that) 
+                        { 
                             if (i > j)
                             {
                                 this._l.RemoveAt(i);
@@ -206,21 +331,89 @@ namespace JsonPolimi
             }
         }
 
-        private Tuple<bool, Gruppo> Equivalenti(int i, int j)
+        private Tuple<SomiglianzaClasse, Gruppo> Equivalenti(int i, int j, bool aggiusta_Anno)
+        {
+            return Equivalenti2(i, this._l[j], aggiusta_Anno);
+            
+        }
+
+        private Tuple<SomiglianzaClasse, Gruppo> Equivalenti2(int i, Gruppo j, bool aggiusta_Annno)
         {
             Gruppo a1 = this._l[i];
-            Gruppo a2 = this._l[j];
+            Gruppo a2 = j;
+
+            SomiglianzaClasse eq = Equivalenti3(a1, a2);
+            if (eq.somiglianzaEnum == SomiglianzaEnum.IDENTITICI || eq.somiglianzaEnum == SomiglianzaEnum.DUBBIO)
+            {
+                ;
+                return new Tuple<SomiglianzaClasse, Gruppo>(eq, Unisci4(i, j, aggiusta_Annno));
+            }
+
+            return new Tuple<SomiglianzaClasse, Gruppo>(new SomiglianzaClasse(SomiglianzaEnum.DIVERSI), null);       
+        }
+
+        private SomiglianzaClasse Equivalenti3(Gruppo a1, Gruppo a2)
+        {
+            var r1 = Equivalenti5(a1, a2);
+
+            if (r1.somiglianzaEnum == SomiglianzaEnum.IDENTITICI)
+            {
+                if (string.IsNullOrEmpty(a1.IDCorsoPolimi) && !string.IsNullOrEmpty(a2.IDCorsoPolimi))
+                {
+                    r1.somiglianzaEnum = SomiglianzaEnum.DUBBIO;
+                }
+                else if (!string.IsNullOrEmpty(a1.IDCorsoPolimi) && string.IsNullOrEmpty(a2.IDCorsoPolimi))
+                {
+                    r1.somiglianzaEnum = SomiglianzaEnum.DUBBIO;
+                }
+            }
+
+            if (r1.somiglianzaEnum == SomiglianzaEnum.DUBBIO)
+            {
+                if (!string.IsNullOrEmpty(a1.Tipo) && !string.IsNullOrEmpty(a2.Tipo) &&
+                    a1.Tipo.ToLower() != a2.Tipo.ToLower())
+                {
+                    r1.somiglianzaEnum = SomiglianzaEnum.DIVERSI;
+                }
+            }
+
+            return r1;
+        }
+
+        private SomiglianzaClasse Equivalenti5(Gruppo a1, Gruppo a2)
+        {
+            if (!string.IsNullOrEmpty(a1.IDCorsoPolimi) && !string.IsNullOrEmpty(a2.IDCorsoPolimi) &&
+                a1.IDCorsoPolimi == a2.IDCorsoPolimi)
+            {
+                int i1 = (CompareOrdinal2(a1.CCS, a2.CCS));
+                if (i1 == 0)
+                {
+                    int i2 = CompareOrdinal(a1.PianoDiStudi, a2.PianoDiStudi);
+                    if (i2 == 0)
+                        return new SomiglianzaClasse(SomiglianzaEnum.IDENTITICI);
+                    else
+                        return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI, a1, a2);
+                }
+                else
+                    return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI, a1, a2);
+            }
+
+            if (!string.IsNullOrEmpty(a1.IDCorsoPolimi) && !string.IsNullOrEmpty(a2.IDCorsoPolimi) &&
+                a1.IDCorsoPolimi != a2.IDCorsoPolimi)
+            {
+                return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI);
+            }
 
             if (a1.PermanentId == a2.PermanentId && !String.IsNullOrEmpty(a1.PermanentId))
-                return Unisci(i, j);
+                return new SomiglianzaClasse(SomiglianzaEnum.IDENTITICI);
             else
             {
-                if (!String.IsNullOrEmpty(a1.PermanentId))
+                if (!string.IsNullOrEmpty(a1.PermanentId))
                 {
-                    if (!String.IsNullOrEmpty(a2.PermanentId))
+                    if (!string.IsNullOrEmpty(a2.PermanentId))
                     {
                         if (a1.PermanentId != a2.PermanentId)
-                            return new Tuple<bool, Gruppo>(false, null);
+                            return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
                     }
                 }
             }
@@ -244,7 +437,7 @@ namespace JsonPolimi
                 if (!String.IsNullOrEmpty(a2.Year))
                 {
                     if (a1.Year != a2.Year)
-                        return new Tuple<bool, Gruppo>(false, null);
+                        return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
                 }
             }
 
@@ -253,16 +446,17 @@ namespace JsonPolimi
                 if (!String.IsNullOrEmpty(a2.Platform))
                 {
                     if (a1.Platform != a2.Platform)
-                        return new Tuple<bool, Gruppo>(false, null);
+                        return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
                 }
             }
 
-            if (!String.IsNullOrEmpty(a1.Office))
+            if (!Gruppo.IsEmpty(a1.Office))
             {
-                if (!String.IsNullOrEmpty(a2.Office))
+                if (!Gruppo.IsEmpty(a2.Office))
                 {
-                    if (a1.Office != a2.Office)
-                        return new Tuple<bool, Gruppo>(false, null);
+                    int i1 = ListaGruppo.CompareOrdinal2(a1.Office, a2.Office);
+                    if (i1 != 0)
+                        return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI, a1, a2);
                 }
             }
 
@@ -271,15 +465,15 @@ namespace JsonPolimi
                 if (!String.IsNullOrEmpty(a2.Degree))
                 {
                     if (a1.Degree != a2.Degree)
-                        return new Tuple<bool, Gruppo>(false, null);
+                        return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
                 }
             }
 
             if (String.IsNullOrEmpty(a1.Classe))
-                return new Tuple<bool, Gruppo>(false, null);
+                return new SomiglianzaClasse( SomiglianzaEnum.DUBBIO,a1,a2);
 
             if (String.IsNullOrEmpty(a2.Classe))
-                return new Tuple<bool, Gruppo>(false, null);
+                return new SomiglianzaClasse( SomiglianzaEnum.DUBBIO,a1,a2);
 
             string[] s1 = a1.Classe.ToLower().Split(' ');
             string[] s2 = a2.Classe.ToLower().Split(' ');
@@ -290,45 +484,62 @@ namespace JsonPolimi
             if (sa1.Contains("magistrale"))
             {
                 if (String.IsNullOrEmpty(a2.Degree))
-                    return new Tuple<bool, Gruppo>(false, null);
+                    return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
                 if (a2.Degree.ToLower() != "lm")
-                    return new Tuple<bool, Gruppo>(false, null);
+                    return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
             }
             else if (sa1.Contains("triennale"))
             {
                 if (String.IsNullOrEmpty(a2.Degree))
-                    return new Tuple<bool, Gruppo>(false, null);
+                    return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
                 if (a2.Degree.ToLower() != "lt")
-                    return new Tuple<bool, Gruppo>(false, null);
+                    return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
             }
             else if (sa2.Contains("magistrale"))
             {
                 if (String.IsNullOrEmpty(a1.Degree))
-                    return new Tuple<bool, Gruppo>(false, null);
+                    return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
                 if (a1.Degree.ToLower() != "lm")
-                    return new Tuple<bool, Gruppo>(false, null);
+                    return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
             }
             else if (sa2.Contains("triennale"))
             {
                 if (String.IsNullOrEmpty(a1.Degree))
-                    return new Tuple<bool, Gruppo>(false, null);
+                    return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
                 if (a1.Degree.ToLower() != "lt")
-                    return new Tuple<bool, Gruppo>(false, null);
+                    return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
             }
 
-            if (NomiSimili(a1.Classe, a2.Classe))
-                return Unisci(i, j);
+            var b1 = (NomiSimili(a1.Classe, a2.Classe));
 
-            return new Tuple<bool, Gruppo>(false, null);
+            if (b1 == SomiglianzaEnum.DUBBIO)
+            {
+                return new SomiglianzaClasse( SomiglianzaEnum.DUBBIO, a1, a2);
+            }
+            else if (b1 == SomiglianzaEnum.IDENTITICI) 
+            { 
+                if (!string.IsNullOrEmpty(a1.IdLink) && string.IsNullOrEmpty(a2.IdLink) &&
+                        string.IsNullOrEmpty(a1.IDCorsoPolimi) && !string.IsNullOrEmpty(a2.IDCorsoPolimi))
+                {
+                    return new SomiglianzaClasse( SomiglianzaEnum.DUBBIO,a1,a2);
+                }
+
+                return new SomiglianzaClasse( SomiglianzaEnum.IDENTITICI);
+            }
+
+            return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
         }
 
-        private bool NomiSimili(string n1, string n2)
+        private SomiglianzaEnum NomiSimili(string n1, string n2)
         {
             if (n1.Length == 0 || n2.Length == 0)
-                return false;
+                return SomiglianzaEnum.DIVERSI;
 
             if (n1 == n2)
-                return true;
+                return SomiglianzaEnum.IDENTITICI;
+
+            if (n1.ToLower() == n2.ToLower())
+                return SomiglianzaEnum.DUBBIO;
 
             try
             {
@@ -373,7 +584,7 @@ namespace JsonPolimi
                 foreach (string no_merge_s in no_merge)
                 {
                     if (l1.Contains(no_merge_s) || l2.Contains(no_merge_s))
-                        return false;
+                        return SomiglianzaEnum.DIVERSI;
                 }
 
                 List<Tuple<string, string>> no_merge2 = new List<Tuple<string, string>>
@@ -384,9 +595,9 @@ namespace JsonPolimi
                 foreach (var no_merge_s2 in no_merge2)
                 {
                     if (l1.Contains(no_merge_s2.Item1) && l1.Contains(no_merge_s2.Item2))
-                        return false;
+                        return SomiglianzaEnum.DIVERSI;
                     if (l2.Contains(no_merge_s2.Item1) && l2.Contains(no_merge_s2.Item2))
-                        return false;
+                        return SomiglianzaEnum.DIVERSI;
                 }
 
                 //remove useless words
@@ -395,13 +606,13 @@ namespace JsonPolimi
                     "engineering", "in",
                     "generale", "gruppo", "for", "the",
                     "e", "delle", "dei",
-                    "ingegneria", "della", "-", "" };
+                    "ingegneria", "della", "-", "", "per", "le" };
                 TryRemove(ref l1, ref l2, useless);
 
                 bool? r2 = ManualCheck(n1, n2);
                 if (r2 != null)
                 {
-                    return r2.Value;
+                    return r2.Value ? SomiglianzaEnum.IDENTITICI : SomiglianzaEnum.DIVERSI;
                 }
 
                 //count how many words are in common
@@ -413,7 +624,15 @@ namespace JsonPolimi
                 }
 
                 int minimo = 0;
-                if (l1.Count + l2.Count > 5)
+                if (l1.Count + l2.Count > 14)
+                {
+                    minimo = 5;
+                }
+                else if (l1.Count + l2.Count > 11)
+                {
+                    minimo = 4;
+                }
+                else if (l1.Count + l2.Count > 5)
                 {
                     minimo = 2;
                 }
@@ -425,20 +644,24 @@ namespace JsonPolimi
                 if (quanti.Count == 1)
                 {
                     if (quanti[0] == "design")
-                        return false;
+                        return SomiglianzaEnum.DIVERSI;
                     if (quanti[0] == "architettura")
-                        return false;
+                        return SomiglianzaEnum.DIVERSI;
                 }
 
+                if (quanti.Count == minimo)
+                    return SomiglianzaEnum.DUBBIO;
+                if (quanti.Count == minimo + 1)
+                    return SomiglianzaEnum.DUBBIO;
                 if (quanti.Count >= minimo)
-                    return true;
+                    return SomiglianzaEnum.IDENTITICI;
             }
             catch
             {
-                return false;
+                return SomiglianzaEnum.DUBBIO;
             }
 
-            return false;
+            return SomiglianzaEnum.DIVERSI;
         }
 
         private void TryRename(ref List<string> l1, ref List<string> l2)
@@ -604,6 +827,12 @@ namespace JsonPolimi
             if (n1 == "fondamenti di elettronica" || n2 == "fondamenti di elettronica")
                 return false;
 
+            if (n1 == "fondamenti di informatica" || n2 == "fondamenti di comunicazioni e internet")
+                return false;
+
+            if (n1 == "fondamenti di automatica" || n2 == "fondamenti di informatica")
+                return false;
+
             if (n1 == "communication network design" || n2 == "communication network design")
                 return false;
 
@@ -658,6 +887,201 @@ namespace JsonPolimi
             return null;
         }
 
+        internal void Importa(List<Gruppo> l2, bool aggiusta_Anno, Chiedi chiedi2)
+        {
+            foreach (var l3 in l2)
+            {
+                Importa2(l3, aggiusta_Anno, chiedi2);
+            }
+        }
+
+        private void Importa2(Gruppo l3, bool aggiusta_anno, Chiedi chiedi2)
+        {
+            for (int i = 0; i < _l.Count; i++)
+            {
+                Tuple<SomiglianzaClasse, Gruppo> r = Equivalenti2(i, l3, aggiusta_anno);
+                bool do_that = false;
+                if (r.Item1.somiglianzaEnum == SomiglianzaEnum.IDENTITICI)
+                {
+                    do_that = true;
+                }
+                else if (r.Item1.somiglianzaEnum == SomiglianzaEnum.DUBBIO)
+                {
+                    bool to_show = true;
+
+                    //todo: E' TEMPORANEA QUESTA COSA
+                    if (r.Item1.a2 == null)
+                    {
+                        to_show = true;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Architettura"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Edile"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Urbanistica"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Design"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Architectural"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Edilizi"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Architecture"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Management"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Aerospaziale"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Biomedica"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Chimica"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Elettrica"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Elettronica"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Energetica"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Fisica"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Gestionale"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Aero"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Automation"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Prevenzione"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Materials"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Mathematical"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Mechanical"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Nuclear"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Space"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Civil"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Ambiente"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Matematica"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Meccanica"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Materiali"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Automazione"))
+                    {
+                        to_show = false;
+                    }
+                    else if (r.Item1.a2.CCS.Contains_In_Uno("Produzione"))
+                    {
+                        to_show = false;
+                    }
+                    //FINE TEMP
+
+                    if (chiedi2 == Chiedi.SI)
+                    {
+
+                        if (to_show)
+                        {
+                            AskToUnifyForm askToUnifyForm = new AskToUnifyForm(r)
+                            {
+                                StartPosition = FormStartPosition.CenterScreen
+                            };
+                            askToUnifyForm.ShowDialog();
+                            if (askToUnifyForm.r != null && askToUnifyForm.r.Value)
+                            {
+                                do_that = true;
+                            }
+                        }
+                        else
+                        {
+                            do_that = false;
+                        }
+                    }
+                    else if (chiedi2 == Chiedi.NO_DIVERSI)
+                    {
+                        do_that = false;
+                    }
+                    else if (chiedi2 == Chiedi.NO_IDENTICI)
+                    {
+                        do_that = true;
+                    }
+
+                }
+
+                if (do_that)
+                {
+                    this._l[i] = r.Item2;
+                    return;
+                }
+            }
+
+            ;
+            this._l.Add(l3);
+        }
+
         private void TryRemove(ref List<string> l1, ref List<string> l2, List<string> to_remove)
         {
             foreach (string s in to_remove)
@@ -682,7 +1106,7 @@ namespace JsonPolimi
             }
         }
 
-        private Tuple<bool, Gruppo> Unisci(int i, int j)
+        private Gruppo Unisci4(int i, Gruppo j, bool aggiusta_anno)
         {
             Gruppo g = Unisci2(i, j);
             if (g == null)
@@ -694,7 +1118,7 @@ namespace JsonPolimi
         private Gruppo Unisci2(int i, int j)
         {
             Gruppo a1 = this._l[i];
-            Gruppo a2 = this._l[j];
+            Gruppo a2 = j;
 
             if (!string.IsNullOrEmpty(a1.Classe) && !string.IsNullOrEmpty(a2.Classe))
             {
@@ -1349,22 +1773,22 @@ namespace JsonPolimi
                 if (!String.IsNullOrEmpty(a2.Classe))
                 {
                     bool done = false;
-                    if (String.IsNullOrEmpty(a1.Year))
+                    if (String.IsNullOrEmpty(r.Year))
                     {
                         if (!String.IsNullOrEmpty(a2.Year))
                         {
-                            if (a2.Classe.Length > a1.Classe.Length)
+                            if (a2.Classe.Length > r.Classe.Length)
                             {
-                                a1.Classe = a2.Classe;
+                                r.Classe = a2.Classe;
                                 done = true;
                             }
                         }
                     }
                     else if (String.IsNullOrEmpty(a2.Year))
                     {
-                        if (!String.IsNullOrEmpty(a1.Year))
+                        if (!String.IsNullOrEmpty(r.Year))
                         {
-                            if (a1.Classe.Length > a2.Classe.Length)
+                            if (r.Classe.Length > a2.Classe.Length)
                             {
                                 done = true;
                             }
@@ -1372,53 +1796,109 @@ namespace JsonPolimi
                     }
 
                     if (!done)
-                        a1.Classe += " " + a2.Classe;
+                        r.Classe += " " + a2.Classe;
                 }
             }
 
-            if (String.IsNullOrEmpty(a1.Degree))
-                a1.Degree = a2.Degree;
-            if (String.IsNullOrEmpty(a1.Id))
-                a1.Id = a2.Id;
-            if (String.IsNullOrEmpty(a1.IdLink))
-                a1.IdLink = a2.IdLink;
-            if (String.IsNullOrEmpty(a1.Language))
-                a1.Language = a2.Language;
-            if (String.IsNullOrEmpty(a1.Office))
-                a1.Office = a2.Office;
-            if (String.IsNullOrEmpty(a1.PermanentId))
-                a1.PermanentId = a2.PermanentId;
-            if (String.IsNullOrEmpty(a1.Platform))
-                a1.Platform = a2.Platform;
-            if (String.IsNullOrEmpty(a1.School))
-                a1.School = a2.School;
-            if (String.IsNullOrEmpty(a1.Tipo))
-                a1.Tipo = a2.Tipo;
-            if (String.IsNullOrEmpty(a1.Year))
-                a1.Year = a2.Year;
-            if (a1.LastUpdateInviteLinkTime == null)
-                a1.LastUpdateInviteLinkTime = a2.LastUpdateInviteLinkTime;
+            if (String.IsNullOrEmpty(r.Degree))
+                r.Degree = a2.Degree;
+            if (String.IsNullOrEmpty(r.Id))
+                r.Id = a2.Id;
+            if (String.IsNullOrEmpty(r.IdLink))
+                r.IdLink = a2.IdLink;
+            if (String.IsNullOrEmpty(r.Language))
+                r.Language = a2.Language;
+            if (Gruppo.IsEmpty(r.Office))
+                r.Office = a2.Office;
+            if (String.IsNullOrEmpty(r.PermanentId))
+                r.PermanentId = a2.PermanentId;
+            if (String.IsNullOrEmpty(r.Platform))
+                r.Platform = a2.Platform;
+            if (String.IsNullOrEmpty(r.School))
+                r.School = a2.School;
+            if (String.IsNullOrEmpty(r.Tipo))
+                r.Tipo = a2.Tipo;
+            if (String.IsNullOrEmpty(r.Year))
+                r.Year = a2.Year;
+            if (r.LastUpdateInviteLinkTime == null)
+                r.LastUpdateInviteLinkTime = a2.LastUpdateInviteLinkTime;
             else
             {
                 if (a2.LastUpdateInviteLinkTime != null)
                 {
-                    if (DateTime.Compare(a1.LastUpdateInviteLinkTime.Value, a2.LastUpdateInviteLinkTime.Value) < 0)
-                        a1.LastUpdateInviteLinkTime = a2.LastUpdateInviteLinkTime;
+                    if (DateTime.Compare(r.LastUpdateInviteLinkTime.Value, a2.LastUpdateInviteLinkTime.Value) < 0)
+                        r.LastUpdateInviteLinkTime = a2.LastUpdateInviteLinkTime;
                 }
             }
 
-            if (!String.IsNullOrEmpty(a1.Year))
+            if (!String.IsNullOrEmpty(r.Year))
             {
-                if (!String.IsNullOrEmpty(a1.Tipo) && !String.IsNullOrEmpty(a2.Tipo))
+                if (!String.IsNullOrEmpty(r.Tipo) && !String.IsNullOrEmpty(a2.Tipo))
                 {
-                    if (a1.Tipo.ToLower() == "s" || a2.Tipo.ToLower() == "s")
-                        a1.Tipo = "S";
+                    if (r.Tipo.ToLower() == "s" || a2.Tipo.ToLower() == "s")
+                        r.Tipo = "S";
                 }
             }
 
-            a1.Aggiusta();
+            r.Aggiusta(aggiusta_anno, true);
 
-            return a1;
+            return r;
+        }
+
+        internal void RicreaID()
+        {
+            for (int i =0; i<this._l.Count; i++)
+            {
+                _l[i].RicreaId();
+            }
+        }
+
+        internal void Fix_link_IDCorsi_se_ce_uno_che_ha_il_link_con_id_corso_uguale()
+        {
+            for (int i = 0; i < _l.Count; i++)
+            {
+                for (int j =0; j< this._l.Count; j++)
+                {
+                    if (
+                        i!=j &&
+                        !string.IsNullOrEmpty(this._l[i].IDCorsoPolimi) &&
+                        !string.IsNullOrEmpty(this._l[j].IDCorsoPolimi) &&
+                        this._l[i].IDCorsoPolimi == this._l[j].IDCorsoPolimi &&
+                        string.IsNullOrEmpty(this._l[i].IdLink) &&
+                        !string.IsNullOrEmpty(this._l[j].IdLink) 
+
+                        )
+                    {
+                        this._l[i].IdLink = this._l[j].IdLink;
+                        this._l[i].Platform = this._l[j].Platform;
+
+                        this._l[i].RicreaId();
+                    }
+                }
+            }
+        }
+
+        internal void FixPianoStudi()
+        {
+            for (int i=0; i<this._l.Count; i++)
+            {
+                if (string.IsNullOrEmpty(this._l[i].PianoDiStudi))
+                {
+                    ;
+                }
+                else
+                {
+                    this._l[i].PianoDiStudi = this._l[i].PianoDiStudi.Trim();
+
+                    if (this._l[i].PianoDiStudi.EndsWith(":"))
+                    {
+                        this._l[i].PianoDiStudi = this._l[i].PianoDiStudi.Substring(0, this._l[i].PianoDiStudi.Length - 1);
+                    }
+
+                }
+
+                this._l[i].RicreaId();
+            }
         }
     }
 }

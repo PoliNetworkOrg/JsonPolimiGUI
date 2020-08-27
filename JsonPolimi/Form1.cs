@@ -11,6 +11,7 @@ using Telegram.Bot.Types.Enums;
 using Size = System.Drawing.Size;
 using HtmlAgilityPack;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace JsonPolimi
 {
@@ -64,12 +65,14 @@ namespace JsonPolimi
             {
                 var i3 = i2.First;
 
-                Aggiungi(i3);
+                Aggiungi(i3, false, false);
             }
 
             Variabili.L.Sort();
 
             ofd.Dispose();
+
+            MessageBox.Show("Finito!");
         }
 
         private static void Refresh_Tabella()
@@ -147,27 +150,33 @@ namespace JsonPolimi
             Process.Start("temp.html");
         }
 
-        private static void Aggiungi(JToken i)
+        private static void Aggiungi(JToken i, bool aggiusta_Anno, bool merge)
         {
             var g = new Gruppo
             {
                 Classe = i["class"].ToString(),
                 Degree = i["degree"].ToString()
             };
+
             try
             {
-                g.Platform = i["group_type"].ToString();
+                try
+                {
+                    g.Platform = i["group_type"].ToString();
+                }
+                catch
+                {
+                    g.Platform = i["platform"].ToString();
+                }
             }
-#pragma warning disable CS0168 // La variabile è dichiarata, ma non viene mai usata
-            catch (Exception)
-#pragma warning restore CS0168 // La variabile è dichiarata, ma non viene mai usata
+            catch
             {
                 g.Platform = i["platform"].ToString();
             }
 
             g.Id = i["id"].ToString();
             g.Language = i["language"].ToString();
-            g.Office = i["office"].ToString();
+            g.Office = new ListaStringhePerJSON( i["office"].ToString() );
             g.School = i["school"].ToString();
             g.IdLink = i["id_link"].ToString();
 
@@ -198,6 +207,46 @@ namespace JsonPolimi
                 g.PermanentId = null;
             }
 
+            try
+            {
+                g.CCS = new ListaStringhePerJSON( i["ccs"].ToString() );
+            }
+            catch
+            {
+                g.CCS = null;
+            }
+
+            try
+            {
+                string s = i["annocorso"].ToString();
+                if (string.IsNullOrEmpty(s))
+                    g.AnnoCorsoStudio = null;
+                else
+                    g.AnnoCorsoStudio = Convert.ToInt32(s);
+            }
+            catch
+            {
+                g.AnnoCorsoStudio = null;
+            }
+
+            try
+            {
+                g.IDCorsoPolimi = i["idcorso"].ToString();
+            }
+            catch
+            {
+                g.IDCorsoPolimi = null;
+            }
+
+            try
+            {
+                g.PianoDiStudi = i["pianostudi"].ToString();
+            }
+            catch
+            {
+                g.PianoDiStudi = null;
+            }
+
             var data = i["LastUpdateInviteLinkTime"].ToString();
             try
             {
@@ -209,9 +258,9 @@ namespace JsonPolimi
                 throw e;
             }
 
-            g.Aggiusta();
+            g.Aggiusta(aggiusta_Anno, creaid : false);
 
-            Variabili.L.Add(g);
+            Variabili.L.Add(g, merge);
         }
 
         public static DateTime? DataFromString(string data)
@@ -276,7 +325,12 @@ namespace JsonPolimi
             Refresh_Tabella();
         }
 
-        private void Button3_Click(object sender, EventArgs e)
+        private void Button3_Click(CheckGruppo.E i)
+        {
+            Salva_Generico(new CheckGruppo(i));
+        }
+
+        private void Salva_Generico(CheckGruppo v)
         {
             if (Variabili.L == null)
             {
@@ -294,15 +348,21 @@ namespace JsonPolimi
             {
                 var elem = Variabili.L.GetElem(i);
 
-                json += '\n';
-                json += '"';
-                json += elem.Id;
-                json += '"' + ":";
+                bool tenere = DoCheckGruppo(v, elem);
+                if (tenere)
+                {
+                    json += '\n';
+                    json += '"';
+                    json += elem.Id;
+                    json += '"' + ":";
+                    json += elem.To_json(v.n);
+                    json += ',';
+                }
+            }
 
-                json += elem.To_json();
-
-                if (i != n - 1)
-                    json += ",";
+            if (json.EndsWith(","))
+            {
+                json = json.Substring(0, json.Length - 1);
             }
 
             json += "},";
@@ -311,17 +371,55 @@ namespace JsonPolimi
             for (var i = 0; i < n; i++)
             {
                 var elem = Variabili.L.GetElem(i);
+                bool tenere = DoCheckGruppo(v, elem);
+                if (tenere)
+                {
+                    json += '\n';
+                    json += elem.To_json(v.n);
+                    json += ',';
+                }
+            }
 
-                json += '\n';
-                json += elem.To_json();
-
-                if (i != n - 1)
-                    json += ",";
+            if (json.EndsWith(","))
+            {
+                json = json.Substring(0, json.Length - 1);
             }
 
             json += "]}";
 
             Salva(json);
+        }
+
+        private bool DoCheckGruppo(CheckGruppo v, Gruppo elem)
+        {
+            switch(v.n)
+            {
+                case CheckGruppo.E.VECCHIA_RICERCA:
+                    {
+                        break;
+                    }
+                case CheckGruppo.E.NUOVA_RICERCA:
+                    {
+                        if (Empty(elem.CCS))
+                            return false;
+
+                        break;
+                    }
+                case CheckGruppo.E.TUTTO:
+                    {
+                        break;
+                    }
+            }
+
+            return true;
+        }
+
+        private bool Empty(ListaStringhePerJSON cCS)
+        {
+            if (cCS == null)
+                return true;
+
+            return cCS.IsEmpty();
         }
 
         private static void Salva(string json)
@@ -347,7 +445,7 @@ namespace JsonPolimi
             for (var i = 0; i < n; i++)
             {
                 var elem = Variabili.L.GetElem(i);
-                if (!string.IsNullOrEmpty(elem.IdLink)) continue;
+                if (!string.IsNullOrEmpty(elem.Id)) continue;
                 Variabili.L.Remove(i);
 
                 i--;
@@ -506,7 +604,11 @@ namespace JsonPolimi
 
             var nomeOld = new Gruppo();
 
+
             foreach (var y in x.Tables)
+            {
+                int n2 = Variabili.L.GetCount();
+
                 foreach (var y2 in y.Rows)
                 {
                     //Console.WriteLine("----- NUOVA RIGA ------");
@@ -523,7 +625,7 @@ namespace JsonPolimi
 
                     g.Aggiusta();
 
-                    foreach (var g3 in g.L) Variabili.L.Add(g3);
+                    foreach (var g3 in g.L) Variabili.L.Add(g3, n2 != 0);
 
                     if (!string.IsNullOrEmpty(g.NomeOld.Classe)) nomeOld.Classe = g.NomeOld.Classe;
 
@@ -533,10 +635,11 @@ namespace JsonPolimi
 
                     if (!string.IsNullOrEmpty(g.NomeOld.School)) nomeOld.School = g.NomeOld.School;
 
-                    if (!string.IsNullOrEmpty(g.NomeOld.Office)) nomeOld.Office = g.NomeOld.Office;
+                    if (!Gruppo.IsEmpty(g.NomeOld.Office)) nomeOld.Office = g.NomeOld.Office;
 
                     if (!string.IsNullOrEmpty(g.NomeOld.Year)) nomeOld.Year = g.NomeOld.Year;
                 }
+            }
         }
 
         private void Button6_Click(object sender, EventArgs e)
@@ -574,6 +677,8 @@ namespace JsonPolimi
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
 
+            int n2 = Variabili.L.GetCount();
+
             foreach (var r in FileSalvare.Gruppi)
             {
                 if (r.Chat.Type == ChatType.Private)
@@ -592,8 +697,8 @@ namespace JsonPolimi
                     LastUpdateInviteLinkTime = r.LastUpdateInviteLinkTime,
                 };
 
-                g.Aggiusta();
-                Variabili.L.Add(g);
+                g.Aggiusta(true, true);
+                Variabili.L.Add(g, n2!=0);
             }
 
             Variabili.L.Sort();
@@ -692,6 +797,7 @@ namespace JsonPolimi
             Salva(json);
         }
 
+        public static InfoManifesto infoManifesto = null;
         private void Button8_Click2(object sender, EventArgs e)
         {
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
@@ -706,14 +812,42 @@ namespace JsonPolimi
                 doc.Load(o.FileName);
             }
 
-            List<Gruppo> L = GetGruppiFromDocument(doc);
+            var x1 = LoadManifesto(doc, "TG");
+            Variabili.L.Importa(x1, false, Chiedi.SI);
+
         }
 
-        private List<Gruppo> GetGruppiFromDocument(HtmlAgilityPack.HtmlDocument doc)
+        private List<Gruppo> LoadManifesto(HtmlAgilityPack.HtmlDocument doc, string PLAT2)
         {
-            List<HtmlNode> L = new List<HtmlNode>();
+            infoManifesto = new InfoManifesto();
+            Form1.anno = null;
+            Form1.pianostudi2 = null;
+
+            List<Gruppo> L2 = GetGruppiFromDocument(doc, PLAT2);
+
+            if (string.IsNullOrEmpty(pianostudi2) || pianostudi2.Length < 5)
+            {
+                ;
+            }
+
+            for (int i = 0; i < L2.Count; i++)
+            {
+                L2[i].AggiungiInfoDaManifesto(infoManifesto);
+                L2[i].CCS = new ListaStringhePerJSON( infoManifesto.corso_di_studio);
+                
+                L2[i].PianoDiStudi = pianostudi2;
+            }
+
+            return L2;
+
+
+        }
+
+        private List<Gruppo> GetGruppiFromDocument(HtmlAgilityPack.HtmlDocument doc, string pLAT2)
+        {
+            List<HtmlNode> L = GetTables(doc.DocumentNode.ChildNodes);
             List<HtmlNode> L2 = new List<HtmlNode>();
-            L.AddRange(doc.DocumentNode.ChildNodes);
+
             while (L.Count > 0)
             {
                 if (L[0].Name == "tr")
@@ -731,23 +865,51 @@ namespace JsonPolimi
                 L.RemoveAt(0);
             }
 
-            return GetGruppiFromDocument2(L2);
+            return GetGruppiFromDocument2(L2, pLAT2);
         }
 
-        private List<Gruppo> GetGruppiFromDocument2(List<HtmlNode> l2)
+        private List<HtmlNode> GetTables(HtmlNodeCollection childNodes)
+        {
+            List<HtmlNode> L = new List<HtmlNode>();
+            List<HtmlNode> L2 = new List<HtmlNode>();
+            L.AddRange(childNodes);
+
+            while (L.Count > 0)
+            {
+                if (L[0].Name == "table")
+                {
+                    L2.Add(L[0]);                  
+                }
+
+                L.AddRange(L[0].ChildNodes);
+                
+
+                L.RemoveAt(0);
+            }
+
+            return L2;
+        }
+
+        private List<Gruppo> GetGruppiFromDocument2(List<HtmlNode> l2, string pLAT2)
         {
             List<Gruppo> LG = new List<Gruppo>();
             foreach (var x in l2)
             {
-                Gruppo x2 = GetGruppiFromDocument3(x);
+                Gruppo x2 = GetGruppiFromDocument3(x, pLAT2);
                 if (x2 != null)
-                    LG.Add(x2);
+                {
+                    string x3 = x2.Classe.Trim();
+                    if (!string.IsNullOrEmpty(x3))
+                    {
+                        LG.Add(x2);                  
+                    }
+                }
             }
 
             return LG;
         }
 
-        private Gruppo GetGruppiFromDocument3(HtmlNode x)
+        private Gruppo GetGruppiFromDocument3(HtmlNode x, string pLAT2)
         {
             List<HtmlNode> L = new List<HtmlNode>();
             for (int i = 0; i < x.ChildNodes.Count; i++)
@@ -758,25 +920,886 @@ namespace JsonPolimi
                 }
             }
 
+            List<InfoParteDiGruppo> infoParteDiGruppo_list = new List<InfoParteDiGruppo>();
+
             for (int i = 0; i < L.Count; i++)
             {
-                L[i] = GetGruppiFromDocument4(L[i]);
+                infoParteDiGruppo_list.Add(GetGruppiFromDocument5(L[i]));
             }
 
-            if (L.Count < 2)
+            Gruppo g = Gruppo.FromInfoParteList(infoParteDiGruppo_list, pLAT2);
+            if (g != null  && g.IsValido())
             {
-                return null;
+                return g;
             }
             else
             {
-                Gruppo g = new Gruppo();
-                g.Classe = L[0].InnerText;
-                g.Id = L[1].InnerText;
-                return g;
+                return null;
             }
         }
+        
+        private bool Contiene_table2(HtmlNode htmlNode)
+        {
+            foreach (var x in htmlNode.ChildNodes)
+            {
+                if (x.Name == "table")
+                    return true;
+            }
 
+            return false;
+        }
+
+        public static int? anno = null;
+        public static string pianostudi2 = null;
+
+        private InfoParteDiGruppo GetGruppiFromDocument5(HtmlNode htmlNode)
+        {
+            bool contiene_table = Contiene_table2(htmlNode);
+            if (contiene_table)
+                return null;
+
+            IEnumerable<string> classes = htmlNode.GetClasses();
+            bool ce = false;
+            foreach (var c2 in classes)
+            {
+                if (c2 == "TitleInfoCard")
+                {
+                    ce = true;
+                    break;
+                }
+            }
+
+            if (ce)
+            {
+                string s = htmlNode.InnerHtml.Trim();
+                if (string.IsNullOrEmpty(s))
+                {
+                    ;
+                }
+                else if (s == "Legenda")
+                {
+                    return null; //sicuro
+                }
+                else if (s.StartsWith("<span id="))
+                {
+                    ;
+                }
+                else if (s.StartsWith("1<sup>"))
+                {
+                    Form1.anno = 1;
+                }
+                else if (s.StartsWith("2<sup>"))
+                {
+                    Form1.anno = 2;
+                }
+                else if (s.StartsWith("3<sup>"))
+                {
+                    Form1.anno = 3;
+                }
+                else if (s.StartsWith("4<sup>"))
+                {
+                    Form1.anno = 4;
+                }
+                else if (s.StartsWith("5<sup>"))
+                {
+                    Form1.anno = 5;
+                }
+                else if (s.StartsWith("Insegnamenti"))
+                {
+                    return null; //sicuro
+                }
+                else
+                {
+                    ;
+                }
+            }
+
+            int ce2 = 0;
+            foreach (var c2 in classes)
+            {
+                if (c2 == "ElementInfoCard2" || c2 == "left")
+                {
+                    ce2++;
+                }
+            }
+
+            if (ce2 == 2)
+            {
+                if (htmlNode.ChildNodes.Count >0)
+                {
+                    var x1 = htmlNode.ChildNodes[0];
+                    ;
+                    if (x1.Name == "select")
+                    {
+                        var x2 = GetPianoStudi(x1);
+                        if (x2.Item1)
+                        {
+                            pianostudi2 = x2.Item2;
+                            return null; //sicuro
+                        }
+                    }
+                    else if (htmlNode.InnerHtml.StartsWith("*** - "))
+                    {
+                        var s3 = htmlNode.InnerHtml.Trim().Split('<');
+                        var s4 = s3[0].Trim();
+                        var s5 = s4.Substring(5).Trim();
+                        pianostudi2 = s5;
+                        return null; //sicuro
+                    }
+                    else
+                    {
+                        pianostudi2 = htmlNode.ChildNodes[0].InnerHtml.Trim();
+                        return null;
+                    }
+                }
+                else
+                {
+                    ;
+                }
+                    
+            }
+
+            if (htmlNode.ChildNodes.Count == 3)
+            {
+                if (htmlNode.ChildNodes[0].Name == "#text" &&
+                    htmlNode.ChildNodes[1].Name != "#text" &&
+                    htmlNode.ChildNodes[2].Name == "#text" )
+                {
+                    string s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
+                    string s2 = htmlNode.ChildNodes[2].InnerHtml.Trim();
+                    if (string.IsNullOrEmpty(s1) && string.IsNullOrEmpty(s2))
+                    {
+                        if (htmlNode.ChildNodes[1].Name == "div")
+                        {
+                            var x1 = htmlNode.ChildNodes[1];
+                            if (x1.ChildNodes.Count == 1)
+                            {
+                                if (x1.ChildNodes[0].Name == "#text")
+                                {
+                                    return new InfoParteDiGruppo(testo_selvaggio: x1.ChildNodes[0].InnerHtml.Trim());
+                                }
+                                else
+                                {
+                                    ;
+                                }
+                            }
+                            else
+                            {
+                                ;
+                            }
+                        }
+                        else if (htmlNode.ChildNodes[1].Name == "a")
+                        {
+                            var x1 = htmlNode.ChildNodes[1];
+                            if (x1.ChildNodes.Count == 3)
+                            {
+                                if (x1.ChildNodes[0].Name == "#text" &&
+                                    x1.ChildNodes[1].Name != "#text" &&
+                                    x1.ChildNodes[2].Name == "#text")
+                                {
+                                    if (x1.ChildNodes[1].Name == "img")
+                                    {
+                                        ImmagineGruppo immagine2 = new ImmagineGruppo(x1.ChildNodes[1]);
+                                        return new InfoParteDiGruppo(immagine: immagine2);
+                                    }
+                                    else
+                                    {
+                                        ;
+                                    }
+                                }
+                                else
+                                {
+                                    ;
+                                }
+                            }
+                            else
+                            {
+                                string s = htmlNode.InnerHtml.Trim();
+                                if (string.IsNullOrEmpty(s))
+                                {
+                                    return null;
+                                }
+                                else
+                                {
+                                    return new InfoParteDiGruppo(
+                                        link: new LinkGruppo(
+                                            htmlNode.ChildNodes[1].Attributes,
+                                            htmlNode.ChildNodes[1].InnerHtml.Trim()
+                                            )
+                                        );
+                                }
+                            }
+                        }
+                        else
+                        {
+                            ;
+                        }
+                    }
+                    else
+                    {
+                        string s3 = htmlNode.InnerHtml.Trim();
+                        if (string.IsNullOrEmpty(s3))
+                        {
+                            return null;
+                        }
+                        else if (s3.StartsWith("Ingegneria Industriale e dell'Informazione"))
+                        {
+                            return null; //sicuro
+                        }
+                        else if (s3 == "1<sup><small>o</small></sup>Anno")
+                        {
+                            return null; //sicuro
+                        }
+                        else if (s3 == "2<sup><small>o</small></sup>Anno")
+                        {
+                            return null; //sicuro
+                        }
+                        else if (s3 == "3<sup><small>o</small></sup>Anno")
+                        {
+                            return null; //sicuro
+                        }
+                        else
+                        {
+                            string s4 = s1 + "<br>" + s2;
+                            if (s4 == s3)
+                            {
+                                List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>
+                                {
+                                    new InfoParteDiGruppo(testo_selvaggio: s1),
+                                    new InfoParteDiGruppo(testo_selvaggio: s2)
+                                };
+                                return new InfoParteDiGruppo(sottopezzi: sottopezzi2);
+                            }
+                            else
+                            {
+                                return new InfoParteDiGruppo(testo_selvaggio: htmlNode.InnerHtml.Trim());
+                            }
+                        }
+                    }
+                }
+                else if (htmlNode.ChildNodes[0].Name == "img" &&
+                        htmlNode.ChildNodes[1].Name == "#text" &&
+                        htmlNode.ChildNodes[2].Name == "img")
+                {
+                        if (htmlNode.ChildNodes[0].Attributes["src"].Value.Contains("/it.png"))
+                        {
+                            if (htmlNode.ChildNodes[2].Attributes["src"].Value.Contains("/en.png"))
+                            {
+                                string s = htmlNode.ChildNodes[1].InnerHtml.Trim();
+                                if (string.IsNullOrEmpty(s))
+                                {
+                                    ;
+                                }
+                                else if (s == "/")
+                                {
+                                    return null; //sicuro
+                                }
+                                else
+                                {
+                                    ;
+                                }
+                            }
+                            else
+                            {
+                                ;
+                            }
+                        }
+                        else
+                        {
+                            ;
+                        }
+                }
+                else
+                {
+                    string s = htmlNode.InnerHtml.Trim();
+                    if (string.IsNullOrEmpty(s))
+                    {
+                        ;
+                    }
+                    else if (s.StartsWith("Insegnamenti a scelta dal"))
+                    {
+                        return null;
+                    }
+                    else if (htmlNode.ChildNodes[0].Name=="a" && htmlNode.ChildNodes[1].Name == "a" &&
+                        htmlNode.ChildNodes[2].Name == "span")
+                    {
+                        LinkGruppo link2 = new LinkGruppo(htmlNode.ChildNodes[1].Attributes, htmlNode.ChildNodes[1].InnerHtml.Trim());
+                        return new InfoParteDiGruppo(link: link2);
+                    }
+                    else
+                    {
+                        ;
+                    }
+                }
+
+            }
+            else if (htmlNode.ChildNodes.Count == 1)
+            {
+                if (htmlNode.ChildNodes[0].Name == "img")
+                {
+                    string src = htmlNode.ChildNodes[0].Attributes["src"].Value.ToString();
+                    if (src.EndsWith("it.png"))
+                        return new InfoParteDiGruppo(lingua: Lingua.IT);
+                    else if (src.EndsWith("en.png"))
+                        return new InfoParteDiGruppo(lingua: Lingua.EN);
+                    else if (src.EndsWith("innovativa.png"))
+                        return null;
+                    else if (src.EndsWith("sequenza.png"))
+                        return null;
+                    else
+                    {
+                        ;
+                    }
+                }
+
+                string s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
+                if (string.IsNullOrEmpty(s1))
+                {
+                    return null; //sono sicuro
+                }
+                else if (htmlNode.ChildNodes[0].Name == "a")
+                {
+                    var x1 = htmlNode.ChildNodes[0];
+                    if (x1.ChildNodes.Count == 3)
+                    {
+                        if (x1.ChildNodes[0].Name == "#text" &&
+                            x1.ChildNodes[1].Name == "div" &&
+                            x1.ChildNodes[2].Name == "#text" )
+                        {
+                            string s11 = x1.ChildNodes[0].InnerHtml.Trim();
+                            string s22 = x1.ChildNodes[2].InnerHtml.Trim();
+
+                            if (string.IsNullOrEmpty(s11) && string.IsNullOrEmpty(s22))
+                            {
+                                var x2 = x1.ChildNodes[1];
+                                if (x2.ChildNodes.Count == 3)
+                                {
+                                    ;
+                                }
+                                else if (x2.ChildNodes.Count == 5)
+                                {
+                                    return null;
+                                }
+                                else
+                                {
+                                    ;
+                                }
+                            }
+                            else
+                            {
+                                ;
+                            }
+                        }
+                        else
+                        {
+                            ;
+                        }
+                    }
+                    else if (x1.ChildNodes.Count == 1)
+                    {
+                        var x2 = x1.ChildNodes[0];
+                        if (x2.ChildNodes.Count == 0)
+                        {
+                            LinkGruppo link2 = new LinkGruppo(htmlNode.ChildNodes[0].Attributes, x2.InnerHtml.Trim());
+                            return new InfoParteDiGruppo(link: link2);
+                        }
+                        else
+                        {
+                            ;
+                        }
+                    }
+                    else
+                    {
+                        ;
+                    }
+                }
+                else if(htmlNode.ChildNodes[0].Name == "#text")
+                {
+                    return new InfoParteDiGruppo(testo_selvaggio: s1);
+                }
+                else if (htmlNode.ChildNodes[0].Name == "select")
+                {
+                    return null;
+                }
+                else
+                {
+                    string s3 = htmlNode.InnerHtml.Trim();
+                    if (string.IsNullOrEmpty(s3))
+                    {
+                        ;
+                    }
+                    else if (s3.StartsWith("<span "))
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        ;
+                    }
+                }
+            }
+            else if (htmlNode.ChildNodes.Count == 6)
+            {
+                string s = htmlNode.InnerHtml.Trim();
+                if (string.IsNullOrEmpty(s))
+                {
+                    ;
+                }
+                else if (s.StartsWith("I CFU riportati a fianco a questo"))
+                {
+                    return null; //sicuro
+                }
+                else if (s.StartsWith("*** - Non diversificato"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("*** - offerta comune"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("*** - URBAN PLANNING AND POLICY DESIGN"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("N1L"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("R1O"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("E1A"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("I1A"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("U1L"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("A1A"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("XEN"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("PSS"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("FOE"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("MOB"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("NDE"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("OA1"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("NDF"))
+                {
+                    return null;
+                }
+                else
+                {
+                    ;
+                }
+            }
+            else if (htmlNode.ChildNodes.Count == 4)
+            {
+                string s = htmlNode.InnerHtml.Trim();
+                if (s.StartsWith("<span id=\"infocard"))
+                {
+                    return null; //sicuro
+                }
+                else if (htmlNode.ChildNodes[0].Name == "select")
+                {
+                    return null; //sicuro
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else if (htmlNode.ChildNodes.Count == 0)
+            {
+                string s1 = htmlNode.InnerHtml.Trim();
+                if (string.IsNullOrEmpty(s1))
+                {
+                    return null; //sicuro
+                }
+                else
+                {
+                    ;
+                }
+            }
+            else if (htmlNode.ChildNodes.Count == 2)
+            {
+                if (htmlNode.ChildNodes[0].Name == "#text" && htmlNode.ChildNodes[1].Name == "div")
+                {
+                    string s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
+                    if (string.IsNullOrEmpty(s1))
+                    {
+                        ;
+                    }
+                    else if (s1 == "10.0")
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("1.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("9.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("12.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("6.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("4.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("3.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("8.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("16.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("14.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("5.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("18.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("15.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("2.0"))
+                    {
+                        return null;
+                    }
+                    else if (s1.StartsWith("7.0"))
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        ;
+                    }
+                }
+                else if (htmlNode.ChildNodes[0].Name == "#text" && htmlNode.ChildNodes[1].Name == "a")
+                {
+                    string s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
+                    if (string.IsNullOrEmpty(s1))
+                    {
+                        var x1 = htmlNode.ChildNodes[1];
+                        if (x1.ChildNodes.Count == 1)
+                        {
+                            if (x1.ChildNodes[0].Name == "#text")
+                            {
+                                LinkGruppo link2 = new LinkGruppo(htmlNode.ChildNodes[1].Attributes, x1.ChildNodes[0].InnerHtml.Trim());
+                                return new InfoParteDiGruppo(link: link2);
+                            }
+                            else
+                            {
+                                ;
+                            }
+                        }
+                        else
+                        {
+                            ;
+                        }
+
+                    }
+                    else
+                    {
+                        string s = htmlNode.InnerHtml.Trim();
+                        if (string.IsNullOrEmpty(s))
+                        {
+                            ;
+                        }
+                        else if (s.StartsWith("Insegnamenti a scelta dal"))
+                        {
+                            return null; //sicuro
+                        }
+                        else
+                        {
+                            ;
+                        }
+                    }
+                }
+                else if (htmlNode.ChildNodes[0].Name == "a" && htmlNode.ChildNodes[1].Name == "a")
+                {
+                    string s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
+                    string s2 = htmlNode.ChildNodes[1].InnerHtml.Trim();
+                    if (string.IsNullOrEmpty(s1) && !string.IsNullOrEmpty(s2))
+                    {
+                        LinkGruppo link2 = new LinkGruppo(htmlNode.ChildNodes[1].Attributes, s2);
+                        return new InfoParteDiGruppo(link: link2);
+                    }
+                    else if (!string.IsNullOrEmpty(s1) && string.IsNullOrEmpty(s2))
+                    {
+                        ;
+                    }
+                    else
+                    {
+                        ;
+                    }
+                }
+                else if (htmlNode.ChildNodes[0].Name == "a" && htmlNode.ChildNodes[1].Name == "span")
+                {
+                    LinkGruppo link2 = new LinkGruppo(htmlNode.ChildNodes[0].Attributes,htmlNode.ChildNodes[0].InnerHtml.Trim());
+                    return new InfoParteDiGruppo(link: link2);
+                }
+                else
+                {
+                    string s = htmlNode.InnerHtml.Trim();
+                    var s2 = s.Split('<');
+                    Form1.infoManifesto.scuola = s2[0].Trim();
+                    return null;
+                }
+            }
+            else
+            {
+                string s = htmlNode.InnerHtml.Trim();
+                if (string.IsNullOrEmpty(s))
+                {
+                    ;
+                }
+                else if (s.StartsWith("4.0"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("ICAR"))
+                {
+                    List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>();
+                    var s2 = s.Split('<');
+                    foreach (var s3 in s2)
+                    {
+                        string s4 = s3;
+                        if (s3.StartsWith("br>"))
+                        {
+                            s4 = s3.Substring(3);
+                        }
+
+                        sottopezzi2.Add(new InfoParteDiGruppo(testo_selvaggio: s4));
+                    }
+                    return new InfoParteDiGruppo(sottopezzi: sottopezzi2);
+                }
+                else if (s.StartsWith("12.0"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("8.0"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("AGR"))
+                {
+                    List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>();
+                    var s2 = s.Split('<');
+                    foreach (var s3 in s2)
+                    {
+                        string s4 = s3;
+                        if (s3.StartsWith("br>"))
+                        {
+                            s4 = s3.Substring(3);
+                        }
+
+                        sottopezzi2.Add(new InfoParteDiGruppo(testo_selvaggio: s4));
+                    }
+                    return new InfoParteDiGruppo(sottopezzi: sottopezzi2);
+                }
+                else if (s.StartsWith("Architettura Urbanistica Ingegneria delle Costruzioni"))
+                {
+                    return null; 
+                }
+
+                else if (s.StartsWith("BIO"))
+                {
+                    List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>();
+                    var s2 = s.Split('<');
+                    foreach (var s3 in s2)
+                    {
+                        string s4 = s3;
+                        if (s3.StartsWith("br>"))
+                        {
+                            s4 = s3.Substring(3);
+                        }
+
+                        sottopezzi2.Add(new InfoParteDiGruppo(testo_selvaggio: s4));
+                    }
+                    return new InfoParteDiGruppo(sottopezzi: sottopezzi2);
+                }
+                else if (s.StartsWith("15.0"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("6.0"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("18.0"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("22.0"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("Design"))
+                {
+                    return null;
+                }
+
+                else if (s.StartsWith("ING-IND"))
+                {
+                    List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>();
+                    var s2 = s.Split('<');
+                    foreach (var s3 in s2)
+                    {
+                        string s4 = s3;
+                        if (s3.StartsWith("br>"))
+                        {
+                            s4 = s3.Substring(3);
+                        }
+
+                        sottopezzi2.Add(new InfoParteDiGruppo(testo_selvaggio: s4));
+                    }
+                    return new InfoParteDiGruppo(sottopezzi: sottopezzi2);
+                }
+                else if (s.StartsWith("Ingegneria Civile"))
+                {
+                    return null; //sicuro
+                }
+
+
+                else if (s.StartsWith("ING-INF"))
+                {
+                    List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>();
+                    var s2 = s.Split('<');
+                    foreach (var s3 in s2)
+                    {
+                        string s4 = s3;
+                        if (s3.StartsWith("br>"))
+                        {
+                            s4 = s3.Substring(3);
+                        }
+
+                        sottopezzi2.Add(new InfoParteDiGruppo(testo_selvaggio: s4));
+                    }
+                    return new InfoParteDiGruppo(sottopezzi: sottopezzi2);
+                }
+
+
+
+
+                else if (s.StartsWith("GEO"))
+                {
+                    List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>();
+                    var s2 = s.Split('<');
+                    foreach (var s3 in s2)
+                    {
+                        string s4 = s3;
+                        if (s3.StartsWith("br>"))
+                        {
+                            s4 = s3.Substring(3);
+                        }
+
+                        sottopezzi2.Add(new InfoParteDiGruppo(testo_selvaggio: s4));
+                    }
+                    return new InfoParteDiGruppo(sottopezzi: sottopezzi2);
+                }
+
+                else
+                {
+                    ;
+                }
+                   
+            }
+
+
+            return null;
+        }
+
+        private Tuple<bool, string> GetPianoStudi(HtmlNode x1)
+        {
+            if (x1.ChildNodes.Count == 0)
+                return new Tuple<bool, string>(false, null);
+
+            bool ce = true;
+            foreach (var x2 in x1.ChildNodes)
+            {
+                if (x2.Name != "option")
+                    ce = false;
+
+                if (x2.InnerHtml == "2019/2020" ||
+                    x2.InnerHtml == "Qualunque sede" ||
+                    x2.InnerHtml == "Scuola di Architettura Urbanistica Ingegneria delle Costruzioni (Arc. Urb. Ing. Cos.)" ||
+                    x2.InnerHtml == "1")
+                    return new Tuple<bool, string>(false, null);
+            }
+
+            if (!ce)
+            {
+                return new Tuple<bool, string>(false, null);
+            }
+
+            ;
+
+            foreach (var x3 in x1.ChildNodes)
+            {
+                if (x3.Name == "option")
+                {
+                    foreach (var x4 in x3.Attributes)
+                    {
+                        if (x4.Name == "selected" && x4.Value == "selected")
+                        {
+                            return new Tuple<bool, string>(true,x3.InnerHtml.Trim());
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+#pragma warning disable IDE0051 // Rimuovi i membri privati inutilizzati
         private HtmlNode GetGruppiFromDocument4(HtmlNode htmlNode)
+#pragma warning restore IDE0051 // Rimuovi i membri privati inutilizzati
         {
             if (htmlNode.ChildNodes.Count == 0)
                 return htmlNode;
@@ -804,6 +1827,175 @@ namespace JsonPolimi
             }
 
             return htmlNode;
+        }
+
+        private void Button12_Click(object sender, EventArgs e)
+        {
+            //todo: fare questo tasto
+        }
+
+        private void Form1_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Button13_Click(object sender, EventArgs e)
+        {
+            string[] f = null;
+            using (var fbd = new FolderBrowserDialog())
+            {
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    f = Directory.GetFiles(fbd.SelectedPath);
+
+                }
+            }
+
+            if (f == null)
+                return;
+
+            List<Gruppo> L = new List<Gruppo>();
+            foreach (var f2 in f)
+            {
+                if (f2.EndsWith(".htm"))
+                {
+                    HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                    doc.Load(f2);
+                    var L2 = LoadManifesto(doc, "TG");
+                    L.AddRange(L2);
+                }
+            }
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            var r = saveFileDialog.ShowDialog();
+            if (r == DialogResult.OK)
+            {
+                var b2 = ObjectToByteArray(L);
+                File.WriteAllBytes(path: saveFileDialog.FileName, bytes: b2);
+            }
+
+        }
+
+        byte[] ObjectToByteArray(object obj)
+        {
+            if (obj == null)
+                return null;
+
+            BinaryFormatter bf = new BinaryFormatter();
+            using (MemoryStream ms = new MemoryStream())
+            {
+                bf.Serialize(ms, obj);
+                return ms.ToArray();
+            }
+        }
+
+        public T FromByteArray<T>(byte[] data)
+        {
+            if (data == null)
+#pragma warning disable IDE0034 // Semplifica l'espressione 'default'
+                return default(T);
+#pragma warning restore IDE0034 // Semplifica l'espressione 'default'
+            BinaryFormatter bf = new BinaryFormatter();
+            using (MemoryStream ms = new MemoryStream(data))
+            {
+                object obj = bf.Deserialize(ms);
+                return (T)obj;
+            }
+        }
+
+        private void Button14_Click(object sender, EventArgs e)
+        {
+            Importa2(Chiedi.SI);
+        }
+
+        private void Importa2(Chiedi chiedi2)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            var r = openFileDialog.ShowDialog();
+            if (r == DialogResult.OK)
+            {
+                byte[] o2 = File.ReadAllBytes(openFileDialog.FileName);
+                List<Gruppo> L2 = FromByteArray<List<Gruppo>>(o2);
+
+                if (Variabili.L == null)
+                    Variabili.L = new ListaGruppo();
+
+                Variabili.L.Importa(L2, false, chiedi2);
+                MessageBox.Show("Fatto!");
+            }
+        }
+
+        private void Button15_Click(object sender, EventArgs e)
+        {
+            Variabili.L.RicreaID();
+        }
+
+        private void Button16_Click(object sender, EventArgs e)
+        {
+            Importa2(Chiedi.NO_DIVERSI);
+        }
+
+        private void Button17_Click(object sender, EventArgs e)
+        {
+            if (Variabili.L == null)
+                Variabili.L = new ListaGruppo();
+
+            Variabili.L.Fix_link_IDCorsi_se_ce_uno_che_ha_il_link_con_id_corso_uguale();
+        }
+
+        private void Button18_Click(object sender, EventArgs e)
+        {
+            Variabili.L.FixPianoStudi();
+        }
+
+        private void Button19_Click(object sender, EventArgs e)
+        {
+            List<string> L = new List<string>
+            {
+                "Bot telegram",
+                "Sito, ricerca vecchia",
+                "Sito, ricerca nuova",
+                "TUTTO"
+            };
+
+            AskFromList askFromList = new AskFromList(L);
+            askFromList.ShowDialog();
+
+            if (askFromList.r == null)
+            {
+                return;
+            }
+
+            int i = askFromList.r.Value;
+
+            switch (i)
+            {
+                case 0:
+                    {
+                        Button10_Click(null, null);
+                        return;
+                    }
+
+                case 1:
+                    {
+                        Button3_Click(CheckGruppo.E.VECCHIA_RICERCA);
+                        return;
+                    }
+
+                case 2:
+                    {
+                        Button3_Click(CheckGruppo.E.NUOVA_RICERCA);
+                        return;
+                    }
+
+                case 3:
+                    {
+                        Button3_Click(CheckGruppo.E.TUTTO);
+                        return;
+                    }
+            }
         }
     }
 }
