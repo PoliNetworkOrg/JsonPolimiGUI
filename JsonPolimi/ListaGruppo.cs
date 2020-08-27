@@ -226,7 +226,18 @@ namespace JsonPolimi
             }
 
             if (a1.Id == a2.Id && !String.IsNullOrEmpty(a1.Id))
+            {
+                if (a1.Classe.ToLower().Contains("cartografia") && !a2.Classe.ToLower().Contains("cartografia"))
+                {
+                    return new Tuple<bool, Gruppo>(false, null);
+                }
+                if (a2.Classe.ToLower().Contains("cartografia") && !a1.Classe.ToLower().Contains("cartografia"))
+                {
+                    return new Tuple<bool, Gruppo>(false, null);
+                }
+
                 return Unisci(i, j);
+            }
 
             if (!String.IsNullOrEmpty(a1.Year))
             {
@@ -674,6 +685,9 @@ namespace JsonPolimi
         private Tuple<bool, Gruppo> Unisci(int i, int j)
         {
             Gruppo g = Unisci2(i, j);
+            if (g == null)
+                return new Tuple<bool, Gruppo>(false, null);
+
             return new Tuple<bool, Gruppo>(true, g);
         }
 
@@ -681,6 +695,652 @@ namespace JsonPolimi
         {
             Gruppo a1 = this._l[i];
             Gruppo a2 = this._l[j];
+
+            if (!string.IsNullOrEmpty(a1.Classe) && !string.IsNullOrEmpty(a2.Classe))
+            {
+                if (a1.Classe.ToLower().Contains("cazzeggio") && !a2.Classe.ToLower().Contains("cazzeggio"))
+                    return null;
+
+                if (a2.Classe.ToLower().Contains("cazzeggio") && !a1.Classe.ToLower().Contains("cazzeggio"))
+                    return null;
+
+                if (a1.Classe.ToLower().Contains("theory") && a2.Classe.ToLower().Contains("theory"))
+                {
+                    if (a1.Classe.ToLower() == "information theory" && a2.Classe.ToLower() == "advanced circuit theory")
+                    {
+                        return null;
+                    }
+
+
+                    if (a2.Classe.ToLower() == "information theory" && a1.Classe.ToLower() == "advanced circuit theory")
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("mobility") && a2.Classe.ToLower().Contains("mobility")  )
+                {
+                    if (a1.Classe.ToLower().Contains("safety") && !a2.Classe.ToLower().Contains("safety"))
+                    {
+                        return null;
+                    }
+                    if (a2.Classe.ToLower().Contains("safety") && !a1.Classe.ToLower().Contains("safety"))
+                    {
+                        return null;
+                    }
+
+                    if (a2.Classe.ToLower().Contains("data") && !a1.Classe.ToLower().Contains("data"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("data") && !a2.Classe.ToLower().Contains("data"))
+                    {
+                        return null;
+                    }
+                }
+                   
+                if (a1.Classe.ToLower().Contains("meccanica") && a2.Classe.ToLower().Contains("meccanica"))
+                {
+                    if (a2.Classe.ToLower().Contains("tecnologia") && !a1.Classe.ToLower().Contains("tecnologia"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("tecnologia") && !a2.Classe.ToLower().Contains("tecnologia"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("scaglione") && !a2.Classe.ToLower().Contains("scaglione"))
+                    return null;
+
+                if (a2.Classe.ToLower().Contains("scaglione") && !a1.Classe.ToLower().Contains("scaglione"))
+                    return null;
+
+                if (a1.Classe.ToLower().Contains("design") && a2.Classe.ToLower().Contains("design"))
+                {
+                    if (a2.Classe.ToLower().Contains("accessory") && !a1.Classe.ToLower().Contains("accessory"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("accessory") && !a2.Classe.ToLower().Contains("accessory"))
+                    {
+                        return null;
+                    }
+
+                    if (a2.Classe.ToLower().Contains("structural") && !a1.Classe.ToLower().Contains("structural"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("structural") && !a2.Classe.ToLower().Contains("structural"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("ambientale") && a2.Classe.ToLower().Contains("ambientale"))
+                {
+                    if (a2.Classe.ToLower().Contains("acustica") && !a1.Classe.ToLower().Contains("acustica"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("acustica") && !a2.Classe.ToLower().Contains("acustica"))
+                    {
+                        return null;
+                    }
+
+                    if (a2.Classe.ToLower().Contains("polimi") && !a1.Classe.ToLower().Contains("polimi"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("polimi") && !a2.Classe.ToLower().Contains("polimi"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("acustica") && a2.Classe.ToLower().Contains("acustica"))
+                {
+                    if (a2.Classe.ToLower().Contains("applicata") && !a1.Classe.ToLower().Contains("applicata"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("applicata") && !a2.Classe.ToLower().Contains("applicata"))
+                    {
+                        return null;
+                    }
+
+                    if (a2.Classe.ToLower().Contains("illuminotecnica") && !a1.Classe.ToLower().Contains("illuminotecnica"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("illuminotecnica") && !a2.Classe.ToLower().Contains("illuminotecnica"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("edifici") && a2.Classe.ToLower().Contains("edifici"))
+                {
+                    if (a2.Classe.ToLower().Contains("caratteri") && !a1.Classe.ToLower().Contains("caratteri"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("caratteri") && !a2.Classe.ToLower().Contains("caratteri"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("tirocinio") && a2.Classe.ToLower().Contains("tirocinio"))
+                {
+                    if (a2.Classe.ToLower().Contains("avviamento") && !a1.Classe.ToLower().Contains("avviamento"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("avviamento") && !a2.Classe.ToLower().Contains("avviamento"))
+                    {
+                        return null;
+                    }
+                }
+
+
+                if (a1.Classe.ToLower().Contains("game") && a2.Classe.ToLower().Contains("game"))
+                {
+                    if (a2.Classe.ToLower().Contains("business") && !a1.Classe.ToLower().Contains("business"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("business") && !a2.Classe.ToLower().Contains("business"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("business") && a2.Classe.ToLower().Contains("business"))
+                {
+                    if (a2.Classe.ToLower().Contains("game") && !a1.Classe.ToLower().Contains("game"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("game") && !a2.Classe.ToLower().Contains("game"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("systems") && a2.Classe.ToLower().Contains("systems"))
+                {
+                    if (a2.Classe.ToLower().Contains("business") && !a1.Classe.ToLower().Contains("business"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("business") && !a2.Classe.ToLower().Contains("business"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("strutture") && a2.Classe.ToLower().Contains("strutture"))
+                {
+                    if (a2.Classe.ToLower().Contains("prova") && !a1.Classe.ToLower().Contains("prova"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("prova") && !a2.Classe.ToLower().Contains("prova"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("methods") && a2.Classe.ToLower().Contains("methods"))
+                {
+                    if (a2.Classe.ToLower().Contains("random") && !a1.Classe.ToLower().Contains("random"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("random") && !a2.Classe.ToLower().Contains("random"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("aziendale") && a2.Classe.ToLower().Contains("aziendale"))
+                {
+                    if (a2.Classe.ToLower().Contains("economia") && !a1.Classe.ToLower().Contains("economia"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("economia") && !a2.Classe.ToLower().Contains("economia"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("fondamenti") && a2.Classe.ToLower().Contains("fondamenti"))
+                {
+                    if (a2.Classe.ToLower().Contains("automatica") && !a1.Classe.ToLower().Contains("automatica"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("automatica") && !a2.Classe.ToLower().Contains("automatica"))
+                    {
+                        return null;
+                    }
+
+                    if (a2.Classe.ToLower().Contains("internet") && !a1.Classe.ToLower().Contains("internet"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("internet") && !a2.Classe.ToLower().Contains("internet"))
+                    {
+                        return null;
+                    }
+
+                    if (a2.Classe.ToLower().Contains("segnali") && !a1.Classe.ToLower().Contains("segnali"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("segnali") && !a2.Classe.ToLower().Contains("segnali"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("laboratorio") && a2.Classe.ToLower().Contains("laboratorio"))
+                {
+                    if (a2.Classe.ToLower().Contains("finale") && !a1.Classe.ToLower().Contains("finale"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("finale") && !a2.Classe.ToLower().Contains("finale"))
+                    {
+                        return null;
+                    }
+
+                    if (a2.Classe.ToLower().Contains("fisica") && !a1.Classe.ToLower().Contains("fisica"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("fisica") && !a2.Classe.ToLower().Contains("fisica"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("communication") && a2.Classe.ToLower().Contains("communication"))
+                {
+                    if (a2.Classe.ToLower().Contains("and") && !a1.Classe.ToLower().Contains("and"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("and") && !a2.Classe.ToLower().Contains("and"))
+                    {
+                        return null;
+                    }
+
+                    if (a2.Classe.ToLower().Contains("branding") && !a1.Classe.ToLower().Contains("branding"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("branding") && !a2.Classe.ToLower().Contains("branding"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("advanced") && a2.Classe.ToLower().Contains("advanced"))
+                {
+                    if (a2.Classe.ToLower().Contains("multivariable") && !a1.Classe.ToLower().Contains("multivariable"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("multivariable") && !a2.Classe.ToLower().Contains("multivariable"))
+                    {
+                        return null;
+                    }
+
+                    if (a2.Classe.ToLower().Contains("topic") && !a1.Classe.ToLower().Contains("topic"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("topic") && !a2.Classe.ToLower().Contains("topic"))
+                    {
+                        return null;
+                    }
+
+                    if (a2.Classe.ToLower().Contains("random") && !a1.Classe.ToLower().Contains("random"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("random") && !a2.Classe.ToLower().Contains("random"))
+                    {
+                        return null;
+                    }
+
+                    if (a2.Classe.ToLower().Contains("materials") && !a1.Classe.ToLower().Contains("materials"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("materials") && !a2.Classe.ToLower().Contains("materials"))
+                    {
+                        return null;
+                    }
+
+                    if (a2.Classe.ToLower().Contains("circuit") && !a1.Classe.ToLower().Contains("circuit"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("circuit") && !a2.Classe.ToLower().Contains("circuit"))
+                    {
+                        return null;
+                    }
+
+
+                    if (a2.Classe.ToLower().Contains("computer") && !a1.Classe.ToLower().Contains("computer"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("computer") && !a2.Classe.ToLower().Contains("computer"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("manufacturing") && a2.Classe.ToLower().Contains("manufacturing"))
+                {
+                    if (a2.Classe.ToLower().Contains("advanced") && !a1.Classe.ToLower().Contains("advanced"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("advanced") && !a2.Classe.ToLower().Contains("advanced"))
+                    {
+                        return null;
+                    }
+
+                    if (a2.Classe.ToLower().Contains("space") && !a1.Classe.ToLower().Contains("space"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("space") && !a2.Classe.ToLower().Contains("space"))
+                    {
+                        return null;
+                    }
+
+                    if (a2.Classe.ToLower().EndsWith(" b") && !a1.Classe.ToLower().EndsWith(" b"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().EndsWith(" b") && !a2.Classe.ToLower().EndsWith(" b"))
+                    {
+                        return null;
+                    }
+
+
+                }
+
+                if (a1.Classe.ToLower().Contains("food") && a2.Classe.ToLower().Contains("food"))
+                {
+                    if (a2.Classe.ToLower().Contains("materials") && !a1.Classe.ToLower().Contains("materials"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("materials") && !a2.Classe.ToLower().Contains("materials"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("materials") && a2.Classe.ToLower().Contains("materials"))
+                {
+                    if (a2.Classe.ToLower().Contains("nuclear") && !a1.Classe.ToLower().Contains("nuclear"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("nuclear") && !a2.Classe.ToLower().Contains("nuclear"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("fisica") && a2.Classe.ToLower().Contains("fisica"))
+                {
+                    if (a2.Classe.ToLower().Contains("sperimentale") && !a1.Classe.ToLower().Contains("sperimentale"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("sperimentale") && !a2.Classe.ToLower().Contains("sperimentale"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("per") && a2.Classe.ToLower().Contains("per"))
+                {
+                    if (a2.Classe.ToLower().Contains("gruppo") && !a1.Classe.ToLower().Contains("gruppo"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("gruppo") && !a2.Classe.ToLower().Contains("gruppo"))
+                    {
+                        return null;
+                    }
+                }
+
+
+                if (a1.Classe.ToLower().Contains("metodi") && a2.Classe.ToLower().Contains("metodi"))
+                {
+                    if (a2.Classe.ToLower().Contains("dispositivi") && !a1.Classe.ToLower().Contains("dispositivi"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("dispositivi") && !a2.Classe.ToLower().Contains("dispositivi"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("sicurezza") && a2.Classe.ToLower().Contains("sicurezza"))
+                {
+                    if (a2.Classe.ToLower().Contains("processo") && !a1.Classe.ToLower().Contains("processo"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("processo") && !a2.Classe.ToLower().Contains("processo"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("rischio") && a2.Classe.ToLower().Contains("rischio"))
+                {
+                    if (a2.Classe.ToLower().Contains("mitigazione") && !a1.Classe.ToLower().Contains("mitigazione"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("mitigazione") && !a2.Classe.ToLower().Contains("mitigazione"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("final") && a2.Classe.ToLower().Contains("final"))
+                {
+                    if (a2.Classe.ToLower().Contains("work") && !a1.Classe.ToLower().Contains("work"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("work") && !a2.Classe.ToLower().Contains("work"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("reti") && a2.Classe.ToLower().Contains("reti"))
+                {
+                    if (a2.Classe.ToLower().Contains("logiche") && !a1.Classe.ToLower().Contains("logiche"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("logiche") && !a2.Classe.ToLower().Contains("logiche"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("safety") && a2.Classe.ToLower().Contains("safety"))
+                {
+                    if (a2.Classe.ToLower().Contains("mobility") && !a1.Classe.ToLower().Contains("mobility"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("mobility") && !a2.Classe.ToLower().Contains("mobility"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("sistemi") && a2.Classe.ToLower().Contains("sistemi"))
+                {
+                    if (a2.Classe.ToLower().Contains("edilizi") && !a1.Classe.ToLower().Contains("edilizi"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("edilizi") && !a2.Classe.ToLower().Contains("edilizi"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("comunicazione") && a2.Classe.ToLower().Contains("comunicazione"))
+                {
+                    if (a2.Classe.ToLower().Contains("design") && !a1.Classe.ToLower().Contains("design"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("design") && !a2.Classe.ToLower().Contains("design"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains("magistrale") && a2.Classe.ToLower().Contains("magistrale"))
+                {
+                    if (a2.Classe.ToLower().Contains("tesi") && !a1.Classe.ToLower().Contains("tesi"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("tesi") && !a2.Classe.ToLower().Contains("tesi"))
+                    {
+                        return null;
+                    }
+                }
+
+
+                if (a1.Classe.ToLower().Contains("tesi") && a2.Classe.ToLower().Contains("tesi"))
+                {
+                    if (a2.Classe.ToLower().Contains("tesi") && !a1.Classe.ToLower().Contains("tesi"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("tesi") && !a2.Classe.ToLower().Contains("tesi"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a1.Classe.ToLower().Contains(" e ") && a2.Classe.ToLower().Contains(" e "))
+                {
+                    if (a2.Classe.ToLower().Contains("tesi") && !a1.Classe.ToLower().Contains("tesi"))
+                    {
+                        return null;
+                    }
+                    if (a1.Classe.ToLower().Contains("tesi") && !a2.Classe.ToLower().Contains("tesi"))
+                    {
+                        return null;
+                    }
+                }
+
+                if (a2.Classe.ToLower().EndsWith(" a") && !a1.Classe.ToLower().EndsWith(" a"))
+                {
+                    return null;
+                }
+                if (a1.Classe.ToLower().EndsWith(" a") && !a2.Classe.ToLower().EndsWith(" a"))
+                {
+                    return null;
+                }
+
+                if (a2.Classe.ToLower().EndsWith(" b") && !a1.Classe.ToLower().EndsWith(" b"))
+                {
+                    return null;
+                }
+                if (a1.Classe.ToLower().EndsWith(" b") && !a2.Classe.ToLower().EndsWith(" b"))
+                {
+                    return null;
+                }
+
+                if (a2.Classe.ToLower().EndsWith(" c") && !a1.Classe.ToLower().EndsWith(" c"))
+                {
+                    return null;
+                }
+                if (a1.Classe.ToLower().EndsWith(" c") && !a2.Classe.ToLower().EndsWith(" c"))
+                {
+                    return null;
+                }
+
+                if (a2.Classe.ToLower().EndsWith(" 1") && !a1.Classe.ToLower().EndsWith(" 1"))
+                {
+                    return null;
+                }
+                if (a1.Classe.ToLower().EndsWith(" 1") && !a2.Classe.ToLower().EndsWith(" 1"))
+                {
+                    return null;
+                }
+
+                if (a2.Classe.ToLower().EndsWith(" 2") && !a1.Classe.ToLower().EndsWith(" 2"))
+                {
+                    return null;
+                }
+                if (a1.Classe.ToLower().EndsWith(" 2") && !a2.Classe.ToLower().EndsWith(" 2"))
+                {
+                    return null;
+                }
+
+                if (a2.Classe.ToLower().EndsWith(" 3") && !a1.Classe.ToLower().EndsWith(" 3"))
+                {
+                    return null;
+                }
+                if (a1.Classe.ToLower().EndsWith(" 3") && !a2.Classe.ToLower().EndsWith(" 3"))
+                {
+                    return null;
+                }
+
+                if (a2.Classe.ToLower().StartsWith("al ") && !a1.Classe.ToLower().StartsWith("al "))
+                {
+                    return null;
+                }
+                if (a1.Classe.ToLower().StartsWith("al ") && !a2.Classe.ToLower().StartsWith("al "))
+                {
+                    return null;
+                }
+
+                if (a1.Classe.ToLower().Contains("~") && !a2.Classe.ToLower().Contains("~"))
+                    return null;
+
+                if (a2.Classe.ToLower().Contains("~") && !a1.Classe.ToLower().Contains("~"))
+                    return null;
+            }
+
+            if (!string.IsNullOrEmpty(a1.Classe) && !string.IsNullOrEmpty(a2.Classe) && a1.Classe.ToLower() == a2.Classe.ToLower())
+            {
+                //good
+            }
+            else
+            {
+                ;
+            }
+
+            ;
 
             if (String.IsNullOrEmpty(a1.Classe))
                 a1.Classe = a2.Classe;
