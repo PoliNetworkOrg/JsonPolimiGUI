@@ -1968,7 +1968,9 @@ namespace JsonPolimi
                 return;
             }
 
+#pragma warning disable CS1690 // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
             int i = askFromList.r.Value;
+#pragma warning restore CS1690 // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
 
             switch (i)
             {
