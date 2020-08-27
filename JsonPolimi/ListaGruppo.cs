@@ -734,6 +734,66 @@ namespace JsonPolimi
                 if (a2_cl.EndsWith(" d") && !a1_cl.EndsWith(" d"))
                     return SomiglianzaEnum.DIVERSI;
 
+                if (a1_cl.Contains("systems") && a2_cl.Contains("systems"))
+                {
+                    if (a1_cl.Contains("intelligent") && !a2_cl.Contains("intelligent"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("intelligent") && !a1_cl.Contains("intelligent"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("reti") && a2_cl.Contains("reti"))
+                {
+                    if (a1_cl.Contains("informatica") && !a2_cl.Contains("informatica"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("informatica") && !a1_cl.Contains("informatica"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("calcolatori") && a2_cl.Contains("calcolatori"))
+                {
+                    if (a1_cl.Contains("reti") && !a2_cl.Contains("reti"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("reti") && !a1_cl.Contains("reti"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("elettrotecnica") && a2_cl.Contains("elettrotecnica"))
+                {
+                    if (a1_cl.Contains("automazione") && !a2_cl.Contains("automazione"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("automazione") && !a1_cl.Contains("automazione"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (!Gruppo.IsEmpty(a1.Office) && !Gruppo.IsEmpty(a2.Office) && Gruppo.Confronta(a1.Office,a2.Office) != 0)
+                {
+                    return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("food") && a2_cl.Contains("food"))
+                {
+                    if (a1_cl.Contains("security") && !a2_cl.Contains("security"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("security") && !a1_cl.Contains("security"))
+                        return SomiglianzaEnum.DIVERSI;
+
+                    if (a1_cl.Contains("trends") && !a2_cl.Contains("trends"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("trends") && !a1_cl.Contains("trends"))
+                        return SomiglianzaEnum.DIVERSI;
+
+                    if (a1_cl.Contains("process") && !a2_cl.Contains("process"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("process") && !a1_cl.Contains("process"))
+                        return SomiglianzaEnum.DIVERSI;
+
+                    if (a1_cl.Contains("engineering") && !a2_cl.Contains("engineering"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("engineering") && !a1_cl.Contains("engineering"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
                 ;
             }
 
