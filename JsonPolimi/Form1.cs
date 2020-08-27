@@ -61,12 +61,16 @@ namespace JsonPolimi
             var infoData = stuff["info_data"];
             var i = infoData.Children();
 
+            int count = 0;
             foreach (var i2 in i)
             {
                 var i3 = i2.First;
 
                 Aggiungi(i3, false, false);
+                count++;
             }
+
+            Console.WriteLine("Added " + count + " groups");
 
             Variabili.L.Sort();
 
