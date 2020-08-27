@@ -352,16 +352,132 @@ namespace JsonPolimi
             if (eq.somiglianzaEnum == SomiglianzaEnum.IDENTITICI || eq.somiglianzaEnum == SomiglianzaEnum.DUBBIO)
             {
                 ;
+
+                SomiglianzaEnum somiglianzaEnum2 = Equivalenti6(a1, a2, eq);
+                switch (somiglianzaEnum2)
+                {
+                    case SomiglianzaEnum.IDENTITICI:
+                        {
+                            ;
+                            break;
+                        }
+                    case SomiglianzaEnum.DIVERSI:
+                        {
+                            eq.somiglianzaEnum = SomiglianzaEnum.DIVERSI;
+                            return new Tuple<SomiglianzaClasse, Gruppo>(eq, null);
+                        }
+                    case SomiglianzaEnum.DUBBIO:
+                        {
+                            ;
+
+                            SomiglianzaEnum somiglianzaEnum3 = SciogliDubbio(a1, a2);
+                            switch (somiglianzaEnum3)
+                            {
+                                case SomiglianzaEnum.IDENTITICI:
+                                    {
+                                        ; //todo
+                                    }
+                                case SomiglianzaEnum.DIVERSI:
+                                    {
+                                        return new Tuple<SomiglianzaClasse, Gruppo>(eq, null);
+                                        break;
+                                    }
+                                case SomiglianzaEnum.DUBBIO:
+                                    {
+                                        ;
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
+                }
+
                 var r2 = Unisci4(i, j, aggiusta_Annno);
                 if (r2.Item1 == false)
                 {
                     return new Tuple<SomiglianzaClasse, Gruppo>(eq, null);
                 }
 
+                ;
+
                 return new Tuple<SomiglianzaClasse, Gruppo>(eq, r2.Item2);
             }
 
-            return new Tuple<SomiglianzaClasse, Gruppo>(new SomiglianzaClasse(SomiglianzaEnum.DIVERSI), null);       
+            return new Tuple<SomiglianzaClasse, Gruppo>(new SomiglianzaClasse(SomiglianzaEnum.DIVERSI), null);
+        }
+
+        private SomiglianzaEnum SciogliDubbio(Gruppo a1, Gruppo a2)
+        {
+            throw new NotImplementedException();
+        }
+
+        private SomiglianzaEnum Equivalenti6(Gruppo a1, Gruppo a2, SomiglianzaClasse somiglianzaEnumOld)
+        {
+            ;
+
+            if (!string.IsNullOrEmpty(a1.Classe) && !string.IsNullOrEmpty(a2.Classe))
+            {
+                string a1_cl = a1.Classe.ToLower();
+                string a2_cl = a2.Classe.ToLower();
+
+                if (a1_cl.Contains("data") && a2_cl.Contains("data"))
+                {
+                    if (a1_cl.Contains("bip") && !a2_cl.Contains("bip"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("bip") && !a1_cl.Contains("bip"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("economia") && a2_cl.Contains("economia"))
+                {
+                    if (a1_cl.Contains("aerospaziale") && !a2_cl.Contains("aerospaziale"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("aerospaziale") && !a1_cl.Contains("aerospaziale"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                var checkToExit = CheckIfToExit(a1, a2);
+                if (checkToExit)
+                {
+                    return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("theory") && a2_cl.Contains("theory"))
+                {
+                    if (a1_cl.Contains("traffic") && !a2_cl.Contains("traffic"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("traffic") && !a1_cl.Contains("traffic"))
+                        return SomiglianzaEnum.DIVERSI;
+
+                    if (a1_cl.Contains("information") && !a2_cl.Contains("information"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("information") && !a1_cl.Contains("information"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("information") && a2_cl.Contains("information"))
+                {
+                    if (a1_cl.Contains("system") && !a2_cl.Contains("system"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("system") && !a1_cl.Contains("system"))
+                        return SomiglianzaEnum.DIVERSI;
+
+                    if (a1_cl.Contains("theory") && !a2_cl.Contains("theory"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("theory") && !a1_cl.Contains("theory"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl == a2_cl)
+                {
+                    return somiglianzaEnumOld.somiglianzaEnum;
+                }
+
+                ;
+            }
+
+            return somiglianzaEnumOld.somiglianzaEnum;
         }
 
         private SomiglianzaClasse Equivalenti3(Gruppo a1, Gruppo a2)
