@@ -298,8 +298,7 @@ namespace JsonPolimi
                         }
                         else if (r.Item1.somiglianzaEnum == SomiglianzaEnum.DUBBIO)
                         {
-                            //TODO: chiedere all'utente
-                            ;
+                            do_that = true;
                         }
 
                         if (r.Item2 == null)
@@ -376,6 +375,7 @@ namespace JsonPolimi
                                 case SomiglianzaEnum.IDENTITICI:
                                     {
                                         ; //todo
+                                        break;
                                     }
                                 case SomiglianzaEnum.DIVERSI:
                                     {
@@ -409,7 +409,69 @@ namespace JsonPolimi
 
         private SomiglianzaEnum SciogliDubbio(Gruppo a1, Gruppo a2)
         {
-            throw new NotImplementedException();
+            ;
+
+            string s1 = a1.Classe?.ToLower();
+            string s2 = a2.Classe?.ToLower();
+
+            if (string.IsNullOrEmpty(s1) && string.IsNullOrEmpty(s2))
+                return SomiglianzaEnum.DUBBIO;
+
+            if (string.IsNullOrEmpty(s1))
+                return SomiglianzaEnum.DIVERSI;
+
+            if (string.IsNullOrEmpty(s2))
+                return SomiglianzaEnum.DIVERSI;
+
+            if (s1 != s2)
+            {
+                return SomiglianzaEnum.DUBBIO;
+                }
+
+            if (!string.IsNullOrEmpty(a1.Platform) && !string.IsNullOrEmpty(a2.Platform) && a1.Platform != a2.Platform)
+            {
+                return SomiglianzaEnum.DIVERSI;
+            }
+
+            //	a1	{{"class":"Information Theory","office":null,"id":"TG///LclXl1g8Xq-OwrFr4JbInA///","degree":null,"school":null,"annocorso":null,"nomecorso":null,"idcorso":null,"pianostudi":null,"id_link":"LclXl1g8Xq-OwrFr4JbInA","language":"ENG","type":"C","year":null,"ccs":null,"permanentId":"-1001480351407","LastUpdateInviteLinkTime":"2020-03-09 14:10:18.000","platform":"TG"} JsonPolimi.Gruppo}	JsonPolimi.Gruppo
+            //  a2	{{"class":"INFORMATION THEORY","office":"Leonardo","id":"TG//Leonardo//054322/474/Z2E - MICROWAVES AND PHOTONICS","degree":null,"school":null,"annocorso":"2","nomecorso":null,"idcorso":"054322","pianostudi":"Z2E - MICROWAVES AND PHOTONICS","id_link":null,"language":"EN","type":"C","year":null,"ccs":"(474), Telecommunication Engineering - Ingegneria delle Telecomunicazioni","permanentId":null,"LastUpdateInviteLinkTime":null,"platform":"TG"} JsonPolimi.Gruppo}	JsonPolimi.Gruppo
+            
+            if (!string.IsNullOrEmpty(a1.PermanentId) && !string.IsNullOrEmpty(a2.PermanentId) && a1.PermanentId != a2.PermanentId)
+            {
+                return SomiglianzaEnum.DIVERSI;
+            }
+
+            if (!Gruppo.IsEmpty(a1.Office) && !Gruppo.IsEmpty(a2.Office) && Gruppo.Confronta(a1.Office, a2.Office) != 0)
+            {
+                return SomiglianzaEnum.DIVERSI;
+            }
+
+            if (!string.IsNullOrEmpty(a1.PianoDiStudi) && !string.IsNullOrEmpty(a2.PianoDiStudi) && a1.PianoDiStudi != a2.PianoDiStudi)
+            {
+                return SomiglianzaEnum.DIVERSI;
+            }
+
+            if (!string.IsNullOrEmpty(a1.Tipo) && !string.IsNullOrEmpty(a2.Tipo) && a1.Tipo != a2.Tipo)
+            {
+                return SomiglianzaEnum.DIVERSI;
+            }
+
+            if (!string.IsNullOrEmpty(a1.Tipo) && !string.IsNullOrEmpty(a2.Tipo) && a1.Tipo != a2.Tipo)
+            {
+                return SomiglianzaEnum.DIVERSI;
+            }
+
+            if (!string.IsNullOrEmpty(a1.School) && !string.IsNullOrEmpty(a2.School) && a1.School != a2.School)
+            {
+                return SomiglianzaEnum.DIVERSI;
+            }
+
+            if (!ListaStringhePerJSON.IsEmpty(a1.CCS) && !ListaStringhePerJSON.IsEmpty(a2.CCS) && ListaStringhePerJSON.Confronta(a1.CCS, a2.CCS) != 0)
+            {
+                return SomiglianzaEnum.DIVERSI;
+            }
+
+            return SomiglianzaEnum.DUBBIO;
         }
 
         private SomiglianzaEnum Equivalenti6(Gruppo a1, Gruppo a2, SomiglianzaClasse somiglianzaEnumOld)
@@ -473,6 +535,204 @@ namespace JsonPolimi
                 {
                     return somiglianzaEnumOld.somiglianzaEnum;
                 }
+
+                if (a1_cl.Contains("mobility") && a2_cl.Contains("mobility"))
+                {
+                    if (a1_cl.Contains("systems") && !a2_cl.Contains("systems"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("systems") && !a1_cl.Contains("systems"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (!string.IsNullOrEmpty(a1.IdLink) && !string.IsNullOrEmpty(a2.IdLink) && a1.IdLink != a2.IdLink)
+                    return SomiglianzaEnum.DIVERSI;
+
+                if ((a1_cl.Contains("tecnologie") && a2_cl.Contains("workshop")) || ((a2_cl.Contains("tecnologie") && a1_cl.Contains("workshop"))))
+                {
+                    if (a1_cl.Contains("digitali") && !a2_cl.Contains("digitali"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("digitali") && !a1_cl.Contains("digitali"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("tecnologie") || a2_cl.Contains("tecnologie"))
+                {
+                    if (a1_cl.Contains("software") && !a2_cl.Contains("software"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("software") && !a1_cl.Contains("software"))
+                        return SomiglianzaEnum.DIVERSI;
+
+                    if (a1_cl.Contains("idraulica") && !a2_cl.Contains("idraulica"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("idraulica") && !a1_cl.Contains("idraulica"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("computing") && a2_cl.Contains("computing"))
+                {
+                    if (a1_cl.Contains("parallel") && !a2_cl.Contains("parallel"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("parallel") && !a1_cl.Contains("parallel"))
+                        return SomiglianzaEnum.DIVERSI;
+
+                    if (a1_cl.Contains("systems") && !a2_cl.Contains("systems"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("systems") && !a1_cl.Contains("systems"))
+                        return SomiglianzaEnum.DIVERSI;
+
+                    if (a1_cl.Contains("genomic") && !a2_cl.Contains("genomic"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("genomic") && !a1_cl.Contains("genomic"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("progetto") && a2_cl.Contains("progetto"))
+                {
+                    if (a1_cl.Contains("ambiente") && !a2_cl.Contains("ambiente"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("ambiente") && !a1_cl.Contains("ambiente"))
+                        return SomiglianzaEnum.DIVERSI;
+
+                    if (a1_cl.Contains("api") && !a2_cl.Contains("api"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("api") && !a1_cl.Contains("api"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.EndsWith(" a") && a2_cl.EndsWith(" a"))
+                {
+                    if (a1_cl.Contains("informatica") && !a2_cl.Contains("informatica"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("informatica") && !a1_cl.Contains("informatica"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("automazione") && a2_cl.Contains("automazione"))
+                {
+                    if (a1_cl.Contains("processi") && !a2_cl.Contains("processi"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("processi") && !a1_cl.Contains("processi"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("systems") && a2_cl.Contains("systems"))
+                {
+                    if (a1_cl.Contains("robotic") && !a2_cl.Contains("robotic"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("robotic") && !a1_cl.Contains("robotic"))
+                        return SomiglianzaEnum.DIVERSI;
+
+                    if (a1_cl.Contains("advanced") && !a2_cl.Contains("advanced"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("advanced") && !a1_cl.Contains("advanced"))
+                        return SomiglianzaEnum.DIVERSI;
+
+                    if (a1_cl.Contains("computing") && !a2_cl.Contains("computing"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("computing") && !a1_cl.Contains("computing"))
+                        return SomiglianzaEnum.DIVERSI;
+
+                    if (a1_cl.Contains("control") && !a2_cl.Contains("control"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("control") && !a1_cl.Contains("control"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+
+                if (a1_cl.Contains("dispositivi") && a2_cl.Contains("dispositivi"))
+                {
+                    if (a1_cl.Contains("biomateriali") && !a2_cl.Contains("biomateriali"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("biomateriali") && !a1_cl.Contains("biomateriali"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("economics") && a2_cl.Contains("economics"))
+                {
+                    if (a1_cl.Contains("business") && !a2_cl.Contains("business"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("business") && !a1_cl.Contains("business"))
+                        return SomiglianzaEnum.DIVERSI;
+
+                    if (a1_cl.Contains("internet") && !a2_cl.Contains("internet"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("internet") && !a1_cl.Contains("internet"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("business") && a2_cl.Contains("business"))
+                {
+                    if (a1_cl.Contains("t2d") && !a2_cl.Contains("t2d"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("t2d") && !a1_cl.Contains("t2d"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("networks") && a2_cl.Contains("networks"))
+                {
+                    if (a1_cl.Contains("transport") && !a2_cl.Contains("transport"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("transport") && !a1_cl.Contains("transport"))
+                        return SomiglianzaEnum.DIVERSI;
+
+                    if (a1_cl.Contains("radio") && !a2_cl.Contains("radio"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("radio") && !a1_cl.Contains("radio"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("processing") && a2_cl.Contains("processing"))
+                {
+                    if (a1_cl.Contains("big") && !a2_cl.Contains("big"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("big") && !a1_cl.Contains("big"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("data") && a2_cl.Contains("data"))
+                {
+                    if (a1_cl.Contains("quality") && !a2_cl.Contains("quality"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("quality") && !a1_cl.Contains("quality"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("quality") && a2_cl.Contains("quality"))
+                {
+                    if (a1_cl.Contains("data") && !a2_cl.Contains("data"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("data") && !a1_cl.Contains("data"))
+                        return SomiglianzaEnum.DIVERSI;
+
+                    if (a1_cl.Contains("information") && !a2_cl.Contains("information"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("information") && !a1_cl.Contains("information"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.Contains("economia") && a2_cl.Contains("economia"))
+                {
+                    if (a1_cl.Contains("ambientale") && !a2_cl.Contains("ambientale"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("ambientale") && !a1_cl.Contains("ambientale"))
+                        return SomiglianzaEnum.DIVERSI;
+
+                    if (a1_cl.Contains("trasporti") && !a2_cl.Contains("trasporti"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("trasporti") && !a1_cl.Contains("trasporti"))
+                        return SomiglianzaEnum.DIVERSI;
+
+                    if (a1_cl.Contains("aerospaziali") && !a2_cl.Contains("aerospaziali"))
+                        return SomiglianzaEnum.DIVERSI;
+                    if (a2_cl.Contains("aerospaziali") && !a1_cl.Contains("aerospaziali"))
+                        return SomiglianzaEnum.DIVERSI;
+                }
+
+                if (a1_cl.EndsWith(" d") && !a2_cl.EndsWith(" d"))
+                    return SomiglianzaEnum.DIVERSI;
+
+                if (a2_cl.EndsWith(" d") && !a1_cl.EndsWith(" d"))
+                    return SomiglianzaEnum.DIVERSI;
 
                 ;
             }

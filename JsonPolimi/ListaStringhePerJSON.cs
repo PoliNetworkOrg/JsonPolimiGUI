@@ -125,5 +125,71 @@ namespace JsonPolimi
             return null;
 
         }
+
+        /*
+            return (o1 == o2)  =>  0
+            return (o1 >  o2)  => +1
+            return (o1 <  o2)  => -1
+        */
+        internal static int Confronta(ListaStringhePerJSON o1, ListaStringhePerJSON o2)
+        {
+            if (o1 == null && o2 == null)
+                return 0;
+
+            if (o1 == null)
+                return -1;
+
+            if (o2 == null)
+                return 1;
+
+            bool contained = true;
+            foreach (var i1 in o1.o)
+            {
+                bool contains = o2.o.Contains(i1);
+                if (!contains)
+                {
+                    contained = false;
+                }
+
+            }
+
+            if (contained)
+            {
+                if (o1.o.Count == o2.o.Count)
+                    return 0;
+
+                return -1;
+            }
+
+            foreach (var i2 in o2.o)
+            {
+                bool contains = o1.o.Contains(i2);
+                if (!contains)
+                {
+                    contained = false;
+                }
+
+            }
+
+            if (contained)
+            {
+                if (o1.o.Count == o2.o.Count)
+                    return 0;
+
+                return 1;
+            }
+
+            ;
+
+            return 1;
+        }
+
+        internal static bool IsEmpty(ListaStringhePerJSON o)
+        {
+            if (o == null)
+                return true;
+
+            return o.IsEmpty();
+        }
     }
 }

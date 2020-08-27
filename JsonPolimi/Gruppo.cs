@@ -475,6 +475,16 @@ namespace JsonPolimi
             }
         }
 
+        /*
+            return (o1 == o2)  =>  0
+            return (o1 >  o2)  => +1
+            return (o1 <  o2)  => -1
+        */
+        internal static int Confronta(ListaStringhePerJSON o1, ListaStringhePerJSON o2)
+        {
+            return ListaStringhePerJSON.Confronta(o1, o2);
+        }
+
         private static void AggiungiLingua(string vUpper, ref InsiemeDiGruppi g)
         {
             g.GruppoDiBase.Language = vUpper;
