@@ -331,6 +331,9 @@ namespace JsonPolimi
 
         private static string EscapeQuotes(string s)
         {
+            if (s == null)
+                return null;
+
             for (var i = 0; i < 3; i++)
             {
                 s = UnEscapeQuotes(s);
@@ -356,6 +359,9 @@ namespace JsonPolimi
 
         private static string UnEscapeQuotes(string s)
         {
+            if (s == null)
+                return null;
+
             var s2 = "";
             var i = 0;
             while (i < s.Length - 1)

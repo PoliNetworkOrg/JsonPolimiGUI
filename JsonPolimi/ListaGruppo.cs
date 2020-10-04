@@ -1690,6 +1690,16 @@ namespace JsonPolimi
             return a1;
         }
 
+        internal bool VediSeCeGiaDaURL(string url)
+        {
+            foreach(var i in this._l)
+            {
+                if (i.IdLink == url)
+                    return true;
+            }
+            return false;
+        }
+
         private bool CheckIfToExit(Gruppo a1, Gruppo a2)
         {
             if (!string.IsNullOrEmpty(a1.Classe) && !string.IsNullOrEmpty(a2.Classe))
@@ -2328,6 +2338,29 @@ namespace JsonPolimi
             }
 
             return false;
+        }
+
+        internal void AddAndMerge(Gruppo g, int groupId)
+        {
+            this._l[groupId].Merge(g);
+        }
+
+        internal int? FindInRamSQL(long id)
+        {
+            ;
+
+            string ids = id.ToString();
+
+            for (int i=0; i<this._l.Count; i++)
+            {
+                var g = this._l[i];
+                if (g.PermanentId == ids)
+                {
+                    return i;
+                }
+            }
+
+            return null;
         }
 
         internal void RicreaID()

@@ -12,6 +12,7 @@ using Size = System.Drawing.Size;
 using HtmlAgilityPack;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
 
 namespace JsonPolimi
 {
@@ -144,6 +145,10 @@ namespace JsonPolimi
 
                 html += "<td>";
                 html += elem.PermanentId;
+                html += "</td>";
+
+                html += "<td>";
+                html += elem.NomeCorso;
                 html += "</td>";
 
                 html += "</tr>";
@@ -340,12 +345,12 @@ namespace JsonPolimi
             Refresh_Tabella();
         }
 
-        private void Button3_Click(CheckGruppo.E i)
+        private void Button3_Click(CheckGruppo.E i, bool entrambi_index)
         {
-            Salva_Generico(new CheckGruppo(i));
+            Salva_Generico(new CheckGruppo(i), entrambi_index);
         }
 
-        private void Salva_Generico(CheckGruppo v)
+        private void Salva_Generico(CheckGruppo v, bool entrambi_index)
         {
             if (Variabili.L == null)
             {
@@ -357,50 +362,63 @@ namespace JsonPolimi
             Aggiusta();
             Variabili.L.Sort();
 
-            var json = "{\"info_data\":{";
             var n = Variabili.L.GetCount();
-            for (var i = 0; i < n; i++)
-            {
-                var elem = Variabili.L.GetElem(i);
 
-                bool tenere = DoCheckGruppo(v, elem);
-                if (tenere)
+            var json = "{";
+
+            if (entrambi_index)
+            {
+                json += "\"info_data\":{";
+         
+                for (var i = 0; i < n; i++)
                 {
-                    json += '\n';
-                    json += '"';
-                    json += elem.Id;
-                    json += '"' + ":";
-                    json += elem.To_json(v.n);
-                    json += ',';
+                    var elem = Variabili.L.GetElem(i);
+
+                    bool tenere = DoCheckGruppo(v, elem);
+                    if (tenere)
+                    {
+                        json += '\n';
+                        json += '"';
+                        json += elem.Id;
+                        json += '"' + ":";
+                        json += elem.To_json(v.n);
+                        json += ',';
+                    }
                 }
-            }
 
-            if (json.EndsWith(","))
-            {
-                json = json.Substring(0, json.Length - 1);
-            }
-
-            json += "},";
-            json += '\n';
-            json += "\"index_data\":[";
-            for (var i = 0; i < n; i++)
-            {
-                var elem = Variabili.L.GetElem(i);
-                bool tenere = DoCheckGruppo(v, elem);
-                if (tenere)
+                if (json.EndsWith(","))
                 {
-                    json += '\n';
-                    json += elem.To_json(v.n);
-                    json += ',';
+                    json = json.Substring(0, json.Length - 1);
                 }
-            }
 
-            if (json.EndsWith(","))
+                json += "}";
+                json += ",";
+            }
+            if (true)
             {
-                json = json.Substring(0, json.Length - 1);
-            }
 
-            json += "]}";
+                json += '\n';
+                json += "\"index_data\":[";
+                for (var i = 0; i < n; i++)
+                {
+                    var elem = Variabili.L.GetElem(i);
+                    bool tenere = DoCheckGruppo(v, elem);
+                    if (tenere)
+                    {
+                        json += '\n';
+                        json += elem.To_json(v.n);
+                        json += ',';
+                    }
+                }
+
+                if (json.EndsWith(","))
+                {
+                    json = json.Substring(0, json.Length - 1);
+                }
+
+                json += "]";
+            }
+            json += "}";
 
             Salva(json);
         }
@@ -483,6 +501,9 @@ namespace JsonPolimi
 
         private static string AggiustaNome(string s)
         {
+            if (s == null)
+                return null;
+
             if (s.Contains("<="))
             {
                 var n = s.IndexOf("<=", StringComparison.Ordinal);
@@ -1963,6 +1984,23 @@ namespace JsonPolimi
                 return;
             }
 
+            bool? entrambi_index = null;
+            DialogResult dialogResult = MessageBox.Show("Vuoi entrambi gli index (si) o solo uno (no)?", "Scegli", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                entrambi_index = true;
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                entrambi_index = false;
+            }
+
+            if (entrambi_index == null)
+            {
+                MessageBox.Show("Non hai scelto nulla!");
+                return;
+            }
+
 #pragma warning disable CS1690 // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
             int i = askFromList.r.Value;
 #pragma warning restore CS1690 // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
@@ -1977,22 +2015,471 @@ namespace JsonPolimi
 
                 case 1:
                     {
-                        Button3_Click(CheckGruppo.E.VECCHIA_RICERCA);
+                        Button3_Click(CheckGruppo.E.VECCHIA_RICERCA, entrambi_index.Value);
                         return;
                     }
 
                 case 2:
                     {
-                        Button3_Click(CheckGruppo.E.NUOVA_RICERCA);
+                        Button3_Click(CheckGruppo.E.NUOVA_RICERCA, entrambi_index.Value);
                         return;
                     }
 
                 case 3:
                     {
-                        Button3_Click(CheckGruppo.E.TUTTO);
+                        Button3_Click(CheckGruppo.E.TUTTO, entrambi_index.Value);
                         return;
                     }
             }
+        }
+
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            if (Variabili.L == null)
+                Variabili.L = new ListaGruppo();
+
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            var r = openFileDialog.ShowDialog();
+            if (r != DialogResult.OK)
+                return;
+
+            ImportaTesto(openFileDialog.FileName);
+        }
+
+        private void ImportaTesto(string fileName)
+        {
+            try
+            {
+                var r = File.ReadAllLines(fileName);
+                ImportaTesto2(r);
+            }
+            catch
+            {
+                ;
+            }
+        }
+
+        private void ImportaTesto2(string[] r)
+        {
+            if (r == null)
+                return;
+
+            string acc = "";
+            
+          
+            for (int i=0; i<r.Length; i++)
+            {
+                if (string.IsNullOrEmpty(r[i]))
+                {
+                    acc = "";
+                }
+
+                if (string.IsNullOrEmpty(acc) && lastAdded != null && lastAdded.Count > 0)
+                {
+                    try
+                    {
+                        bool aggiunto2 = AggiungiTesto("", r[i].Trim(), true);
+                        if (aggiunto2)
+                            continue;
+                    }
+                    catch
+                    {
+                        ;
+                    }
+                }
+
+                acc += r[i].Trim() + " ";
+
+
+           
+                bool aggiunto = ValutaSeDaAggiungereENelCasoAggiungi(acc);
+                if (aggiunto)
+                    acc = "";
+                else
+                {
+                    lastAdded = null;
+                }
+            }
+        }
+
+        private bool ValutaSeDaAggiungereENelCasoAggiungi(string acc)
+        {
+            if (string.IsNullOrEmpty(acc))
+                return false;
+
+            List<string> acc_splitted;
+            if (acc.Contains(" ") == false)
+            {
+                acc_splitted = new List<string>() { acc };
+            }
+            else
+            {
+                acc_splitted = acc.Split(' ').ToList();
+            }
+
+            Tuple<int?,int?> indexofwebsite = ControllaSeCeUnSito(acc_splitted);
+            if (indexofwebsite == null || indexofwebsite.Item1 == null || indexofwebsite.Item2 == null)
+                return false;
+
+            string nome = "";
+            for (int i=0; i< acc_splitted.Count; i++)
+            {
+                if (i!= indexofwebsite.Item1.Value)
+                {
+                    nome += acc_splitted[i].Trim() + " ";
+                }
+            }
+
+            string url = "";
+            if (indexofwebsite.Item2.Value == 0)
+            {
+                url = acc_splitted[indexofwebsite.Item1.Value];
+            }
+            else
+            {
+                ;
+            }
+
+            return AggiungiTesto(nome, url, false);
+        }
+
+        List<string> lastAdded = null;
+
+        private bool AggiungiTesto(string nome, string url, bool gruppoAdded)
+        {
+            int? r2 = ControllaSeCeUnSito2(url);
+            if (r2 == null || r2 != 0)
+                return false;
+
+            if (gruppoAdded && (lastAdded != null && lastAdded.Count > 0))
+            {
+               
+                Gruppo g2 = new Gruppo
+                {
+                    NomeCorso = lastAdded[lastAdded.Count-1].Trim(),
+                    IdLink = url.Trim(),
+                    Id = url.Trim()
+                };
+                g2.RicreaId();
+                bool ce_gia2 = VediSeCeGiaDaURL(url);
+                if (ce_gia2 == false)
+                {
+                    if (lastAdded == null)
+                        lastAdded = new List<string>();
+
+                    lastAdded.Add(g2.NomeCorso);
+                    Variabili.L.Add(g2, false);
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(nome) || string.IsNullOrEmpty(url))
+                return false;
+
+            Gruppo g = new Gruppo
+            {
+                NomeCorso = nome.Trim(),
+                IdLink = url.Trim(),
+                Id = url.Trim()
+            };
+            g.RicreaId();
+
+            bool ce_gia = VediSeCeGiaDaURL(url);
+            if (ce_gia == false)
+            {
+                if (lastAdded == null)
+                    lastAdded = new List<string>();
+
+                lastAdded.Add(g.NomeCorso);
+                Variabili.L.Add(g, false);
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool VediSeCeGiaDaURL(string url)
+        {
+            return Variabili.L.VediSeCeGiaDaURL(url);
+        }
+
+        private Tuple<int?, int?> ControllaSeCeUnSito(List<string> acc)
+        {
+            if (acc == null)
+                return null;
+
+            for (int i =0; i< acc.Count; i++)
+            {
+                int? r = ControllaSeCeUnSito2(acc[i]);
+                if (r != null)
+                    return new Tuple<int?, int?>( i, r);
+            }
+
+            return null;
+        }
+
+        private int? ControllaSeCeUnSito2(string v)
+        {
+            bool result = Uri.TryCreate(v, UriKind.Absolute, out Uri uriResult)
+                && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+
+            if (result)
+                return 0;
+
+
+            int i = v.IndexOf("http://");
+            if (i >= 0)
+                return i;
+
+            i = v.IndexOf("https://");
+            if (i >= 0)
+                return i;
+
+            return null;
+        }
+
+        private void button10_Click_1(object sender, EventArgs e)
+        {
+            if (Variabili.L == null)
+                Variabili.L = new ListaGruppo();
+
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            var r = openFileDialog.ShowDialog();
+            if (r != DialogResult.OK)
+            {
+                return;
+            }
+
+            var read = File.ReadAllText(openFileDialog.FileName);
+
+            try
+            {
+                ImportaSQL(read);
+            }
+            catch
+            {
+                ;
+            }
+        }
+
+        private void ImportaSQL(string read)
+        {
+            string[] s = read.Split(new string[] { "INSERT INTO \"Groups\" " }, StringSplitOptions.None);
+
+            ;
+
+            foreach (var s2 in s)
+            {
+                try
+                {
+                    ImportaSQL2(s2);
+                }
+                catch (Exception e2)
+                {
+                    ;
+                }
+            }
+        }
+
+        private void ImportaSQL2(string s2)
+        {
+            if (string.IsNullOrEmpty(s2))
+                return;
+
+            if (s2.StartsWith("(") == false)
+                return;
+
+            ;
+
+            var s3 = s2.Split(new string[] { "VALUES" }, StringSplitOptions.None);
+
+            var s4 = s3[1];
+
+            ;
+
+            s4 = s4.Trim();
+
+
+            ;
+
+            int lastSemiColomn = s4.LastIndexOf(";");
+            if (lastSemiColomn < 0 || lastSemiColomn >= s4.Length)
+                return;
+
+            string s5 = s4.Substring(0, lastSemiColomn).Trim();
+
+            ;
+
+            ImportaSQL3(s5);
+        }
+
+        private void ImportaSQL3(string s5)
+        {
+            ;
+
+            var s6 = s5.Split(',');
+
+            ;
+
+            if (s6.Length == 7)
+            {
+                ImportaSQL4(s6);
+                return;
+            }
+
+            ;
+
+            List<string> s7 = new List<string>();
+            for (int i=0; i<6; i++)
+            {
+                s7.Add(s6[i]);
+            }
+
+            ;
+
+            string nome = "";
+            for (int i=6; i<s6.Length; i++)
+            {
+                nome += s6[i] + ",";
+            }
+            if (nome[nome.Length - 1] == ',')
+            {
+                nome = nome.Remove(nome.Length - 1);
+            }
+
+            s7.Add(nome);
+
+            ImportaSQL4(s7.ToArray());
+
+        }
+
+        private void ImportaSQL4(string[] s6)
+        {
+            long id = Convert.ToInt64( s6[0].Substring(1).Trim());
+            int? id_in_ram = FindInRamSQL(id);
+            if (id_in_ram == null)
+            {
+                ImportaSQL5(s6);
+            }
+            else
+            {
+                ImportaSQL6(s6, id_in_ram.Value);
+            }
+        }
+
+        private void ImportaSQL6(string[] s6, int GroupId)
+        {
+            Gruppo g = OttieniGruppoSQL(s6);
+
+            Variabili.L.AddAndMerge(g, GroupId);
+        }
+
+        private void ImportaSQL5(string[] s6)
+        {
+            ;
+
+            Gruppo g = OttieniGruppoSQL(s6);
+
+            //this group is not in ram, we have to add it
+            Variabili.L.Add(g, false);
+        }
+
+        private Gruppo OttieniGruppoSQL(string[] s6)
+        {
+            var s7 = s6[3].Split('/');
+
+            Gruppo g = new Gruppo();
+            g.PermanentId = s6[0].Substring(1).Trim();
+            g.Platform = "TG";
+            g.IdLink = s7[s7.Length - 1].Trim();
+            if (g.IdLink[g.IdLink.Length - 1] == '\'')
+            {
+                g.IdLink = g.IdLink.Remove(g.IdLink.Length - 1);
+            }
+            g.Classe = s6[6].Trim();
+            if (g.Classe[g.Classe.Length - 1] == ')')
+            {
+                g.Classe = g.Classe.Remove(g.Classe.Length - 1);
+            }
+            if (g.Classe[g.Classe.Length - 1] == '\'')
+            {
+                g.Classe = g.Classe.Remove(g.Classe.Length - 1);
+            }
+            if (g.Classe[0] == '\'')
+            {
+                g.Classe = g.Classe.Substring(1).Trim();
+            }
+            g.LastUpdateInviteLinkTime = ToDateTime(s6[4]);
+
+            g.Aggiusta(false, true);
+            return g;
+        }
+
+        private DateTime? ToDateTime(string v)
+        {
+            var v2 = v.Trim().Split(' ');
+
+            if (v2.Length < 2)
+                return null;
+
+            var v3 = v2[0].Split('-');
+            var v4 = v2[1].Split('.');
+            var v5 = v4[0].Trim().Split(':');
+
+            ;
+
+            if (v3[0].StartsWith("'"))
+            {
+                v3[0] = v3[0].Substring(1);
+            }
+
+            int anno = Convert.ToInt32(v3[0]);
+            int mese = Convert.ToInt32(v3[1]);
+            int giorno = Convert.ToInt32(v3[2]);
+            int ora = Convert.ToInt32(v5[0]);
+            int minuto = Convert.ToInt32(v5[1]);
+
+            if (v5[2][v5[2].Length - 1] == '\'')
+            {
+                v5[2] = v5[2].Remove(v5[2].Length - 1);
+            }
+
+            int secondo = Convert.ToInt32(v5[2]);
+
+            int millisec = 0;
+            if (v4.Length > 1)
+            {
+
+                if (v4[1][v4[1].Length - 1] == '\'')
+                {
+                    v4[1] = v4[1].Remove(v4[1].Length - 1);
+                }
+
+                if (v4[1].Length > 3)
+                {
+                    v4[1] = v4[1].Substring(0, 3);
+                }
+
+                millisec = Convert.ToInt32(v4[1]);
+            }
+
+            return new DateTime(anno,
+                mese,
+                giorno,
+                ora,
+                minuto,
+                secondo,
+                millisec);
+            return null;
+        }
+
+        private int? FindInRamSQL(long id)
+        {
+            ;
+
+            return Variabili.L.FindInRamSQL(id);
         }
     }
 }
