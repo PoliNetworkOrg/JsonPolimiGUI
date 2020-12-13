@@ -1319,5 +1319,66 @@ namespace JsonPolimi
         {
             this.Id = CreaId();
         }
+
+        internal void AggiustaNomeDoppio()
+        {
+            if (string.IsNullOrEmpty(this.Classe))
+                return;
+
+            int i = 0;
+            int j = 1;
+
+            float ugualeMax = this.Classe.Length / 3f;
+            if (ugualeMax < 5)
+                ugualeMax = 5;
+
+            string uguale = "";
+
+            for (int k=0; k<this.Classe.Length -1 ; k++)
+            {
+                if (this.Classe[k] == ' ' && this.Classe[k+1] == ' ')
+                {
+                    this.Classe = this.Classe.Remove(k, 1);
+                    k--;
+                }
+            }
+
+            while(true)
+            {
+                if (i >= this.Classe.Length || j >= this.Classe.Length)
+                {
+                    ;
+
+                    if (uguale.Length > ugualeMax)
+                    {
+                        this.Classe = uguale;
+                        return;
+                    }
+
+                    return;
+                }
+
+                if (this.Classe[i].ToString().ToLower() == this.Classe[j].ToString().ToLower())
+                {
+                    uguale += this.Classe[i];
+                    i++;
+                    j++;
+                }
+                else
+                {
+                    ;
+
+                    if (uguale.Length > ugualeMax)
+                    {
+                        this.Classe = uguale;
+                        return;
+                    }
+
+                    uguale = "";
+                    j++;
+                    i = 0;
+                }
+            }
+        }
     }
 }

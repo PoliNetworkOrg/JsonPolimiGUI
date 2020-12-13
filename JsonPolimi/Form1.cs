@@ -429,6 +429,10 @@ namespace JsonPolimi
             {
                 case CheckGruppo.E.VECCHIA_RICERCA:
                     {
+                        if (string.IsNullOrEmpty(elem.Classe))
+                            return false;
+                        if (string.IsNullOrEmpty(elem.IdLink))
+                            return false;
                         break;
                     }
                 case CheckGruppo.E.NUOVA_RICERCA:
@@ -2411,6 +2415,13 @@ namespace JsonPolimi
             {
                 g.Classe = g.Classe.Substring(1).Trim();
             }
+
+            int semicolomn = g.Classe.IndexOf(");");
+            if (semicolomn>=0 && semicolomn < g.Classe.Length)
+            {
+                g.Classe = g.Classe.Substring(0, semicolomn).Trim();
+            }
+
             g.LastUpdateInviteLinkTime = ToDateTime(s6[4]);
 
             g.Aggiusta(false, true);
@@ -2480,6 +2491,16 @@ namespace JsonPolimi
             ;
 
             return Variabili.L.FindInRamSQL(id);
+        }
+
+        private void button20_Click(object sender, EventArgs e)
+        {
+            if (Variabili.L == null)
+            {
+                Variabili.L = new ListaGruppo();
+            }
+
+            Variabili.L.AggiustaNomiDoppi();
         }
     }
 }

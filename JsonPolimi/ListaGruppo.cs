@@ -334,6 +334,8 @@ namespace JsonPolimi
                     }
                 }
             }
+
+            ;
         }
 
         private Tuple<SomiglianzaClasse, Gruppo> Equivalenti(int i, int j, bool aggiusta_Anno)
@@ -385,6 +387,17 @@ namespace JsonPolimi
                                 case SomiglianzaEnum.DUBBIO:
                                     {
                                         ;
+
+                                        if (a1.Id == a2.Id)
+                                        {
+                                            var r7 = Unisci4(i, j, aggiusta_Annno);
+                                            eq.somiglianzaEnum = SomiglianzaEnum.IDENTITICI;
+                                            return new Tuple<SomiglianzaClasse, Gruppo>(eq, r7.Item2);
+                                        }
+                                         
+
+                                        ;
+
                                         break;
                                     }
                             }
@@ -2338,6 +2351,14 @@ namespace JsonPolimi
             }
 
             return false;
+        }
+
+        internal void AggiustaNomiDoppi()
+        {
+            for (int i=0; i<this._l.Count; i++)
+            {
+                this._l[i].AggiustaNomeDoppio();
+            }
         }
 
         internal void AddAndMerge(Gruppo g, int groupId)
