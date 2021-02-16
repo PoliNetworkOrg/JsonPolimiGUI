@@ -129,7 +129,7 @@ namespace JsonPolimi
                 if (i1 != 0)
                     return i1;
 
-                i1 =  CompareOrdinal(a.PermanentId, b.PermanentId);
+                i1 = CompareOrdinal(a.PermanentId, b.PermanentId);
                 if (i1 != 0)
                     return i1;
 
@@ -141,7 +141,7 @@ namespace JsonPolimi
                 if (i1 != 0)
                     return i1;
 
-                i1 =  CompareInt(a.AnnoCorsoStudio, b.AnnoCorsoStudio);
+                i1 = CompareInt(a.AnnoCorsoStudio, b.AnnoCorsoStudio);
                 if (i1 != 0)
                     return i1;
 
@@ -306,9 +306,8 @@ namespace JsonPolimi
                             do_that = false;
                         }
 
-
-                        if (do_that) 
-                        { 
+                        if (do_that)
+                        {
                             if (i > j)
                             {
                                 this._l.RemoveAt(i);
@@ -340,11 +339,10 @@ namespace JsonPolimi
 
         private Tuple<SomiglianzaClasse, Gruppo> Equivalenti(int i, int j, bool aggiusta_Anno)
         {
-            return Equivalenti2(i, new Tuple<Gruppo, int> (this._l[j],j), aggiusta_Anno);
-            
+            return Equivalenti2(i, new Tuple<Gruppo, int>(this._l[j], j), aggiusta_Anno);
         }
 
-        private Tuple<SomiglianzaClasse, Gruppo> Equivalenti2(int i, Tuple<Gruppo,int> j, bool aggiusta_Annno)
+        private Tuple<SomiglianzaClasse, Gruppo> Equivalenti2(int i, Tuple<Gruppo, int> j, bool aggiusta_Annno)
         {
             Gruppo a1 = this._l[i];
             Gruppo a2 = j.Item1;
@@ -402,7 +400,6 @@ namespace JsonPolimi
                                             eq.somiglianzaEnum = SomiglianzaEnum.IDENTITICI;
                                             return new Tuple<SomiglianzaClasse, Gruppo>(eq, r7.Item2);
                                         }
-                                         
 
                                         ;
 
@@ -447,7 +444,7 @@ namespace JsonPolimi
             if (s1 != s2)
             {
                 return SomiglianzaEnum.DUBBIO;
-                }
+            }
 
             if (!string.IsNullOrEmpty(a1.Platform) && !string.IsNullOrEmpty(a2.Platform) && a1.Platform != a2.Platform)
             {
@@ -456,7 +453,7 @@ namespace JsonPolimi
 
             //	a1	{{"class":"Information Theory","office":null,"id":"TG///LclXl1g8Xq-OwrFr4JbInA///","degree":null,"school":null,"annocorso":null,"nomecorso":null,"idcorso":null,"pianostudi":null,"id_link":"LclXl1g8Xq-OwrFr4JbInA","language":"ENG","type":"C","year":null,"ccs":null,"permanentId":"-1001480351407","LastUpdateInviteLinkTime":"2020-03-09 14:10:18.000","platform":"TG"} JsonPolimi.Gruppo}	JsonPolimi.Gruppo
             //  a2	{{"class":"INFORMATION THEORY","office":"Leonardo","id":"TG//Leonardo//054322/474/Z2E - MICROWAVES AND PHOTONICS","degree":null,"school":null,"annocorso":"2","nomecorso":null,"idcorso":"054322","pianostudi":"Z2E - MICROWAVES AND PHOTONICS","id_link":null,"language":"EN","type":"C","year":null,"ccs":"(474), Telecommunication Engineering - Ingegneria delle Telecomunicazioni","permanentId":null,"LastUpdateInviteLinkTime":null,"platform":"TG"} JsonPolimi.Gruppo}	JsonPolimi.Gruppo
-            
+
             if (!string.IsNullOrEmpty(a1.PermanentId) && !string.IsNullOrEmpty(a2.PermanentId) && a1.PermanentId != a2.PermanentId)
             {
                 return SomiglianzaEnum.DIVERSI;
@@ -659,7 +656,6 @@ namespace JsonPolimi
                         return SomiglianzaEnum.DIVERSI;
                 }
 
-
                 if (a1_cl.Contains("dispositivi") && a2_cl.Contains("dispositivi"))
                 {
                     if (a1_cl.Contains("biomateriali") && !a2_cl.Contains("biomateriali"))
@@ -792,7 +788,7 @@ namespace JsonPolimi
                         return SomiglianzaEnum.DIVERSI;
                 }
 
-                if (!Gruppo.IsEmpty(a1.Office) && !Gruppo.IsEmpty(a2.Office) && Gruppo.Confronta(a1.Office,a2.Office) != 0)
+                if (!Gruppo.IsEmpty(a1.Office) && !Gruppo.IsEmpty(a2.Office) && Gruppo.Confronta(a1.Office, a2.Office) != 0)
                 {
                     return SomiglianzaEnum.DIVERSI;
                 }
@@ -835,7 +831,6 @@ namespace JsonPolimi
                     if (a2_cl.Contains("gruppo") && !a1_cl.Contains("gruppo"))
                         return SomiglianzaEnum.DIVERSI;
                 }
-
 
                 ;
             }
@@ -904,7 +899,7 @@ namespace JsonPolimi
                     if (!string.IsNullOrEmpty(a2.PermanentId))
                     {
                         if (a1.PermanentId != a2.PermanentId)
-                            return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
+                            return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI);
                     }
                 }
             }
@@ -928,7 +923,7 @@ namespace JsonPolimi
                 if (!String.IsNullOrEmpty(a2.Year))
                 {
                     if (a1.Year != a2.Year)
-                        return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
+                        return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI);
                 }
             }
 
@@ -937,7 +932,7 @@ namespace JsonPolimi
                 if (!String.IsNullOrEmpty(a2.Platform))
                 {
                     if (a1.Platform != a2.Platform)
-                        return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
+                        return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI);
                 }
             }
 
@@ -947,7 +942,7 @@ namespace JsonPolimi
                 {
                     int i1 = ListaGruppo.CompareOrdinal2(a1.Office, a2.Office);
                     if (i1 != 0)
-                        return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI, a1, a2);
+                        return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI, a1, a2);
                 }
             }
 
@@ -956,15 +951,15 @@ namespace JsonPolimi
                 if (!String.IsNullOrEmpty(a2.Degree))
                 {
                     if (a1.Degree != a2.Degree)
-                        return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
+                        return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI);
                 }
             }
 
             if (String.IsNullOrEmpty(a1.Classe))
-                return new SomiglianzaClasse( SomiglianzaEnum.DUBBIO,a1,a2);
+                return new SomiglianzaClasse(SomiglianzaEnum.DUBBIO, a1, a2);
 
             if (String.IsNullOrEmpty(a2.Classe))
-                return new SomiglianzaClasse( SomiglianzaEnum.DUBBIO,a1,a2);
+                return new SomiglianzaClasse(SomiglianzaEnum.DUBBIO, a1, a2);
 
             string[] s1 = a1.Classe.ToLower().Split(' ');
             string[] s2 = a2.Classe.ToLower().Split(' ');
@@ -975,50 +970,50 @@ namespace JsonPolimi
             if (sa1.Contains("magistrale"))
             {
                 if (String.IsNullOrEmpty(a2.Degree))
-                    return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
+                    return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI);
                 if (a2.Degree.ToLower() != "lm")
-                    return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
+                    return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI);
             }
             else if (sa1.Contains("triennale"))
             {
                 if (String.IsNullOrEmpty(a2.Degree))
-                    return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
+                    return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI);
                 if (a2.Degree.ToLower() != "lt")
-                    return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
+                    return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI);
             }
             else if (sa2.Contains("magistrale"))
             {
                 if (String.IsNullOrEmpty(a1.Degree))
-                    return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
+                    return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI);
                 if (a1.Degree.ToLower() != "lm")
-                    return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
+                    return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI);
             }
             else if (sa2.Contains("triennale"))
             {
                 if (String.IsNullOrEmpty(a1.Degree))
-                    return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
+                    return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI);
                 if (a1.Degree.ToLower() != "lt")
-                    return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
+                    return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI);
             }
 
             var b1 = (NomiSimili(a1.Classe, a2.Classe));
 
             if (b1 == SomiglianzaEnum.DUBBIO)
             {
-                return new SomiglianzaClasse( SomiglianzaEnum.DUBBIO, a1, a2);
+                return new SomiglianzaClasse(SomiglianzaEnum.DUBBIO, a1, a2);
             }
-            else if (b1 == SomiglianzaEnum.IDENTITICI) 
-            { 
+            else if (b1 == SomiglianzaEnum.IDENTITICI)
+            {
                 if (!string.IsNullOrEmpty(a1.IdLink) && string.IsNullOrEmpty(a2.IdLink) &&
                         string.IsNullOrEmpty(a1.IDCorsoPolimi) && !string.IsNullOrEmpty(a2.IDCorsoPolimi))
                 {
-                    return new SomiglianzaClasse( SomiglianzaEnum.DUBBIO,a1,a2);
+                    return new SomiglianzaClasse(SomiglianzaEnum.DUBBIO, a1, a2);
                 }
 
-                return new SomiglianzaClasse( SomiglianzaEnum.IDENTITICI);
+                return new SomiglianzaClasse(SomiglianzaEnum.IDENTITICI);
             }
 
-            return new SomiglianzaClasse( SomiglianzaEnum.DIVERSI);
+            return new SomiglianzaClasse(SomiglianzaEnum.DIVERSI);
         }
 
         private SomiglianzaEnum NomiSimili(string n1, string n2)
@@ -1387,7 +1382,7 @@ namespace JsonPolimi
             }
         }
 
-        private void Importa2(Tuple<Gruppo,int> l3, bool aggiusta_anno, Chiedi chiedi2)
+        private void Importa2(Tuple<Gruppo, int> l3, bool aggiusta_anno, Chiedi chiedi2)
         {
             for (int i = 0; i < _l.Count; i++)
             {
@@ -1534,7 +1529,6 @@ namespace JsonPolimi
 
                     if (chiedi2 == Chiedi.SI)
                     {
-
                         if (to_show)
                         {
                             AskToUnifyForm askToUnifyForm = new AskToUnifyForm(r)
@@ -1565,7 +1559,6 @@ namespace JsonPolimi
                     {
                         do_that = true;
                     }
-
                 }
 
                 if (do_that)
@@ -1603,7 +1596,7 @@ namespace JsonPolimi
             }
         }
 
-        private Tuple<bool,Gruppo> Unisci4(int i, Tuple<Gruppo,int> j, bool aggiusta_anno)
+        private Tuple<bool, Gruppo> Unisci4(int i, Tuple<Gruppo, int> j, bool aggiusta_anno)
         {
             Gruppo g = Unisci2(i, j, aggiusta_anno);
             if (g == null)
@@ -1663,7 +1656,6 @@ namespace JsonPolimi
 
                     if (!done)
                     {
-
                         a1.Classe = UnisciNomi(a1.Classe, a2.Classe);
                     }
                 }
@@ -1726,7 +1718,7 @@ namespace JsonPolimi
 
         internal bool VediSeCeGiaDaURL(string url)
         {
-            foreach(var i in this._l)
+            foreach (var i in this._l)
             {
                 if (i.IdLink == url)
                     return true;
@@ -1750,7 +1742,6 @@ namespace JsonPolimi
                     {
                         return true;
                     }
-
 
                     if (a2.Classe.ToLower() == "information theory" && a1.Classe.ToLower() == "advanced circuit theory")
                     {
@@ -1883,7 +1874,6 @@ namespace JsonPolimi
                         return true;
                     }
                 }
-
 
                 if (a1.Classe.ToLower().Contains("game") && a2.Classe.ToLower().Contains("game"))
                 {
@@ -2076,7 +2066,6 @@ namespace JsonPolimi
                         return true;
                     }
 
-
                     if (a2.Classe.ToLower().Contains("computer") && !a1.Classe.ToLower().Contains("computer"))
                     {
                         return true;
@@ -2115,8 +2104,6 @@ namespace JsonPolimi
                     {
                         return true;
                     }
-
-
                 }
 
                 if (a1.Classe.ToLower().Contains("food") && a2.Classe.ToLower().Contains("food"))
@@ -2166,7 +2153,6 @@ namespace JsonPolimi
                         return true;
                     }
                 }
-
 
                 if (a1.Classe.ToLower().Contains("metodi") && a2.Classe.ToLower().Contains("metodi"))
                 {
@@ -2276,7 +2262,6 @@ namespace JsonPolimi
                     }
                 }
 
-
                 if (a1.Classe.ToLower().Contains("tesi") && a2.Classe.ToLower().Contains("tesi"))
                 {
                     if (a2.Classe.ToLower().Contains("tesi") && !a1.Classe.ToLower().Contains("tesi"))
@@ -2376,7 +2361,7 @@ namespace JsonPolimi
 
         internal void CheckSeILinkVanno()
         {
-            for (int i=0; i<this._l.Count; i++)
+            for (int i = 0; i < this._l.Count; i++)
             {
                 this._l[i].CheckSeIlLinkVa();
             }
@@ -2384,7 +2369,7 @@ namespace JsonPolimi
 
         internal void AggiustaNomiDoppi()
         {
-            for (int i=0; i<this._l.Count; i++)
+            for (int i = 0; i < this._l.Count; i++)
             {
                 this._l[i].AggiustaNomeDoppio();
             }
@@ -2401,7 +2386,7 @@ namespace JsonPolimi
 
             string ids = id.ToString();
 
-            for (int i=0; i<this._l.Count; i++)
+            for (int i = 0; i < this._l.Count; i++)
             {
                 var g = this._l[i];
                 if (g.PermanentId == ids)
@@ -2415,7 +2400,7 @@ namespace JsonPolimi
 
         internal void RicreaID()
         {
-            for (int i =0; i<this._l.Count; i++)
+            for (int i = 0; i < this._l.Count; i++)
             {
                 _l[i].RicreaId();
             }
@@ -2425,15 +2410,15 @@ namespace JsonPolimi
         {
             for (int i = 0; i < _l.Count; i++)
             {
-                for (int j =0; j< this._l.Count; j++)
+                for (int j = 0; j < this._l.Count; j++)
                 {
                     if (
-                        i!=j &&
+                        i != j &&
                         !string.IsNullOrEmpty(this._l[i].IDCorsoPolimi) &&
                         !string.IsNullOrEmpty(this._l[j].IDCorsoPolimi) &&
                         this._l[i].IDCorsoPolimi == this._l[j].IDCorsoPolimi &&
                         string.IsNullOrEmpty(this._l[i].IdLink) &&
-                        !string.IsNullOrEmpty(this._l[j].IdLink) 
+                        !string.IsNullOrEmpty(this._l[j].IdLink)
 
                         )
                     {
@@ -2448,7 +2433,7 @@ namespace JsonPolimi
 
         internal void FixPianoStudi()
         {
-            for (int i=0; i<this._l.Count; i++)
+            for (int i = 0; i < this._l.Count; i++)
             {
                 if (string.IsNullOrEmpty(this._l[i].PianoDiStudi))
                 {
@@ -2462,7 +2447,6 @@ namespace JsonPolimi
                     {
                         this._l[i].PianoDiStudi = this._l[i].PianoDiStudi.Substring(0, this._l[i].PianoDiStudi.Length - 1);
                     }
-
                 }
 
                 this._l[i].RicreaId();

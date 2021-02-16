@@ -1349,7 +1349,10 @@ namespace JsonPolimi
             //AggiustaNomeDoppio3();
         }
 
+#pragma warning disable IDE0051 // Rimuovi i membri privati inutilizzati
+
         private void AggiustaNomeDoppio3()
+#pragma warning restore IDE0051 // Rimuovi i membri privati inutilizzati
         {
             string uguale = "";
 

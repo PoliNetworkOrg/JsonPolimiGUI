@@ -1,18 +1,17 @@
-﻿using Independentsoft.Office.Odf;
+﻿using HtmlAgilityPack;
 using JsonPolimi.Tipi;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using Telegram.Bot.Types.Enums;
 using Size = System.Drawing.Size;
-using HtmlAgilityPack;
-using System.Collections.Generic;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Linq;
 
 namespace JsonPolimi
 {
@@ -88,7 +87,6 @@ namespace JsonPolimi
                     count++;
                 }
             }
-
 
             Console.WriteLine("Added " + count + " groups");
 
@@ -204,7 +202,7 @@ namespace JsonPolimi
 
             g.Id = i["id"].ToString();
             g.Language = i["language"].ToString();
-            g.Office = new ListaStringhePerJSON( i["office"].ToString() );
+            g.Office = new ListaStringhePerJSON(i["office"].ToString());
             g.School = i["school"].ToString();
             g.IdLink = i["id_link"].ToString();
 
@@ -237,7 +235,7 @@ namespace JsonPolimi
 
             try
             {
-                g.CCS = new ListaStringhePerJSON( i["ccs"].ToString() );
+                g.CCS = new ListaStringhePerJSON(i["ccs"].ToString());
             }
             catch
             {
@@ -296,11 +294,10 @@ namespace JsonPolimi
                 g.LastUpdateInviteLinkTime = null;
                 throw e;
             }
-        
-            g.LinkFunzionante = BoolFromString(i["linkfunzionante"]);
-            
 
-            g.Aggiusta(aggiusta_Anno, creaid : false);
+            g.LinkFunzionante = BoolFromString(i["linkfunzionante"]);
+
+            g.Aggiusta(aggiusta_Anno, creaid: false);
 
             Variabili.L.Add(g, merge);
         }
@@ -409,7 +406,7 @@ namespace JsonPolimi
             if (entrambi_index)
             {
                 json += "\"info_data\":{";
-         
+
                 for (var i = 0; i < n; i++)
                 {
                     var elem = Variabili.L.GetElem(i);
@@ -437,7 +434,6 @@ namespace JsonPolimi
 
             if (true)
             {
-
                 json += '\n';
                 json += "\"index_data\":[";
                 for (var i = 0; i < n; i++)
@@ -466,7 +462,7 @@ namespace JsonPolimi
 
         private bool DoCheckGruppo(CheckGruppo v, Gruppo elem)
         {
-            switch(v.n)
+            switch (v.n)
             {
                 case CheckGruppo.E.RICERCA_SITO_V3:
                 case CheckGruppo.E.VECCHIA_RICERCA:
@@ -663,13 +659,9 @@ namespace JsonPolimi
 
         private static void Apri_ODS(string file, string year)
         {
-
             var ods_read = ODS_Reader.Read2(file);
 
-
             var nomeOld = new Gruppo();
-
-
 
             int n2 = Variabili.L.GetCount();
 
@@ -683,7 +675,6 @@ namespace JsonPolimi
                 {
                     Gruppo.AggiungiInformazioneAmbigua(y3.ToString().Trim(), ref g);
                 }
-
 
                 g.Aggiusta();
 
@@ -701,7 +692,6 @@ namespace JsonPolimi
 
                 if (!string.IsNullOrEmpty(g.NomeOld.Year)) nomeOld.Year = g.NomeOld.Year;
             }
-            
         }
 
         private void Button6_Click(object sender, EventArgs e)
@@ -760,7 +750,7 @@ namespace JsonPolimi
                 };
 
                 g.Aggiusta(true, true);
-                Variabili.L.Add(g, n2!=0);
+                Variabili.L.Add(g, n2 != 0);
             }
 
             Variabili.L.Sort();
@@ -860,6 +850,7 @@ namespace JsonPolimi
         }
 
         public static InfoManifesto infoManifesto = null;
+
         private void Button8_Click2(object sender, EventArgs e)
         {
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
@@ -876,7 +867,6 @@ namespace JsonPolimi
 
             var x1 = LoadManifesto(doc, "TG");
             Variabili.L.Importa(x1, false, Chiedi.SI);
-
         }
 
         private List<Gruppo> LoadManifesto(HtmlAgilityPack.HtmlDocument doc, string PLAT2)
@@ -895,14 +885,12 @@ namespace JsonPolimi
             for (int i = 0; i < L2.Count; i++)
             {
                 L2[i].AggiungiInfoDaManifesto(infoManifesto);
-                L2[i].CCS = new ListaStringhePerJSON( infoManifesto.corso_di_studio);
-                
+                L2[i].CCS = new ListaStringhePerJSON(infoManifesto.corso_di_studio);
+
                 L2[i].PianoDiStudi = pianostudi2;
             }
 
             return L2;
-
-
         }
 
         private List<Gruppo> GetGruppiFromDocument(HtmlAgilityPack.HtmlDocument doc, string pLAT2)
@@ -940,11 +928,10 @@ namespace JsonPolimi
             {
                 if (L[0].Name == "table")
                 {
-                    L2.Add(L[0]);                  
+                    L2.Add(L[0]);
                 }
 
                 L.AddRange(L[0].ChildNodes);
-                
 
                 L.RemoveAt(0);
             }
@@ -963,7 +950,7 @@ namespace JsonPolimi
                     string x3 = x2.Classe.Trim();
                     if (!string.IsNullOrEmpty(x3))
                     {
-                        LG.Add(x2);                  
+                        LG.Add(x2);
                     }
                 }
             }
@@ -990,7 +977,7 @@ namespace JsonPolimi
             }
 
             Gruppo g = Gruppo.FromInfoParteList(infoParteDiGruppo_list, pLAT2);
-            if (g != null  && g.IsValido())
+            if (g != null && g.IsValido())
             {
                 return g;
             }
@@ -999,7 +986,7 @@ namespace JsonPolimi
                 return null;
             }
         }
-        
+
         private bool Contiene_table2(HtmlNode htmlNode)
         {
             foreach (var x in htmlNode.ChildNodes)
@@ -1087,7 +1074,7 @@ namespace JsonPolimi
 
             if (ce2 == 2)
             {
-                if (htmlNode.ChildNodes.Count >0)
+                if (htmlNode.ChildNodes.Count > 0)
                 {
                     var x1 = htmlNode.ChildNodes[0];
                     ;
@@ -1118,14 +1105,13 @@ namespace JsonPolimi
                 {
                     ;
                 }
-                    
             }
 
             if (htmlNode.ChildNodes.Count == 3)
             {
                 if (htmlNode.ChildNodes[0].Name == "#text" &&
                     htmlNode.ChildNodes[1].Name != "#text" &&
-                    htmlNode.ChildNodes[2].Name == "#text" )
+                    htmlNode.ChildNodes[2].Name == "#text")
                 {
                     string s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
                     string s2 = htmlNode.ChildNodes[2].InnerHtml.Trim();
@@ -1243,23 +1229,18 @@ namespace JsonPolimi
                         htmlNode.ChildNodes[1].Name == "#text" &&
                         htmlNode.ChildNodes[2].Name == "img")
                 {
-                        if (htmlNode.ChildNodes[0].Attributes["src"].Value.Contains("/it.png"))
+                    if (htmlNode.ChildNodes[0].Attributes["src"].Value.Contains("/it.png"))
+                    {
+                        if (htmlNode.ChildNodes[2].Attributes["src"].Value.Contains("/en.png"))
                         {
-                            if (htmlNode.ChildNodes[2].Attributes["src"].Value.Contains("/en.png"))
+                            string s = htmlNode.ChildNodes[1].InnerHtml.Trim();
+                            if (string.IsNullOrEmpty(s))
                             {
-                                string s = htmlNode.ChildNodes[1].InnerHtml.Trim();
-                                if (string.IsNullOrEmpty(s))
-                                {
-                                    ;
-                                }
-                                else if (s == "/")
-                                {
-                                    return null; //sicuro
-                                }
-                                else
-                                {
-                                    ;
-                                }
+                                ;
+                            }
+                            else if (s == "/")
+                            {
+                                return null; //sicuro
                             }
                             else
                             {
@@ -1270,6 +1251,11 @@ namespace JsonPolimi
                         {
                             ;
                         }
+                    }
+                    else
+                    {
+                        ;
+                    }
                 }
                 else
                 {
@@ -1282,7 +1268,7 @@ namespace JsonPolimi
                     {
                         return null;
                     }
-                    else if (htmlNode.ChildNodes[0].Name=="a" && htmlNode.ChildNodes[1].Name == "a" &&
+                    else if (htmlNode.ChildNodes[0].Name == "a" && htmlNode.ChildNodes[1].Name == "a" &&
                         htmlNode.ChildNodes[2].Name == "span")
                     {
                         LinkGruppo link2 = new LinkGruppo(htmlNode.ChildNodes[1].Attributes, htmlNode.ChildNodes[1].InnerHtml.Trim());
@@ -1293,7 +1279,6 @@ namespace JsonPolimi
                         ;
                     }
                 }
-
             }
             else if (htmlNode.ChildNodes.Count == 1)
             {
@@ -1326,7 +1311,7 @@ namespace JsonPolimi
                     {
                         if (x1.ChildNodes[0].Name == "#text" &&
                             x1.ChildNodes[1].Name == "div" &&
-                            x1.ChildNodes[2].Name == "#text" )
+                            x1.ChildNodes[2].Name == "#text")
                         {
                             string s11 = x1.ChildNodes[0].InnerHtml.Trim();
                             string s22 = x1.ChildNodes[2].InnerHtml.Trim();
@@ -1375,7 +1360,7 @@ namespace JsonPolimi
                         ;
                     }
                 }
-                else if(htmlNode.ChildNodes[0].Name == "#text")
+                else if (htmlNode.ChildNodes[0].Name == "#text")
                 {
                     return new InfoParteDiGruppo(testo_selvaggio: s1);
                 }
@@ -1604,7 +1589,6 @@ namespace JsonPolimi
                         {
                             ;
                         }
-
                     }
                     else
                     {
@@ -1643,7 +1627,7 @@ namespace JsonPolimi
                 }
                 else if (htmlNode.ChildNodes[0].Name == "a" && htmlNode.ChildNodes[1].Name == "span")
                 {
-                    LinkGruppo link2 = new LinkGruppo(htmlNode.ChildNodes[0].Attributes,htmlNode.ChildNodes[0].InnerHtml.Trim());
+                    LinkGruppo link2 = new LinkGruppo(htmlNode.ChildNodes[0].Attributes, htmlNode.ChildNodes[0].InnerHtml.Trim());
                     return new InfoParteDiGruppo(link: link2);
                 }
                 else
@@ -1707,9 +1691,8 @@ namespace JsonPolimi
                 }
                 else if (s.StartsWith("Architettura Urbanistica Ingegneria delle Costruzioni"))
                 {
-                    return null; 
+                    return null;
                 }
-
                 else if (s.StartsWith("BIO"))
                 {
                     List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>();
@@ -1746,7 +1729,6 @@ namespace JsonPolimi
                 {
                     return null;
                 }
-
                 else if (s.StartsWith("ING-IND"))
                 {
                     List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>();
@@ -1767,8 +1749,6 @@ namespace JsonPolimi
                 {
                     return null; //sicuro
                 }
-
-
                 else if (s.StartsWith("ING-INF"))
                 {
                     List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>();
@@ -1785,10 +1765,6 @@ namespace JsonPolimi
                     }
                     return new InfoParteDiGruppo(sottopezzi: sottopezzi2);
                 }
-
-
-
-
                 else if (s.StartsWith("GEO"))
                 {
                     List<InfoParteDiGruppo> sottopezzi2 = new List<InfoParteDiGruppo>();
@@ -1805,14 +1781,11 @@ namespace JsonPolimi
                     }
                     return new InfoParteDiGruppo(sottopezzi: sottopezzi2);
                 }
-
                 else
                 {
                     ;
                 }
-                   
             }
-
 
             return null;
         }
@@ -1850,7 +1823,7 @@ namespace JsonPolimi
                     {
                         if (x4.Name == "selected" && x4.Value == "selected")
                         {
-                            return new Tuple<bool, string>(true,x3.InnerHtml.Trim());
+                            return new Tuple<bool, string>(true, x3.InnerHtml.Trim());
                         }
                     }
                 }
@@ -1860,6 +1833,7 @@ namespace JsonPolimi
         }
 
 #pragma warning disable IDE0051 // Rimuovi i membri privati inutilizzati
+
         private HtmlNode GetGruppiFromDocument4(HtmlNode htmlNode)
 #pragma warning restore IDE0051 // Rimuovi i membri privati inutilizzati
         {
@@ -1898,7 +1872,6 @@ namespace JsonPolimi
 
         private void Form1_Load_1(object sender, EventArgs e)
         {
-
         }
 
         private void Button13_Click(object sender, EventArgs e)
@@ -1911,7 +1884,6 @@ namespace JsonPolimi
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
                 {
                     f = Directory.GetFiles(fbd.SelectedPath);
-
                 }
             }
 
@@ -1937,10 +1909,9 @@ namespace JsonPolimi
                 var b2 = ObjectToByteArray(L);
                 File.WriteAllBytes(path: saveFileDialog.FileName, bytes: b2);
             }
-
         }
 
-        byte[] ObjectToByteArray(object obj)
+        private byte[] ObjectToByteArray(object obj)
         {
             if (obj == null)
                 return null;
@@ -2063,8 +2034,6 @@ namespace JsonPolimi
                     }
             }
 
-
-
             switch (i)
             {
                 case 0:
@@ -2130,9 +2099,8 @@ namespace JsonPolimi
                 return;
 
             string acc = "";
-            
-          
-            for (int i=0; i<r.Length; i++)
+
+            for (int i = 0; i < r.Length; i++)
             {
                 if (string.IsNullOrEmpty(r[i]))
                 {
@@ -2155,8 +2123,6 @@ namespace JsonPolimi
 
                 acc += r[i].Trim() + " ";
 
-
-           
                 bool aggiunto = ValutaSeDaAggiungereENelCasoAggiungi(acc);
                 if (aggiunto)
                     acc = "";
@@ -2182,14 +2148,14 @@ namespace JsonPolimi
                 acc_splitted = acc.Split(' ').ToList();
             }
 
-            Tuple<int?,int?> indexofwebsite = ControllaSeCeUnSito(acc_splitted);
+            Tuple<int?, int?> indexofwebsite = ControllaSeCeUnSito(acc_splitted);
             if (indexofwebsite == null || indexofwebsite.Item1 == null || indexofwebsite.Item2 == null)
                 return false;
 
             string nome = "";
-            for (int i=0; i< acc_splitted.Count; i++)
+            for (int i = 0; i < acc_splitted.Count; i++)
             {
-                if (i!= indexofwebsite.Item1.Value)
+                if (i != indexofwebsite.Item1.Value)
                 {
                     nome += acc_splitted[i].Trim() + " ";
                 }
@@ -2208,7 +2174,7 @@ namespace JsonPolimi
             return AggiungiTesto(nome, url, false);
         }
 
-        List<string> lastAdded = null;
+        private List<string> lastAdded = null;
 
         private bool AggiungiTesto(string nome, string url, bool gruppoAdded)
         {
@@ -2218,10 +2184,9 @@ namespace JsonPolimi
 
             if (gruppoAdded && (lastAdded != null && lastAdded.Count > 0))
             {
-               
                 Gruppo g2 = new Gruppo
                 {
-                    NomeCorso = lastAdded[lastAdded.Count-1].Trim(),
+                    NomeCorso = lastAdded[lastAdded.Count - 1].Trim(),
                     IdLink = url.Trim(),
                     Id = url.Trim()
                 };
@@ -2275,11 +2240,11 @@ namespace JsonPolimi
             if (acc == null)
                 return null;
 
-            for (int i =0; i< acc.Count; i++)
+            for (int i = 0; i < acc.Count; i++)
             {
                 int? r = ControllaSeCeUnSito2(acc[i]);
                 if (r != null)
-                    return new Tuple<int?, int?>( i, r);
+                    return new Tuple<int?, int?>(i, r);
             }
 
             return null;
@@ -2292,7 +2257,6 @@ namespace JsonPolimi
 
             if (result)
                 return 0;
-
 
             int i = v.IndexOf("http://");
             if (i >= 0)
@@ -2368,7 +2332,6 @@ namespace JsonPolimi
 
             s4 = s4.Trim();
 
-
             ;
 
             int lastSemiColomn = s4.LastIndexOf(";");
@@ -2399,7 +2362,7 @@ namespace JsonPolimi
             ;
 
             List<string> s7 = new List<string>();
-            for (int i=0; i<6; i++)
+            for (int i = 0; i < 6; i++)
             {
                 s7.Add(s6[i]);
             }
@@ -2407,7 +2370,7 @@ namespace JsonPolimi
             ;
 
             string nome = "";
-            for (int i=6; i<s6.Length; i++)
+            for (int i = 6; i < s6.Length; i++)
             {
                 nome += s6[i] + ",";
             }
@@ -2419,12 +2382,11 @@ namespace JsonPolimi
             s7.Add(nome);
 
             ImportaSQL4(s7.ToArray());
-
         }
 
         private void ImportaSQL4(string[] s6)
         {
-            long id = Convert.ToInt64( s6[0].Substring(1).Trim());
+            long id = Convert.ToInt64(s6[0].Substring(1).Trim());
             int? id_in_ram = FindInRamSQL(id);
             if (id_in_ram == null)
             {
@@ -2483,7 +2445,7 @@ namespace JsonPolimi
             }
 
             int semicolomn = g.Classe.IndexOf(");");
-            if (semicolomn>=0 && semicolomn < g.Classe.Length)
+            if (semicolomn >= 0 && semicolomn < g.Classe.Length)
             {
                 g.Classe = g.Classe.Substring(0, semicolomn).Trim();
             }
@@ -2528,7 +2490,6 @@ namespace JsonPolimi
             int millisec = 0;
             if (v4.Length > 1)
             {
-
                 if (v4[1][v4[1].Length - 1] == '\'')
                 {
                     v4[1] = v4[1].Remove(v4[1].Length - 1);

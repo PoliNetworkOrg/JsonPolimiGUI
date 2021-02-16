@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace JsonPolimi
@@ -19,7 +18,7 @@ namespace JsonPolimi
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            if (t_classe.Text.Length <= 0 || t_degree.Text.Length <= 0  ||
+            if (t_classe.Text.Length <= 0 || t_degree.Text.Length <= 0 ||
                 t_lang.Text.Length <= 0 || t_office.Text.Length <= 0 || t_platform.Text.Length <= 0 ||
                 t_school.Text.Length <= 0 || t_type.Text.Length <= 0 || t_year.Text.Length <= 0)
             {
@@ -45,7 +44,7 @@ namespace JsonPolimi
                 Degree = t_degree.Text,
                 Id = t_id.Text,
                 Language = t_lang.Text,
-                Office = new ListaStringhePerJSON( t_office.Text ),
+                Office = new ListaStringhePerJSON(t_office.Text),
                 Platform = t_platform.Text,
                 School = t_school.Text,
                 Tipo = t_type.Text,
@@ -55,7 +54,6 @@ namespace JsonPolimi
                 CCS = new ListaStringhePerJSON(t_ccs.Text),
                 IDCorsoPolimi = t_idcorsopolimi.Text,
                 PianoDiStudi = t_pianostudi.Text
-
             };
 
             if (Variabili.L == null)
@@ -96,7 +94,7 @@ namespace JsonPolimi
             t_degree.Text = g.Degree;
             t_id.Text = g.Id;
             t_lang.Text = g.Language;
-            t_office.Text =  StringCheckNull( g.Office);
+            t_office.Text = StringCheckNull(g.Office);
             t_platform.Text = g.Platform;
             t_school.Text = g.School;
             t_type.Text = g.Tipo;
@@ -125,6 +123,5 @@ namespace JsonPolimi
 
             return office.StringNotNull();
         }
-
     }
 }

@@ -33,7 +33,6 @@ namespace JsonPolimi
             return r;
         }
 
-
         public bool IsEmpty()
         {
             if (o == null)
@@ -54,7 +53,7 @@ namespace JsonPolimi
         internal string StringNotNull()
         {
             if (o == null)
-                    return null;
+                return null;
 
             return this.ToString();
         }
@@ -108,7 +107,6 @@ namespace JsonPolimi
             }
 
             return null;
-
         }
 
         private string getCCSCode2(string v)
@@ -123,7 +121,6 @@ namespace JsonPolimi
             }
 
             return null;
-
         }
 
         /*
@@ -131,6 +128,7 @@ namespace JsonPolimi
             return (o1 >  o2)  => +1
             return (o1 <  o2)  => -1
         */
+
         internal static int Confronta(ListaStringhePerJSON o1, ListaStringhePerJSON o2)
         {
             if (o1 == null && o2 == null)
@@ -150,7 +148,6 @@ namespace JsonPolimi
                 {
                     contained = false;
                 }
-
             }
 
             if (contained)
@@ -168,7 +165,6 @@ namespace JsonPolimi
                 {
                     contained = false;
                 }
-
             }
 
             if (contained)

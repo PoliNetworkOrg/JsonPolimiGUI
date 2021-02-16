@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Ionic.Zip;
+﻿using Ionic.Zip;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
-using System.Threading.Tasks;
 
 namespace JsonPolimi
 {
@@ -190,7 +185,7 @@ namespace JsonPolimi
 
         private static ZipEntry GetContentXML(string fileName)
         {
-            ReadOptions options = new ReadOptions() {  Encoding = Encoding.UTF8 };
+            ReadOptions options = new ReadOptions() { Encoding = Encoding.UTF8 };
             using (ZipFile zip = ZipFile.Read(fileName, options: options))
             {
                 foreach (ZipEntry e in zip)
