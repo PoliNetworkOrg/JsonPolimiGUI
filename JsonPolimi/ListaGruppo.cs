@@ -1666,7 +1666,10 @@ namespace JsonPolimi
             if (String.IsNullOrEmpty(a1.Id))
                 a1.Id = a2.Id;
             if (String.IsNullOrEmpty(a1.IdLink))
+            {
                 a1.IdLink = a2.IdLink;
+                a1.LinkFunzionante = a2.LinkFunzionante;
+            }
             if (String.IsNullOrEmpty(a1.Language))
                 a1.Language = a2.Language;
             if (Gruppo.IsEmpty(a1.Office))
@@ -1691,6 +1694,13 @@ namespace JsonPolimi
                         a1.LastUpdateInviteLinkTime = a2.LastUpdateInviteLinkTime;
                 }
             }
+
+            if (a1.LinkFunzionante != null && a1.LinkFunzionante == false && (a2.LinkFunzionante == null || a2.LinkFunzionante != false))
+            {
+                a1.IdLink = a2.IdLink;
+                a1.LinkFunzionante = a2.LinkFunzionante;
+            }
+
 
             if (!String.IsNullOrEmpty(a1.Year))
             {
