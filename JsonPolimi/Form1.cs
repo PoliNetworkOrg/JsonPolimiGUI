@@ -60,16 +60,35 @@ namespace JsonPolimi
             var stuff = JObject.Parse(content);
 
             var infoData = stuff["info_data"];
-            var i = infoData.Children();
-
             int count = 0;
-            foreach (var i2 in i)
-            {
-                var i3 = i2.First;
 
-                Aggiungi(i3, false, false);
-                count++;
+            JEnumerable<JToken> i;
+            if (infoData == null)
+            {
+                ;
+                var i4 = stuff.First;
+                ;
+                var i5 = i4.First;
+                ;
+                i = i5.Children();
+                foreach (var i2 in i)
+                {
+                    Aggiungi(i2, false, false);
+                    count++;
+                }
             }
+            else
+            {
+                i = infoData.Children();
+                foreach (var i2 in i)
+                {
+                    var i3 = i2.First;
+
+                    Aggiungi(i3, false, false);
+                    count++;
+                }
+            }
+
 
             Console.WriteLine("Added " + count + " groups");
 
@@ -277,10 +296,31 @@ namespace JsonPolimi
                 g.LastUpdateInviteLinkTime = null;
                 throw e;
             }
+        
+            g.LinkFunzionante = BoolFromString(i["linkfunzionante"]);
+            
 
             g.Aggiusta(aggiusta_Anno, creaid : false);
 
             Variabili.L.Add(g, merge);
+        }
+
+        private static bool? BoolFromString(JToken jTokens)
+        {
+            try
+            {
+                string s = jTokens.ToString();
+                if (s == "Y")
+                    return true;
+                else if (s == "N")
+                    return false;
+            }
+            catch
+            {
+                ;
+            }
+
+            return null;
         }
 
         public static DateTime? DataFromString(string data)
@@ -394,6 +434,7 @@ namespace JsonPolimi
                 json += "}";
                 json += ",";
             }
+
             if (true)
             {
 
@@ -427,6 +468,7 @@ namespace JsonPolimi
         {
             switch(v.n)
             {
+                case CheckGruppo.E.RICERCA_SITO_V3:
                 case CheckGruppo.E.VECCHIA_RICERCA:
                     {
                         if (string.IsNullOrEmpty(elem.Classe))
@@ -1977,7 +2019,8 @@ namespace JsonPolimi
                 "Bot telegram",
                 "Sito, ricerca vecchia",
                 "Sito, ricerca nuova",
-                "TUTTO"
+                "TUTTO",
+                "Sito, ricerca v3 (2021-02)"
             };
 
             AskFromList askFromList = new AskFromList(L);
@@ -1988,26 +2031,39 @@ namespace JsonPolimi
                 return;
             }
 
-            bool? entrambi_index = null;
-            DialogResult dialogResult = MessageBox.Show("Vuoi entrambi gli index (si) o solo uno (no)?", "Scegli", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
-            {
-                entrambi_index = true;
-            }
-            else if (dialogResult == DialogResult.No)
-            {
-                entrambi_index = false;
-            }
-
-            if (entrambi_index == null)
-            {
-                MessageBox.Show("Non hai scelto nulla!");
-                return;
-            }
-
 #pragma warning disable CS1690 // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
             int i = askFromList.r.Value;
 #pragma warning restore CS1690 // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
+
+            bool? entrambi_index = null;
+            switch (i)
+            {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    {
+                        DialogResult dialogResult = MessageBox.Show("Vuoi entrambi gli index (si) o solo uno (no)?", "Scegli", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            entrambi_index = true;
+                        }
+                        else if (dialogResult == DialogResult.No)
+                        {
+                            entrambi_index = false;
+                        }
+
+                        if (entrambi_index == null)
+                        {
+                            MessageBox.Show("Non hai scelto nulla!");
+                            return;
+                        }
+
+                        break;
+                    }
+            }
+
+
 
             switch (i)
             {
@@ -2032,6 +2088,11 @@ namespace JsonPolimi
                 case 3:
                     {
                         Button3_Click(CheckGruppo.E.TUTTO, entrambi_index.Value);
+                        return;
+                    }
+                case 4:
+                    {
+                        Button3_Click(CheckGruppo.E.RICERCA_SITO_V3, false);
                         return;
                     }
             }
@@ -2244,7 +2305,7 @@ namespace JsonPolimi
             return null;
         }
 
-        private void button10_Click_1(object sender, EventArgs e)
+        private void Button10_Click_1(object sender, EventArgs e)
         {
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
@@ -2280,7 +2341,9 @@ namespace JsonPolimi
                 {
                     ImportaSQL2(s2);
                 }
+#pragma warning disable IDE0059 // Assegnazione non necessaria di un valore
                 catch (Exception e2)
+#pragma warning restore IDE0059 // Assegnazione non necessaria di un valore
                 {
                     ;
                 }
@@ -2394,10 +2457,13 @@ namespace JsonPolimi
         {
             var s7 = s6[3].Split('/');
 
-            Gruppo g = new Gruppo();
-            g.PermanentId = s6[0].Substring(1).Trim();
-            g.Platform = "TG";
-            g.IdLink = s7[s7.Length - 1].Trim();
+            Gruppo g = new Gruppo
+            {
+                PermanentId = s6[0].Substring(1).Trim(),
+                Platform = "TG",
+                IdLink = s7[s7.Length - 1].Trim()
+            };
+
             if (g.IdLink[g.IdLink.Length - 1] == '\'')
             {
                 g.IdLink = g.IdLink.Remove(g.IdLink.Length - 1);
@@ -2493,7 +2559,7 @@ namespace JsonPolimi
             return Variabili.L.FindInRamSQL(id);
         }
 
-        private void button20_Click(object sender, EventArgs e)
+        private void Button20_Click(object sender, EventArgs e)
         {
             if (Variabili.L == null)
             {
@@ -2501,6 +2567,16 @@ namespace JsonPolimi
             }
 
             Variabili.L.AggiustaNomiDoppi();
+        }
+
+        private void Button21_Click(object sender, EventArgs e)
+        {
+            if (Variabili.L == null)
+                Variabili.L = new ListaGruppo();
+
+            Variabili.L.CheckSeILinkVanno();
+
+            MessageBox.Show("Finito il check dei link!");
         }
     }
 }

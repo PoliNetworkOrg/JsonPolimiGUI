@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
 
 namespace JsonPolimi
 {
@@ -27,6 +29,7 @@ namespace JsonPolimi
         public string Tipo;
         public string Year; // esempio: 2018/2019
         public DateTime? LastUpdateInviteLinkTime;
+        public bool? LinkFunzionante;
 
         public Gruppo()
         {
@@ -234,6 +237,8 @@ namespace JsonPolimi
 
                         break;
                     }
+
+                case CheckGruppo.E.RICERCA_SITO_V3:
                 case CheckGruppo.E.VECCHIA_RICERCA:
                     {
                         json += "\"class\":";
@@ -256,6 +261,8 @@ namespace JsonPolimi
                         json += StringCheckNull(Year);
                         json += ",\"platform\":";
                         json += StringCheckNull(Platform);
+                        json += ",\"linkfunzionante\":";
+                        json += BoolCheckNotNull(LinkFunzionante);
                         break;
                     }
                 case CheckGruppo.E.NUOVA_RICERCA:
@@ -299,9 +306,10 @@ namespace JsonPolimi
             return json;
         }
 
- 
-
-
+        private string BoolCheckNotNull(bool? linkFunzionante)
+        {
+            return linkFunzionante == null ? "null" : linkFunzionante.Value ? '"' + "Y" +'"' : '"' + "N" + '"';
+        }
 
         private string StringCheckNull(int? annoCorsoStudio)
         {
@@ -1379,6 +1387,53 @@ namespace JsonPolimi
                     i = 0;
                 }
             }
+        }
+
+        internal void CheckSeIlLinkVa()
+        {
+
+            switch (this.Platform)
+            {
+                case "TG":
+                    {
+                        string link = this.GetLink();
+                        string content = null;
+                        try
+                        {
+                            content = Download(link);
+                        }
+                        catch
+                        {
+                            ;
+                        }
+                        ;
+                        if (string.IsNullOrEmpty(content))
+                        {
+                            this.LinkFunzionante = null;
+                        }
+                        else if (content.Contains("tg://") && content.Contains("Join Group") && (content.Contains("member")))
+                        {
+                            this.LinkFunzionante = true;
+                        }
+                        else
+                        {
+                            this.LinkFunzionante = false;
+                        }
+                        break;
+                    }
+            }
+        }
+
+        public static string Download(string uri)
+        {
+            WebClient client = new WebClient();
+
+            Stream data = client.OpenRead(uri);
+            StreamReader reader = new StreamReader(data);
+            string s = reader.ReadToEnd();
+            data.Close();
+            reader.Close();
+            return s;
         }
     }
 }

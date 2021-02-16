@@ -2353,6 +2353,14 @@ namespace JsonPolimi
             return false;
         }
 
+        internal void CheckSeILinkVanno()
+        {
+            for (int i=0; i<this._l.Count; i++)
+            {
+                this._l[i].CheckSeIlLinkVa();
+            }
+        }
+
         internal void AggiustaNomiDoppi()
         {
             for (int i=0; i<this._l.Count; i++)
