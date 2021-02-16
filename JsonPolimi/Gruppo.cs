@@ -8,12 +8,25 @@ namespace JsonPolimi
     [Serializable]
     public class Gruppo
     {
-        public string Classe;
+        private string classe_hidden;
+
+        public string Classe
+        {
+            get
+            {
+                return this.classe_hidden;
+            }
+            set
+            {
+                ;
+                this.classe_hidden = value;
+            }
+        }
 
         public string IDCorsoPolimi { get; set; }
-        public List<string> GruppoTabellaInsegnamenti { get;  set; }
-        public InfoManifesto Manifesto { get;  set; }
-        public int? AnnoCorsoStudio { get;  set; }
+        public List<string> GruppoTabellaInsegnamenti { get; set; }
+        public InfoManifesto Manifesto { get; set; }
+        public int? AnnoCorsoStudio { get; set; }
         public ListaStringhePerJSON CCS { get; internal set; }
         public string PianoDiStudi { get; set; }
         public string NomeCorso { get; set; }
@@ -45,9 +58,8 @@ namespace JsonPolimi
             if (aggiusta_anno)
                 AggiustaAnno();
 
-
             if (!string.IsNullOrEmpty(Year) && !string.IsNullOrEmpty(this.Classe) && !string.IsNullOrEmpty(this.Degree) &&
-                !string.IsNullOrEmpty(this.Id) && !string.IsNullOrEmpty(this.IdLink) && !string.IsNullOrEmpty(this.Language) && !IsEmpty( this.Office))
+                !string.IsNullOrEmpty(this.Id) && !string.IsNullOrEmpty(this.IdLink) && !string.IsNullOrEmpty(this.Language) && !IsEmpty(this.Office))
             {
                 if (string.IsNullOrEmpty(Tipo))
                 {
@@ -137,7 +149,7 @@ namespace JsonPolimi
             try
             {
                 var r = Id.Split('/');
-                r2 =  r[3];
+                r2 = r[3];
             }
             catch
             {
@@ -154,12 +166,12 @@ namespace JsonPolimi
                 ;
             }
 
-            return Platform + "/" + 
+            return Platform + "/" +
                 Year + "/" +
                 Office + "/" +
                 IdLink + "/" +
-                StringNotEmpty(IDCorsoPolimi) + "/" + 
-                CCS?.getCCSCode() + "/"+
+                StringNotEmpty(IDCorsoPolimi) + "/" +
+                CCS?.getCCSCode() + "/" +
                 PianoDiStudi;
         }
 
@@ -308,7 +320,7 @@ namespace JsonPolimi
 
         private string BoolCheckNotNull(bool? linkFunzionante)
         {
-            return linkFunzionante == null ? "null" : linkFunzionante.Value ? '"' + "Y" +'"' : '"' + "N" + '"';
+            return linkFunzionante == null ? "null" : linkFunzionante.Value ? '"' + "Y" + '"' : '"' + "N" + '"';
         }
 
         private string StringCheckNull(int? annoCorsoStudio)
@@ -319,14 +331,12 @@ namespace JsonPolimi
             return StringCheckNull(annoCorsoStudio.Value.ToString());
         }
 
-
-
         private string StringCheckNull(ListaStringhePerJSON office)
         {
             if (office == null)
                 return "null";
 
-            return '"' +  office.StringNotNull() + '"';
+            return '"' + office.StringNotNull() + '"';
         }
 
         private string StringCheckNull(string s)
@@ -494,6 +504,7 @@ namespace JsonPolimi
             return (o1 >  o2)  => +1
             return (o1 <  o2)  => -1
         */
+
         internal static int Confronta(ListaStringhePerJSON o1, ListaStringhePerJSON o2)
         {
             return ListaStringhePerJSON.Confronta(o1, o2);
@@ -519,7 +530,7 @@ namespace JsonPolimi
 
         private static void AggiungiNome(string v, ref InsiemeDiGruppi g)
         {
-            if (v == "<=") 
+            if (v == "<=")
                 return;
 
             if (string.IsNullOrEmpty(v))
@@ -533,8 +544,6 @@ namespace JsonPolimi
 
             if (v.Contains(" vedasi PoliExtra"))
                 return;
-
-
 
             if (string.IsNullOrEmpty(g.GruppoDiBase.Classe))
             {
@@ -819,9 +828,8 @@ namespace JsonPolimi
                         {
                             return null;
                         }
-
                     }
-                    else if (string.IsNullOrEmpty(infoParteDiGruppo_list[0].testo_selvaggio) && 
+                    else if (string.IsNullOrEmpty(infoParteDiGruppo_list[0].testo_selvaggio) &&
                         string.IsNullOrEmpty(infoParteDiGruppo_list[1].testo_selvaggio))
                     {
                         return null;
@@ -942,18 +950,15 @@ namespace JsonPolimi
                         return null; //sicuro
                     }
 
-
                     if (infoParteDiGruppo_list[1].testo_selvaggio == "Italiano/Inglese")
                     {
                         return null; //sicuro
                     }
 
-
                     if (infoParteDiGruppo_list[1].testo_selvaggio == "Laboratorio")
                     {
                         return null; //sicuro
                     }
-
 
                     if (infoParteDiGruppo_list[1].testo_selvaggio == "Mutuabile")
                     {
@@ -977,10 +982,10 @@ namespace JsonPolimi
 
                     return null;
                 }
-                
+
                 if (infoParteDiGruppo_list.Count == 1)
                 {
-                    if (infoParteDiGruppo_list[0]==null)
+                    if (infoParteDiGruppo_list[0] == null)
                     {
                         return null; //sono sicuro
                     }
@@ -1042,7 +1047,6 @@ namespace JsonPolimi
             if (infoParteDiGruppo_list[0] == null && infoParteDiGruppo_list[1] == null)
                 return null;
 
-
             if (infoParteDiGruppo_list.Count == 4)
             {
                 if (infoParteDiGruppo_list[0].testo_selvaggio == "Corso di Studio")
@@ -1062,13 +1066,13 @@ namespace JsonPolimi
 
                     Form1.infoManifesto.corso_di_studio = x4;
                 }
-                
+
                 if (infoParteDiGruppo_list[2].testo_selvaggio == "Sede del corso")
                 {
                     string x1 = infoParteDiGruppo_list[3].testo_selvaggio.Trim();
                     Form1.infoManifesto.sede_del_corso = x1.Split(',');
                 }
-                
+
                 if (infoParteDiGruppo_list[0].testo_selvaggio == "Anni di Corso Attivi")
                 {
                     string x1 = infoParteDiGruppo_list[1].testo_selvaggio.Trim();
@@ -1111,9 +1115,7 @@ namespace JsonPolimi
                     Form1.infoManifesto.durata_nominale_corso = x1;
                 }
 
-
                 return null; //info interessanti
-
             }
 
             if (infoParteDiGruppo_list.Count == 10 || infoParteDiGruppo_list.Count == 9 || infoParteDiGruppo_list.Count == 11)
@@ -1158,7 +1160,7 @@ namespace JsonPolimi
                         Classe = classe,
                         IDCorsoPolimi = infoParteDiGruppo_list[0].testo_selvaggio,
                         GruppoTabellaInsegnamenti = GetGruppoTabellaInsegnamenti(infoParteDiGruppo_list[1]),
-                        Office = new ListaStringhePerJSON( GetSede(infoParteDiGruppo_list[5])),
+                        Office = new ListaStringhePerJSON(GetSede(infoParteDiGruppo_list[5])),
                         Language = lang,
                         Tipo = "C",
                         AnnoCorsoStudio = Form1.anno,
@@ -1192,13 +1194,11 @@ namespace JsonPolimi
                         {
                             return null; //sicuro
                         }
-                        else 
+                        else
                         {
                             return null;
                         }
-
                     }
-
                 }
                 else if (infoParteDiGruppo_list[1] != null && infoParteDiGruppo_list[1].testo_selvaggio == "Area Servizi ICT")
                 {
@@ -1211,7 +1211,6 @@ namespace JsonPolimi
 
                 return null; //da fare maggiori controlli
             }
-
 
             return null;
         }
@@ -1242,7 +1241,7 @@ namespace JsonPolimi
                 Manifesto = this.Manifesto,
                 AnnoCorsoStudio = this.AnnoCorsoStudio,
                 CCS = this.CCS,
-                PianoDiStudi = this.PianoDiStudi, 
+                PianoDiStudi = this.PianoDiStudi,
                 NomeCorso = this.NomeCorso
             };
 
@@ -1257,7 +1256,6 @@ namespace JsonPolimi
             List<string> L = new List<string>();
             if (string.IsNullOrEmpty(infoParteDiGruppo.testo_selvaggio) && infoParteDiGruppo.sottopezzi != null)
             {
-
                 foreach (var x1 in infoParteDiGruppo.sottopezzi)
                 {
                     L.Add(x1.testo_selvaggio);
@@ -1333,29 +1331,36 @@ namespace JsonPolimi
             if (string.IsNullOrEmpty(this.Classe))
                 return;
 
-            int i = 0;
-            int j = 1;
-
-            float ugualeMax = this.Classe.Length / 3f;
-            if (ugualeMax < 5)
-                ugualeMax = 5;
-
-            string uguale = "";
-
-            for (int k=0; k<this.Classe.Length -1 ; k++)
+            for (int k = 0; k < this.Classe.Length - 1; k++)
             {
-                if (this.Classe[k] == ' ' && this.Classe[k+1] == ' ')
+                if (this.Classe[k] == ' ' && this.Classe[k + 1] == ' ')
                 {
                     this.Classe = this.Classe.Remove(k, 1);
                     k--;
                 }
             }
 
-            ;
+            string s2 = AggiustaNomeDoppio2(this.Classe);
+            if (s2 != this.Classe)
+            {
+                this.Classe = s2;
+            }
 
-            this.Classe = AggiustaNomeDoppio2(this.Classe);
+            //AggiustaNomeDoppio3();
+        }
 
-            while(true)
+        private void AggiustaNomeDoppio3()
+        {
+            string uguale = "";
+
+            float ugualeMax = this.Classe.Length / 3f;
+            if (ugualeMax < 5)
+                ugualeMax = 5;
+
+            int i = 0;
+            int j = 1;
+
+            while (true)
             {
                 if (i >= this.Classe.Length || j >= this.Classe.Length)
                 {
@@ -1400,7 +1405,6 @@ namespace JsonPolimi
 
             text = text.Trim();
 
-            
             string[] s = text.Trim().Split(' ');
             ;
 
@@ -1427,7 +1431,7 @@ namespace JsonPolimi
             ;
 
             //s2.Count > 2
-            for (int i=0; i<s2.Count; i++)
+            for (int i = 0; i < s2.Count; i++)
             {
                 for (int rip = 1; rip < s2.Count; rip++)
                 {
@@ -1455,7 +1459,7 @@ namespace JsonPolimi
                                     r.Add(s[k]);
                                 }
                                 k += rip;
-                                for (; k < j; k++)
+                                for (; k < s2.Count; k++)
                                 {
                                     r.Add(s[k]);
                                 }
@@ -1475,7 +1479,6 @@ namespace JsonPolimi
                 }
             }
 
-
             return text;
         }
 
@@ -1486,11 +1489,11 @@ namespace JsonPolimi
                 return false;
             }
 
-            for (int k=0; k<rip; k++)
+            for (int k = 0; k < rip; k++)
             {
                 int l1 = k + j;
                 int l2 = k + j + rip;
-                if (l1 < s2.Count && l2 <s2.Count)
+                if (l1 < s2.Count && l2 < s2.Count)
                 {
                     if (s2[l2] != s2[l1])
                         return false;
@@ -1506,7 +1509,6 @@ namespace JsonPolimi
 
         internal void CheckSeIlLinkVa()
         {
-
             switch (this.Platform)
             {
                 case "TG":
