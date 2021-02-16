@@ -349,6 +349,14 @@ namespace JsonPolimi
             Gruppo a1 = this._l[i];
             Gruppo a2 = j.Item1;
 
+            if (a1.Platform != a2.Platform)
+                return new Tuple<SomiglianzaClasse, Gruppo>(new SomiglianzaClasse(SomiglianzaEnum.DIVERSI, null, null), null);
+
+            if (a1.IdLink != a2.IdLink && a1.LinkFunzionante == true && a2.LinkFunzionante == true)
+            {
+                return new Tuple<SomiglianzaClasse, Gruppo>(new SomiglianzaClasse(SomiglianzaEnum.DIVERSI, null, null), null);
+            }
+
             SomiglianzaClasse eq = Equivalenti3(a1, a2);
             if (eq.somiglianzaEnum == SomiglianzaEnum.IDENTITICI || eq.somiglianzaEnum == SomiglianzaEnum.DUBBIO)
             {
@@ -1654,7 +1662,10 @@ namespace JsonPolimi
                     }
 
                     if (!done)
-                        a1.Classe += " " + a2.Classe;
+                    {
+
+                        a1.Classe = UnisciNomi(a1.Classe, a2.Classe);
+                    }
                 }
             }
 
@@ -1701,6 +1712,16 @@ namespace JsonPolimi
             a1.Aggiusta(aggiusta_anno, true);
 
             return a1;
+        }
+
+        private string UnisciNomi(string classe1, string classe2)
+        {
+            string s1 = classe1.ToLower().Trim();
+            string s2 = classe2.ToLower().Trim();
+            if (s1 == s2)
+                return classe1;
+
+            return classe1.Trim() + " " + classe2.Trim();
         }
 
         internal bool VediSeCeGiaDaURL(string url)
