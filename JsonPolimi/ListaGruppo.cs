@@ -388,7 +388,6 @@ namespace JsonPolimi
                                 case SomiglianzaEnum.DIVERSI:
                                     {
                                         return new Tuple<SomiglianzaClasse, Gruppo>(eq, null);
-                                        break;
                                     }
                                 case SomiglianzaEnum.DUBBIO:
                                     {

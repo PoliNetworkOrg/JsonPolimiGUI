@@ -1208,8 +1208,6 @@ namespace JsonPolimi
                 {
                     return null;
                 }
-
-                return null; //da fare maggiori controlli
             }
 
             return null;
@@ -1439,45 +1437,34 @@ namespace JsonPolimi
                 for (int rip = 1; rip < s2.Count; rip++)
                 {
                     if (i + rip < s2.Count)
-                    {
-                        List<string> ripstring = new List<string>();
-                        for (int j = 0; j < rip; j++)
+                    {             
+                        bool uguali = FindSeUguali(s2, i, rip);
+                        if (uguali)
                         {
-                            ripstring.Add(s2[j + i]);
-                        }
+                            ;
 
-                        ;
-
-                        for (int j = i + rip; j < s2.Count; j += rip)
-                        {
-                            bool uguali = FindSeUguali(s2, i, j, rip, ripstring);
-                            if (uguali)
+                            List<string> r = new List<string>();
+                            int k = 0;
+                            for (; k < (i+rip); k++)
                             {
-                                ;
-
-                                List<string> r = new List<string>();
-                                int k = 0;
-                                for (; k < j; k++)
-                                {
-                                    r.Add(s[k]);
-                                }
-                                k += rip;
-                                for (; k < s2.Count; k++)
-                                {
-                                    r.Add(s[k]);
-                                }
-
-                                string text2 = "";
-                                for (int l = 0; l < r.Count; l++)
-                                {
-                                    text2 += r[l] + " ";
-                                }
-
-                                text2 = text2.Trim();
-
-                                return AggiustaNomeDoppio2(text2);
+                                r.Add(s[k]);
                             }
-                        }
+                            k += rip;
+                            for (; k < s2.Count; k++)
+                            {
+                                r.Add(s[k]);
+                            }
+
+                            string text2 = "";
+                            for (int l = 0; l < r.Count; l++)
+                            {
+                                text2 += r[l] + " ";
+                            }
+
+                            text2 = text2.Trim();
+
+                            return AggiustaNomeDoppio2(text2);
+                        }                    
                     }
                 }
             }
@@ -1485,17 +1472,17 @@ namespace JsonPolimi
             return text;
         }
 
-        private bool FindSeUguali(List<string> s2, int i, int j, int rip, List<string> ripstring)
+        private bool FindSeUguali(List<string> s2, int i, int rip)
         {
-            if (i >= s2.Count || j >= s2.Count || rip >= s2.Count)
+            if (i >= s2.Count  || rip >= s2.Count)
             {
                 return false;
             }
 
             for (int k = 0; k < rip; k++)
             {
-                int l1 = k + j;
-                int l2 = k + j + rip;
+                int l1 = k + i;
+                int l2 = k + i + rip;
                 if (l1 < s2.Count && l2 < s2.Count)
                 {
                     if (s2[l2] != s2[l1])
@@ -1516,31 +1503,51 @@ namespace JsonPolimi
             {
                 case "TG":
                     {
-                        string link = this.GetLink();
-                        string content = null;
-                        try
-                        {
-                            content = Download(link);
-                        }
-                        catch
-                        {
-                            ;
-                        }
-                        ;
-                        if (string.IsNullOrEmpty(content))
-                        {
-                            this.LinkFunzionante = null;
-                        }
-                        else if (content.Contains("tg://") && content.Contains("Join Group") && (content.Contains("member")))
-                        {
-                            this.LinkFunzionante = true;
-                        }
-                        else
-                        {
-                            this.LinkFunzionante = false;
-                        }
+                        List<bool?> works = new List<bool?>();
+                        this.LinkFunzionante = CheckSeIlLinkVa3_Telegram();
                         break;
                     }
+            }
+        }
+
+        private bool? CheckSeIlLinkVa3_Telegram()
+        {
+            bool? works = null;
+            for (int i=0; i<3; i++)
+            {
+                works = CheckSeIlLinkVa2_Telegram();
+                if (works != null && works.Value == true)
+                    return true;
+            }
+
+            return works;
+
+        }
+
+        private bool? CheckSeIlLinkVa2_Telegram()
+        {
+            string link = this.GetLink();
+            string content = null;
+            try
+            {
+                content = Download(link);
+            }
+            catch
+            {
+                ;
+            }
+                        
+            if (string.IsNullOrEmpty(content))
+            {
+                return null;
+            }
+            else if (content.Contains("tg://") && content.Contains("Join Group") && (content.Contains("member")))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 

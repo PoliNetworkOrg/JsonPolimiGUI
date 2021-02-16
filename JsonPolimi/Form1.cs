@@ -2306,7 +2306,9 @@ namespace JsonPolimi
                     ImportaSQL2(s2);
                 }
 #pragma warning disable IDE0059 // Assegnazione non necessaria di un valore
+#pragma warning disable CS0168 // La variabile è dichiarata, ma non viene mai usata
                 catch (Exception e2)
+#pragma warning restore CS0168 // La variabile è dichiarata, ma non viene mai usata
 #pragma warning restore IDE0059 // Assegnazione non necessaria di un valore
                 {
                     ;
@@ -2510,7 +2512,6 @@ namespace JsonPolimi
                 minuto,
                 secondo,
                 millisec);
-            return null;
         }
 
         private int? FindInRamSQL(long id)
