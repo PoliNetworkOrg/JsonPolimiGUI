@@ -1351,6 +1351,10 @@ namespace JsonPolimi
                 }
             }
 
+            ;
+
+            this.Classe = AggiustaNomeDoppio2(this.Classe);
+
             while(true)
             {
                 if (i >= this.Classe.Length || j >= this.Classe.Length)
@@ -1387,6 +1391,117 @@ namespace JsonPolimi
                     i = 0;
                 }
             }
+        }
+
+        private string AggiustaNomeDoppio2(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return "";
+
+            text = text.Trim();
+
+            
+            string[] s = text.Trim().Split(' ');
+            ;
+
+            List<string> s2 = new List<string>();
+            foreach (var s3 in s)
+            {
+                s2.Add(s3.ToLower());
+            }
+
+            if (s2.Count == 0)
+                return "";
+
+            if (s2.Count == 1)
+                return text;
+
+            if (s2.Count == 2)
+            {
+                if (s2[0] == s2[1])
+                    text = s[0];
+
+                return text;
+            }
+
+            ;
+
+            //s2.Count > 2
+            for (int i=0; i<s2.Count; i++)
+            {
+                for (int rip = 1; rip < s2.Count; rip++)
+                {
+                    if (i + rip < s2.Count)
+                    {
+                        List<string> ripstring = new List<string>();
+                        for (int j = 0; j < rip; j++)
+                        {
+                            ripstring.Add(s2[j + i]);
+                        }
+
+                        ;
+
+                        for (int j = i + rip; j < s2.Count; j += rip)
+                        {
+                            bool uguali = FindSeUguali(s2, i, j, rip, ripstring);
+                            if (uguali)
+                            {
+                                ;
+
+                                List<string> r = new List<string>();
+                                int k = 0;
+                                for (; k < j; k++)
+                                {
+                                    r.Add(s[k]);
+                                }
+                                k += rip;
+                                for (; k < j; k++)
+                                {
+                                    r.Add(s[k]);
+                                }
+
+                                string text2 = "";
+                                for (int l = 0; l < r.Count; l++)
+                                {
+                                    text2 += r[l] + " ";
+                                }
+
+                                text2 = text2.Trim();
+
+                                return AggiustaNomeDoppio2(text2);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            return text;
+        }
+
+        private bool FindSeUguali(List<string> s2, int i, int j, int rip, List<string> ripstring)
+        {
+            if (i >= s2.Count || j >= s2.Count || rip >= s2.Count)
+            {
+                return false;
+            }
+
+            for (int k=0; k<rip; k++)
+            {
+                int l1 = k + j;
+                int l2 = k + j + rip;
+                if (l1 < s2.Count && l2 <s2.Count)
+                {
+                    if (s2[l2] != s2[l1])
+                        return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         internal void CheckSeIlLinkVa()
