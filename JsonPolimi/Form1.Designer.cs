@@ -36,6 +36,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button7 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button22 = new System.Windows.Forms.Button();
+            this.button21 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button18 = new System.Windows.Forms.Button();
@@ -50,7 +52,7 @@
             this.button15 = new System.Windows.Forms.Button();
             this.button19 = new System.Windows.Forms.Button();
             this.button20 = new System.Windows.Forms.Button();
-            this.button21 = new System.Windows.Forms.Button();
+            this.button23 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -134,6 +136,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button23);
+            this.groupBox2.Controls.Add(this.button22);
             this.groupBox2.Controls.Add(this.button21);
             this.groupBox2.Controls.Add(this.button10);
             this.groupBox2.Controls.Add(this.button3);
@@ -150,6 +154,29 @@
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Altro";
+            // 
+            // button22
+            // 
+            this.button22.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button22.Location = new System.Drawing.Point(246, 319);
+            this.button22.Name = "button22";
+            this.button22.Size = new System.Drawing.Size(435, 71);
+            this.button22.TabIndex = 19;
+            this.button22.Text = "Salva su un file la lista di id telegram cui link non è segnato come funzionante " +
+    "= Y";
+            this.button22.UseVisualStyleBackColor = true;
+            this.button22.Click += new System.EventHandler(this.Button22_Click);
+            // 
+            // button21
+            // 
+            this.button21.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button21.Location = new System.Drawing.Point(7, 319);
+            this.button21.Name = "button21";
+            this.button21.Size = new System.Drawing.Size(233, 71);
+            this.button21.TabIndex = 18;
+            this.button21.Text = "Controlla se i link vanno e flaggali di conseguenza (tutto in ram)";
+            this.button21.UseVisualStyleBackColor = true;
+            this.button21.Click += new System.EventHandler(this.Button21_Click);
             // 
             // button10
             // 
@@ -306,16 +333,16 @@
             this.button20.UseVisualStyleBackColor = true;
             this.button20.Click += new System.EventHandler(this.Button20_Click);
             // 
-            // button21
+            // button23
             // 
-            this.button21.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button21.Location = new System.Drawing.Point(7, 319);
-            this.button21.Name = "button21";
-            this.button21.Size = new System.Drawing.Size(674, 71);
-            this.button21.TabIndex = 18;
-            this.button21.Text = "Controlla se i link vanno e flaggali di conseguenza (tutto in ram)";
-            this.button21.UseVisualStyleBackColor = true;
-            this.button21.Click += new System.EventHandler(this.Button21_Click);
+            this.button23.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button23.Location = new System.Drawing.Point(7, 396);
+            this.button23.Name = "button23";
+            this.button23.Size = new System.Drawing.Size(674, 56);
+            this.button23.TabIndex = 20;
+            this.button23.Text = "Importa gruppi dal comando /update_links_from_json";
+            this.button23.UseVisualStyleBackColor = true;
+            this.button23.Click += new System.EventHandler(this.button23_Click);
             // 
             // Form1
             // 
@@ -369,6 +396,8 @@
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Button button20;
         private System.Windows.Forms.Button button21;
+        private System.Windows.Forms.Button button22;
+        private System.Windows.Forms.Button button23;
     }
 }
 

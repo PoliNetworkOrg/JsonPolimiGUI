@@ -4,10 +4,12 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using Telegram.Bot.Types.Enums;
@@ -765,6 +767,40 @@ namespace JsonPolimi
             return r[r.Length - 1];
         }
 
+        public static void BinarySerializeObject(string path, object obj)
+        {
+            using (StreamWriter streamWriter = new StreamWriter(path))
+            {
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+                try
+                {
+                    binaryFormatter.Serialize(streamWriter.BaseStream, obj);
+                }
+                catch (SerializationException ex)
+                {
+                    throw new SerializationException(((object)ex).ToString() + "\n" + ex.Source);
+                }
+            }
+        }
+
+        public static object BinaryDeserializeObject(string path)
+        {
+            using (StreamReader streamReader = new StreamReader(path))
+            {
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+                object obj;
+                try
+                {
+                    obj = binaryFormatter.Deserialize(streamReader.BaseStream);
+                }
+                catch (SerializationException ex)
+                {
+                    throw new SerializationException(((object)ex).ToString() + "\n" + ex.Source);
+                }
+                return obj;
+            }
+        }
+
         public static void LoadGruppi()
         {
             var ofd = new OpenFileDialog();
@@ -775,16 +811,15 @@ namespace JsonPolimi
                 return;
             }
 
-            string content;
+            string content = null;
+            Exception ex = null;
             try
             {
                 content = File.ReadAllText(ofd.FileName);
             }
             catch (Exception e2)
             {
-                MessageBox.Show("Lettura fallita! \n\n" + e2.Message);
-                ofd.Dispose();
-                return;
+                ex = e2;
             }
 
             try
@@ -796,10 +831,19 @@ namespace JsonPolimi
                 ;
             }
 
+
+            if (content == null)
+            {
+                MessageBox.Show("Lettura fallita! \n\n" + ex.Message);
+                return;
+            }
+
             if (FileSalvare == null)
                 FileSalvare = new FileSalvare();
 
             ofd.Dispose();
+
+      
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -2536,9 +2580,29 @@ namespace JsonPolimi
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
 
-            Variabili.L.CheckSeILinkVanno();
+            Variabili.L.CheckSeILinkVanno(false);
 
             MessageBox.Show("Finito il check dei link!");
+        }
+
+        private void Button22_Click(object sender, EventArgs e)
+        {
+            if (Variabili.L == null)
+            {
+                Variabili.L = new ListaGruppo();
+            }
+
+            Variabili.L.SalvaTelegramIdDeiGruppiLinkCheNonVanno();
+        }
+
+        private void button23_Click(object sender, EventArgs e)
+        {
+            if (Variabili.L == null)
+            {
+                Variabili.L = new ListaGruppo();
+            }
+
+            Variabili.L.ImportaGruppiDalComandoDelBotTelegram_UpdateLinkFromJson();
         }
     }
 }

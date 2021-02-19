@@ -1497,21 +1497,26 @@ namespace JsonPolimi
             return true;
         }
 
-        internal void CheckSeIlLinkVa()
+        internal void CheckSeIlLinkVa(bool force)
         {
             switch (this.Platform)
             {
                 case "TG":
                     {
-                        List<bool?> works = new List<bool?>();
-                        this.LinkFunzionante = CheckSeIlLinkVa3_Telegram();
+                        this.LinkFunzionante = CheckSeIlLinkVa3_Telegram(force);
                         break;
                     }
             }
         }
 
-        private bool? CheckSeIlLinkVa3_Telegram()
+        private bool? CheckSeIlLinkVa3_Telegram(bool force)
         {
+            if (!force)
+            {
+                if (this.LinkFunzionante == true)
+                    return true;
+            }
+
             bool? works = null;
             for (int i=0; i<3; i++)
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 using static System.String;
 
@@ -2368,11 +2369,142 @@ namespace JsonPolimi
             return false;
         }
 
-        internal void CheckSeILinkVanno()
+        internal void ImportaGruppiDalComandoDelBotTelegram_UpdateLinkFromJson()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            var r = openFileDialog.ShowDialog();
+            if (r != DialogResult.OK)
+                return;
+
+            string[] l = File.ReadAllLines(openFileDialog.FileName);
+
+            ;
+
+            List<List<string>> l2 = SplitPerStringaVuota(l);
+
+            ;
+
+            foreach (var l3 in l2)
+            {
+                ImportaGruppiDalComandoDelBotTelegram_UpdateLinkFromJson2(l3);
+            }
+
+            MessageBox.Show("Finito l'importazione dei gruppi da Telegram bot!");
+        }
+
+        private void ImportaGruppiDalComandoDelBotTelegram_UpdateLinkFromJson2(List<string> l3)
+        {
+            if (l3 == null || l3.Count == 0)
+                return;
+
+            if (l3.Count < 4)
+                return;
+
+            if (l3[0] == "Success: N")
+            {
+                return;
+            }
+
+            string idlink = l3[1].Substring("IdLink: ".Length).Trim();
+            string newlink = l3[2].Substring( "NewLink: ".Length).Trim();
+            var n2 = newlink.Split('/');
+            newlink = n2[n2.Length - 1];
+            string nome = l3[3].Substring("Nome: ".Length).Trim();
+
+            int? i = TrovaGruppo(idlink, nome);
+            if (i == null)
+            {
+                Gruppo g = new Gruppo() { Classe = nome, IdLink = idlink , Platform = "TG"};
+                g.Aggiusta(true, true);
+                this.Add(g, false);
+            }
+            else
+            {
+                this._l[i.Value].IdLink = newlink;
+                this._l[i.Value].LastUpdateInviteLinkTime = DateTime.Now;
+                this._l[i.Value].LinkFunzionante = true;
+                this._l[i.Value].Aggiusta(false, true);
+            }
+        }
+
+        private int? TrovaGruppo(string idlink, string nome)
+        {
+            for (int i=0; i<this._l.Count; i++)
+            {
+                if (this._l[i].IdLink == idlink)
+                    return i;
+
+                if (this._l[i].Classe == nome)
+                    return i;
+            }
+
+            return null;
+        }
+
+        private List<List<string>> SplitPerStringaVuota(string[] l)
+        {
+            List<List<string>> r = new List<List<string>>();
+            List<string> r2 = null;
+            for (int i = 0; i < l.Length; i++)
+            {
+                if (!string.IsNullOrEmpty(l[i]))
+                {
+                    if (r2 == null)
+                        r2 = new List<string>();
+
+                    r2.Add(l[i]);
+                }
+                else
+                {
+                    if (r2 != null)
+                    {
+                        r.Add(r2);
+                        r2 = null;
+                    }
+                }
+            }
+
+            return r;
+        }
+
+        internal void SalvaTelegramIdDeiGruppiLinkCheNonVanno()
+        {
+            List<Gruppo> l = new List<Gruppo>();
+            foreach (var x in this._l)
+            {
+                if (x.Platform == "TG")
+                {
+                    if (x.LinkFunzionante == null || x.LinkFunzionante.Value == false)
+                    {
+                        l.Add(x);
+                    }
+                }
+            }
+
+            string s = "[";
+
+            foreach (var l2 in l)
+            {
+                s += l2.To_json(CheckGruppo.E.RICERCA_SITO_V3) + ",";
+            }
+
+            s = s.Remove(s.Length - 1);
+
+            s += "]";
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            var r = saveFileDialog.ShowDialog();
+            if (r == DialogResult.OK)
+            {
+                File.WriteAllText(saveFileDialog.FileName, s);
+            }
+        }
+
+        internal void CheckSeILinkVanno(bool force)
         {
             for (int i = 0; i < this._l.Count; i++)
             {
-                this._l[i].CheckSeIlLinkVa();
+                this._l[i].CheckSeIlLinkVa(force);
             }
         }
 
