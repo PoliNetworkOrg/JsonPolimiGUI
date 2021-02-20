@@ -854,6 +854,7 @@ namespace JsonPolimi
         private void Button9_Click(object sender, EventArgs e)
         {
             Variabili.L.ProvaAdUnire();
+            MessageBox.Show("Prova ad unire terminato!");
         }
 
         private void Button10_Click(object sender, EventArgs e)

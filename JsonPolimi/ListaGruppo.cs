@@ -351,6 +351,25 @@ namespace JsonPolimi
             if (a1.Platform != a2.Platform)
                 return new Tuple<SomiglianzaClasse, Gruppo>(new SomiglianzaClasse(SomiglianzaEnum.DIVERSI, null, null), null);
 
+            if (a1.Platform == a2.Platform)
+            {
+                string c1 = a1.Classe.ToLower().Trim();
+                string c2 = a2.Classe.ToLower().Trim();
+                if (c1 == c2)
+                {
+                    if ((JsonEmpty(a1.Office) && !JsonEmpty(a2.Office)) || (!JsonEmpty(a1.Office) && JsonEmpty(a2.Office)))
+                    {
+                        if ((a1.Tipo == "C" && a2.Tipo == "S")|| (a1.Tipo == "S" && a2.Tipo == "C"))
+                        {
+                            var r7 = Unisci4(i, j, aggiusta_Annno);
+                            r7.Item2.Tipo = "C";
+                            return new Tuple<SomiglianzaClasse, Gruppo>(new SomiglianzaClasse(SomiglianzaEnum.IDENTITICI, a1, a2), r7.Item2);
+                        }
+                    }
+                }
+
+            }
+
             if (a1.IdLink != a2.IdLink && a1.LinkFunzionante == true && a2.LinkFunzionante == true)
             {
                 return new Tuple<SomiglianzaClasse, Gruppo>(new SomiglianzaClasse(SomiglianzaEnum.DIVERSI, null, null), null);
@@ -423,6 +442,14 @@ namespace JsonPolimi
             }
 
             return new Tuple<SomiglianzaClasse, Gruppo>(new SomiglianzaClasse(SomiglianzaEnum.DIVERSI), null);
+        }
+
+        private bool JsonEmpty(ListaStringhePerJSON office)
+        {
+            if (office == null)
+                return true;
+
+            return office.IsEmpty();
         }
 
         private SomiglianzaEnum SciogliDubbio(Gruppo a1, Gruppo a2)
