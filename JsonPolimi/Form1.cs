@@ -2605,5 +2605,15 @@ namespace JsonPolimi
 
             Variabili.L.ImportaGruppiDalComandoDelBotTelegram_UpdateLinkFromJson();
         }
+
+        private void button24_Click(object sender, EventArgs e)
+        {
+            if (Variabili.L == null)
+            {
+                Variabili.L = new ListaGruppo();
+            }
+
+            Variabili.L.ImportaGruppiDaTabellaTelegramGruppiBot_PuntoBin();
+        }
     }
 }

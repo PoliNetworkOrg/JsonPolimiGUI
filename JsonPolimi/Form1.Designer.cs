@@ -36,6 +36,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button7 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button23 = new System.Windows.Forms.Button();
             this.button22 = new System.Windows.Forms.Button();
             this.button21 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
@@ -52,7 +53,7 @@
             this.button15 = new System.Windows.Forms.Button();
             this.button19 = new System.Windows.Forms.Button();
             this.button20 = new System.Windows.Forms.Button();
-            this.button23 = new System.Windows.Forms.Button();
+            this.button24 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -60,7 +61,7 @@
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(202, 70);
+            this.button2.Location = new System.Drawing.Point(202, 81);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(159, 57);
             this.button2.TabIndex = 1;
@@ -84,7 +85,7 @@
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button4.Location = new System.Drawing.Point(202, 12);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(159, 52);
+            this.button4.Size = new System.Drawing.Size(159, 63);
             this.button4.TabIndex = 3;
             this.button4.Text = "Aggiungi/crea gruppo";
             this.button4.UseVisualStyleBackColor = true;
@@ -104,7 +105,7 @@
             // button6
             // 
             this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button6.Location = new System.Drawing.Point(12, 419);
+            this.button6.Location = new System.Drawing.Point(12, 426);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(349, 38);
             this.button6.TabIndex = 5;
@@ -128,7 +129,7 @@
             this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button7.Location = new System.Drawing.Point(12, 133);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(184, 32);
+            this.button7.Size = new System.Drawing.Size(184, 43);
             this.button7.TabIndex = 7;
             this.button7.Text = "Modifica gruppo";
             this.button7.UseVisualStyleBackColor = true;
@@ -136,6 +137,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button24);
             this.groupBox2.Controls.Add(this.button23);
             this.groupBox2.Controls.Add(this.button22);
             this.groupBox2.Controls.Add(this.button21);
@@ -154,6 +156,17 @@
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Altro";
+            // 
+            // button23
+            // 
+            this.button23.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button23.Location = new System.Drawing.Point(393, 396);
+            this.button23.Name = "button23";
+            this.button23.Size = new System.Drawing.Size(288, 56);
+            this.button23.TabIndex = 20;
+            this.button23.Text = "Importa gruppi dal comando /update_links_from_json";
+            this.button23.UseVisualStyleBackColor = true;
+            this.button23.Click += new System.EventHandler(this.Button23_Click);
             // 
             // button22
             // 
@@ -281,9 +294,9 @@
             // button8
             // 
             this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button8.Location = new System.Drawing.Point(12, 247);
+            this.button8.Location = new System.Drawing.Point(12, 258);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(349, 56);
+            this.button8.Size = new System.Drawing.Size(175, 78);
             this.button8.TabIndex = 9;
             this.button8.Text = "Carica json da bot telegram";
             this.button8.UseVisualStyleBackColor = true;
@@ -292,7 +305,7 @@
             // button9
             // 
             this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button9.Location = new System.Drawing.Point(12, 171);
+            this.button9.Location = new System.Drawing.Point(12, 182);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(184, 70);
             this.button9.TabIndex = 9;
@@ -303,7 +316,7 @@
             // button15
             // 
             this.button15.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button15.Location = new System.Drawing.Point(202, 133);
+            this.button15.Location = new System.Drawing.Point(202, 144);
             this.button15.Name = "button15";
             this.button15.Size = new System.Drawing.Size(159, 108);
             this.button15.TabIndex = 11;
@@ -314,9 +327,9 @@
             // button19
             // 
             this.button19.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button19.Location = new System.Drawing.Point(12, 369);
+            this.button19.Location = new System.Drawing.Point(12, 342);
             this.button19.Name = "button19";
-            this.button19.Size = new System.Drawing.Size(349, 38);
+            this.button19.Size = new System.Drawing.Size(349, 78);
             this.button19.TabIndex = 12;
             this.button19.Text = "Salva file";
             this.button19.UseVisualStyleBackColor = true;
@@ -325,30 +338,30 @@
             // button20
             // 
             this.button20.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button20.Location = new System.Drawing.Point(12, 309);
+            this.button20.Location = new System.Drawing.Point(193, 259);
             this.button20.Name = "button20";
-            this.button20.Size = new System.Drawing.Size(349, 54);
+            this.button20.Size = new System.Drawing.Size(168, 77);
             this.button20.TabIndex = 13;
             this.button20.Text = "Risolvi nomi doppi";
             this.button20.UseVisualStyleBackColor = true;
             this.button20.Click += new System.EventHandler(this.Button20_Click);
             // 
-            // button23
+            // button24
             // 
-            this.button23.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button23.Location = new System.Drawing.Point(7, 396);
-            this.button23.Name = "button23";
-            this.button23.Size = new System.Drawing.Size(674, 56);
-            this.button23.TabIndex = 20;
-            this.button23.Text = "Importa gruppi dal comando /update_links_from_json";
-            this.button23.UseVisualStyleBackColor = true;
-            this.button23.Click += new System.EventHandler(this.Button23_Click);
+            this.button24.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button24.Location = new System.Drawing.Point(7, 396);
+            this.button24.Name = "button24";
+            this.button24.Size = new System.Drawing.Size(380, 56);
+            this.button24.TabIndex = 21;
+            this.button24.Text = "Importa gruppi da tabella bot telegram .bin";
+            this.button24.UseVisualStyleBackColor = true;
+            this.button24.Click += new System.EventHandler(this.button24_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1066, 482);
+            this.ClientSize = new System.Drawing.Size(1066, 483);
             this.Controls.Add(this.button20);
             this.Controls.Add(this.button19);
             this.Controls.Add(this.button15);
@@ -398,6 +411,7 @@
         private System.Windows.Forms.Button button21;
         private System.Windows.Forms.Button button22;
         private System.Windows.Forms.Button button23;
+        private System.Windows.Forms.Button button24;
     }
 }
 

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using static System.String;
 
@@ -2394,6 +2397,84 @@ namespace JsonPolimi
             }
 
             return false;
+        }
+
+        internal void ImportaGruppiDaTabellaTelegramGruppiBot_PuntoBin()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            var r = openFileDialog.ShowDialog();
+            if (r != DialogResult.OK)
+                return;
+
+            var obj = BinaryDeserializeObject(openFileDialog.FileName);
+
+            ;
+
+            if (obj == null)
+                return;
+
+            if (obj is DataTable dt )
+            {
+                if (dt.Rows == null)
+                    return;
+
+                if (dt.Rows.Count == 0)
+                    return;
+
+                ;
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    ImportaGruppoDaDataRow(dr);
+                }
+            }
+        }
+
+        private void ImportaGruppoDaDataRow(DataRow dr)
+        {
+            ;
+
+            var idlink1 = dr.ItemArray[3].ToString().Split('/');
+            var idlink2 = idlink1[idlink1.Length - 1];
+
+            var date = dr.ItemArray[4];
+            DateTime? date2 = null;
+            try
+            {
+                date2 = (DateTime?)date;
+            }
+            catch
+            {
+                ;
+            }
+
+            Gruppo gruppo = new Gruppo() {
+                Platform = "TG",
+                PermanentId = Convert.ToInt64(dr.ItemArray[0]).ToString(),
+                IdLink = idlink2,
+                Classe = dr.ItemArray[6].ToString(),
+                LastUpdateInviteLinkTime = date2
+            };
+            gruppo.Aggiusta(true, true);
+            this.Add(gruppo, true);
+        }
+
+        public static object BinaryDeserializeObject(string path)
+        {
+            using (StreamReader streamReader = new StreamReader(path))
+            {
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+                object obj;
+                try
+                {
+                    obj = binaryFormatter.Deserialize(streamReader.BaseStream);
+                }
+                catch (SerializationException ex)
+                {
+                    throw new SerializationException(((object)ex).ToString() + "\n" + ex.Source);
+                }
+                return obj;
+            }
         }
 
         internal void ImportaGruppiDalComandoDelBotTelegram_UpdateLinkFromJson()
