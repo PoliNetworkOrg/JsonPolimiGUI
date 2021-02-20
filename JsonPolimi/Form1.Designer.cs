@@ -357,7 +357,7 @@
             this.button24.TabIndex = 21;
             this.button24.Text = "Importa gruppi da tabella bot telegram .bin";
             this.button24.UseVisualStyleBackColor = true;
-            this.button24.Click += new System.EventHandler(this.button24_Click);
+            this.button24.Click += new System.EventHandler(this.Button24_Click);
             // 
             // button25
             // 
@@ -369,7 +369,7 @@
             this.button25.Text = "Controlla se i link vanno (solo quelli che già non vanno) e flaggali di conseguen" +
     "za (tutto in ram)";
             this.button25.UseVisualStyleBackColor = true;
-            this.button25.Click += new System.EventHandler(this.button25_Click);
+            this.button25.Click += new System.EventHandler(this.Button25_Click);
             // 
             // Form1
             // 

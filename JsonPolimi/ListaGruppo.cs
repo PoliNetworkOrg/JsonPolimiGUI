@@ -2608,11 +2608,11 @@ namespace JsonPolimi
             }
         }
 
-        internal void CheckSeILinkVanno(bool force)
+        internal void CheckSeILinkVanno(bool saltaQuelliGiaFunzionanti)
         {
             for (int i = 0; i < this._l.Count; i++)
             {
-                this._l[i].CheckSeIlLinkVa(force);
+                this._l[i].CheckSeIlLinkVa(saltaQuelliGiaFunzionanti);
             }
         }
 

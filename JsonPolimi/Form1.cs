@@ -2581,7 +2581,7 @@ namespace JsonPolimi
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
 
-            Variabili.L.CheckSeILinkVanno(false);
+            Variabili.L.CheckSeILinkVanno(saltaQuelliGiaFunzionanti: false);
 
             MessageBox.Show("Finito il check dei link!");
         }
@@ -2606,7 +2606,7 @@ namespace JsonPolimi
             Variabili.L.ImportaGruppiDalComandoDelBotTelegram_UpdateLinkFromJson();
         }
 
-        private void button24_Click(object sender, EventArgs e)
+        private void Button24_Click(object sender, EventArgs e)
         {
             if (Variabili.L == null)
             {
@@ -2617,12 +2617,12 @@ namespace JsonPolimi
             MessageBox.Show("Gruppi importati dalla tabella telegram del bot!");
         }
 
-        private void button25_Click(object sender, EventArgs e)
+        private void Button25_Click(object sender, EventArgs e)
         {
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
 
-            Variabili.L.CheckSeILinkVanno(true);
+            Variabili.L.CheckSeILinkVanno(saltaQuelliGiaFunzionanti: true);
 
             MessageBox.Show("Finito il check dei link!");
         }

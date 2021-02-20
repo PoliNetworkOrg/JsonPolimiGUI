@@ -72,7 +72,7 @@ namespace JsonPolimi
             return false;
         }
 
-        internal string getCCSCode()
+        internal string GetCCSCode()
         {
             if (this.o == null)
                 return null;
@@ -86,13 +86,13 @@ namespace JsonPolimi
                     if (x1.StartsWith("(") && x1.EndsWith("),"))
                     {
                         string s3 = x1.Substring(0, x1.Length - 1);
-                        return getCCSCode2(s3);
+                        return GetCCSCode2(s3);
                     }
                     else if (x1.StartsWith("(") && x1.EndsWith(")"))
-                        return getCCSCode2(x1);
+                        return GetCCSCode2(x1);
                 }
 
-                return getCCSCode2(s2[s2.Length - 1]);
+                return GetCCSCode2(s2[s2.Length - 1]);
             }
 
             foreach (var x1 in o)
@@ -100,16 +100,16 @@ namespace JsonPolimi
                 if (x1.StartsWith("(") && x1.EndsWith("),"))
                 {
                     string s3 = x1.Substring(0, x1.Length - 1);
-                    return getCCSCode2(s3);
+                    return GetCCSCode2(s3);
                 }
                 else if (x1.StartsWith("(") && x1.EndsWith(")"))
-                    return getCCSCode2(x1);
+                    return GetCCSCode2(x1);
             }
 
             return null;
         }
 
-        private string getCCSCode2(string v)
+        private string GetCCSCode2(string v)
         {
             string s = v.Trim();
             if (s.StartsWith("(") && s.EndsWith(")"))

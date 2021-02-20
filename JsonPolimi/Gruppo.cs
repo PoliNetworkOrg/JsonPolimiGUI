@@ -171,7 +171,7 @@ namespace JsonPolimi
                 Office + "/" +
                 IdLink + "/" +
                 StringNotEmpty(IDCorsoPolimi) + "/" +
-                CCS?.getCCSCode() + "/" +
+                CCS?.GetCCSCode() + "/" +
                 PianoDiStudi;
         }
 
@@ -1497,21 +1497,21 @@ namespace JsonPolimi
             return true;
         }
 
-        internal void CheckSeIlLinkVa(bool force)
+        internal void CheckSeIlLinkVa(bool saltaQuelliGiaFunzionanti)
         {
             switch (this.Platform)
             {
                 case "TG":
                     {
-                        this.LinkFunzionante = CheckSeIlLinkVa3_Telegram(force);
+                        this.LinkFunzionante = CheckSeIlLinkVa3_Telegram(saltaQuelliGiaFunzionanti);
                         break;
                     }
             }
         }
 
-        private bool? CheckSeIlLinkVa3_Telegram(bool force)
+        private bool? CheckSeIlLinkVa3_Telegram(bool saltaQuelliGiaFunzionanti)
         {
-            if (!force)
+            if (saltaQuelliGiaFunzionanti)
             {
                 if (this.LinkFunzionante == true)
                     return true;
