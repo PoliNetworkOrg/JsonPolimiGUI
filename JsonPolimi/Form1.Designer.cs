@@ -342,7 +342,7 @@
             this.button23.TabIndex = 20;
             this.button23.Text = "Importa gruppi dal comando /update_links_from_json";
             this.button23.UseVisualStyleBackColor = true;
-            this.button23.Click += new System.EventHandler(this.button23_Click);
+            this.button23.Click += new System.EventHandler(this.Button23_Click);
             // 
             // Form1
             // 

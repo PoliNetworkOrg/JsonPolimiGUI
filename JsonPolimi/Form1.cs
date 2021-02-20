@@ -2595,7 +2595,7 @@ namespace JsonPolimi
             Variabili.L.SalvaTelegramIdDeiGruppiLinkCheNonVanno();
         }
 
-        private void button23_Click(object sender, EventArgs e)
+        private void Button23_Click(object sender, EventArgs e)
         {
             if (Variabili.L == null)
             {
