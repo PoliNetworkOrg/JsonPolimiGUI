@@ -2614,6 +2614,7 @@ namespace JsonPolimi
             }
 
             Variabili.L.ImportaGruppiDaTabellaTelegramGruppiBot_PuntoBin();
+            MessageBox.Show("Gruppi importati dalla tabella telegram del bot!");
         }
     }
 }
