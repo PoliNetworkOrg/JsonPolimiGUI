@@ -99,8 +99,8 @@ namespace JsonPolimi
             t_school.Text = g.School;
             t_type.Text = g.Tipo;
             t_year.Text = g.Year;
-            t_idlink.Text = g.IdLink;
-            t_ccs.Text = g.CCS.StringNotNull();
+            t_idlink.Text = g.IdLink;        
+            t_ccs.Text = StringCheckNull(g.CCS);
             t_idcorsopolimi.Text = g.IDCorsoPolimi;
             t_annocorso.Text = ToText(g.AnnoCorsoStudio);
             t_pianostudi.Text = g.PianoDiStudi;
