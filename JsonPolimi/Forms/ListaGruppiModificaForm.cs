@@ -1,7 +1,9 @@
-﻿using System;
+﻿using JsonPolimi.Data;
+using JsonPolimi.Tipi;
+using System;
 using System.Windows.Forms;
 
-namespace JsonPolimi
+namespace JsonPolimi.Forms
 {
     public partial class ListaGruppiModificaForm : Form
     {

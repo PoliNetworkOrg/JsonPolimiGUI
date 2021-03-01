@@ -1,4 +1,4 @@
-﻿namespace JsonPolimi
+﻿namespace JsonPolimi.Forms
 {
     partial class AskFromList
     {

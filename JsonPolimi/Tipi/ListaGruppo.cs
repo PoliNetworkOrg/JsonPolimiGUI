@@ -1,4 +1,6 @@
-﻿using System;
+﻿using JsonPolimi.Enums;
+using JsonPolimi.Forms;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -8,7 +10,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using static System.String;
 
-namespace JsonPolimi
+namespace JsonPolimi.Tipi
 {
     public class ListaGruppo : IEnumerable
     {
@@ -362,7 +364,7 @@ namespace JsonPolimi
                 {
                     if ((JsonEmpty(a1.Office) && !JsonEmpty(a2.Office)) || (!JsonEmpty(a1.Office) && JsonEmpty(a2.Office)))
                     {
-                        if ((a1.Tipo == "C" && a2.Tipo == "S")|| (a1.Tipo == "S" && a2.Tipo == "C"))
+                        if ((a1.Tipo == "C" && a2.Tipo == "S") || (a1.Tipo == "S" && a2.Tipo == "C"))
                         {
                             var r7 = Unisci4(i, j, aggiusta_Annno);
                             r7.Item2.Tipo = "C";
@@ -370,7 +372,6 @@ namespace JsonPolimi
                         }
                     }
                 }
-
             }
 
             if (a1.IdLink != a2.IdLink && a1.LinkFunzionante == true && a2.LinkFunzionante == true)
@@ -1731,7 +1732,6 @@ namespace JsonPolimi
                 a1.LinkFunzionante = a2.LinkFunzionante;
             }
 
-
             if (!String.IsNullOrEmpty(a1.Year))
             {
                 if (!String.IsNullOrEmpty(a1.Tipo) && !String.IsNullOrEmpty(a2.Tipo))
@@ -2413,7 +2413,7 @@ namespace JsonPolimi
             if (obj == null)
                 return;
 
-            if (obj is DataTable dt )
+            if (obj is DataTable dt)
             {
                 if (dt.Rows == null)
                     return;
@@ -2448,7 +2448,8 @@ namespace JsonPolimi
                 ;
             }
 
-            Gruppo gruppo = new Gruppo() {
+            Gruppo gruppo = new Gruppo()
+            {
                 Platform = "TG",
                 PermanentId = Convert.ToInt64(dr.ItemArray[0]).ToString(),
                 IdLink = idlink2,
@@ -2514,7 +2515,7 @@ namespace JsonPolimi
             }
 
             string idlink = l3[1].Substring("IdLink: ".Length).Trim();
-            string newlink = l3[2].Substring( "NewLink: ".Length).Trim();
+            string newlink = l3[2].Substring("NewLink: ".Length).Trim();
             var n2 = newlink.Split('/');
             newlink = n2[n2.Length - 1];
             string nome = l3[3].Substring("Nome: ".Length).Trim();
@@ -2522,7 +2523,7 @@ namespace JsonPolimi
             int? i = TrovaGruppo(idlink, nome);
             if (i == null)
             {
-                Gruppo g = new Gruppo() { Classe = nome, IdLink = idlink , Platform = "TG"};
+                Gruppo g = new Gruppo() { Classe = nome, IdLink = idlink, Platform = "TG" };
                 g.Aggiusta(true, true);
                 this.Add(g, false);
             }
@@ -2537,7 +2538,7 @@ namespace JsonPolimi
 
         private int? TrovaGruppo(string idlink, string nome)
         {
-            for (int i=0; i<this._l.Count; i++)
+            for (int i = 0; i < this._l.Count; i++)
             {
                 if (this._l[i].IdLink == idlink)
                     return i;

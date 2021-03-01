@@ -1,6 +1,6 @@
 ﻿using HtmlAgilityPack;
 
-namespace JsonPolimi
+namespace JsonPolimi.Tipi
 {
     internal class LinkGruppo
     {

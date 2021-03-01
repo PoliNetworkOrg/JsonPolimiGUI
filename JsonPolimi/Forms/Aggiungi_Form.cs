@@ -1,7 +1,9 @@
-﻿using System;
+﻿using JsonPolimi.Data;
+using JsonPolimi.Tipi;
+using System;
 using System.Windows.Forms;
 
-namespace JsonPolimi
+namespace JsonPolimi.Forms
 {
     public partial class AggiungiForm : Form
     {
@@ -99,7 +101,7 @@ namespace JsonPolimi
             t_school.Text = g.School;
             t_type.Text = g.Tipo;
             t_year.Text = g.Year;
-            t_idlink.Text = g.IdLink;        
+            t_idlink.Text = g.IdLink;
             t_ccs.Text = StringCheckNull(g.CCS);
             t_idcorsopolimi.Text = g.IDCorsoPolimi;
             t_annocorso.Text = ToText(g.AnnoCorsoStudio);

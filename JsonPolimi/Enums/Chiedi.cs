@@ -1,4 +1,4 @@
-﻿namespace JsonPolimi
+﻿namespace JsonPolimi.Enums
 {
     internal enum Chiedi
     {

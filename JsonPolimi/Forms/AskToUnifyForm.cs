@@ -1,8 +1,9 @@
-﻿using System;
+﻿using JsonPolimi.Tipi;
+using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 
-namespace JsonPolimi
+namespace JsonPolimi.Forms
 {
     public partial class AskToUnifyForm : Form
     {

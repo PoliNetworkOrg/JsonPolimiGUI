@@ -1,9 +1,10 @@
-﻿using System;
+﻿using JsonPolimi.Forms;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 
-namespace JsonPolimi
+namespace JsonPolimi.Tipi
 {
     [Serializable]
     public class Gruppo
@@ -941,7 +942,7 @@ namespace JsonPolimi
 
                     if (infoParteDiGruppo_list[0].testo_selvaggio == "Scuola")
                     {
-                        Form1.infoManifesto.scuola = infoParteDiGruppo_list[1].testo_selvaggio.Trim();
+                        Form1.infoManifesto.Scuola = infoParteDiGruppo_list[1].testo_selvaggio.Trim();
                         return null; //sicuro
                     }
 
@@ -1064,19 +1065,19 @@ namespace JsonPolimi
                         }
                     }
 
-                    Form1.infoManifesto.corso_di_studio = x4;
+                    Form1.infoManifesto.Corso_di_studio = x4;
                 }
 
                 if (infoParteDiGruppo_list[2].testo_selvaggio == "Sede del corso")
                 {
                     string x1 = infoParteDiGruppo_list[3].testo_selvaggio.Trim();
-                    Form1.infoManifesto.sede_del_corso = x1.Split(',');
+                    Form1.infoManifesto.Sede_del_corso = x1.Split(',');
                 }
 
                 if (infoParteDiGruppo_list[0].testo_selvaggio == "Anni di Corso Attivi")
                 {
                     string x1 = infoParteDiGruppo_list[1].testo_selvaggio.Trim();
-                    Form1.infoManifesto.anni_di_corso_attivi = x1.Split(',');
+                    Form1.infoManifesto.Anni_di_corso_attivi = x1.Split(',');
                 }
 
                 if (infoParteDiGruppo_list[0].testo_selvaggio == "Anno Accademico")
@@ -1091,7 +1092,7 @@ namespace JsonPolimi
                         ;
                     }
 
-                    Form1.infoManifesto.anno_accademico = x1;
+                    Form1.infoManifesto.Anno_accademico = x1;
                 }
 
                 if (infoParteDiGruppo_list[2].testo_selvaggio == "Sede")
@@ -1106,13 +1107,13 @@ namespace JsonPolimi
                         ;
                     }
 
-                    Form1.infoManifesto.sede = x1;
+                    Form1.infoManifesto.Sede = x1;
                 }
 
                 if (infoParteDiGruppo_list[2].testo_selvaggio == "Durata nominale del Corso")
                 {
                     string x1 = infoParteDiGruppo_list[3].testo_selvaggio.Trim();
-                    Form1.infoManifesto.durata_nominale_corso = x1;
+                    Form1.infoManifesto.Durata_nominale_corso = x1;
                 }
 
                 return null; //info interessanti
@@ -1437,7 +1438,7 @@ namespace JsonPolimi
                 for (int rip = 1; rip < s2.Count; rip++)
                 {
                     if (i + rip < s2.Count)
-                    {             
+                    {
                         bool uguali = FindSeUguali(s2, i, rip);
                         if (uguali)
                         {
@@ -1445,7 +1446,7 @@ namespace JsonPolimi
 
                             List<string> r = new List<string>();
                             int k = 0;
-                            for (; k < (i+rip); k++)
+                            for (; k < (i + rip); k++)
                             {
                                 r.Add(s[k]);
                             }
@@ -1464,7 +1465,7 @@ namespace JsonPolimi
                             text2 = text2.Trim();
 
                             return AggiustaNomeDoppio2(text2);
-                        }                    
+                        }
                     }
                 }
             }
@@ -1474,7 +1475,7 @@ namespace JsonPolimi
 
         private bool FindSeUguali(List<string> s2, int i, int rip)
         {
-            if (i >= s2.Count  || rip >= s2.Count)
+            if (i >= s2.Count || rip >= s2.Count)
             {
                 return false;
             }
@@ -1518,7 +1519,7 @@ namespace JsonPolimi
             }
 
             bool? works = null;
-            for (int i=0; i<3; i++)
+            for (int i = 0; i < 3; i++)
             {
                 works = CheckSeIlLinkVa2_Telegram();
                 if (works != null && works.Value == true)
@@ -1526,7 +1527,6 @@ namespace JsonPolimi
             }
 
             return works;
-
         }
 
         private bool? CheckSeIlLinkVa2_Telegram()
@@ -1541,7 +1541,7 @@ namespace JsonPolimi
             {
                 ;
             }
-                        
+
             if (string.IsNullOrEmpty(content))
             {
                 return null;

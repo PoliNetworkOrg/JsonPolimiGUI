@@ -1,10 +1,12 @@
 ﻿using HtmlAgilityPack;
+using JsonPolimi.Data;
+using JsonPolimi.Enums;
 using JsonPolimi.Tipi;
+using JsonPolimi.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -15,7 +17,7 @@ using System.Windows.Forms;
 using Telegram.Bot.Types.Enums;
 using Size = System.Drawing.Size;
 
-namespace JsonPolimi
+namespace JsonPolimi.Forms
 {
     public partial class Form1 : Form
     {
@@ -831,7 +833,6 @@ namespace JsonPolimi
                 ;
             }
 
-
             if (content == null)
             {
                 MessageBox.Show("Lettura fallita! \n\n" + ex.Message);
@@ -842,8 +843,6 @@ namespace JsonPolimi
                 FileSalvare = new FileSalvare();
 
             ofd.Dispose();
-
-      
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -930,7 +929,7 @@ namespace JsonPolimi
             for (int i = 0; i < L2.Count; i++)
             {
                 L2[i].AggiungiInfoDaManifesto(infoManifesto);
-                L2[i].CCS = new ListaStringhePerJSON(infoManifesto.corso_di_studio);
+                L2[i].CCS = new ListaStringhePerJSON(infoManifesto.Corso_di_studio);
 
                 L2[i].PianoDiStudi = pianostudi2;
             }
@@ -1679,7 +1678,7 @@ namespace JsonPolimi
                 {
                     string s = htmlNode.InnerHtml.Trim();
                     var s2 = s.Split('<');
-                    Form1.infoManifesto.scuola = s2[0].Trim();
+                    Form1.infoManifesto.Scuola = s2[0].Trim();
                     return null;
                 }
             }

@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using JsonPolimi.Enums;
+using System.Collections.Generic;
 
-namespace JsonPolimi
+namespace JsonPolimi.Tipi
 {
     internal class InfoParteDiGruppo
     {

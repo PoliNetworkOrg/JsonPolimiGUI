@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 
-namespace JsonPolimi
+namespace JsonPolimi.Utils
 {
     internal class ODS_Reader
     {

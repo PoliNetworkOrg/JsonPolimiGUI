@@ -1,4 +1,6 @@
-﻿namespace JsonPolimi
+﻿using JsonPolimi.Tipi;
+
+namespace JsonPolimi.Data
 {
     public static class Variabili
     {

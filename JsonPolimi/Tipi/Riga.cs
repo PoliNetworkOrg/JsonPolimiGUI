@@ -1,4 +1,4 @@
-﻿namespace JsonPolimi
+﻿namespace JsonPolimi.Tipi
 {
     public class Riga
     {

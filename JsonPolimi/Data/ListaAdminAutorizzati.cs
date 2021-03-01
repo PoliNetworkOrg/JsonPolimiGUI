@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace JsonPolimi
+namespace JsonPolimi.Data
 {
     public static class ListaAdminAutorizzati
     {

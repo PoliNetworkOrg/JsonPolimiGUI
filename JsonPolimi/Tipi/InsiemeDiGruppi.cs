@@ -2,7 +2,7 @@
 
 // ReSharper disable ForCanBeConvertedToForeach
 
-namespace JsonPolimi
+namespace JsonPolimi.Tipi
 {
     public class InsiemeDiGruppi
     {

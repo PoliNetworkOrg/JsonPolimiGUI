@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace JsonPolimi
+namespace JsonPolimi.Tipi
 {
     [Serializable]
     public class ListaStringhePerJSON

@@ -1,4 +1,6 @@
-﻿namespace JsonPolimi
+﻿using JsonPolimi.Enums;
+
+namespace JsonPolimi.Tipi
 {
     public class SomiglianzaClasse
     {
