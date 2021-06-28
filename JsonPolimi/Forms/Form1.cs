@@ -2625,5 +2625,13 @@ namespace JsonPolimi.Forms
 
             MessageBox.Show("Finito il check dei link!");
         }
+
+        private void button26_Click(object sender, EventArgs e)
+        {
+            if (Variabili.L == null)
+                Variabili.L = new ListaGruppo();
+
+            Variabili.L.stampaWhatsapp();
+        }
     }
 }

@@ -2399,6 +2399,29 @@ namespace JsonPolimi.Tipi
             return false;
         }
 
+        internal void stampaWhatsapp()
+        {
+
+            string s = "";
+            int i = 0;
+            foreach (var g in this._l)
+            {
+                if (g.Platform.ToLower() == "wa")
+                {
+                    s += i.ToString() + " https://chat.whatsapp.com/" +  g.IdLink + "\n\n";
+                    i++;
+                }
+      
+            }
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            var r = saveFileDialog.ShowDialog();
+            if (r == DialogResult.OK)
+            {
+                File.WriteAllText(saveFileDialog.FileName, s);
+            }
+        }
+
         internal void ImportaGruppiDaTabellaTelegramGruppiBot_PuntoBin()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
