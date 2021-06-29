@@ -25,7 +25,7 @@ namespace JsonPolimi.Forms
 
         }
 
-        private static void Refresh_Tabella()
+        private static void Refresh_Tabella(string textBox_anno, string textBox_piattaforma)
         {
             if (Data.Variabili.L == null)
             {
@@ -42,10 +42,24 @@ namespace JsonPolimi.Forms
                 return;
             }
 
+            int done = 0;
+
             for (var i = 0; i < n; i++)
             {
                 var elem = Data.Variabili.L.GetElem(i);
-                html += elem.GetHTML_DataRow();
+                var html_elem =  elem.GetHTML_DataRow(textBox_anno,textBox_piattaforma);
+                html += html_elem;
+
+                if (!string.IsNullOrEmpty(html_elem))
+                {
+                    done++;
+                }
+            }
+
+            if (done <= 0)
+            {
+                MessageBox.Show("Lista vuota!");
+                return;
             }
 
             html += "</table></body></html>";
@@ -55,7 +69,7 @@ namespace JsonPolimi.Forms
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            Refresh_Tabella();
+            Refresh_Tabella(textBox_anno: textBox_anno.Text,  textBox_piattaforma: textBox_piattaforma.Text);
         }
     }
 }

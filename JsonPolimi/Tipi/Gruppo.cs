@@ -38,8 +38,24 @@ namespace JsonPolimi.Tipi
         public string Language;
         public ListaStringhePerJSON Office; // esempio: LEONARDO
 
-        internal string GetHTML_DataRow()
+        internal string GetHTML_DataRow(string textBox_anno, string textBox_piattaforma)
         {
+            if (!string.IsNullOrEmpty(textBox_anno))
+            {
+                if (textBox_anno != Year)
+                {
+                    return "";
+                }
+            }
+
+            if (!string.IsNullOrEmpty(textBox_piattaforma))
+            {
+                if (textBox_piattaforma != Platform)
+                {
+                    return "";
+                }
+            }
+
             string html = "";
             html += "<tr>";
 
