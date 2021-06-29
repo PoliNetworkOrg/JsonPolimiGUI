@@ -81,6 +81,12 @@
     <Compile Include="Forms\AskToUnifyForm.Designer.cs">
       <DependentUpon>AskToUnifyForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\GeneraTabellaHTML.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GeneraTabellaHTML.Designer.cs">
+      <DependentUpon>GeneraTabellaHTML.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tipi\CheckGruppo.cs" />
     <Compile Include="Enums\Chiedi.cs" />
     <Compile Include="Forms\Form1.cs">
@@ -125,6 +131,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GeneraTabellaHTML.resx">
+      <DependentUpon>GeneraTabellaHTML.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ListaGruppiModificaForm.resx">
       <DependentUpon>ListaGruppiModificaForm.cs</DependentUpon>

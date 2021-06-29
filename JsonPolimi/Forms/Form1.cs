@@ -101,84 +101,7 @@ namespace JsonPolimi.Forms
             MessageBox.Show("Finito!");
         }
 
-        private static void Refresh_Tabella()
-        {
-            if (Variabili.L == null)
-            {
-                MessageBox.Show("Lista vuota!");
-                return;
-            }
-
-            var html = "<html><body><table>";
-            var n = Variabili.L.GetCount();
-
-            if (n <= 0)
-            {
-                MessageBox.Show("Lista vuota!");
-                return;
-            }
-
-            for (var i = 0; i < n; i++)
-            {
-                var elem = Variabili.L.GetElem(i);
-
-                html += "<tr>";
-
-                html += "<td>";
-                html += elem.Id;
-                html += "</td>";
-
-                html += "<td>";
-                html += elem.Platform;
-                html += "</td>";
-
-                html += "<td>";
-                html += elem.Classe;
-                html += "</td>";
-
-                html += "<td>";
-                html += elem.Degree;
-                html += "</td>";
-
-                html += "<td>";
-                html += elem.Language;
-                html += "</td>";
-
-                html += "<td>";
-                html += elem.Office;
-                html += "</td>";
-
-                html += "<td>";
-                html += elem.School;
-                html += "</td>";
-
-                html += "<td>";
-                html += elem.Tipo;
-                html += "</td>";
-
-                html += "<td>";
-                html += elem.Year;
-                html += "</td>";
-
-                html += "<td>";
-                html += elem.IdLink;
-                html += "</td>";
-
-                html += "<td>";
-                html += elem.PermanentId;
-                html += "</td>";
-
-                html += "<td>";
-                html += elem.NomeCorso;
-                html += "</td>";
-
-                html += "</tr>";
-            }
-
-            html += "</table></body></html>";
-            File.WriteAllText("temp.html", html);
-            Process.Start("temp.html");
-        }
+       
 
         private static void Aggiungi(JToken i, bool aggiusta_Anno, bool merge)
         {
@@ -383,7 +306,8 @@ namespace JsonPolimi.Forms
         private void Button2_Click(object sender, EventArgs e)
         {
             Aggiusta();
-            Refresh_Tabella();
+            GeneraTabellaHTML generaTabellaHTML = new GeneraTabellaHTML();
+            generaTabellaHTML.Show();
         }
 
         private void Button3_Click(CheckGruppo.E i, bool entrambi_index)
@@ -2626,12 +2550,12 @@ namespace JsonPolimi.Forms
             MessageBox.Show("Finito il check dei link!");
         }
 
-        private void button26_Click(object sender, EventArgs e)
+        private void Button26_Click(object sender, EventArgs e)
         {
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
 
-            Variabili.L.stampaWhatsapp();
+            Variabili.L.StampaWhatsapp();
         }
     }
 }

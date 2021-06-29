@@ -2399,7 +2399,7 @@ namespace JsonPolimi.Tipi
             return false;
         }
 
-        internal void stampaWhatsapp()
+        internal void StampaWhatsapp()
         {
 
             string s = "";
@@ -2485,20 +2485,32 @@ namespace JsonPolimi.Tipi
 
         public static object BinaryDeserializeObject(string path)
         {
-            using (StreamReader streamReader = new StreamReader(path))
+
+            StreamReader streamReader = null;
+            try
             {
-                BinaryFormatter binaryFormatter = new BinaryFormatter();
-                object obj;
-                try
-                {
-                    obj = binaryFormatter.Deserialize(streamReader.BaseStream);
-                }
-                catch (SerializationException ex)
-                {
-                    throw new SerializationException(((object)ex).ToString() + "\n" + ex.Source);
-                }
-                return obj;
+                streamReader = new StreamReader(path);
             }
+            catch
+            {
+                ;
+            }
+
+            if (streamReader == null)
+                return null;
+            
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            object obj;
+            try
+            {
+                obj = binaryFormatter.Deserialize(streamReader.BaseStream);
+            }
+            catch (SerializationException ex)
+            {
+                throw new SerializationException(((object)ex).ToString() + "\n" + ex.Source);
+            }
+            return obj;
+            
         }
 
         internal void ImportaGruppiDalComandoDelBotTelegram_UpdateLinkFromJson()
@@ -2618,6 +2630,7 @@ namespace JsonPolimi.Tipi
             foreach (var l2 in l)
             {
                 s += l2.To_json(CheckGruppo.E.RICERCA_SITO_V3) + ",";
+                s += "\n";
             }
 
             s = s.Remove(s.Length - 1);

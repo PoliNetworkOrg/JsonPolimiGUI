@@ -37,6 +37,64 @@ namespace JsonPolimi.Tipi
         public string IdLink; // esempio: 21432583243205
         public string Language;
         public ListaStringhePerJSON Office; // esempio: LEONARDO
+
+        internal string GetHTML_DataRow()
+        {
+            string html = "";
+            html += "<tr>";
+
+            html += "<td>";
+            html += this.Id;
+            html += "</td>";
+
+            html += "<td>";
+            html += this.Platform;
+            html += "</td>";
+
+            html += "<td>";
+            html += this.Classe;
+            html += "</td>";
+
+            html += "<td>";
+            html += this.Degree;
+            html += "</td>";
+
+            html += "<td>";
+            html += this.Language;
+            html += "</td>";
+
+            html += "<td>";
+            html += this.Office;
+            html += "</td>";
+
+            html += "<td>";
+            html += this.School;
+            html += "</td>";
+
+            html += "<td>";
+            html += this.Tipo;
+            html += "</td>";
+
+            html += "<td>";
+            html += this.Year;
+            html += "</td>";
+
+            html += "<td>";
+            html += this.IdLink;
+            html += "</td>";
+
+            html += "<td>";
+            html += this.PermanentId;
+            html += "</td>";
+
+            html += "<td>";
+            html += this.NomeCorso;
+            html += "</td>";
+
+            html += "</tr>";
+            return html;
+        }
+
         public string PermanentId; //per telegram, esempio -1000345953
         public string Platform; // esempio: FB
         public string School;
