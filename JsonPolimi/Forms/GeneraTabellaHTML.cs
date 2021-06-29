@@ -33,7 +33,7 @@ namespace JsonPolimi.Forms
                 return;
             }
 
-            var html = "<html><body><table>";
+            var html = "<html><body><table border=\"1\">";
             var n = Data.Variabili.L.GetCount();
 
             if (n <= 0)

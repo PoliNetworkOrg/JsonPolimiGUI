@@ -107,6 +107,11 @@ namespace JsonPolimi.Tipi
             html += this.NomeCorso;
             html += "</td>";
 
+            html += "<td>";
+            html += this.GetLink();
+            html += "</td>";
+
+
             html += "</tr>";
             return html;
         }
@@ -846,8 +851,29 @@ namespace JsonPolimi.Tipi
 
         private string GetLink()
         {
-            //   https://t.me/joinchat/LclXl1aSJiYbzl7wCW5WZg
-            return "https://t.me/joinchat/" + this.IdLink;
+            if (string.IsNullOrEmpty(this.Platform))
+                return "";
+
+            switch (this.Platform)
+            {
+                case "TG":
+                    {
+                        return "https://t.me/joinchat/" + this.IdLink;
+                    }
+
+                case "WA":
+                    {
+                        return "https://chat.whatsapp.com/" + this.IdLink;
+                    }
+
+                case "FB":
+                    {
+                        return "https://www.facebook.com/groups/" + this.IdLink;
+                    }
+            }
+
+            return "";
+         
         }
 
         internal static Gruppo FromInfoParteList(List<InfoParteDiGruppo> infoParteDiGruppo_list, string pLAT2)
