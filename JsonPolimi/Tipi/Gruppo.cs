@@ -353,6 +353,10 @@ namespace JsonPolimi.Tipi
                         json += StringCheckNull(Year);
                         json += ",\"platform\":";
                         json += StringCheckNull(Platform);
+                        json += ",\"permanentId\":";
+                        json += StringCheckNull(PermanentId);
+                        json += ",\"LastUpdateInviteLinkTime\":";
+                        json += StringCheckNull(GetTelegramTime());
                         json += ",\"linkfunzionante\":";
                         json += BoolCheckNotNull(LinkFunzionante);
                         break;

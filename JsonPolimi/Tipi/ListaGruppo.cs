@@ -2553,9 +2553,10 @@ namespace JsonPolimi.Tipi
             string newlink = l3[2].Substring("NewLink: ".Length).Trim();
             var n2 = newlink.Split('/');
             newlink = n2[n2.Length - 1];
-            string nome = l3[3].Substring("Nome: ".Length).Trim();
+            string permanentId = l3[3].Substring("PermanentId: ".Length).Trim();
+            string nome = l3[4].Substring("Nome: ".Length).Trim();
 
-            int? i = TrovaGruppo(idlink, nome);
+            int? i = TrovaGruppo(idlink, nome, permanentId);
             if (i == null)
             {
                 Gruppo g = new Gruppo() { Classe = nome, IdLink = idlink, Platform = "TG" };
@@ -2567,11 +2568,12 @@ namespace JsonPolimi.Tipi
                 this._l[i.Value].IdLink = newlink;
                 this._l[i.Value].LastUpdateInviteLinkTime = DateTime.Now;
                 this._l[i.Value].LinkFunzionante = true;
+                this._l[i.Value].PermanentId = permanentId;
                 this._l[i.Value].Aggiusta(false, true);
             }
         }
 
-        private int? TrovaGruppo(string idlink, string nome)
+        private int? TrovaGruppo(string idlink, string nome, string permanentId)
         {
             for (int i = 0; i < this._l.Count; i++)
             {
@@ -2579,6 +2581,10 @@ namespace JsonPolimi.Tipi
                     return i;
 
                 if (this._l[i].Classe == nome)
+                    return i;
+
+
+                if (this._l[i].PermanentId == permanentId)
                     return i;
             }
 
