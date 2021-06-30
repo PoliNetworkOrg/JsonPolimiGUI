@@ -2577,15 +2577,19 @@ namespace JsonPolimi.Tipi
         {
             for (int i = 0; i < this._l.Count; i++)
             {
-                if (this._l[i].IdLink == idlink)
-                    return i;
+                if (this._l[i].Platform == "TG")
+                {
 
-                if (this._l[i].Classe == nome)
-                    return i;
+                    if (this._l[i].IdLink == idlink)
+                        return i;
+
+                    if (this._l[i].Classe == nome)
+                        return i;
 
 
-                if (this._l[i].PermanentId == permanentId)
-                    return i;
+                    if (this._l[i].PermanentId == permanentId)
+                        return i;
+                }
             }
 
             return null;
