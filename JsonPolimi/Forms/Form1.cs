@@ -2516,7 +2516,7 @@ namespace JsonPolimi.Forms
                 Variabili.L = new ListaGruppo();
             }
 
-            Variabili.L.SalvaTelegramIdDeiGruppiLinkCheNonVanno();
+            Variabili.L.SalvaTelegramIdDeiGruppiLinkCheNonVanno(textBox1.Text);
         }
 
         private void Button23_Click(object sender, EventArgs e)

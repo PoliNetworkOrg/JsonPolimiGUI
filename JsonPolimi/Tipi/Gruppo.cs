@@ -111,6 +111,10 @@ namespace JsonPolimi.Tipi
             html += this.GetLink();
             html += "</td>";
 
+            html += "<td>";
+            html += this.LinkFunzionante;
+            html += "</td>";
+
 
             html += "</tr>";
             return html;

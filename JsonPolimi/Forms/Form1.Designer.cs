@@ -56,8 +56,12 @@
             this.button19 = new System.Windows.Forms.Button();
             this.button20 = new System.Windows.Forms.Button();
             this.button26 = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // button2
@@ -109,7 +113,7 @@
             this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button6.Location = new System.Drawing.Point(12, 426);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(349, 38);
+            this.button6.Size = new System.Drawing.Size(349, 77);
             this.button6.TabIndex = 5;
             this.button6.Text = "Svuota lista";
             this.button6.UseVisualStyleBackColor = true;
@@ -139,10 +143,10 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.groupBox3);
             this.groupBox2.Controls.Add(this.button25);
             this.groupBox2.Controls.Add(this.button24);
             this.groupBox2.Controls.Add(this.button23);
-            this.groupBox2.Controls.Add(this.button22);
             this.groupBox2.Controls.Add(this.button21);
             this.groupBox2.Controls.Add(this.button10);
             this.groupBox2.Controls.Add(this.button3);
@@ -155,7 +159,7 @@
             this.groupBox2.Controls.Add(this.button11);
             this.groupBox2.Location = new System.Drawing.Point(367, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(687, 510);
+            this.groupBox2.Size = new System.Drawing.Size(753, 555);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Altro";
@@ -163,9 +167,9 @@
             // button25
             // 
             this.button25.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button25.Location = new System.Drawing.Point(275, 319);
+            this.button25.Location = new System.Drawing.Point(216, 319);
             this.button25.Name = "button25";
-            this.button25.Size = new System.Drawing.Size(235, 123);
+            this.button25.Size = new System.Drawing.Size(203, 162);
             this.button25.TabIndex = 22;
             this.button25.Text = "Controlla se i link vanno (solo quelli che già non vanno) e flaggali di conseguen" +
     "za (tutto in ram)";
@@ -175,7 +179,7 @@
             // button24
             // 
             this.button24.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button24.Location = new System.Drawing.Point(6, 448);
+            this.button24.Location = new System.Drawing.Point(6, 487);
             this.button24.Name = "button24";
             this.button24.Size = new System.Drawing.Size(380, 56);
             this.button24.TabIndex = 21;
@@ -186,9 +190,9 @@
             // button23
             // 
             this.button23.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button23.Location = new System.Drawing.Point(393, 448);
+            this.button23.Location = new System.Drawing.Point(392, 487);
             this.button23.Name = "button23";
-            this.button23.Size = new System.Drawing.Size(288, 56);
+            this.button23.Size = new System.Drawing.Size(354, 56);
             this.button23.TabIndex = 20;
             this.button23.Text = "Importa gruppi dal comando /update_links_from_json";
             this.button23.UseVisualStyleBackColor = true;
@@ -197,9 +201,9 @@
             // button22
             // 
             this.button22.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button22.Location = new System.Drawing.Point(516, 319);
+            this.button22.Location = new System.Drawing.Point(6, 69);
             this.button22.Name = "button22";
-            this.button22.Size = new System.Drawing.Size(165, 123);
+            this.button22.Size = new System.Drawing.Size(305, 87);
             this.button22.TabIndex = 19;
             this.button22.Text = "Salva su un file la lista di id telegram cui link non è segnato come funzionante " +
     "= Y";
@@ -209,9 +213,9 @@
             // button21
             // 
             this.button21.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button21.Location = new System.Drawing.Point(7, 319);
+            this.button21.Location = new System.Drawing.Point(6, 319);
             this.button21.Name = "button21";
-            this.button21.Size = new System.Drawing.Size(262, 123);
+            this.button21.Size = new System.Drawing.Size(204, 162);
             this.button21.TabIndex = 18;
             this.button21.Text = "Controlla se i link vanno (tutti) e flaggali di conseguenza (tutto in ram)";
             this.button21.UseVisualStyleBackColor = true;
@@ -222,7 +226,7 @@
             this.button10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button10.Location = new System.Drawing.Point(246, 243);
             this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(435, 70);
+            this.button10.Size = new System.Drawing.Size(496, 70);
             this.button10.TabIndex = 17;
             this.button10.Text = "Carica gruppi in ram da file .sql della tabella gruppi del bot telegram";
             this.button10.UseVisualStyleBackColor = true;
@@ -244,7 +248,7 @@
             this.button18.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button18.Location = new System.Drawing.Point(474, 19);
             this.button18.Name = "button18";
-            this.button18.Size = new System.Drawing.Size(207, 52);
+            this.button18.Size = new System.Drawing.Size(268, 52);
             this.button18.TabIndex = 15;
             this.button18.Text = "Fix piano studi in ram";
             this.button18.UseVisualStyleBackColor = true;
@@ -265,9 +269,9 @@
             // button16
             // 
             this.button16.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button16.Location = new System.Drawing.Point(352, 77);
+            this.button16.Location = new System.Drawing.Point(390, 77);
             this.button16.Name = "button16";
-            this.button16.Size = new System.Drawing.Size(329, 76);
+            this.button16.Size = new System.Drawing.Size(352, 76);
             this.button16.TabIndex = 13;
             this.button16.Text = "Load gruppi polimi da manifesto\r\n (cartella) [load/importa] [nel dubbio NO]";
             this.button16.UseVisualStyleBackColor = true;
@@ -278,7 +282,7 @@
             this.button14.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button14.Location = new System.Drawing.Point(7, 77);
             this.button14.Name = "button14";
-            this.button14.Size = new System.Drawing.Size(339, 76);
+            this.button14.Size = new System.Drawing.Size(377, 76);
             this.button14.TabIndex = 12;
             this.button14.Text = "Load gruppi polimi da manifesto\r\n (cartella) [load/importa] [nel dubbio chiedi]";
             this.button14.UseVisualStyleBackColor = true;
@@ -300,7 +304,7 @@
             this.button12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button12.Location = new System.Drawing.Point(352, 159);
             this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(329, 77);
+            this.button12.Size = new System.Drawing.Size(390, 77);
             this.button12.TabIndex = 10;
             this.button12.Text = "Load gruppi polimi da ricerca insegnamento";
             this.button12.UseVisualStyleBackColor = true;
@@ -375,7 +379,7 @@
             // button26
             // 
             this.button26.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button26.Location = new System.Drawing.Point(12, 470);
+            this.button26.Location = new System.Drawing.Point(12, 509);
             this.button26.Name = "button26";
             this.button26.Size = new System.Drawing.Size(349, 46);
             this.button26.TabIndex = 14;
@@ -383,11 +387,39 @@
             this.button26.UseVisualStyleBackColor = true;
             this.button26.Click += new System.EventHandler(this.Button26_Click);
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.label1);
+            this.groupBox3.Controls.Add(this.textBox1);
+            this.groupBox3.Controls.Add(this.button22);
+            this.groupBox3.Location = new System.Drawing.Point(425, 319);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(317, 162);
+            this.groupBox3.TabIndex = 15;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Esporta per fix da bot telegram";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(6, 43);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(305, 20);
+            this.textBox1.TabIndex = 20;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(239, 27);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(59, 13);
+            this.label1.TabIndex = 21;
+            this.label1.Text = "Filtro anno:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1066, 528);
+            this.ClientSize = new System.Drawing.Size(1121, 567);
             this.Controls.Add(this.button26);
             this.Controls.Add(this.button20);
             this.Controls.Add(this.button19);
@@ -408,6 +440,8 @@
             this.Load += new System.EventHandler(this.Form1_Load_1);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -441,6 +475,9 @@
         private System.Windows.Forms.Button button24;
         private System.Windows.Forms.Button button25;
         private System.Windows.Forms.Button button26;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

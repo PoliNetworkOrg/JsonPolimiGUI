@@ -2621,7 +2621,7 @@ namespace JsonPolimi.Tipi
             return r;
         }
 
-        internal void SalvaTelegramIdDeiGruppiLinkCheNonVanno()
+        internal void SalvaTelegramIdDeiGruppiLinkCheNonVanno(string anno)
         {
             List<Gruppo> l = new List<Gruppo>();
             foreach (var x in this._l)
@@ -2630,7 +2630,17 @@ namespace JsonPolimi.Tipi
                 {
                     if (x.LinkFunzionante == null || x.LinkFunzionante.Value == false)
                     {
-                        l.Add(x);
+                        if (string.IsNullOrEmpty(anno))
+                        {
+                            l.Add(x);
+                        }
+                        else
+                        {
+                            if (x.Year == anno)
+                            {
+                                l.Add(x);
+                            }
+                        }
                     }
                 }
             }
