@@ -1629,21 +1629,24 @@ namespace JsonPolimi.Tipi
 
         private Tuple<bool, Gruppo> Unisci4(int i, Tuple<Gruppo, int> j, bool aggiusta_anno)
         {
-            Gruppo g = Unisci2(i, j, aggiusta_anno);
+            Gruppo g = Unisci2(i, j, aggiusta_anno, false);
             if (g == null)
                 return new Tuple<bool, Gruppo>(false, null);
 
             return new Tuple<bool, Gruppo>(true, g);
         }
 
-        private Gruppo Unisci2(int i, Tuple<Gruppo, int> j, bool aggiusta_anno)
+        private Gruppo Unisci2(int i, Tuple<Gruppo, int> j, bool aggiusta_anno, bool forced)
         {
             Gruppo a1 = this._l[i];
             Gruppo a2 = j.Item1;
 
-            bool toExit = CheckIfToExit(a1, a2);
-            if (toExit)
-                return null;
+            if (!forced)
+            {
+                bool toExit = CheckIfToExit(a1, a2);
+                if (toExit)
+                    return null;
+            }
 
             if (!string.IsNullOrEmpty(a1.Classe) && !string.IsNullOrEmpty(a2.Classe) && a1.Classe.ToLower() == a2.Classe.ToLower())
             {
@@ -2397,6 +2400,33 @@ namespace JsonPolimi.Tipi
             }
 
             return false;
+        }
+
+        internal void AggiustaGruppiDoppiIDTelegramUguale()
+        {
+            int count = 0;
+            for (int i=0; i<this._l.Count; i++)
+            {
+                for (int j=0; j<this._l.Count; j++)
+                {
+                    if (i != j)
+                    {
+                        if (!string.IsNullOrEmpty( this._l[i].PermanentId) && !string.IsNullOrEmpty(this._l[j].PermanentId))
+                        {
+                            if (this._l[i].PermanentId == this._l[j].PermanentId)
+                            {
+                                count++;
+
+                                this._l[i] = Unisci2(i, new Tuple<Gruppo, int>(this._l[j], j), true, true);
+                                this._l.RemoveAt(j);
+                                j--;
+                            }
+                        }
+                    }
+                }
+            }
+
+            MessageBox.Show("AggiustaGruppiDoppiIDTelegramUguale\n" + count);
         }
 
         internal void StampaWhatsapp()

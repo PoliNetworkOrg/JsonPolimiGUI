@@ -36,10 +36,13 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button7 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button22 = new System.Windows.Forms.Button();
             this.button25 = new System.Windows.Forms.Button();
             this.button24 = new System.Windows.Forms.Button();
             this.button23 = new System.Windows.Forms.Button();
-            this.button22 = new System.Windows.Forms.Button();
             this.button21 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -56,9 +59,7 @@
             this.button19 = new System.Windows.Forms.Button();
             this.button20 = new System.Windows.Forms.Button();
             this.button26 = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.button27 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -111,9 +112,9 @@
             // button6
             // 
             this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button6.Location = new System.Drawing.Point(12, 426);
+            this.button6.Location = new System.Drawing.Point(12, 464);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(349, 77);
+            this.button6.Size = new System.Drawing.Size(349, 39);
             this.button6.TabIndex = 5;
             this.button6.Text = "Svuota lista";
             this.button6.UseVisualStyleBackColor = true;
@@ -164,6 +165,46 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Altro";
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.label1);
+            this.groupBox3.Controls.Add(this.textBox1);
+            this.groupBox3.Controls.Add(this.button22);
+            this.groupBox3.Location = new System.Drawing.Point(425, 319);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(317, 162);
+            this.groupBox3.TabIndex = 15;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Esporta per fix da bot telegram";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(239, 27);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(59, 13);
+            this.label1.TabIndex = 21;
+            this.label1.Text = "Filtro anno:";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(6, 43);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(305, 20);
+            this.textBox1.TabIndex = 20;
+            // 
+            // button22
+            // 
+            this.button22.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button22.Location = new System.Drawing.Point(6, 69);
+            this.button22.Name = "button22";
+            this.button22.Size = new System.Drawing.Size(305, 87);
+            this.button22.TabIndex = 19;
+            this.button22.Text = "Salva su un file la lista di id telegram cui link non è segnato come funzionante " +
+    "= Y";
+            this.button22.UseVisualStyleBackColor = true;
+            this.button22.Click += new System.EventHandler(this.Button22_Click);
+            // 
             // button25
             // 
             this.button25.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -197,18 +238,6 @@
             this.button23.Text = "Importa gruppi dal comando /update_links_from_json";
             this.button23.UseVisualStyleBackColor = true;
             this.button23.Click += new System.EventHandler(this.Button23_Click);
-            // 
-            // button22
-            // 
-            this.button22.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button22.Location = new System.Drawing.Point(6, 69);
-            this.button22.Name = "button22";
-            this.button22.Size = new System.Drawing.Size(305, 87);
-            this.button22.TabIndex = 19;
-            this.button22.Text = "Salva su un file la lista di id telegram cui link non è segnato come funzionante " +
-    "= Y";
-            this.button22.UseVisualStyleBackColor = true;
-            this.button22.Click += new System.EventHandler(this.Button22_Click);
             // 
             // button21
             // 
@@ -324,9 +353,9 @@
             // button8
             // 
             this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button8.Location = new System.Drawing.Point(12, 258);
+            this.button8.Location = new System.Drawing.Point(12, 259);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(175, 78);
+            this.button8.Size = new System.Drawing.Size(128, 135);
             this.button8.TabIndex = 9;
             this.button8.Text = "Carica json da bot telegram";
             this.button8.UseVisualStyleBackColor = true;
@@ -357,9 +386,9 @@
             // button19
             // 
             this.button19.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button19.Location = new System.Drawing.Point(12, 342);
+            this.button19.Location = new System.Drawing.Point(12, 400);
             this.button19.Name = "button19";
-            this.button19.Size = new System.Drawing.Size(349, 78);
+            this.button19.Size = new System.Drawing.Size(349, 58);
             this.button19.TabIndex = 12;
             this.button19.Text = "Salva file";
             this.button19.UseVisualStyleBackColor = true;
@@ -368,11 +397,11 @@
             // button20
             // 
             this.button20.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button20.Location = new System.Drawing.Point(193, 259);
+            this.button20.Location = new System.Drawing.Point(146, 258);
             this.button20.Name = "button20";
-            this.button20.Size = new System.Drawing.Size(168, 77);
+            this.button20.Size = new System.Drawing.Size(215, 67);
             this.button20.TabIndex = 13;
-            this.button20.Text = "Risolvi nomi doppi";
+            this.button20.Text = "Risolvi nomi doppi (generico)";
             this.button20.UseVisualStyleBackColor = true;
             this.button20.Click += new System.EventHandler(this.Button20_Click);
             // 
@@ -387,39 +416,23 @@
             this.button26.UseVisualStyleBackColor = true;
             this.button26.Click += new System.EventHandler(this.Button26_Click);
             // 
-            // groupBox3
+            // button27
             // 
-            this.groupBox3.Controls.Add(this.label1);
-            this.groupBox3.Controls.Add(this.textBox1);
-            this.groupBox3.Controls.Add(this.button22);
-            this.groupBox3.Location = new System.Drawing.Point(425, 319);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(317, 162);
-            this.groupBox3.TabIndex = 15;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Esporta per fix da bot telegram";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(6, 43);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(305, 20);
-            this.textBox1.TabIndex = 20;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(239, 27);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(59, 13);
-            this.label1.TabIndex = 21;
-            this.label1.Text = "Filtro anno:";
+            this.button27.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button27.Location = new System.Drawing.Point(146, 327);
+            this.button27.Name = "button27";
+            this.button27.Size = new System.Drawing.Size(215, 67);
+            this.button27.TabIndex = 15;
+            this.button27.Text = "Unisci quelli che hanno id telegram uguale";
+            this.button27.UseVisualStyleBackColor = true;
+            this.button27.Click += new System.EventHandler(this.button27_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1121, 567);
+            this.Controls.Add(this.button27);
             this.Controls.Add(this.button26);
             this.Controls.Add(this.button20);
             this.Controls.Add(this.button19);
@@ -478,6 +491,7 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button button27;
     }
 }
 
