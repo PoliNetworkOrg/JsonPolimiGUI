@@ -2554,10 +2554,12 @@ namespace JsonPolimi.Tipi
             var n2 = newlink.Split('/');
             newlink = n2[n2.Length - 1];
             string permanentId = l3[3].Substring("PermanentId: ".Length).Trim();
-            string nome = l3[4].Substring("Nome: ".Length).Trim();
+            string oldlinks = l3[4].Substring("OldLink: ".Length).Trim();
+            List<string> oldlinks_list = GetOldLinks(oldlinks);
+            string nome = l3[5].Substring("Nome: ".Length).Trim();
 
-            int? i = TrovaGruppo(idlink, nome, permanentId);
-            if (i == null)
+            List<int> i = TrovaGruppo(idlink, nome, permanentId);
+            if (i == null || i.Count == 0)
             {
                 Gruppo g = new Gruppo() { Classe = nome, IdLink = idlink, Platform = "TG" };
                 g.Aggiusta(true, true);
@@ -2565,34 +2567,112 @@ namespace JsonPolimi.Tipi
             }
             else
             {
-                this._l[i.Value].IdLink = newlink;
-                this._l[i.Value].LastUpdateInviteLinkTime = DateTime.Now;
-                this._l[i.Value].LinkFunzionante = true;
-                this._l[i.Value].PermanentId = permanentId;
-                this._l[i.Value].Aggiusta(false, true);
+                foreach (var i2 in i)
+                {
+                    this._l[i2].IdLink = newlink;
+                    this._l[i2].LastUpdateInviteLinkTime = DateTime.Now;
+                    this._l[i2].LinkFunzionante = true;
+                    this._l[i2].PermanentId = permanentId;
+                    this._l[i2].Aggiusta(false, true);
+                }
             }
         }
 
-        private int? TrovaGruppo(string idlink, string nome, string permanentId)
+        private List<string> GetOldLinks(string oldlinks)
         {
+            if (string.IsNullOrEmpty(oldlinks))
+                return null;
+
+            oldlinks = oldlinks.Trim();
+
+            if (oldlinks.StartsWith("["))
+                oldlinks = oldlinks.Substring(1);
+            else
+                return null;
+
+            if (oldlinks.EndsWith("]"))
+                oldlinks = oldlinks.Remove(oldlinks.Length - 1);
+            else
+                return null;
+
+            if (oldlinks.Contains(","))
+            {
+                List<string> r = new List<string>();
+
+                var o = oldlinks.Split('\'');
+                foreach (var o2 in o)
+                {
+                    string o3 = GetOldLinks2(o2);
+                    if (string.IsNullOrEmpty(o3))
+                    {
+                        ;
+                    }
+                    else
+                    {
+                        r.Add(o3);    
+                    }
+                }
+
+                return r;
+            }
+            else
+            {
+                if (oldlinks.StartsWith("'"))
+                    oldlinks = oldlinks.Substring(1);
+                else
+                    return null;
+
+                if (oldlinks.EndsWith("'"))
+                    oldlinks = oldlinks.Remove(oldlinks.Length - 1);
+                else
+                    return null;
+
+                return new List<string>() { oldlinks };
+            }
+
+        }
+
+        private string GetOldLinks2(string o2)
+        {
+            //'feuwbbggqwgqwwg'
+
+
+            if (string.IsNullOrEmpty(o2))
+                return null;
+
+            o2 = o2.Trim();
+
+            if (o2.StartsWith("'"))
+                o2 = o2.Substring(1);
+            else
+                return null;
+
+            if (o2.EndsWith("'"))
+                o2 = o2.Remove(o2.Length - 1);
+            else
+                return null;
+
+            return o2.Trim();
+        }
+
+        private List<int> TrovaGruppo(string idlink, string nome, string permanentId)
+        {
+            List<int> r = new List<int>();
             for (int i = 0; i < this._l.Count; i++)
             {
                 if (this._l[i].Platform == "TG")
                 {
 
                     if (this._l[i].IdLink == idlink)
-                        return i;
-
-                    if (this._l[i].Classe == nome)
-                        return i;
-
-
-                    if (this._l[i].PermanentId == permanentId)
-                        return i;
+                        r.Add(i);
+                    else if (this._l[i].Classe == nome)
+                        r.Add(i);
+                    else if (this._l[i].PermanentId == permanentId)
+                        r.Add(i);
                 }
             }
 
-            return null;
+            return r;
         }
 
         private List<List<string>> SplitPerStringaVuota(string[] l)
