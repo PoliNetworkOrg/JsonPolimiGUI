@@ -2574,30 +2574,46 @@ namespace JsonPolimi.Tipi
             if (l3.Count < 4)
                 return;
 
-            if (l3[0] == "Success: N")
-            {
-                return;
-            }
-
-            string idlink = l3[1].Substring("IdLink: ".Length).Trim();
-            string newlink = l3[2].Substring("NewLink: ".Length).Trim();
-            var n2 = newlink.Split('/');
-            newlink = n2[n2.Length - 1];
             string permanentId = l3[3].Substring("PermanentId: ".Length).Trim();
             if (permanentId == "null" || permanentId == "[null]")
                 permanentId = null;
 
-            string oldlinks = l3[4].Substring("OldLink: ".Length).Trim();
-            List<string> oldlinks_list = GetOldLinks(oldlinks);
-
-            string exceptionmessage = l3[5].Substring("ExceptionMessage: ".Length).Trim();
-            string q1 = l3[6].Substring("q1: ".Length).Trim();
-            string q2 = l3[7].Substring("q2: ".Length).Trim();
-            string q3 = l3[8].Substring("q3: ".Length).Trim();
-
+            string idlink = null;
+            string newlink = null;
             string nome = l3[9].Substring("Nome: ".Length).Trim();
+            List<string> oldlinks_list = null;
+
+            bool? linkFunzionante = null;
+
+            if (l3[0] == "Success: N")
+            {
+                linkFunzionante = false;
+            }
+            else
+            {
+                linkFunzionante = true;
+
+
+                idlink = l3[1].Substring("IdLink: ".Length).Trim();
+                newlink = l3[2].Substring("NewLink: ".Length).Trim();
+                var n2 = newlink.Split('/');
+                newlink = n2[n2.Length - 1];
+             
+
+                string oldlinks = l3[4].Substring("OldLink: ".Length).Trim();
+                oldlinks_list = GetOldLinks(oldlinks);
+
+                string exceptionmessage = l3[5].Substring("ExceptionMessage: ".Length).Trim();
+                string q1 = l3[6].Substring("q1: ".Length).Trim();
+                string q2 = l3[7].Substring("q2: ".Length).Trim();
+                string q3 = l3[8].Substring("q3: ".Length).Trim();
+
+             
+            }
 
             List<int> i = TrovaGruppo(idlink, nome, permanentId, oldlinks_list);
+
+
             if (i == null || i.Count == 0)
             {
                 Gruppo g = new Gruppo() { Classe = nome, IdLink = idlink, Platform = "TG", PermanentId = permanentId };
@@ -2608,9 +2624,13 @@ namespace JsonPolimi.Tipi
             {
                 foreach (var i2 in i)
                 {
-                    this._l[i2].IdLink = newlink;
-                    this._l[i2].LastUpdateInviteLinkTime = DateTime.Now;
-                    this._l[i2].LinkFunzionante = true;
+                  
+                    if (linkFunzionante != null && linkFunzionante.Value == true)
+                    {
+                        this._l[i2].IdLink = newlink;
+                        this._l[i2].LastUpdateInviteLinkTime = DateTime.Now;
+                        this._l[i2].LinkFunzionante = true;
+                    }
                     this._l[i2].PermanentId = permanentId;
                     this._l[i2].Aggiusta(false, true);
                 }
@@ -2702,11 +2722,11 @@ namespace JsonPolimi.Tipi
                 if (this._l[i].Platform == "TG")
                 {
 
-                    if (this._l[i].IdLink == idlink)
+                    if (this._l[i].IdLink == idlink && !string.IsNullOrEmpty(idlink))
                         r.Add(i);
-                    else if (this._l[i].Classe == nome)
+                    else if (this._l[i].Classe == nome && !string.IsNullOrEmpty(nome))
                         r.Add(i);
-                    else if (this._l[i].PermanentId == permanentId)
+                    else if (this._l[i].PermanentId == permanentId && !string.IsNullOrEmpty(permanentId))
                         r.Add(i);
                     else if (oldlinks_list != null && oldlinks_list.Contains(this._l[i].IdLink))
                         r.Add(i);
