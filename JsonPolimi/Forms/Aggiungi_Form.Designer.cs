@@ -71,6 +71,8 @@
             this.label27 = new System.Windows.Forms.Label();
             this.t_pianostudi = new System.Windows.Forms.TextBox();
             this.label28 = new System.Windows.Forms.Label();
+            this.textBox_permanent_id = new System.Windows.Forms.TextBox();
+            this.label29 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -204,7 +206,7 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(12, 387);
+            this.button1.Location = new System.Drawing.Point(14, 421);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(610, 30);
             this.button1.TabIndex = 16;
@@ -434,11 +436,29 @@
             this.label28.TabIndex = 40;
             this.label28.Text = "PianoStudi";
             // 
+            // textBox_permanent_id
+            // 
+            this.textBox_permanent_id.Location = new System.Drawing.Point(82, 383);
+            this.textBox_permanent_id.Name = "textBox_permanent_id";
+            this.textBox_permanent_id.Size = new System.Drawing.Size(318, 20);
+            this.textBox_permanent_id.TabIndex = 44;
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(3, 386);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(72, 13);
+            this.label29.TabIndex = 43;
+            this.label29.Text = "Permanent ID";
+            // 
             // AggiungiForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(634, 424);
+            this.ClientSize = new System.Drawing.Size(634, 463);
+            this.Controls.Add(this.textBox_permanent_id);
+            this.Controls.Add(this.label29);
             this.Controls.Add(this.label27);
             this.Controls.Add(this.t_pianostudi);
             this.Controls.Add(this.label28);
@@ -538,5 +558,7 @@
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.TextBox t_pianostudi;
         private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.TextBox textBox_permanent_id;
+        private System.Windows.Forms.Label label29;
     }
 }

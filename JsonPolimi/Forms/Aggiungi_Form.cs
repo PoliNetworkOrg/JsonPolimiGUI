@@ -55,7 +55,8 @@ namespace JsonPolimi.Forms
                 AnnoCorsoStudio = ToInt(t_annocorso.Text),
                 CCS = new ListaStringhePerJSON(t_ccs.Text),
                 IDCorsoPolimi = t_idcorsopolimi.Text,
-                PianoDiStudi = t_pianostudi.Text
+                PianoDiStudi = t_pianostudi.Text,
+                PermanentId = textBox_permanent_id.Text
             };
 
             if (Variabili.L == null)
@@ -106,6 +107,7 @@ namespace JsonPolimi.Forms
             t_idcorsopolimi.Text = g.IDCorsoPolimi;
             t_annocorso.Text = ToText(g.AnnoCorsoStudio);
             t_pianostudi.Text = g.PianoDiStudi;
+            textBox_permanent_id.Text = g.PermanentId;
 
             button1.Text = "Modifica";
         }
