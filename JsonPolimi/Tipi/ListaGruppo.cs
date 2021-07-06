@@ -2584,6 +2584,9 @@ namespace JsonPolimi.Tipi
             var n2 = newlink.Split('/');
             newlink = n2[n2.Length - 1];
             string permanentId = l3[3].Substring("PermanentId: ".Length).Trim();
+            if (permanentId == "null" || permanentId == "[null]")
+                permanentId = null;
+
             string oldlinks = l3[4].Substring("OldLink: ".Length).Trim();
             List<string> oldlinks_list = GetOldLinks(oldlinks);
             string nome = l3[5].Substring("Nome: ".Length).Trim();
@@ -2591,7 +2594,7 @@ namespace JsonPolimi.Tipi
             List<int> i = TrovaGruppo(idlink, nome, permanentId, oldlinks_list);
             if (i == null || i.Count == 0)
             {
-                Gruppo g = new Gruppo() { Classe = nome, IdLink = idlink, Platform = "TG" };
+                Gruppo g = new Gruppo() { Classe = nome, IdLink = idlink, Platform = "TG", PermanentId = permanentId };
                 g.Aggiusta(true, true);
                 this.Add(g, false);
             }
