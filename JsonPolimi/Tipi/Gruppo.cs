@@ -142,17 +142,20 @@ namespace JsonPolimi.Tipi
             if (aggiusta_anno)
                 AggiustaAnno();
 
-            if (!string.IsNullOrEmpty(Year) && !string.IsNullOrEmpty(this.Classe) && !string.IsNullOrEmpty(this.Degree) &&
-                !string.IsNullOrEmpty(this.Id) && !string.IsNullOrEmpty(this.IdLink) && !string.IsNullOrEmpty(this.Language) && !IsEmpty(this.Office))
+            if (Tipo != "G")
             {
-                if (string.IsNullOrEmpty(Tipo))
+                if (!string.IsNullOrEmpty(Year) && !string.IsNullOrEmpty(this.Classe) && !string.IsNullOrEmpty(this.Degree) &&
+                    !string.IsNullOrEmpty(this.Id) && !string.IsNullOrEmpty(this.IdLink) && !string.IsNullOrEmpty(this.Language) && !IsEmpty(this.Office))
+                {
+                    if (string.IsNullOrEmpty(Tipo))
+                    {
+                        Tipo = "S";
+                    }
+                }
+                else if (!string.IsNullOrEmpty(Year))
                 {
                     Tipo = "S";
                 }
-            }
-            else if (!string.IsNullOrEmpty(Year))
-            {
-                Tipo = "S";
             }
 
             if (string.IsNullOrEmpty(Language)) Language = IndovinaLaLinguaDalNome();
