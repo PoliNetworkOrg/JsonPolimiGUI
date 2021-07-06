@@ -2589,7 +2589,13 @@ namespace JsonPolimi.Tipi
 
             string oldlinks = l3[4].Substring("OldLink: ".Length).Trim();
             List<string> oldlinks_list = GetOldLinks(oldlinks);
-            string nome = l3[5].Substring("Nome: ".Length).Trim();
+
+            string exceptionmessage = l3[5].Substring("ExceptionMessage: ".Length).Trim();
+            string q1 = l3[6].Substring("q1: ".Length).Trim();
+            string q2 = l3[7].Substring("q2: ".Length).Trim();
+            string q3 = l3[8].Substring("q3: ".Length).Trim();
+
+            string nome = l3[9].Substring("Nome: ".Length).Trim();
 
             List<int> i = TrovaGruppo(idlink, nome, permanentId, oldlinks_list);
             if (i == null || i.Count == 0)
