@@ -23,7 +23,7 @@ namespace JsonPolimi.Forms
                     variable.AggiustaAnno();
             }
 
-            Filtra(null, 0, null);
+            Filtra(null, 0, null, 0);
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -54,7 +54,7 @@ namespace JsonPolimi.Forms
             Filtra2();
         }
 
-        private void Filtra(string text, int selectedIndex, string anno)
+        private void Filtra(string text, int selectedIndex, string anno, int combobox_linkvalido)
         {
             listBox1.Items.Clear();
 
@@ -67,6 +67,9 @@ namespace JsonPolimi.Forms
             if (selectedIndex < 0)
                 selectedIndex = 0;
 
+            if (combobox_linkvalido < 0)
+                combobox_linkvalido = 0;
+
             text = text.ToLower();
             anno = anno.ToLower();
 
@@ -77,6 +80,20 @@ namespace JsonPolimi.Forms
                 if (!variable.Classe.ToLower().Contains(text)) continue;
 
                 if (selectedIndex != 0 && variable.Platform.ToUpper() != comboBox1.Items[selectedIndex].ToString()) continue;
+
+                if (combobox_linkvalido > 0)
+                {
+                    if (combobox_linkvalido == 1)
+                    {
+                        if (variable.LinkFunzionante == null || variable.LinkFunzionante.Value == false)
+                            continue;
+                    }
+                    else if (combobox_linkvalido == 2)
+                    {
+                        if (variable.LinkFunzionante != null && variable.LinkFunzionante.Value == true)
+                            continue;
+                    }
+                }
 
                 var anno2 = variable.Year ?? "";
 
@@ -147,7 +164,12 @@ namespace JsonPolimi.Forms
 
         private void Filtra2()
         {
-            Filtra(textBox1.Text, comboBox1.SelectedIndex, textBox2.Text);
+            Filtra(textBox1.Text, comboBox1.SelectedIndex, textBox2.Text, comboBox2.SelectedIndex);
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Filtra2();
         }
     }
 }
