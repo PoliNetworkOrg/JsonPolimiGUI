@@ -363,7 +363,7 @@ namespace JsonPolimi.Forms
             if (true)
             {
                 json += '\n';
-                json += "\"index_data\":[";
+                json += "    \"index_data\": [";
                 for (var i = 0; i < n; i++)
                 {
                     var elem = Variabili.L.GetElem(i);
@@ -371,6 +371,7 @@ namespace JsonPolimi.Forms
                     if (tenere)
                     {
                         json += '\n';
+                        json += "        ";
                         json += elem.To_json(v.n);
                         json += ',';
                     }
@@ -381,7 +382,8 @@ namespace JsonPolimi.Forms
                     json = json.Substring(0, json.Length - 1);
                 }
 
-                json += "]";
+                json += "    ]";
+                json += "\n";
             }
             json += "}";
 
