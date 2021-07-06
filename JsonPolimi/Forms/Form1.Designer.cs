@@ -425,7 +425,7 @@
             this.button27.TabIndex = 15;
             this.button27.Text = "Unisci quelli che hanno id telegram uguale";
             this.button27.UseVisualStyleBackColor = true;
-            this.button27.Click += new System.EventHandler(this.button27_Click);
+            this.button27.Click += new System.EventHandler(this.Button27_Click);
             // 
             // Form1
             // 

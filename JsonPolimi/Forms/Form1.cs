@@ -2560,7 +2560,7 @@ namespace JsonPolimi.Forms
             Variabili.L.StampaWhatsapp();
         }
 
-        private void button27_Click(object sender, EventArgs e)
+        private void Button27_Click(object sender, EventArgs e)
         {
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();

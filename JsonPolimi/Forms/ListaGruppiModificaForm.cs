@@ -167,7 +167,7 @@ namespace JsonPolimi.Forms
             Filtra(textBox1.Text, comboBox1.SelectedIndex, textBox2.Text, comboBox2.SelectedIndex);
         }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             Filtra2();
         }

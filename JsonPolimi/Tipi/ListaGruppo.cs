@@ -2588,7 +2588,7 @@ namespace JsonPolimi.Tipi
             List<string> oldlinks_list = GetOldLinks(oldlinks);
             string nome = l3[5].Substring("Nome: ".Length).Trim();
 
-            List<int> i = TrovaGruppo(idlink, nome, permanentId);
+            List<int> i = TrovaGruppo(idlink, nome, permanentId, oldlinks_list);
             if (i == null || i.Count == 0)
             {
                 Gruppo g = new Gruppo() { Classe = nome, IdLink = idlink, Platform = "TG" };
@@ -2685,7 +2685,7 @@ namespace JsonPolimi.Tipi
             return o2.Trim();
         }
 
-        private List<int> TrovaGruppo(string idlink, string nome, string permanentId)
+        private List<int> TrovaGruppo(string idlink, string nome, string permanentId, List<string> oldlinks_list)
         {
             List<int> r = new List<int>();
             for (int i = 0; i < this._l.Count; i++)
@@ -2698,6 +2698,8 @@ namespace JsonPolimi.Tipi
                     else if (this._l[i].Classe == nome)
                         r.Add(i);
                     else if (this._l[i].PermanentId == permanentId)
+                        r.Add(i);
+                    else if (oldlinks_list != null && oldlinks_list.Contains(this._l[i].IdLink))
                         r.Add(i);
                 }
             }
