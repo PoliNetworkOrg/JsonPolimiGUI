@@ -267,109 +267,11 @@ namespace JsonPolimi.Forms
                 return;
             }
 
-            Variabili.L.Sort();
-            Aggiusta();
-            Variabili.L.Sort();
-
-            var n = Variabili.L.GetCount();
-
-            var json = "{";
-
-            if (entrambi_index)
-            {
-                json += "\"info_data\":{";
-
-                for (var i = 0; i < n; i++)
-                {
-                    var elem = Variabili.L.GetElem(i);
-
-                    bool tenere = DoCheckGruppo(v, elem);
-                    if (tenere)
-                    {
-                        json += '\n';
-                        json += '"';
-                        json += elem.Id;
-                        json += '"' + ":";
-                        json += elem.To_json(v.n);
-                        json += ',';
-                    }
-                }
-
-                if (json.EndsWith(","))
-                {
-                    json = json.Substring(0, json.Length - 1);
-                }
-
-                json += "}";
-                json += ",";
-            }
-
-            if (true)
-            {
-                json += '\n';
-                json += "    \"index_data\": [";
-                for (var i = 0; i < n; i++)
-                {
-                    var elem = Variabili.L.GetElem(i);
-                    bool tenere = DoCheckGruppo(v, elem);
-                    if (tenere)
-                    {
-                        json += '\n';
-                        json += "        ";
-                        json += elem.To_json(v.n);
-                        json += ',';
-                    }
-                }
-
-                if (json.EndsWith(","))
-                {
-                    json = json.Substring(0, json.Length - 1);
-                }
-
-                json += "    ]";
-                json += "\n";
-            }
-            json += "}";
+            string json = JsonPolimi_Core_nf.Utils.JsonBuilder.getJson(v, entrambi_index);
 
             Salva(json);
         }
 
-        private bool DoCheckGruppo(CheckGruppo v, Gruppo elem)
-        {
-            switch (v.n)
-            {
-                case CheckGruppo.E.RICERCA_SITO_V3:
-                case CheckGruppo.E.VECCHIA_RICERCA:
-                    {
-                        if (string.IsNullOrEmpty(elem.Classe))
-                            return false;
-                        if (string.IsNullOrEmpty(elem.IdLink))
-                            return false;
-                        break;
-                    }
-                case CheckGruppo.E.NUOVA_RICERCA:
-                    {
-                        if (Empty(elem.CCS))
-                            return false;
-
-                        break;
-                    }
-                case CheckGruppo.E.TUTTO:
-                    {
-                        break;
-                    }
-            }
-
-            return true;
-        }
-
-        private bool Empty(ListaStringhePerJSON cCS)
-        {
-            if (cCS == null)
-                return true;
-
-            return cCS.IsEmpty();
-        }
 
         private static void Salva(string json)
         {
@@ -385,64 +287,8 @@ namespace JsonPolimi.Forms
             o.Dispose();
         }
 
-        private static void Aggiusta()
-        {
-            if (Variabili.L == null)
-                Variabili.L = new ListaGruppo();
 
-            var n = Variabili.L.GetCount();
-            for (var i = 0; i < n; i++)
-            {
-                var elem = Variabili.L.GetElem(i);
-                if (!string.IsNullOrEmpty(elem.Id)) continue;
-                Variabili.L.Remove(i);
-
-                i--;
-                n = Variabili.L.GetCount();
-            }
-
-            n = Variabili.L.GetCount();
-            for (var i = 0; i < n; i++)
-            {
-                var elem = Variabili.L.GetElem(i);
-
-                var nome = AggiustaNome(elem.Classe);
-                elem.Classe = nome;
-
-                Variabili.L.SetElem(i, elem);
-            }
-
-            Variabili.L.Sort();
-        }
-
-        private static string AggiustaNome(string s)
-        {
-            if (s == null)
-                return null;
-
-            if (s.Contains("<="))
-            {
-                var n = s.IndexOf("<=", StringComparison.Ordinal);
-                var r = "";
-                r += s.Substring(0, n);
-                r += s.Substring(n + 2);
-                return r;
-            }
-
-            if (s.Contains("&lt;="))
-            {
-                var n = s.IndexOf("&lt;=", StringComparison.Ordinal);
-                var r = "";
-                r += s.Substring(0, n);
-                r += s.Substring(n + 5);
-                return r;
-            }
-
-            s = s.Replace("&apos;", "'");
-            s = s.Replace("&amp;", "&");
-
-            return s;
-        }
+        
 
         private void Button4_Click(object sender, EventArgs e)
         {
