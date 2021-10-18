@@ -44,6 +44,9 @@
     <Reference Include="Independentsoft.Office.Odf, Version=2.0.660.16295, Culture=neutral, PublicKeyToken=76be97fe952f1ec7, processorArchitecture=MSIL">
       <HintPath>..\packages\Independentsoft.Office.Odf.2.0.660\lib\net45\Independentsoft.Office.Odf.dll</HintPath>
     </Reference>
+    <Reference Include="JsonPolimi_Core_nf">
+      <HintPath>..\..\JsonPolimiCore\JsonPolimi_Core_nf\bin\Debug\JsonPolimi_Core_nf.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -148,12 +151,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\JsonPolimi_Core_nf\JsonPolimi_Core_nf.csproj">
-      <Project>{175ce56a-a96c-43cb-92b8-71b52c7aaec5}</Project>
-      <Name>JsonPolimi_Core_nf</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
