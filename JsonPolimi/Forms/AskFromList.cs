@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace JsonPolimi_Core_nf.Forms
+namespace JsonPolimi.Forms
 {
     public partial class AskFromList : Form
     {

@@ -1,4 +1,4 @@
-﻿namespace JsonPolimi_Core_nf.Forms
+﻿namespace JsonPolimi.Forms
 {
     partial class AggiungiForm
     {

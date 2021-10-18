@@ -17,14 +17,17 @@ using Telegram.Bot.Types.Enums;
 using Size = System.Drawing.Size;
 using JsonPolimi.Forms;
 
-namespace JsonPolimi_Core_nf.Forms
+namespace JsonPolimi.Forms
 {
     public partial class MainForm : Form
     {
         public static FileSalvare FileSalvare;
 
-        public MainForm()
+        public static JsonPolimi_Core_nf.Tipi.ParametriCondivisi parametriCondivisi; 
+
+        public MainForm(JsonPolimi_Core_nf.Tipi.ParametriCondivisi parametriCondivisiParam)
         {
+            parametriCondivisi = parametriCondivisiParam;
             InitializeComponent();
         }
 
@@ -214,7 +217,7 @@ namespace JsonPolimi_Core_nf.Forms
 
             try
             {
-                g.LastUpdateInviteLinkTime = DataFromString(data);
+                g.LastUpdateInviteLinkTime = JsonPolimi_Core_nf.Utils.Dates.DataFromString(data);
             }
             catch (Exception e)
             {
@@ -245,62 +248,6 @@ namespace JsonPolimi_Core_nf.Forms
             }
 
             return null;
-        }
-
-        public static DateTime? DataFromString(string data)
-        {
-            if (string.IsNullOrEmpty(data))
-                return null;
-            if (data == "null")
-                return null;
-
-            if (data.Contains("T"))
-            {
-                //2019-07-27T17:13:23.5409603+02:00
-                var a1 = data.Split('T');
-
-                //2019-07-27
-                var a2 = a1[0].Split('-');
-
-                //17:13:23.5409603+02:00
-                var a3 = a1[1].Split('+');
-
-                //17:13:23.5409603
-                var a4 = a3[0].Split('.');
-
-                //17:13:23
-                var a5 = a4[0].Split(':');
-
-                return new DateTime(Convert.ToInt32(a2[0]), Convert.ToInt32(a2[1]), Convert.ToInt32(a2[2]), Convert.ToInt32(a5[0]), Convert.ToInt32(a5[1]), Convert.ToInt32(a5[2]));
-            }
-
-            if (data.Contains("."))
-            {
-                //2019-07-29 18:26:55.034083
-                data = data.Split('.')[0];
-
-                //2019-07-29 18:26:55
-                var b1 = data.Split(' ');
-
-                //2019-07-29
-                var b2 = b1[0].Split('-');
-
-                //18:26:55
-                var b3 = b1[1].Split(':');
-
-                return new DateTime(Convert.ToInt32(b2[0]), Convert.ToInt32(b2[1]), Convert.ToInt32(b2[2]), Convert.ToInt32(b3[0]), Convert.ToInt32(b3[1]), Convert.ToInt32(b3[2]));
-            }
-
-            //27/07/2019 11:42:24
-            var s1 = data.Split(' ');
-
-            //27/07/2019
-            var s2 = s1[0].Split('/');
-
-            //11:42:24
-            var s3 = s1[1].Split(':');
-
-            return new DateTime(Convert.ToInt32(s2[2]), Convert.ToInt32(s2[1]), Convert.ToInt32(s2[0]), Convert.ToInt32(s3[0]), Convert.ToInt32(s3[1]), Convert.ToInt32(s3[2]));
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -819,7 +766,7 @@ namespace JsonPolimi_Core_nf.Forms
             Salva(json);
         }
 
-        public static InfoManifesto infoManifesto = null;
+ 
 
         private void Button8_Click2(object sender, EventArgs e)
         {
@@ -836,34 +783,83 @@ namespace JsonPolimi_Core_nf.Forms
             }
 
             var x1 = LoadManifesto(doc, "TG");
-            Variabili.L.Importa(x1, false, Chiedi.SI);
+            Importa4(x1, Chiedi.SI);
+
         }
 
-        private List<Gruppo> LoadManifesto(HtmlAgilityPack.HtmlDocument doc, string PLAT2)
+        public static void Importa4(List<Tuple<Gruppo>> x1, Chiedi sI)
         {
-            infoManifesto = new InfoManifesto();
-            MainForm.anno = null;
-            MainForm.pianostudi2 = null;
+            var r2 = Variabili.L.Importa(x1, false, sI);
+            for (int i=0; i<r2.Count; i++)
+            {
+                var r3 = r2[i];
+                switch (r3.actionDoneImport)
+                {
+                    case ActionDoneImport.IMPORTED:
+                        break;
+                    case ActionDoneImport.ADDED:
+                        break;
+                    case ActionDoneImport.SIMILARITIES_FOUND:
+                        {
+                            bool importato = false;
+                            for (int j = 0; j < r3.simili.Count; j++)
+                            {
+                                var r4 = r3.simili[j];
+                                AskToUnifyForm askToUnifyForm = new AskToUnifyForm(r4.Item2, r3.simili.Count)
+                                {
+                                    StartPosition = FormStartPosition.CenterScreen
+                                };
+                                askToUnifyForm.ShowDialog();
+                                if (askToUnifyForm.r != null)
+                                {
+#pragma warning disable CS1690 // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
+                                    if (askToUnifyForm.r.Value)
+#pragma warning restore CS1690 // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
+                                    {
+                                        Variabili.L.Importa3(r4.Item1, r4.Item2);
+                                        importato = true;
+                                        break;
+                                    }
+                                }
+                            }
 
-            List<Gruppo> L2 = GetGruppiFromDocument(doc, PLAT2);
 
-            if (string.IsNullOrEmpty(pianostudi2) || pianostudi2.Length < 5)
+                            if (importato == false)
+                            {
+                                Variabili.L.Add(x1[i].Item1, false);
+                            }
+                            break;
+                        }
+         
+                }
+            }
+        }
+
+        private List<Tuple<Gruppo>> LoadManifesto(HtmlAgilityPack.HtmlDocument doc, string PLAT2)
+        {
+            parametriCondivisi.infoManifesto = new InfoManifesto();
+            parametriCondivisi.anno = null;
+            parametriCondivisi.pianostudi2 = null;
+
+            List<Tuple<Gruppo>> L2 = GetGruppiFromDocument(doc, PLAT2);
+
+            if (string.IsNullOrEmpty(parametriCondivisi.pianostudi2) || parametriCondivisi.pianostudi2.Length < 5)
             {
                 ;
             }
 
             for (int i = 0; i < L2.Count; i++)
             {
-                L2[i].AggiungiInfoDaManifesto(infoManifesto);
-                L2[i].CCS = new ListaStringhePerJSON(infoManifesto.Corso_di_studio);
+                L2[i].Item1.AggiungiInfoDaManifesto(parametriCondivisi.infoManifesto);
+                L2[i].Item1.CCS = new ListaStringhePerJSON(parametriCondivisi.infoManifesto.Corso_di_studio);
 
-                L2[i].PianoDiStudi = pianostudi2;
+                L2[i].Item1.PianoDiStudi = parametriCondivisi.pianostudi2;
             }
 
             return L2;
         }
 
-        private List<Gruppo> GetGruppiFromDocument(HtmlAgilityPack.HtmlDocument doc, string pLAT2)
+        private List<Tuple<Gruppo>> GetGruppiFromDocument(HtmlAgilityPack.HtmlDocument doc, string pLAT2)
         {
             List<HtmlNode> L = GetTables(doc.DocumentNode.ChildNodes);
             List<HtmlNode> L2 = new List<HtmlNode>();
@@ -909,9 +905,9 @@ namespace JsonPolimi_Core_nf.Forms
             return L2;
         }
 
-        private List<Gruppo> GetGruppiFromDocument2(List<HtmlNode> l2, string pLAT2)
+        private List<Tuple<Gruppo>> GetGruppiFromDocument2(List<HtmlNode> l2, string pLAT2)
         {
-            List<Gruppo> LG = new List<Gruppo>();
+            List<Tuple<Gruppo>> LG = new List<Tuple<Gruppo>>();
             foreach (var x in l2)
             {
                 Gruppo x2 = GetGruppiFromDocument3(x, pLAT2);
@@ -920,7 +916,7 @@ namespace JsonPolimi_Core_nf.Forms
                     string x3 = x2.Classe.Trim();
                     if (!string.IsNullOrEmpty(x3))
                     {
-                        LG.Add(x2);
+                        LG.Add(new Tuple<Gruppo>(x2));
                     }
                 }
             }
@@ -968,8 +964,7 @@ namespace JsonPolimi_Core_nf.Forms
             return false;
         }
 
-        public static int? anno = null;
-        public static string pianostudi2 = null;
+
 
         private InfoParteDiGruppo GetGruppiFromDocument5(HtmlNode htmlNode)
         {
@@ -1005,23 +1000,23 @@ namespace JsonPolimi_Core_nf.Forms
                 }
                 else if (s.StartsWith("1<sup>"))
                 {
-                    MainForm.anno = 1;
+                    parametriCondivisi.anno = 1;
                 }
                 else if (s.StartsWith("2<sup>"))
                 {
-                    MainForm.anno = 2;
+                    parametriCondivisi.anno = 2;
                 }
                 else if (s.StartsWith("3<sup>"))
                 {
-                    MainForm.anno = 3;
+                    parametriCondivisi.anno = 3;
                 }
                 else if (s.StartsWith("4<sup>"))
                 {
-                    MainForm.anno = 4;
+                    parametriCondivisi.anno = 4;
                 }
                 else if (s.StartsWith("5<sup>"))
                 {
-                    MainForm.anno = 5;
+                    parametriCondivisi.anno = 5;
                 }
                 else if (s.StartsWith("Insegnamenti"))
                 {
@@ -1053,7 +1048,7 @@ namespace JsonPolimi_Core_nf.Forms
                         var x2 = GetPianoStudi(x1);
                         if (x2.Item1)
                         {
-                            pianostudi2 = x2.Item2;
+                            parametriCondivisi.pianostudi2 = x2.Item2;
                             return null; //sicuro
                         }
                     }
@@ -1062,12 +1057,12 @@ namespace JsonPolimi_Core_nf.Forms
                         var s3 = htmlNode.InnerHtml.Trim().Split('<');
                         var s4 = s3[0].Trim();
                         var s5 = s4.Substring(5).Trim();
-                        pianostudi2 = s5;
+                        parametriCondivisi.pianostudi2 = s5;
                         return null; //sicuro
                     }
                     else
                     {
-                        pianostudi2 = htmlNode.ChildNodes[0].InnerHtml.Trim();
+                        parametriCondivisi.pianostudi2 = htmlNode.ChildNodes[0].InnerHtml.Trim();
                         return null;
                     }
                 }
@@ -1604,7 +1599,7 @@ namespace JsonPolimi_Core_nf.Forms
                 {
                     string s = htmlNode.InnerHtml.Trim();
                     var s2 = s.Split('<');
-                    MainForm.infoManifesto.Scuola = s2[0].Trim();
+                    parametriCondivisi.infoManifesto.Scuola = s2[0].Trim();
                     return null;
                 }
             }
@@ -1868,7 +1863,12 @@ namespace JsonPolimi_Core_nf.Forms
                     HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
                     doc.Load(f2);
                     var L2 = LoadManifesto(doc, "TG");
-                    L.AddRange(L2);
+
+                    foreach (var t1 in L2)
+                    {
+                        L.Add(t1.Item1);
+                    }
+     
                 }
             }
 
@@ -1913,7 +1913,7 @@ namespace JsonPolimi_Core_nf.Forms
             Importa2( Chiedi.SI);
         }
 
-        private void Importa2(Chiedi chiedi2)
+        private void  Importa2(Chiedi chiedi2)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             var r = openFileDialog.ShowDialog();
@@ -1925,9 +1925,18 @@ namespace JsonPolimi_Core_nf.Forms
                 if (Variabili.L == null)
                     Variabili.L = new ListaGruppo();
 
-                Variabili.L.Importa(L2, false, chiedi2);
+                List<Tuple<Gruppo>> l3 = new List<Tuple<Gruppo>>();
+                foreach (var item in L2)
+                {
+                    l3.Add(new Tuple<Gruppo>(item));
+                }
+
+                Importa4(l3,chiedi2);
                 MessageBox.Show("Fatto!");
+     
             }
+
+   
         }
 
         private void Button15_Click(object sender, EventArgs e)

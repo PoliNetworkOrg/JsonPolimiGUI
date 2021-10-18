@@ -1,6 +1,6 @@
 ﻿
 using JsonPolimi_Core_nf.Data;
-using JsonPolimi_Core_nf.Forms;
+ 
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -1055,7 +1055,7 @@ namespace JsonPolimi_Core_nf.Tipi
 
                     if (infoParteDiGruppo_list[0].testo_selvaggio == "Scuola")
                     {
-                        MainForm.infoManifesto.Scuola = infoParteDiGruppo_list[1].testo_selvaggio.Trim();
+                        Variabili.ParametriCondivisiItem.infoManifesto.Scuola = infoParteDiGruppo_list[1].testo_selvaggio.Trim();
                         return null; //sicuro
                     }
 
@@ -1178,19 +1178,19 @@ namespace JsonPolimi_Core_nf.Tipi
                         }
                     }
 
-                    MainForm.infoManifesto.Corso_di_studio = x4;
+                    Variabili.ParametriCondivisiItem.infoManifesto.Corso_di_studio = x4;
                 }
 
                 if (infoParteDiGruppo_list[2].testo_selvaggio == "Sede del corso")
                 {
                     string x1 = infoParteDiGruppo_list[3].testo_selvaggio.Trim();
-                    MainForm.infoManifesto.Sede_del_corso = x1.Split(',');
+                    Variabili.ParametriCondivisiItem.infoManifesto.Sede_del_corso = x1.Split(',');
                 }
 
                 if (infoParteDiGruppo_list[0].testo_selvaggio == "Anni di Corso Attivi")
                 {
                     string x1 = infoParteDiGruppo_list[1].testo_selvaggio.Trim();
-                    MainForm.infoManifesto.Anni_di_corso_attivi = x1.Split(',');
+                    Variabili.ParametriCondivisiItem.infoManifesto.Anni_di_corso_attivi = x1.Split(',');
                 }
 
                 if (infoParteDiGruppo_list[0].testo_selvaggio == "Anno Accademico")
@@ -1205,7 +1205,7 @@ namespace JsonPolimi_Core_nf.Tipi
                         ;
                     }
 
-                    MainForm.infoManifesto.Anno_accademico = x1;
+                    Variabili.ParametriCondivisiItem.infoManifesto.Anno_accademico = x1;
                 }
 
                 if (infoParteDiGruppo_list[2].testo_selvaggio == "Sede")
@@ -1220,13 +1220,13 @@ namespace JsonPolimi_Core_nf.Tipi
                         ;
                     }
 
-                    MainForm.infoManifesto.Sede = x1;
+                    Variabili.ParametriCondivisiItem.infoManifesto.Sede = x1;
                 }
 
                 if (infoParteDiGruppo_list[2].testo_selvaggio == "Durata nominale del Corso")
                 {
                     string x1 = infoParteDiGruppo_list[3].testo_selvaggio.Trim();
-                    MainForm.infoManifesto.Durata_nominale_corso = x1;
+                    Variabili.ParametriCondivisiItem.infoManifesto.Durata_nominale_corso = x1;
                 }
 
                 return null; //info interessanti
@@ -1277,9 +1277,9 @@ namespace JsonPolimi_Core_nf.Tipi
                         Office = new ListaStringhePerJSON(GetSede(infoParteDiGruppo_list[5])),
                         Language = lang,
                         Tipo = "C",
-                        AnnoCorsoStudio = MainForm.anno,
+                        AnnoCorsoStudio = Variabili.ParametriCondivisiItem.anno,
                         Platform = pLAT2,
-                        PianoDiStudi = MainForm.pianostudi2,
+                        PianoDiStudi = Variabili.ParametriCondivisiItem.pianostudi2,
                         NomeCorso = classe
                     };
                     g.IdLink = null;

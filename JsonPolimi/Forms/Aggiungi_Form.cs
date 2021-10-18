@@ -3,7 +3,7 @@ using JsonPolimi_Core_nf.Tipi;
 using System;
 using System.Windows.Forms;
 
-namespace JsonPolimi_Core_nf.Forms
+namespace JsonPolimi.Forms
 {
     public partial class AggiungiForm : Form
     {

@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace JsonPolimi_Core_nf.Forms
+namespace JsonPolimi.Forms
 {
     partial class AskToUnifyForm
     {

@@ -1,7 +1,7 @@
 ﻿
 
 using JsonPolimi_Core_nf.Enums;
-using JsonPolimi_Core_nf.Forms;
+ 
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -1406,18 +1406,28 @@ namespace JsonPolimi_Core_nf.Tipi
             return null;
         }
 
-        public void Importa(List<Gruppo> l2, bool aggiusta_Anno, Chiedi chiedi2)
+        public List<ImportaReturn> Importa(List<Tuple<Gruppo>> l2, bool aggiusta_Anno, Chiedi chiedi2)
         {
+            List<ImportaReturn> r2 = new List<ImportaReturn>();
             for (int i = 0; i < l2.Count; i++)
             {
-                Gruppo l3 = l2[i];
-                Importa2(new Tuple<Gruppo, int>(l3, i), aggiusta_Anno, chiedi2);
+                Gruppo l3 = l2[i].Item1;
+                ImportaReturn r = Importa2(new Tuple<Gruppo, int>(l3, i), aggiusta_Anno, chiedi2);
+                r2.Add(r);
             }
+
+            return r2;
         }
 
-        private void Importa2(Tuple<Gruppo, int> l3, bool aggiusta_anno, Chiedi chiedi2)
+        private Tipi.ImportaReturn Importa2(Tuple<Gruppo, int> l3, bool aggiusta_anno, Chiedi chiedi2)
         {
-            for (int i = 0; i < _l.Count; i++)
+            int i = 0;
+
+            List<Tuple<int, Tuple<SomiglianzaClasse, Gruppo>>> simili = new List<Tuple<int, Tuple<SomiglianzaClasse, Gruppo>>>();
+
+            bool ci_sono_simili_da_chiedere = false;
+
+            for (i = 0; i < _l.Count; i++)
             {
                 Tuple<SomiglianzaClasse, Gruppo> r = Equivalenti2(i, l3, aggiusta_anno);
                 bool do_that = false;
@@ -1564,20 +1574,9 @@ namespace JsonPolimi_Core_nf.Tipi
                     {
                         if (to_show)
                         {
-                            AskToUnifyForm askToUnifyForm = new AskToUnifyForm(r)
-                            {
-                                StartPosition = FormStartPosition.CenterScreen
-                            };
-                            askToUnifyForm.ShowDialog();
-                            if (askToUnifyForm.r != null)
-                            {
-#pragma warning disable CS1690 // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
-                                if (askToUnifyForm.r.Value)
-#pragma warning restore CS1690 // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
-                                {
-                                    do_that = true;
-                                }
-                            }
+                            simili.Add(new Tuple<int, Tuple<SomiglianzaClasse, Gruppo>>(i,r));
+                            do_that = false;
+                            ci_sono_simili_da_chiedere = true;
                         }
                         else
                         {
@@ -1594,15 +1593,28 @@ namespace JsonPolimi_Core_nf.Tipi
                     }
                 }
 
+
+
                 if (do_that)
                 {
-                    this._l[i] = r.Item2;
-                    return;
+                    Importa3(i,r);
+                    return new ImportaReturn( Enums.ActionDoneImport.IMPORTED);
                 }
+            }
+
+            if (ci_sono_simili_da_chiedere)
+            {
+                return new ImportaReturn(ActionDoneImport.SIMILARITIES_FOUND, simili);
             }
 
             ;
             this._l.Add(l3.Item1);
+            return new ImportaReturn(ActionDoneImport.ADDED);
+        }
+
+        public void Importa3(int i, Tuple<SomiglianzaClasse, Gruppo> r)
+        {
+            this._l[i] = r.Item2;
         }
 
         private void TryRemove(ref List<string> l1, ref List<string> l2, List<string> to_remove)

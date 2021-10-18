@@ -4,21 +4,23 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 
-namespace JsonPolimi_Core_nf.Forms
+namespace JsonPolimi.Forms
 {
     public partial class AskToUnifyForm : Form
     {
         private readonly Tuple<SomiglianzaClasse, Gruppo> d;
         public bool? r = null;
+        int count;
 
         public AskToUnifyForm()
         {
             InitializeComponent();
         }
 
-        public AskToUnifyForm(Tuple<SomiglianzaClasse, Gruppo> d)
+        public AskToUnifyForm(Tuple<SomiglianzaClasse, Gruppo> d, int count)
         {
             this.d = d;
+            this.count = count;
             InitializeComponent();
         }
 
@@ -32,6 +34,8 @@ namespace JsonPolimi_Core_nf.Forms
 
             linkLabel1.Text = "https://t.me/joinchat/" + d.Item1.a1.IdLink;
             linkLabel2.Text = "https://t.me/joinchat/" + d.Item1.a2.IdLink;
+
+            this.Text += " n=" + count.ToString();
         }
 
         private void Button1_Click(object sender, EventArgs e)
