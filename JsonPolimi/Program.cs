@@ -1,10 +1,11 @@
 ﻿using JsonPolimi.Forms;
+using JsonPolimi_Core_nf.Forms;
 using System;
 using System.Windows.Forms;
 
 namespace JsonPolimi
 {
-    internal static class Program
+    public static class Program
     {
         /// <summary>
         ///     Punto di ingresso principale dell'applicazione.
@@ -14,7 +15,7 @@ namespace JsonPolimi
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new MainForm());
         }
     }
 }
