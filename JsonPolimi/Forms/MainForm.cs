@@ -1,8 +1,8 @@
 ﻿using HtmlAgilityPack;
 using JsonPolimi_Core_nf.Data;
+using JsonPolimi_Core_nf.Enums;
 using JsonPolimi_Core_nf.Tipi;
 using JsonPolimi_Core_nf.Utils;
-using JsonPolimi_Core_nf.Enums;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -15,7 +15,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using Telegram.Bot.Types.Enums;
 using Size = System.Drawing.Size;
-using JsonPolimi.Forms;
 
 namespace JsonPolimi.Forms
 {
@@ -23,7 +22,7 @@ namespace JsonPolimi.Forms
     {
         public static FileSalvare FileSalvare;
 
-        public static JsonPolimi_Core_nf.Tipi.ParametriCondivisi parametriCondivisi; 
+        public static JsonPolimi_Core_nf.Tipi.ParametriCondivisi parametriCondivisi;
 
         public MainForm(JsonPolimi_Core_nf.Tipi.ParametriCondivisi parametriCondivisiParam)
         {
@@ -103,8 +102,6 @@ namespace JsonPolimi.Forms
 
             MessageBox.Show("Finito!");
         }
-
-       
 
         private static void Aggiungi(JToken i, bool aggiusta_Anno, bool merge)
         {
@@ -766,8 +763,6 @@ namespace JsonPolimi.Forms
             Salva(json);
         }
 
- 
-
         private void Button8_Click2(object sender, EventArgs e)
         {
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
@@ -784,21 +779,22 @@ namespace JsonPolimi.Forms
 
             var x1 = LoadManifesto(doc, "TG");
             Importa4(x1, Chiedi.SI);
-
         }
 
         public static void Importa4(List<Tuple<Gruppo>> x1, Chiedi sI)
         {
             var r2 = Variabili.L.Importa(x1, false, sI);
-            for (int i=0; i<r2.Count; i++)
+            for (int i = 0; i < r2.Count; i++)
             {
                 var r3 = r2[i];
                 switch (r3.actionDoneImport)
                 {
                     case ActionDoneImport.IMPORTED:
                         break;
+
                     case ActionDoneImport.ADDED:
                         break;
+
                     case ActionDoneImport.SIMILARITIES_FOUND:
                         {
                             bool importato = false;
@@ -823,14 +819,12 @@ namespace JsonPolimi.Forms
                                 }
                             }
 
-
                             if (importato == false)
                             {
                                 Variabili.L.Add(x1[i].Item1, false);
                             }
                             break;
                         }
-         
                 }
             }
         }
@@ -963,8 +957,6 @@ namespace JsonPolimi.Forms
 
             return false;
         }
-
-
 
         private InfoParteDiGruppo GetGruppiFromDocument5(HtmlNode htmlNode)
         {
@@ -1868,7 +1860,6 @@ namespace JsonPolimi.Forms
                     {
                         L.Add(t1.Item1);
                     }
-     
                 }
             }
 
@@ -1910,10 +1901,10 @@ namespace JsonPolimi.Forms
 
         private void Button14_Click(object sender, EventArgs e)
         {
-            Importa2( Chiedi.SI);
+            Importa2(Chiedi.SI);
         }
 
-        private void  Importa2(Chiedi chiedi2)
+        private void Importa2(Chiedi chiedi2)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             var r = openFileDialog.ShowDialog();
@@ -1931,12 +1922,9 @@ namespace JsonPolimi.Forms
                     l3.Add(new Tuple<Gruppo>(item));
                 }
 
-                Importa4(l3,chiedi2);
+                Importa4(l3, chiedi2);
                 MessageBox.Show("Fatto!");
-     
             }
-
-   
         }
 
         private void Button15_Click(object sender, EventArgs e)

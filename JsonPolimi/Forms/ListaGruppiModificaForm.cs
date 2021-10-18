@@ -1,6 +1,5 @@
-﻿ 
-using JsonPolimi_Core_nf.Data;
- 
+﻿using JsonPolimi_Core_nf.Data;
+
 using JsonPolimi_Core_nf.Tipi;
 using System;
 using System.Windows.Forms;

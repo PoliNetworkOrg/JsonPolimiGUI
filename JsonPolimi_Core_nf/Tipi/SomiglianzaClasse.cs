@@ -1,5 +1,4 @@
-﻿
-using JsonPolimi_Core_nf.Enums;
+﻿using JsonPolimi_Core_nf.Enums;
 
 namespace JsonPolimi_Core_nf.Tipi
 {

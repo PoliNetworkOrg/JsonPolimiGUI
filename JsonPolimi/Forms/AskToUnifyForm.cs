@@ -1,5 +1,4 @@
-﻿ 
-using JsonPolimi_Core_nf.Tipi;
+﻿using JsonPolimi_Core_nf.Tipi;
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -10,7 +9,7 @@ namespace JsonPolimi.Forms
     {
         private readonly Tuple<SomiglianzaClasse, Gruppo> d;
         public bool? r = null;
-        int count;
+        private readonly int count;
 
         public AskToUnifyForm()
         {

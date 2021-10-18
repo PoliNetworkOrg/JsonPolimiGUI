@@ -1,7 +1,4 @@
-﻿
-using JsonPolimi_Core_nf.Data;
- 
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using Telegram.Bot.Types;
 

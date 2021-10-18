@@ -1,6 +1,5 @@
-﻿
-using JsonPolimi_Core_nf.Data;
- 
+﻿using JsonPolimi_Core_nf.Data;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,7 +29,7 @@ namespace JsonPolimi_Core_nf.Tipi
         public List<string> GruppoTabellaInsegnamenti { get; set; }
         public InfoManifesto Manifesto { get; set; }
         public int? AnnoCorsoStudio { get; set; }
-        public ListaStringhePerJSON CCS { get;  set; }
+        public ListaStringhePerJSON CCS { get; set; }
         public string PianoDiStudi { get; set; }
         public string NomeCorso { get; set; }
 
@@ -116,7 +115,6 @@ namespace JsonPolimi_Core_nf.Tipi
             html += "<td>";
             html += this.LinkFunzionante;
             html += "</td>";
-
 
             html += "</tr>";
             return html;
@@ -886,7 +884,6 @@ namespace JsonPolimi_Core_nf.Tipi
             }
 
             return "";
-         
         }
 
         public static Gruppo FromInfoParteList(List<InfoParteDiGruppo> infoParteDiGruppo_list, string pLAT2)

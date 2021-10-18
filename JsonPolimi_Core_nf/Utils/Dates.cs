@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JsonPolimi_Core_nf.Utils
 {
     public static class Dates
     {
-
-
         public static DateTime? DataFromString(string data)
         {
             if (string.IsNullOrEmpty(data))
@@ -65,6 +59,5 @@ namespace JsonPolimi_Core_nf.Utils
 
             return new DateTime(Convert.ToInt32(s2[2]), Convert.ToInt32(s2[1]), Convert.ToInt32(s2[0]), Convert.ToInt32(s3[0]), Convert.ToInt32(s3[1]), Convert.ToInt32(s3[2]));
         }
-
     }
 }

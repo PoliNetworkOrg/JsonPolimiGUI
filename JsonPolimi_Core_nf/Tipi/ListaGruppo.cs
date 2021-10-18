@@ -1,7 +1,5 @@
-﻿
+﻿using JsonPolimi_Core_nf.Enums;
 
-using JsonPolimi_Core_nf.Enums;
- 
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -458,7 +456,7 @@ namespace JsonPolimi_Core_nf.Tipi
             return office.IsEmpty();
         }
 
-        private  SomiglianzaEnum SciogliDubbio(Gruppo a1, Gruppo a2)
+        private SomiglianzaEnum SciogliDubbio(Gruppo a1, Gruppo a2)
         {
             ;
 
@@ -525,7 +523,7 @@ namespace JsonPolimi_Core_nf.Tipi
             return SomiglianzaEnum.DUBBIO;
         }
 
-        private  SomiglianzaEnum Equivalenti6(Gruppo a1, Gruppo a2, SomiglianzaClasse somiglianzaEnumOld)
+        private SomiglianzaEnum Equivalenti6(Gruppo a1, Gruppo a2, SomiglianzaClasse somiglianzaEnumOld)
         {
             ;
 
@@ -1421,12 +1419,11 @@ namespace JsonPolimi_Core_nf.Tipi
 
         private Tipi.ImportaReturn Importa2(Tuple<Gruppo, int> l3, bool aggiusta_anno, Chiedi chiedi2)
         {
-            int i = 0;
-
             List<Tuple<int, Tuple<SomiglianzaClasse, Gruppo>>> simili = new List<Tuple<int, Tuple<SomiglianzaClasse, Gruppo>>>();
 
             bool ci_sono_simili_da_chiedere = false;
 
+            int i;
             for (i = 0; i < _l.Count; i++)
             {
                 Tuple<SomiglianzaClasse, Gruppo> r = Equivalenti2(i, l3, aggiusta_anno);
@@ -1574,7 +1571,7 @@ namespace JsonPolimi_Core_nf.Tipi
                     {
                         if (to_show)
                         {
-                            simili.Add(new Tuple<int, Tuple<SomiglianzaClasse, Gruppo>>(i,r));
+                            simili.Add(new Tuple<int, Tuple<SomiglianzaClasse, Gruppo>>(i, r));
                             do_that = false;
                             ci_sono_simili_da_chiedere = true;
                         }
@@ -1593,12 +1590,10 @@ namespace JsonPolimi_Core_nf.Tipi
                     }
                 }
 
-
-
                 if (do_that)
                 {
-                    Importa3(i,r);
-                    return new ImportaReturn( Enums.ActionDoneImport.IMPORTED);
+                    Importa3(i, r);
+                    return new ImportaReturn(Enums.ActionDoneImport.IMPORTED);
                 }
             }
 
@@ -2419,13 +2414,13 @@ namespace JsonPolimi_Core_nf.Tipi
         public void AggiustaGruppiDoppiIDTelegramUguale()
         {
             int count = 0;
-            for (int i=0; i<this._l.Count; i++)
+            for (int i = 0; i < this._l.Count; i++)
             {
-                for (int j=0; j<this._l.Count; j++)
+                for (int j = 0; j < this._l.Count; j++)
                 {
                     if (i != j)
                     {
-                        if (!string.IsNullOrEmpty( this._l[i].PermanentId) && !string.IsNullOrEmpty(this._l[j].PermanentId))
+                        if (!string.IsNullOrEmpty(this._l[i].PermanentId) && !string.IsNullOrEmpty(this._l[j].PermanentId))
                         {
                             if (this._l[i].PermanentId == this._l[j].PermanentId)
                             {
@@ -2445,17 +2440,15 @@ namespace JsonPolimi_Core_nf.Tipi
 
         public void StampaWhatsapp()
         {
-
             string s = "";
             int i = 0;
             foreach (var g in this._l)
             {
                 if (g.Platform.ToLower() == "wa")
                 {
-                    s += i.ToString() + " https://chat.whatsapp.com/" +  g.IdLink + "\n\n";
+                    s += i.ToString() + " https://chat.whatsapp.com/" + g.IdLink + "\n\n";
                     i++;
                 }
-      
             }
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -2529,7 +2522,6 @@ namespace JsonPolimi_Core_nf.Tipi
 
         public static object BinaryDeserializeObject(string path)
         {
-
             StreamReader streamReader = null;
             try
             {
@@ -2542,7 +2534,7 @@ namespace JsonPolimi_Core_nf.Tipi
 
             if (streamReader == null)
                 return null;
-            
+
             BinaryFormatter binaryFormatter = new BinaryFormatter();
             object obj;
             try
@@ -2554,7 +2546,6 @@ namespace JsonPolimi_Core_nf.Tipi
                 throw new SerializationException(((object)ex).ToString() + "\n" + ex.Source);
             }
             return obj;
-            
         }
 
         public void ImportaGruppiDalComandoDelBotTelegram_UpdateLinkFromJson()
@@ -2607,12 +2598,10 @@ namespace JsonPolimi_Core_nf.Tipi
             {
                 linkFunzionante = true;
 
-
                 idlink = l3[1].Substring("IdLink: ".Length).Trim();
                 newlink = l3[2].Substring("NewLink: ".Length).Trim();
                 var n2 = newlink.Split('/');
                 newlink = n2[n2.Length - 1];
-             
 
                 string oldlinks = l3[4].Substring("OldLink: ".Length).Trim();
                 oldlinks_list = GetOldLinks(oldlinks);
@@ -2621,12 +2610,9 @@ namespace JsonPolimi_Core_nf.Tipi
                 string q1 = l3[6].Substring("q1: ".Length).Trim();
                 string q2 = l3[7].Substring("q2: ".Length).Trim();
                 string q3 = l3[8].Substring("q3: ".Length).Trim();
-
-             
             }
 
             List<int> i = TrovaGruppo(idlink, nome, permanentId, oldlinks_list);
-
 
             if (i == null || i.Count == 0)
             {
@@ -2638,7 +2624,6 @@ namespace JsonPolimi_Core_nf.Tipi
             {
                 foreach (var i2 in i)
                 {
-                  
                     if (linkFunzionante != null && linkFunzionante.Value == true)
                     {
                         this._l[i2].IdLink = newlink;
@@ -2682,7 +2667,7 @@ namespace JsonPolimi_Core_nf.Tipi
                     }
                     else
                     {
-                        r.Add(o3);    
+                        r.Add(o3);
                     }
                 }
 
@@ -2702,13 +2687,11 @@ namespace JsonPolimi_Core_nf.Tipi
 
                 return new List<string>() { oldlinks };
             }
-
         }
 
         private string GetOldLinks2(string o2)
         {
             //'feuwbbggqwgqwwg'
-
 
             if (string.IsNullOrEmpty(o2))
                 return null;
@@ -2735,7 +2718,6 @@ namespace JsonPolimi_Core_nf.Tipi
             {
                 if (this._l[i].Platform == "TG")
                 {
-
                     if (this._l[i].IdLink == idlink && !string.IsNullOrEmpty(idlink))
                         r.Add(i);
                     else if (this._l[i].Classe == nome && !string.IsNullOrEmpty(nome))
