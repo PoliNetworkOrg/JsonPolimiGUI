@@ -254,6 +254,19 @@ namespace JsonPolimi.Forms
             generaTabellaHTML.Show();
         }
 
+        private void Aggiusta()
+        {
+            if (Variabili.L == null)
+                return;
+
+            List<Gruppo> list = Variabili.L.GetGroups();
+
+            foreach (var i in list)
+            {
+                i.Aggiusta(true, true);
+            }
+        }
+
         private void Button3_Click(CheckGruppo.E i, bool entrambi_index)
         {
             Salva_Generico(new CheckGruppo(i), entrambi_index);
@@ -267,7 +280,7 @@ namespace JsonPolimi.Forms
                 return;
             }
 
-            string json = JsonPolimi_Core_nf.Utils.JsonBuilder.getJson(v, entrambi_index);
+            string json = JsonBuilder.GetJson(v, entrambi_index);
 
             Salva(json);
         }
@@ -1999,7 +2012,7 @@ namespace JsonPolimi.Forms
             {
                 Gruppo g2 = new Gruppo
                 {
-                    NomeCorso = lastAdded[lastAdded.Count - 1].Trim(),
+                    NomeCorso = lastAdded[^1].Trim(),
                     IdLink = url.Trim(),
                     Id = url.Trim()
                 };
@@ -2349,7 +2362,13 @@ namespace JsonPolimi.Forms
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
 
-            Variabili.L.CheckSeILinkVanno(saltaQuelliGiaFunzionanti: false);
+            ParametriFunzione parameters = new ParametriFunzione();
+            parameters.AddParam(true, "laPrimaVoltaControllaDaCapo");            //bool laPrimaVoltaControllaDaCapo
+            parameters.AddParam(2, "volteCheCiRiprova");            //int volteCheCiRiprova
+            parameters.AddParam(100, "waitOgniVoltaCheCiRiprova");            //int waitOgniVoltaCheCiRiprova
+
+            //saltaQuelliGiaFunzionanti: false
+            Variabili.L.CheckSeILinkVanno(parameters);
 
             MessageBox.Show("Finito il check dei link!");
         }
@@ -2387,10 +2406,18 @@ namespace JsonPolimi.Forms
 
         private void Button25_Click(object sender, EventArgs e)
         {
+            //"Controlla se i link vanno (solo quelli che già non vanno) e flaggali di conseguenza (tutto in ram)"
+
             if (Variabili.L == null)
                 Variabili.L = new ListaGruppo();
 
-            Variabili.L.CheckSeILinkVanno(saltaQuelliGiaFunzionanti: true);
+            ParametriFunzione parameters = new ParametriFunzione();
+            parameters.AddParam(false, "laPrimaVoltaControllaDaCapo" );            //bool laPrimaVoltaControllaDaCapo
+            parameters.AddParam(2, "volteCheCiRiprova");            //int volteCheCiRiprova
+            parameters.AddParam(100, "waitOgniVoltaCheCiRiprova");            //int waitOgniVoltaCheCiRiprova
+
+            //saltaQuelliGiaFunzionanti: true
+            Variabili.L.CheckSeILinkVanno(parameters);
 
             MessageBox.Show("Finito il check dei link!");
         }
