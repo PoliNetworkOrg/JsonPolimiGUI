@@ -22,7 +22,7 @@ namespace JsonPolimi.Forms
     {
         public static FileSalvare FileSalvare;
 
-        public static JsonPolimi_Core_nf.Tipi.ParametriCondivisi parametriCondivisi;
+        public static ParametriCondivisi parametriCondivisi;
 
         public MainForm(JsonPolimi_Core_nf.Tipi.ParametriCondivisi parametriCondivisiParam)
         {
@@ -495,7 +495,7 @@ namespace JsonPolimi.Forms
                 return null;
 
             var r = chatInviteLink.Split('/');
-            return r[r.Length - 1];
+            return r[^1];
         }
 
         public static void BinarySerializeObject(string path, object obj)
@@ -788,7 +788,7 @@ namespace JsonPolimi.Forms
                 }
             }
 
-            List<InfoParteDiGruppo> infoParteDiGruppo_list = new List<InfoParteDiGruppo>();
+            List<InfoParteDiGruppo> infoParteDiGruppo_list = new();
 
             for (int i = 0; i < L.Count; i++)
             {
@@ -806,7 +806,7 @@ namespace JsonPolimi.Forms
             }
         }
 
-        private bool Contiene_table2(HtmlNode htmlNode)
+        private static bool Contiene_table2(HtmlNode htmlNode)
         {
             foreach (var x in htmlNode.ChildNodes)
             {
@@ -817,7 +817,7 @@ namespace JsonPolimi.Forms
             return false;
         }
 
-        private InfoParteDiGruppo GetGruppiFromDocument5(HtmlNode htmlNode)
+        private static InfoParteDiGruppo GetGruppiFromDocument5(HtmlNode htmlNode)
         {
             bool contiene_table = Contiene_table2(htmlNode);
             if (contiene_table)
@@ -1574,7 +1574,7 @@ namespace JsonPolimi.Forms
                         string s4 = s3;
                         if (s3.StartsWith("br>"))
                         {
-                            s4 = s3.Substring(3);
+                            s4 = s3[3..];
                         }
 
                         sottopezzi2.Add(new InfoParteDiGruppo(testo_selvaggio: s4));
@@ -1606,7 +1606,7 @@ namespace JsonPolimi.Forms
             return null;
         }
 
-        private Tuple<bool, string> GetPianoStudi(HtmlNode x1)
+        private static Tuple<bool, string> GetPianoStudi(HtmlNode x1)
         {
             if (x1.ChildNodes.Count == 0)
                 return new Tuple<bool, string>(false, null);
@@ -1650,7 +1650,7 @@ namespace JsonPolimi.Forms
 
 #pragma warning disable IDE0051 // Rimuovi i membri privati inutilizzati
 
-        private HtmlNode GetGruppiFromDocument4(HtmlNode htmlNode)
+        private static HtmlNode GetGruppiFromDocument4(HtmlNode htmlNode)
 #pragma warning restore IDE0051 // Rimuovi i membri privati inutilizzati
         {
             if (htmlNode.ChildNodes.Count == 0)
@@ -1965,7 +1965,7 @@ namespace JsonPolimi.Forms
                 return false;
 
             List<string> acc_splitted;
-            if (acc.Contains(" ") == false)
+            if (acc.Contains(' ') == false)
             {
                 acc_splitted = new List<string>() { acc };
             }
@@ -2214,7 +2214,7 @@ namespace JsonPolimi.Forms
 
         private void ImportaSQL4(string[] s6)
         {
-            long id = Convert.ToInt64(s6[0].Substring(1).Trim());
+            long id = Convert.ToInt64(s6[0][1..].Trim());
             int? id_in_ram = FindInRamSQL(id);
             if (id_in_ram == null)
             {
@@ -2263,7 +2263,7 @@ namespace JsonPolimi.Forms
             {
                 g.Classe = g.Classe.Remove(g.Classe.Length - 1);
             }
-            if (g.Classe[g.Classe.Length - 1] == '\'')
+            if (g.Classe[^1] == '\'')
             {
                 g.Classe = g.Classe.Remove(g.Classe.Length - 1);
             }
@@ -2340,7 +2340,7 @@ namespace JsonPolimi.Forms
                 millisec);
         }
 
-        private int? FindInRamSQL(long id)
+        private static int? FindInRamSQL(long id)
         {
             ;
 
