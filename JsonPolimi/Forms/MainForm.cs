@@ -2368,7 +2368,9 @@ namespace JsonPolimi.Forms
             parameters.AddParam(100, "waitOgniVoltaCheCiRiprova");            //int waitOgniVoltaCheCiRiprova
 
             //saltaQuelliGiaFunzionanti: false
-            Variabili.L.CheckSeILinkVanno(parameters);
+            EventoConLog r1 =Variabili.L.CheckSeILinkVanno(parameters);
+            r1.action(null, null);
+            
 
             MessageBox.Show("Finito il check dei link!");
         }
@@ -2417,7 +2419,8 @@ namespace JsonPolimi.Forms
             parameters.AddParam(100, "waitOgniVoltaCheCiRiprova");            //int waitOgniVoltaCheCiRiprova
 
             //saltaQuelliGiaFunzionanti: true
-            Variabili.L.CheckSeILinkVanno(parameters);
+            var r1 = Variabili.L.CheckSeILinkVanno(parameters);
+            r1.action(null, null);
 
             MessageBox.Show("Finito il check dei link!");
         }
