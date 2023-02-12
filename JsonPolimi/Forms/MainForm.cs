@@ -1802,7 +1802,7 @@ public partial class MainForm : Form
         }
     }
 
-    private void ImportaSql(string read)
+    private static void ImportaSql(string read)
     {
         var s = read.Split(new[] { "INSERT INTO \"Groups\" " }, StringSplitOptions.None);
 
@@ -1827,7 +1827,7 @@ public partial class MainForm : Form
             }
     }
 
-    private void ImportaSql2(string s2)
+    private static void ImportaSql2(string s2)
     {
         if (string.IsNullOrEmpty(s2))
             return;
@@ -1858,7 +1858,7 @@ public partial class MainForm : Form
         ImportaSql3(s5);
     }
 
-    private void ImportaSql3(string s5)
+    private static void ImportaSql3(string s5)
     {
         ;
 
