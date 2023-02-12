@@ -20,9 +20,9 @@ namespace JsonPolimi.Forms;
 
 public partial class MainForm : Form
 {
-    public static FileSalvare FileSalvare;
+    private static FileSalvare FileSalvare;
 
-    public static ParametriCondivisi parametriCondivisi;
+    private static ParametriCondivisi parametriCondivisi;
 
     private List<string> lastAdded;
 
@@ -518,7 +518,7 @@ public partial class MainForm : Form
         return obj;
     }
 
-    public static void LoadGruppi()
+    private static void LoadGruppi()
     {
         var ofd = new OpenFileDialog();
         var rDialog = ofd.ShowDialog();
@@ -570,7 +570,7 @@ public partial class MainForm : Form
         MessageBox.Show("Prova ad unire terminato!");
     }
 
-    private void Button10_Click(object sender, EventArgs e)
+    private static void Button10_Click(object sender, EventArgs e)
     {
         if (Variabili.L == null)
         {
@@ -622,7 +622,7 @@ public partial class MainForm : Form
         Importa4(x1, Chiedi.SI);
     }
 
-    public static void Importa4(List<Tuple<Gruppo>> x1, Chiedi sI)
+    private static void Importa4(List<Tuple<Gruppo>> x1, Chiedi sI)
     {
         var r2 = Variabili.L.Importa(x1, false, sI);
         for (var i = 0; i < r2.Count; i++)
@@ -683,7 +683,7 @@ public partial class MainForm : Form
         return L2;
     }
 
-    private List<Tuple<Gruppo>> GetGruppiFromDocument(HtmlDocument doc, string pLAT2)
+    private static List<Tuple<Gruppo>> GetGruppiFromDocument(HtmlDocument doc, string pLAT2)
     {
         var L = GetTables(doc.DocumentNode.ChildNodes);
         var L2 = new List<HtmlNode>();
@@ -1485,7 +1485,7 @@ public partial class MainForm : Form
         return ms.ToArray();
     }
 
-    public static T FromByteArray<T>(byte[] data)
+    private static T FromByteArray<T>(byte[] data)
     {
         if (data == null)
 #pragma warning disable IDE0034 // Semplifica l'espressione 'default'
@@ -1888,7 +1888,7 @@ public partial class MainForm : Form
         ImportaSql4(s7.ToArray());
     }
 
-    private void ImportaSql4(string[] s6)
+    private void ImportaSql4(IReadOnlyList<string> s6)
     {
         var id = Convert.ToInt64(s6[0][1..].Trim());
         var idInRam = FindInRamSql(id);
@@ -1898,14 +1898,14 @@ public partial class MainForm : Form
             ImportaSql6(s6, idInRam.Value);
     }
 
-    private void ImportaSql6(IReadOnlyList<string> s6, int groupId)
+    private static void ImportaSql6(IReadOnlyList<string> s6, int groupId)
     {
         var g = OttieniGruppoSql(s6);
 
         Variabili.L.AddAndMerge(g, groupId);
     }
 
-    private void ImportaSql5(IReadOnlyList<string> s6)
+    private static void ImportaSql5(IReadOnlyList<string> s6)
     {
         ;
 
