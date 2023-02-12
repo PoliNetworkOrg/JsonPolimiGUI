@@ -931,7 +931,6 @@ public partial class MainForm : Form
                                 new(s2)
                             };
                             return new InfoParteDiGruppo(sottopezzi2);
-
                         }
 
                         break;
@@ -1419,9 +1418,7 @@ public partial class MainForm : Form
         foreach (var x3 in x1.ChildNodes)
             if (x3.Name == "option")
                 if (x3.Attributes.Any(x4 => x4.Name == "selected" && x4.Value == "selected"))
-                {
                     return new Tuple<bool, string>(true, x3.InnerHtml.Trim());
-                }
 
         return null;
     }
