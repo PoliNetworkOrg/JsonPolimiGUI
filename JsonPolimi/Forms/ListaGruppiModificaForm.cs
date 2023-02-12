@@ -14,8 +14,7 @@ public partial class ListaGruppiModificaForm : Form
 
     private void ListaGruppiModificaForm_Load(object sender, EventArgs e)
     {
-        if (Variabili.L == null)
-            Variabili.L = new ListaGruppo();
+        Variabili.L ??= new ListaGruppo();
 
         foreach (Gruppo variable in Variabili.L)
             if (string.IsNullOrEmpty(variable.Year))
@@ -56,11 +55,9 @@ public partial class ListaGruppiModificaForm : Form
     {
         listBox1.Items.Clear();
 
-        if (text == null)
-            text = "";
+        text ??= "";
 
-        if (anno == null)
-            anno = "";
+        anno ??= "";
 
         if (selectedIndex < 0)
             selectedIndex = 0;
@@ -83,7 +80,7 @@ public partial class ListaGruppiModificaForm : Form
             if (combobox_linkvalido > 0)
                 switch (combobox_linkvalido)
                 {
-                    case 1 when variable.LinkFunzionante == null || variable.LinkFunzionante.Value == false:
+                    case 1 when variable.LinkFunzionante is null or false:
                     case 2 when variable.LinkFunzionante != null && variable.LinkFunzionante.Value:
                         continue;
                 }

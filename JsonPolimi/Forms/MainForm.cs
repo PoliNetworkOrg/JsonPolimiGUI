@@ -34,8 +34,7 @@ public partial class MainForm : Form
 
     private void Button1_Click(object sender, EventArgs e)
     {
-        if (Variabili.L == null)
-            Variabili.L = new ListaGruppo();
+        Variabili.L ??= new ListaGruppo();
 
         var ofd = new OpenFileDialog();
         var rDialog = ofd.ShowDialog();
@@ -555,8 +554,7 @@ public partial class MainForm : Form
             return;
         }
 
-        if (FileSalvare == null)
-            FileSalvare = new FileSalvare();
+        FileSalvare ??= new FileSalvare();
 
         ofd.Dispose();
     }
@@ -1397,17 +1395,11 @@ public partial class MainForm : Form
             if (x2.Name != "option")
                 ce = false;
 
-            if (x2.InnerHtml == "2019/2020" ||
-                x2.InnerHtml == "Qualunque sede" ||
-                x2.InnerHtml ==
-                "Scuola di Architettura Urbanistica Ingegneria delle Costruzioni (Arc. Urb. Ing. Cos.)" ||
-                x2.InnerHtml == "1")
+            if (x2.InnerHtml is "2019/2020" or "Qualunque sede" or "Scuola di Architettura Urbanistica Ingegneria delle Costruzioni (Arc. Urb. Ing. Cos.)" or "1")
                 return new Tuple<bool, string>(false, null);
         }
 
         if (!ce) return new Tuple<bool, string>(false, null);
-
-        ;
 
         return (from x3 in x1.ChildNodes
             where x3.Name == "option"
@@ -1778,11 +1770,11 @@ public partial class MainForm : Form
         if (result)
             return 0;
 
-        var i = v.IndexOf("http://");
+        var i = v.IndexOf("http://", StringComparison.Ordinal);
         if (i >= 0)
             return i;
 
-        i = v.IndexOf("https://");
+        i = v.IndexOf("https://", StringComparison.Ordinal);
         if (i >= 0)
             return i;
 
@@ -1937,10 +1929,10 @@ public partial class MainForm : Form
         g.Classe = s6[6].Trim();
         if (g.Classe[^1] == ')') g.Classe = g.Classe.Remove(g.Classe.Length - 1);
         if (g.Classe[^1] == '\'') g.Classe = g.Classe.Remove(g.Classe.Length - 1);
-        if (g.Classe[0] == '\'') g.Classe = g.Classe.Substring(1).Trim();
+        if (g.Classe[0] == '\'') g.Classe = g.Classe[1..].Trim();
 
-        var semicolomn = g.Classe.IndexOf(");");
-        if (semicolomn >= 0 && semicolomn < g.Classe.Length) g.Classe = g.Classe.Substring(0, semicolomn).Trim();
+        var semicolomn = g.Classe.IndexOf(");", StringComparison.Ordinal);
+        if (semicolomn >= 0 && semicolomn < g.Classe.Length) g.Classe = g.Classe[..semicolomn].Trim();
 
         g.LastUpdateInviteLinkTime = ToDateTime(s6[4]);
 

@@ -59,8 +59,7 @@ public partial class AggiungiForm : Form
             PermanentId = textBox_permanent_id.Text
         };
 
-        if (Variabili.L == null)
-            Variabili.L = new ListaGruppo();
+        Variabili.L ??= new ListaGruppo();
 
         g.Aggiusta(true, true);
 
