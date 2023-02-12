@@ -610,7 +610,7 @@ public partial class MainForm : Form
                 json += ",";
         }
 
-        if (json[json.Length - 1] == ',')
+        if (json[^1] == ',')
             json = json.Remove(json.Length - 1);
 
         json += "]}";
@@ -650,25 +650,20 @@ public partial class MainForm : Form
                 case ActionDoneImport.SIMILARITIES_FOUND:
                 {
                     var importato = false;
-                    for (var j = 0; j < r3.simili.Count; j++)
+                    foreach (var r4 in r3.simili)
                     {
-                        var r4 = r3.simili[j];
                         var askToUnifyForm = new AskToUnifyForm(r4.Item2, r3.simili.Count)
                         {
                             StartPosition = FormStartPosition.CenterScreen
                         };
                         askToUnifyForm.ShowDialog();
-                        if (askToUnifyForm.r != null)
-                        {
+                        if (askToUnifyForm.r == null) continue;
 #pragma warning disable CS1690 // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
-                            if (askToUnifyForm.r.Value)
-#pragma warning restore CS1690 // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
-                            {
-                                Variabili.L.Importa3(r4.Item1, r4.Item2);
-                                importato = true;
-                                break;
-                            }
-                        }
+                        if (!askToUnifyForm.r.Value) continue;
+                        // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
+                        Variabili.L.Importa3(r4.Item1, r4.Item2);
+                        importato = true;
+                        break;
                     }
 
                     if (importato == false) Variabili.L.Add(x1[i].Item1, false);
@@ -688,12 +683,12 @@ public partial class MainForm : Form
 
         if (string.IsNullOrEmpty(parametriCondivisi.pianostudi2) || parametriCondivisi.pianostudi2.Length < 5) ;
 
-        for (var i = 0; i < L2.Count; i++)
+        foreach (var t in L2)
         {
-            L2[i].Item1.AggiungiInfoDaManifesto(parametriCondivisi.infoManifesto);
-            L2[i].Item1.CCS = new ListaStringhePerJSON(parametriCondivisi.infoManifesto.Corso_di_studio);
+            t.Item1.AggiungiInfoDaManifesto(parametriCondivisi.infoManifesto);
+            t.Item1.CCS = new ListaStringhePerJSON(parametriCondivisi.infoManifesto.Corso_di_studio);
 
-            L2[i].Item1.PianoDiStudi = parametriCondivisi.pianostudi2;
+            t.Item1.PianoDiStudi = parametriCondivisi.pianostudi2;
         }
 
         return L2;
@@ -755,18 +750,13 @@ public partial class MainForm : Form
         return LG;
     }
 
-    private Gruppo GetGruppiFromDocument3(HtmlNode x, string pLAT2)
+    private static Gruppo GetGruppiFromDocument3(HtmlNode x, string pLat2)
     {
-        var L = new List<HtmlNode>();
-        for (var i = 0; i < x.ChildNodes.Count; i++)
-            if (x.ChildNodes[i].Name == "td")
-                L.Add(x.ChildNodes[i]);
+        var l = x.ChildNodes.Where(t => t.Name == "td").ToList();
 
-        List<InfoParteDiGruppo> infoParteDiGruppo_list = new();
+        var infoParteDiGruppoList = l.Select(GetGruppiFromDocument5).ToList();
 
-        for (var i = 0; i < L.Count; i++) infoParteDiGruppo_list.Add(GetGruppiFromDocument5(L[i]));
-
-        var g = Gruppo.FromInfoParteList(infoParteDiGruppo_list, pLAT2);
+        var g = Gruppo.FromInfoParteList(infoParteDiGruppoList, pLat2);
         if (g != null && g.IsValido())
             return g;
         return null;
@@ -774,29 +764,20 @@ public partial class MainForm : Form
 
     private static bool Contiene_table2(HtmlNode htmlNode)
     {
-        foreach (var x in htmlNode.ChildNodes)
-            if (x.Name == "table")
-                return true;
-
-        return false;
+        return htmlNode.ChildNodes.Any(x => x.Name == "table");
     }
 
     private static InfoParteDiGruppo GetGruppiFromDocument5(HtmlNode htmlNode)
     {
-        var contiene_table = Contiene_table2(htmlNode);
-        if (contiene_table)
+        var contieneTable = Contiene_table2(htmlNode);
+        if (contieneTable)
             return null;
 
         var classes = htmlNode.GetClasses();
-        var ce = false;
-        foreach (var c2 in classes)
-            if (c2 == "TitleInfoCard")
-            {
-                ce = true;
-                break;
-            }
+        var enumerable = classes.ToList();
+        var ce = enumerable?.Any(c2 => c2 == "TitleInfoCard");
 
-        if (ce)
+        if (ce ?? false)
         {
             var s = htmlNode.InnerHtml.Trim();
             if (string.IsNullOrEmpty(s))
@@ -821,10 +802,7 @@ public partial class MainForm : Form
                 ;
         }
 
-        var ce2 = 0;
-        foreach (var c2 in classes)
-            if (c2 == "ElementInfoCard2" || c2 == "left")
-                ce2++;
+        var ce2 = enumerable.Count(c2 => c2 is "ElementInfoCard2" or "left");
 
         if (ce2 == 2)
         {
@@ -861,294 +839,316 @@ public partial class MainForm : Form
             }
         }
 
-        if (htmlNode.ChildNodes.Count == 3)
+        switch (htmlNode.ChildNodes.Count)
         {
-            if (htmlNode.ChildNodes[0].Name == "#text" &&
-                htmlNode.ChildNodes[1].Name != "#text" &&
-                htmlNode.ChildNodes[2].Name == "#text")
-            {
-                var s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
-                var s2 = htmlNode.ChildNodes[2].InnerHtml.Trim();
-                if (string.IsNullOrEmpty(s1) && string.IsNullOrEmpty(s2))
+            case 3:
+                switch (htmlNode.ChildNodes[0].Name)
                 {
-                    if (htmlNode.ChildNodes[1].Name == "div")
+                    case "#text" when
+                        htmlNode.ChildNodes[1].Name != "#text" &&
+                        htmlNode.ChildNodes[2].Name == "#text":
                     {
-                        var x1 = htmlNode.ChildNodes[1];
-                        if (x1.ChildNodes.Count == 1)
+                        var s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
+                        var s2 = htmlNode.ChildNodes[2].InnerHtml.Trim();
+                        if (string.IsNullOrEmpty(s1) && string.IsNullOrEmpty(s2))
                         {
-                            if (x1.ChildNodes[0].Name == "#text")
-                                return new InfoParteDiGruppo(x1.ChildNodes[0].InnerHtml.Trim());
-                            ;
+                            if (htmlNode.ChildNodes[1].Name == "div")
+                            {
+                                var x1 = htmlNode.ChildNodes[1];
+                                if (x1.ChildNodes.Count == 1)
+                                {
+                                    if (x1.ChildNodes[0].Name == "#text")
+                                        return new InfoParteDiGruppo(x1.ChildNodes[0].InnerHtml.Trim());
+                                    ;
+                                }
+                                else
+                                {
+                                    ;
+                                }
+                            }
+                            else if (htmlNode.ChildNodes[1].Name == "a")
+                            {
+                                var x1 = htmlNode.ChildNodes[1];
+                                if (x1.ChildNodes.Count == 3)
+                                {
+                                    if (x1.ChildNodes[0].Name == "#text" &&
+                                        x1.ChildNodes[1].Name != "#text" &&
+                                        x1.ChildNodes[2].Name == "#text")
+                                    {
+                                        if (x1.ChildNodes[1].Name == "img")
+                                        {
+                                            var immagine2 = new ImmagineGruppo(x1.ChildNodes[1]);
+                                            return new InfoParteDiGruppo(immagine2);
+                                        }
+
+                                        ;
+                                    }
+                                    else
+                                    {
+                                        ;
+                                    }
+                                }
+                                else
+                                {
+                                    var s = htmlNode.InnerHtml.Trim();
+                                    if (string.IsNullOrEmpty(s))
+                                        return null;
+                                    return new InfoParteDiGruppo(
+                                        new LinkGruppo(
+                                            htmlNode.ChildNodes[1].Attributes,
+                                            htmlNode.ChildNodes[1].InnerHtml.Trim()
+                                        )
+                                    );
+                                }
+                            }
+                            else
+                            {
+                                ;
+                            }
+                        }
+                        else
+                        {
+                            var s3 = htmlNode.InnerHtml.Trim();
+                            if (string.IsNullOrEmpty(s3)) return null;
+
+                            if (s3.StartsWith("Ingegneria Industriale e dell'Informazione")) return null; //sicuro
+
+                            switch (s3)
+                            {
+                                case "1<sup><small>o</small></sup>Anno":
+                                //sicuro
+                                case "2<sup><small>o</small></sup>Anno":
+                                //sicuro
+                                case "3<sup><small>o</small></sup>Anno":
+                                    return null; //sicuro
+                            }
+
+                            var s4 = s1 + "<br>" + s2;
+                            if (s4 != s3) return new InfoParteDiGruppo(htmlNode.InnerHtml.Trim());
+                            var sottopezzi2 = new List<InfoParteDiGruppo>
+                            {
+                                new(s1),
+                                new(s2)
+                            };
+                            return new InfoParteDiGruppo(sottopezzi2);
+
+                        }
+
+                        break;
+                    }
+                    case "img" when
+                        htmlNode.ChildNodes[1].Name == "#text" &&
+                        htmlNode.ChildNodes[2].Name == "img":
+                    {
+                        if (htmlNode.ChildNodes[0].Attributes["src"].Value.Contains("/it.png"))
+                        {
+                            if (htmlNode.ChildNodes[2].Attributes["src"].Value.Contains("/en.png"))
+                            {
+                                var s = htmlNode.ChildNodes[1].InnerHtml.Trim();
+                                if (string.IsNullOrEmpty(s))
+                                    ;
+                                else if (s == "/")
+                                    return null; //sicuro
+                                else
+                                    ;
+                            }
+                            else
+                            {
+                                ;
+                            }
                         }
                         else
                         {
                             ;
                         }
+
+                        break;
                     }
-                    else if (htmlNode.ChildNodes[1].Name == "a")
+                    default:
                     {
-                        var x1 = htmlNode.ChildNodes[1];
-                        if (x1.ChildNodes.Count == 3)
+                        var s = htmlNode.InnerHtml.Trim();
+                        if (string.IsNullOrEmpty(s))
                         {
-                            if (x1.ChildNodes[0].Name == "#text" &&
-                                x1.ChildNodes[1].Name != "#text" &&
-                                x1.ChildNodes[2].Name == "#text")
+                            ;
+                        }
+                        else if (s.StartsWith("Insegnamenti a scelta dal"))
+                        {
+                            return null;
+                        }
+                        else if (htmlNode.ChildNodes[0].Name == "a" && htmlNode.ChildNodes[1].Name == "a" &&
+                                 htmlNode.ChildNodes[2].Name == "span")
+                        {
+                            var link2 = new LinkGruppo(htmlNode.ChildNodes[1].Attributes,
+                                htmlNode.ChildNodes[1].InnerHtml.Trim());
+                            return new InfoParteDiGruppo(link2);
+                        }
+                        else
+                        {
+                            ;
+                        }
+
+                        break;
+                    }
+                }
+
+                break;
+            case 1:
+            {
+                if (htmlNode.ChildNodes[0].Name == "img")
+                {
+                    var src = htmlNode.ChildNodes[0].Attributes["src"].Value;
+                    if (src.EndsWith("it.png"))
+                        return new InfoParteDiGruppo(Lingua.IT);
+                    if (src.EndsWith("en.png"))
+                        return new InfoParteDiGruppo(Lingua.EN);
+                    if (src.EndsWith("innovativa.png"))
+                        return null;
+                    if (src.EndsWith("sequenza.png"))
+                        return null;
+                    ;
+                }
+
+                var s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
+                if (string.IsNullOrEmpty(s1)) return null; //sono sicuro
+
+                switch (htmlNode.ChildNodes[0].Name)
+                {
+                    case "a":
+                    {
+                        var x1 = htmlNode.ChildNodes[0];
+                        switch (x1.ChildNodes.Count)
+                        {
+                            case 3 when x1.ChildNodes[0].Name == "#text" &&
+                                        x1.ChildNodes[1].Name == "div" &&
+                                        x1.ChildNodes[2].Name == "#text":
                             {
-                                if (x1.ChildNodes[1].Name == "img")
+                                var s11 = x1.ChildNodes[0].InnerHtml.Trim();
+                                var s22 = x1.ChildNodes[2].InnerHtml.Trim();
+
+                                if (string.IsNullOrEmpty(s11) && string.IsNullOrEmpty(s22))
                                 {
-                                    var immagine2 = new ImmagineGruppo(x1.ChildNodes[1]);
-                                    return new InfoParteDiGruppo(immagine2);
+                                    var x2 = x1.ChildNodes[1];
+                                    switch (x2.ChildNodes.Count)
+                                    {
+                                        case 3:
+                                            ;
+                                            break;
+                                        case 5:
+                                            return null;
+                                        default:
+                                            ;
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    ;
+                                }
+
+                                break;
+                            }
+                            case 3:
+                                ;
+                                break;
+                            case 1:
+                            {
+                                var x2 = x1.ChildNodes[0];
+                                if (x2.ChildNodes.Count == 0)
+                                {
+                                    var link2 = new LinkGruppo(htmlNode.ChildNodes[0].Attributes, x2.InnerHtml.Trim());
+                                    return new InfoParteDiGruppo(link2);
                                 }
 
                                 ;
+                                break;
                             }
-                            else
-                            {
+                            default:
                                 ;
-                            }
+                                break;
                         }
-                        else
-                        {
-                            var s = htmlNode.InnerHtml.Trim();
-                            if (string.IsNullOrEmpty(s))
-                                return null;
-                            return new InfoParteDiGruppo(
-                                new LinkGruppo(
-                                    htmlNode.ChildNodes[1].Attributes,
-                                    htmlNode.ChildNodes[1].InnerHtml.Trim()
-                                )
-                            );
-                        }
+
+                        break;
                     }
-                    else
+                    case "#text":
+                        return new InfoParteDiGruppo(s1);
+                    case "select":
+                        return null;
+                    default:
                     {
-                        ;
-                    }
-                }
-                else
-                {
-                    var s3 = htmlNode.InnerHtml.Trim();
-                    if (string.IsNullOrEmpty(s3)) return null;
-
-                    if (s3.StartsWith("Ingegneria Industriale e dell'Informazione")) return null; //sicuro
-
-                    if (s3 == "1<sup><small>o</small></sup>Anno") return null; //sicuro
-
-                    if (s3 == "2<sup><small>o</small></sup>Anno") return null; //sicuro
-
-                    if (s3 == "3<sup><small>o</small></sup>Anno") return null; //sicuro
-
-                    var s4 = s1 + "<br>" + s2;
-                    if (s4 == s3)
-                    {
-                        var sottopezzi2 = new List<InfoParteDiGruppo>
-                        {
-                            new(s1),
-                            new(s2)
-                        };
-                        return new InfoParteDiGruppo(sottopezzi2);
-                    }
-
-                    return new InfoParteDiGruppo(htmlNode.InnerHtml.Trim());
-                }
-            }
-            else if (htmlNode.ChildNodes[0].Name == "img" &&
-                     htmlNode.ChildNodes[1].Name == "#text" &&
-                     htmlNode.ChildNodes[2].Name == "img")
-            {
-                if (htmlNode.ChildNodes[0].Attributes["src"].Value.Contains("/it.png"))
-                {
-                    if (htmlNode.ChildNodes[2].Attributes["src"].Value.Contains("/en.png"))
-                    {
-                        var s = htmlNode.ChildNodes[1].InnerHtml.Trim();
-                        if (string.IsNullOrEmpty(s))
+                        var s3 = htmlNode.InnerHtml.Trim();
+                        if (string.IsNullOrEmpty(s3))
                             ;
-                        else if (s == "/")
-                            return null; //sicuro
+                        else if (s3.StartsWith("<span "))
+                            return null;
                         else
                             ;
-                    }
-                    else
-                    {
-                        ;
+                        break;
                     }
                 }
-                else
-                {
-                    ;
-                }
+
+                break;
             }
-            else
+            case 6:
             {
                 var s = htmlNode.InnerHtml.Trim();
                 if (string.IsNullOrEmpty(s))
-                {
                     ;
-                }
-                else if (s.StartsWith("Insegnamenti a scelta dal"))
-                {
+                else if (s.StartsWith("I CFU riportati a fianco a questo"))
+                    return null; //sicuro
+                else if (s.StartsWith("*** - Non diversificato"))
                     return null;
-                }
-                else if (htmlNode.ChildNodes[0].Name == "a" && htmlNode.ChildNodes[1].Name == "a" &&
-                         htmlNode.ChildNodes[2].Name == "span")
-                {
-                    var link2 = new LinkGruppo(htmlNode.ChildNodes[1].Attributes,
-                        htmlNode.ChildNodes[1].InnerHtml.Trim());
-                    return new InfoParteDiGruppo(link2);
-                }
-                else
-                {
-                    ;
-                }
-            }
-        }
-        else if (htmlNode.ChildNodes.Count == 1)
-        {
-            if (htmlNode.ChildNodes[0].Name == "img")
-            {
-                var src = htmlNode.ChildNodes[0].Attributes["src"].Value;
-                if (src.EndsWith("it.png"))
-                    return new InfoParteDiGruppo(Lingua.IT);
-                if (src.EndsWith("en.png"))
-                    return new InfoParteDiGruppo(Lingua.EN);
-                if (src.EndsWith("innovativa.png"))
+                else if (s.StartsWith("*** - offerta comune"))
                     return null;
-                if (src.EndsWith("sequenza.png"))
+                else if (s.StartsWith("*** - URBAN PLANNING AND POLICY DESIGN"))
                     return null;
-                ;
-            }
-
-            var s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
-            if (string.IsNullOrEmpty(s1)) return null; //sono sicuro
-
-            if (htmlNode.ChildNodes[0].Name == "a")
-            {
-                var x1 = htmlNode.ChildNodes[0];
-                if (x1.ChildNodes.Count == 3)
-                {
-                    if (x1.ChildNodes[0].Name == "#text" &&
-                        x1.ChildNodes[1].Name == "div" &&
-                        x1.ChildNodes[2].Name == "#text")
-                    {
-                        var s11 = x1.ChildNodes[0].InnerHtml.Trim();
-                        var s22 = x1.ChildNodes[2].InnerHtml.Trim();
-
-                        if (string.IsNullOrEmpty(s11) && string.IsNullOrEmpty(s22))
-                        {
-                            var x2 = x1.ChildNodes[1];
-                            if (x2.ChildNodes.Count == 3)
-                                ;
-                            else if (x2.ChildNodes.Count == 5)
-                                return null;
-                            else
-                                ;
-                        }
-                        else
-                        {
-                            ;
-                        }
-                    }
-                    else
-                    {
-                        ;
-                    }
-                }
-                else if (x1.ChildNodes.Count == 1)
-                {
-                    var x2 = x1.ChildNodes[0];
-                    if (x2.ChildNodes.Count == 0)
-                    {
-                        var link2 = new LinkGruppo(htmlNode.ChildNodes[0].Attributes, x2.InnerHtml.Trim());
-                        return new InfoParteDiGruppo(link2);
-                    }
-
-                    ;
-                }
-                else
-                {
-                    ;
-                }
-            }
-            else if (htmlNode.ChildNodes[0].Name == "#text")
-            {
-                return new InfoParteDiGruppo(s1);
-            }
-            else if (htmlNode.ChildNodes[0].Name == "select")
-            {
-                return null;
-            }
-            else
-            {
-                var s3 = htmlNode.InnerHtml.Trim();
-                if (string.IsNullOrEmpty(s3))
-                    ;
-                else if (s3.StartsWith("<span "))
+                else if (s.StartsWith("N1L"))
+                    return null;
+                else if (s.StartsWith("R1O"))
+                    return null;
+                else if (s.StartsWith("E1A"))
+                    return null;
+                else if (s.StartsWith("I1A"))
+                    return null;
+                else if (s.StartsWith("U1L"))
+                    return null;
+                else if (s.StartsWith("A1A"))
+                    return null;
+                else if (s.StartsWith("XEN"))
+                    return null;
+                else if (s.StartsWith("PSS"))
+                    return null;
+                else if (s.StartsWith("FOE"))
+                    return null;
+                else if (s.StartsWith("MOB"))
+                    return null;
+                else if (s.StartsWith("NDE"))
+                    return null;
+                else if (s.StartsWith("OA1"))
+                    return null;
+                else if (s.StartsWith("NDF"))
                     return null;
                 else
                     ;
+                break;
             }
-        }
-        else if (htmlNode.ChildNodes.Count == 6)
-        {
-            var s = htmlNode.InnerHtml.Trim();
-            if (string.IsNullOrEmpty(s))
+            case 4:
+            {
+                var s = htmlNode.InnerHtml.Trim();
+                if (s.StartsWith("<span id=\"infocard"))
+                    return null; //sicuro
+                if (htmlNode.ChildNodes[0].Name == "select")
+                    return null; //sicuro
+                return null;
+            }
+            case 0:
+            {
+                var s1 = htmlNode.InnerHtml.Trim();
+                if (string.IsNullOrEmpty(s1))
+                    return null; //sicuro
                 ;
-            else if (s.StartsWith("I CFU riportati a fianco a questo"))
-                return null; //sicuro
-            else if (s.StartsWith("*** - Non diversificato"))
-                return null;
-            else if (s.StartsWith("*** - offerta comune"))
-                return null;
-            else if (s.StartsWith("*** - URBAN PLANNING AND POLICY DESIGN"))
-                return null;
-            else if (s.StartsWith("N1L"))
-                return null;
-            else if (s.StartsWith("R1O"))
-                return null;
-            else if (s.StartsWith("E1A"))
-                return null;
-            else if (s.StartsWith("I1A"))
-                return null;
-            else if (s.StartsWith("U1L"))
-                return null;
-            else if (s.StartsWith("A1A"))
-                return null;
-            else if (s.StartsWith("XEN"))
-                return null;
-            else if (s.StartsWith("PSS"))
-                return null;
-            else if (s.StartsWith("FOE"))
-                return null;
-            else if (s.StartsWith("MOB"))
-                return null;
-            else if (s.StartsWith("NDE"))
-                return null;
-            else if (s.StartsWith("OA1"))
-                return null;
-            else if (s.StartsWith("NDF"))
-                return null;
-            else
-                ;
-        }
-        else if (htmlNode.ChildNodes.Count == 4)
-        {
-            var s = htmlNode.InnerHtml.Trim();
-            if (s.StartsWith("<span id=\"infocard"))
-                return null; //sicuro
-            if (htmlNode.ChildNodes[0].Name == "select")
-                return null; //sicuro
-            return null;
-        }
-        else if (htmlNode.ChildNodes.Count == 0)
-        {
-            var s1 = htmlNode.InnerHtml.Trim();
-            if (string.IsNullOrEmpty(s1))
-                return null; //sicuro
-            ;
-        }
-        else if (htmlNode.ChildNodes.Count == 2)
-        {
-            if (htmlNode.ChildNodes[0].Name == "#text" && htmlNode.ChildNodes[1].Name == "div")
+                break;
+            }
+            case 2 when htmlNode.ChildNodes[0].Name == "#text" && htmlNode.ChildNodes[1].Name == "div":
             {
                 var s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
                 if (string.IsNullOrEmpty(s1))
@@ -1185,8 +1185,9 @@ public partial class MainForm : Form
                     return null;
                 else
                     ;
+                break;
             }
-            else if (htmlNode.ChildNodes[0].Name == "#text" && htmlNode.ChildNodes[1].Name == "a")
+            case 2 when htmlNode.ChildNodes[0].Name == "#text" && htmlNode.ChildNodes[1].Name == "a":
             {
                 var s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
                 if (string.IsNullOrEmpty(s1))
@@ -1218,8 +1219,10 @@ public partial class MainForm : Form
                     else
                         ;
                 }
+
+                break;
             }
-            else if (htmlNode.ChildNodes[0].Name == "a" && htmlNode.ChildNodes[1].Name == "a")
+            case 2 when htmlNode.ChildNodes[0].Name == "a" && htmlNode.ChildNodes[1].Name == "a":
             {
                 var s1 = htmlNode.ChildNodes[0].InnerHtml.Trim();
                 var s2 = htmlNode.ChildNodes[1].InnerHtml.Trim();
@@ -1230,161 +1233,160 @@ public partial class MainForm : Form
                 }
 
                 if (!string.IsNullOrEmpty(s1) && string.IsNullOrEmpty(s2))
-                {
                     ;
-                }
                 else
-                {
                     ;
-                }
+                break;
             }
-            else if (htmlNode.ChildNodes[0].Name == "a" && htmlNode.ChildNodes[1].Name == "span")
+            case 2 when htmlNode.ChildNodes[0].Name == "a" && htmlNode.ChildNodes[1].Name == "span":
             {
                 var link2 = new LinkGruppo(htmlNode.ChildNodes[0].Attributes, htmlNode.ChildNodes[0].InnerHtml.Trim());
                 return new InfoParteDiGruppo(link2);
             }
-            else
+            case 2:
             {
                 var s = htmlNode.InnerHtml.Trim();
                 var s2 = s.Split('<');
                 parametriCondivisi.infoManifesto.Scuola = s2[0].Trim();
                 return null;
             }
-        }
-        else
-        {
-            var s = htmlNode.InnerHtml.Trim();
-            if (string.IsNullOrEmpty(s))
+            default:
             {
-                ;
-            }
-            else if (s.StartsWith("4.0"))
-            {
-                return null;
-            }
-            else if (s.StartsWith("ICAR"))
-            {
-                var sottopezzi2 = new List<InfoParteDiGruppo>();
-                var s2 = s.Split('<');
-                foreach (var s3 in s2)
+                var s = htmlNode.InnerHtml.Trim();
+                if (string.IsNullOrEmpty(s))
                 {
-                    var s4 = s3;
-                    if (s3.StartsWith("br>")) s4 = s3.Substring(3);
+                    ;
+                }
+                else if (s.StartsWith("4.0"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("ICAR"))
+                {
+                    var sottopezzi2 = new List<InfoParteDiGruppo>();
+                    var s2 = s.Split('<');
+                    foreach (var s3 in s2)
+                    {
+                        var s4 = s3;
+                        if (s3.StartsWith("br>")) s4 = s3.Substring(3);
 
-                    sottopezzi2.Add(new InfoParteDiGruppo(s4));
+                        sottopezzi2.Add(new InfoParteDiGruppo(s4));
+                    }
+
+                    return new InfoParteDiGruppo(sottopezzi2);
+                }
+                else if (s.StartsWith("12.0"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("8.0"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("AGR"))
+                {
+                    var sottopezzi2 = new List<InfoParteDiGruppo>();
+                    var s2 = s.Split('<');
+                    foreach (var s3 in s2)
+                    {
+                        var s4 = s3;
+                        if (s3.StartsWith("br>")) s4 = s3.Substring(3);
+
+                        sottopezzi2.Add(new InfoParteDiGruppo(s4));
+                    }
+
+                    return new InfoParteDiGruppo(sottopezzi2);
+                }
+                else if (s.StartsWith("Architettura Urbanistica Ingegneria delle Costruzioni"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("BIO"))
+                {
+                    var sottopezzi2 = new List<InfoParteDiGruppo>();
+                    var s2 = s.Split('<');
+                    foreach (var s3 in s2)
+                    {
+                        var s4 = s3;
+                        if (s3.StartsWith("br>")) s4 = s3.Substring(3);
+
+                        sottopezzi2.Add(new InfoParteDiGruppo(s4));
+                    }
+
+                    return new InfoParteDiGruppo(sottopezzi2);
+                }
+                else if (s.StartsWith("15.0"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("6.0"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("18.0"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("22.0"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("Design"))
+                {
+                    return null;
+                }
+                else if (s.StartsWith("ING-IND"))
+                {
+                    var sottopezzi2 = new List<InfoParteDiGruppo>();
+                    var s2 = s.Split('<');
+                    foreach (var s3 in s2)
+                    {
+                        var s4 = s3;
+                        if (s3.StartsWith("br>")) s4 = s3.Substring(3);
+
+                        sottopezzi2.Add(new InfoParteDiGruppo(s4));
+                    }
+
+                    return new InfoParteDiGruppo(sottopezzi2);
+                }
+                else if (s.StartsWith("Ingegneria Civile"))
+                {
+                    return null; //sicuro
+                }
+                else if (s.StartsWith("ING-INF"))
+                {
+                    var sottopezzi2 = new List<InfoParteDiGruppo>();
+                    var s2 = s.Split('<');
+                    foreach (var s3 in s2)
+                    {
+                        var s4 = s3;
+                        if (s3.StartsWith("br>")) s4 = s3[3..];
+
+                        sottopezzi2.Add(new InfoParteDiGruppo(s4));
+                    }
+
+                    return new InfoParteDiGruppo(sottopezzi2);
+                }
+                else if (s.StartsWith("GEO"))
+                {
+                    var sottopezzi2 = new List<InfoParteDiGruppo>();
+                    var s2 = s.Split('<');
+                    foreach (var s3 in s2)
+                    {
+                        var s4 = s3;
+                        if (s3.StartsWith("br>")) s4 = s3.Substring(3);
+
+                        sottopezzi2.Add(new InfoParteDiGruppo(s4));
+                    }
+
+                    return new InfoParteDiGruppo(sottopezzi2);
+                }
+                else
+                {
+                    ;
                 }
 
-                return new InfoParteDiGruppo(sottopezzi2);
-            }
-            else if (s.StartsWith("12.0"))
-            {
-                return null;
-            }
-            else if (s.StartsWith("8.0"))
-            {
-                return null;
-            }
-            else if (s.StartsWith("AGR"))
-            {
-                var sottopezzi2 = new List<InfoParteDiGruppo>();
-                var s2 = s.Split('<');
-                foreach (var s3 in s2)
-                {
-                    var s4 = s3;
-                    if (s3.StartsWith("br>")) s4 = s3.Substring(3);
-
-                    sottopezzi2.Add(new InfoParteDiGruppo(s4));
-                }
-
-                return new InfoParteDiGruppo(sottopezzi2);
-            }
-            else if (s.StartsWith("Architettura Urbanistica Ingegneria delle Costruzioni"))
-            {
-                return null;
-            }
-            else if (s.StartsWith("BIO"))
-            {
-                var sottopezzi2 = new List<InfoParteDiGruppo>();
-                var s2 = s.Split('<');
-                foreach (var s3 in s2)
-                {
-                    var s4 = s3;
-                    if (s3.StartsWith("br>")) s4 = s3.Substring(3);
-
-                    sottopezzi2.Add(new InfoParteDiGruppo(s4));
-                }
-
-                return new InfoParteDiGruppo(sottopezzi2);
-            }
-            else if (s.StartsWith("15.0"))
-            {
-                return null;
-            }
-            else if (s.StartsWith("6.0"))
-            {
-                return null;
-            }
-            else if (s.StartsWith("18.0"))
-            {
-                return null;
-            }
-            else if (s.StartsWith("22.0"))
-            {
-                return null;
-            }
-            else if (s.StartsWith("Design"))
-            {
-                return null;
-            }
-            else if (s.StartsWith("ING-IND"))
-            {
-                var sottopezzi2 = new List<InfoParteDiGruppo>();
-                var s2 = s.Split('<');
-                foreach (var s3 in s2)
-                {
-                    var s4 = s3;
-                    if (s3.StartsWith("br>")) s4 = s3.Substring(3);
-
-                    sottopezzi2.Add(new InfoParteDiGruppo(s4));
-                }
-
-                return new InfoParteDiGruppo(sottopezzi2);
-            }
-            else if (s.StartsWith("Ingegneria Civile"))
-            {
-                return null; //sicuro
-            }
-            else if (s.StartsWith("ING-INF"))
-            {
-                var sottopezzi2 = new List<InfoParteDiGruppo>();
-                var s2 = s.Split('<');
-                foreach (var s3 in s2)
-                {
-                    var s4 = s3;
-                    if (s3.StartsWith("br>")) s4 = s3[3..];
-
-                    sottopezzi2.Add(new InfoParteDiGruppo(s4));
-                }
-
-                return new InfoParteDiGruppo(sottopezzi2);
-            }
-            else if (s.StartsWith("GEO"))
-            {
-                var sottopezzi2 = new List<InfoParteDiGruppo>();
-                var s2 = s.Split('<');
-                foreach (var s3 in s2)
-                {
-                    var s4 = s3;
-                    if (s3.StartsWith("br>")) s4 = s3.Substring(3);
-
-                    sottopezzi2.Add(new InfoParteDiGruppo(s4));
-                }
-
-                return new InfoParteDiGruppo(sottopezzi2);
-            }
-            else
-            {
-                ;
+                break;
             }
         }
 
@@ -1416,9 +1418,10 @@ public partial class MainForm : Form
 
         foreach (var x3 in x1.ChildNodes)
             if (x3.Name == "option")
-                foreach (var x4 in x3.Attributes)
-                    if (x4.Name == "selected" && x4.Value == "selected")
-                        return new Tuple<bool, string>(true, x3.InnerHtml.Trim());
+                if (x3.Attributes.Any(x4 => x4.Name == "selected" && x4.Value == "selected"))
+                {
+                    return new Tuple<bool, string>(true, x3.InnerHtml.Trim());
+                }
 
         return null;
     }
@@ -1439,13 +1442,7 @@ public partial class MainForm : Form
 
         foreach (var x in htmlNode.ChildNodes)
         {
-            var buono = true;
-            foreach (var x2 in x.InnerText)
-                if (LC.Contains(x2))
-                {
-                    buono = false;
-                    break;
-                }
+            var buono = x.InnerText.All(x2 => !LC.Contains(x2));
 
             if (buono)
                 return x;
@@ -1477,51 +1474,45 @@ public partial class MainForm : Form
         if (f == null)
             return;
 
-        var L = new List<Gruppo>();
+        var l = new List<Gruppo>();
         foreach (var f2 in f)
             if (f2.EndsWith(".htm"))
             {
                 var doc = new HtmlDocument();
                 doc.Load(f2);
-                var L2 = LoadManifesto(doc, "TG");
+                var l2 = LoadManifesto(doc, "TG");
 
-                foreach (var t1 in L2) L.Add(t1.Item1);
+                l.AddRange(l2.Select(t1 => t1.Item1));
             }
 
         var saveFileDialog = new SaveFileDialog();
         var r = saveFileDialog.ShowDialog();
-        if (r == DialogResult.OK)
-        {
-            var b2 = ObjectToByteArray(L);
-            File.WriteAllBytes(saveFileDialog.FileName, b2);
-        }
+        if (r != DialogResult.OK) return;
+        var b2 = ObjectToByteArray(l);
+        File.WriteAllBytes(saveFileDialog.FileName, b2);
     }
 
-    private byte[] ObjectToByteArray(object obj)
+    private static byte[] ObjectToByteArray(object obj)
     {
         if (obj == null)
             return null;
 
         var bf = new BinaryFormatter();
-        using (var ms = new MemoryStream())
-        {
-            bf.Serialize(ms, obj);
-            return ms.ToArray();
-        }
+        using var ms = new MemoryStream();
+        bf.Serialize(ms, obj);
+        return ms.ToArray();
     }
 
-    public T FromByteArray<T>(byte[] data)
+    public static T FromByteArray<T>(byte[] data)
     {
         if (data == null)
 #pragma warning disable IDE0034 // Semplifica l'espressione 'default'
             return default;
 #pragma warning restore IDE0034 // Semplifica l'espressione 'default'
         var bf = new BinaryFormatter();
-        using (var ms = new MemoryStream(data))
-        {
-            var obj = bf.Deserialize(ms);
-            return (T)obj;
-        }
+        using var ms = new MemoryStream(data);
+        var obj = bf.Deserialize(ms);
+        return (T)obj;
     }
 
     private void Button14_Click(object sender, EventArgs e)
@@ -1529,24 +1520,20 @@ public partial class MainForm : Form
         Importa2(Chiedi.SI);
     }
 
-    private void Importa2(Chiedi chiedi2)
+    private static void Importa2(Chiedi chiedi2)
     {
         var openFileDialog = new OpenFileDialog();
         var r = openFileDialog.ShowDialog();
-        if (r == DialogResult.OK)
-        {
-            var o2 = File.ReadAllBytes(openFileDialog.FileName);
-            var L2 = FromByteArray<List<Gruppo>>(o2);
+        if (r != DialogResult.OK) return;
+        var o2 = File.ReadAllBytes(openFileDialog.FileName);
+        var L2 = FromByteArray<List<Gruppo>>(o2);
 
-            if (Variabili.L == null)
-                Variabili.L = new ListaGruppo();
+        Variabili.L ??= new ListaGruppo();
 
-            var l3 = new List<Tuple<Gruppo>>();
-            foreach (var item in L2) l3.Add(new Tuple<Gruppo>(item));
+        var l3 = L2.Select(item => new Tuple<Gruppo>(item)).ToList();
 
-            Importa4(l3, chiedi2);
-            MessageBox.Show("Fatto!");
-        }
+        Importa4(l3, chiedi2);
+        MessageBox.Show("Fatto!");
     }
 
     private void Button15_Click(object sender, EventArgs e)
@@ -1561,8 +1548,7 @@ public partial class MainForm : Form
 
     private void Button17_Click(object sender, EventArgs e)
     {
-        if (Variabili.L == null)
-            Variabili.L = new ListaGruppo();
+        Variabili.L ??= new ListaGruppo();
 
         Variabili.L.Fix_link_IDCorsi_se_ce_uno_che_ha_il_link_con_id_corso_uguale();
     }
@@ -1602,9 +1588,12 @@ public partial class MainForm : Form
             {
                 var dialogResult = MessageBox.Show("Vuoi entrambi gli index (si) o solo uno (no)?", "Scegli",
                     MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.Yes)
-                    entrambi_index = true;
-                else if (dialogResult == DialogResult.No) entrambi_index = false;
+                entrambi_index = dialogResult switch
+                {
+                    DialogResult.Yes => true,
+                    DialogResult.No => false,
+                    _ => null
+                };
 
                 if (entrambi_index == null)
                 {
@@ -1651,8 +1640,7 @@ public partial class MainForm : Form
 
     private void Button3_Click(object sender, EventArgs e)
     {
-        if (Variabili.L == null)
-            Variabili.L = new ListaGruppo();
+        Variabili.L ??= new ListaGruppo();
 
         var openFileDialog = new OpenFileDialog();
         var r = openFileDialog.ShowDialog();
@@ -1682,14 +1670,14 @@ public partial class MainForm : Form
 
         var acc = "";
 
-        for (var i = 0; i < r.Length; i++)
+        foreach (var t in r)
         {
-            if (string.IsNullOrEmpty(r[i])) acc = "";
+            if (string.IsNullOrEmpty(t)) acc = "";
 
-            if (string.IsNullOrEmpty(acc) && lastAdded != null && lastAdded.Count > 0)
+            if (string.IsNullOrEmpty(acc) && lastAdded is { Count: > 0 })
                 try
                 {
-                    var aggiunto2 = AggiungiTesto("", r[i].Trim(), true);
+                    var aggiunto2 = AggiungiTesto("", t.Trim(), true);
                     if (aggiunto2)
                         continue;
                 }
@@ -1698,7 +1686,7 @@ public partial class MainForm : Form
                     ;
                 }
 
-            acc += r[i].Trim() + " ";
+            acc += t?.Trim() + " ";
 
             var aggiunto = ValutaSeDaAggiungereENelCasoAggiungi(acc);
             if (aggiunto)
@@ -1719,7 +1707,8 @@ public partial class MainForm : Form
         if (indexofwebsite?.Item1 == null || indexofwebsite.Item2 == null)
             return false;
 
-        var nome = accSplitted.Where((t, i) => i != indexofwebsite.Item1.Value).Aggregate("", (current, t) => current + (t.Trim() + " "));
+        var nome = accSplitted.Where((t, i) => i != indexofwebsite.Item1.Value)
+            .Aggregate("", (current, t) => current + t.Trim() + " ");
 
         var url = "";
         if (indexofwebsite.Item2.Value == 0)
@@ -1743,14 +1732,13 @@ public partial class MainForm : Form
                 Id = url.Trim()
             };
             g2.RicreaId();
-            var ce_gia2 = VediSeCeGiaDaUrl(url);
-            if (ce_gia2 != false) return false;
+            var ceGia2 = VediSeCeGiaDaUrl(url);
+            if (ceGia2) return false;
             lastAdded ??= new List<string>();
 
             lastAdded.Add(g2.NomeCorso);
             Variabili.L.Add(g2, false);
             return true;
-
         }
 
         if (string.IsNullOrEmpty(nome) || string.IsNullOrEmpty(url))
@@ -1771,7 +1759,6 @@ public partial class MainForm : Form
         lastAdded.Add(g.NomeCorso);
         Variabili.L.Add(g, false);
         return true;
-
     }
 
     private static bool VediSeCeGiaDaUrl(string url)
@@ -1985,7 +1972,7 @@ public partial class MainForm : Form
 
         ;
 
-        if (v3[0].StartsWith("'")) v3[0] = v3[0].Substring(1);
+        if (v3[0].StartsWith("'")) v3[0] = v3[0][1..];
 
         var anno = Convert.ToInt32(v3[0]);
         var mese = Convert.ToInt32(v3[1]);
@@ -2006,7 +1993,7 @@ public partial class MainForm : Form
                 minuto,
                 secondo,
                 millisec);
-        
+
         if (v4[1][v4[1].Length - 1] == '\'') v4[1] = v4[1].Remove(v4[1].Length - 1);
 
         if (v4[1].Length > 3) v4[1] = v4[1].Substring(0, 3);
