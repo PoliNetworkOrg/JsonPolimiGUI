@@ -69,7 +69,7 @@ public partial class AggiungiForm : Form
             Close();
     }
 
-    private int? ToInt(string text)
+    private static int? ToInt(string text)
     {
         if (string.IsNullOrEmpty(text))
             return null;

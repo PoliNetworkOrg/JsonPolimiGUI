@@ -254,11 +254,11 @@ public partial class MainForm : Form
     private void Button2_Click(object sender, EventArgs e)
     {
         Aggiusta();
-        var generaTabellaHTML = new GeneraTabellaHTML();
-        generaTabellaHTML.Show();
+        var generaTabellaHtml = new GeneraTabellaHTML();
+        generaTabellaHtml.Show();
     }
 
-    private void Aggiusta()
+    private static void Aggiusta()
     {
         if (Variabili.L == null)
             return;
@@ -268,12 +268,12 @@ public partial class MainForm : Form
         foreach (var i in list) i.Aggiusta(true, true);
     }
 
-    private void Button3_Click(CheckGruppo.E i, bool entrambi_index)
+    private static void Button3_Click(CheckGruppo.E i, bool entrambiIndex)
     {
-        Salva_Generico(new CheckGruppo(i), entrambi_index);
+        Salva_Generico(new CheckGruppo(i), entrambiIndex);
     }
 
-    private void Salva_Generico(CheckGruppo v, bool entrambi_index)
+    private static void Salva_Generico(CheckGruppo v, bool entrambiIndex)
     {
         if (Variabili.L == null)
         {
@@ -281,7 +281,7 @@ public partial class MainForm : Form
             return;
         }
 
-        var json = JsonBuilder.GetJson(v, entrambi_index);
+        var json = JsonBuilder.GetJson(v, entrambiIndex);
 
         Salva(json);
     }
@@ -705,7 +705,7 @@ public partial class MainForm : Form
         return GetGruppiFromDocument2(L2, pLAT2);
     }
 
-    private List<HtmlNode> GetTables(HtmlNodeCollection childNodes)
+    private static List<HtmlNode> GetTables(HtmlNodeCollection childNodes)
     {
         var L = new List<HtmlNode>();
         var L2 = new List<HtmlNode>();
@@ -809,7 +809,7 @@ public partial class MainForm : Form
                 {
                     var s3 = htmlNode.InnerHtml.Trim().Split('<');
                     var s4 = s3[0].Trim();
-                    var s5 = s4.Substring(5).Trim();
+                    var s5 = s4[5..].Trim();
                     parametriCondivisi.pianostudi2 = s5;
                     return null; //sicuro
                 }
@@ -1259,7 +1259,7 @@ public partial class MainForm : Form
                     foreach (var s3 in s2)
                     {
                         var s4 = s3;
-                        if (s3.StartsWith("br>")) s4 = s3.Substring(3);
+                        if (s3.StartsWith("br>")) s4 = s3[3..];
 
                         sottopezzi2.Add(new InfoParteDiGruppo(s4));
                     }
@@ -1281,7 +1281,7 @@ public partial class MainForm : Form
                     foreach (var s3 in s2)
                     {
                         var s4 = s3;
-                        if (s3.StartsWith("br>")) s4 = s3.Substring(3);
+                        if (s3.StartsWith("br>")) s4 = s3[3..];
 
                         sottopezzi2.Add(new InfoParteDiGruppo(s4));
                     }
@@ -1299,7 +1299,7 @@ public partial class MainForm : Form
                     foreach (var s3 in s2)
                     {
                         var s4 = s3;
-                        if (s3.StartsWith("br>")) s4 = s3.Substring(3);
+                        if (s3.StartsWith("br>")) s4 = s3[3..];
 
                         sottopezzi2.Add(new InfoParteDiGruppo(s4));
                     }
@@ -1333,7 +1333,7 @@ public partial class MainForm : Form
                     foreach (var s3 in s2)
                     {
                         var s4 = s3;
-                        if (s3.StartsWith("br>")) s4 = s3.Substring(3);
+                        if (s3.StartsWith("br>")) s4 = s3[3..];
 
                         sottopezzi2.Add(new InfoParteDiGruppo(s4));
                     }
@@ -1365,7 +1365,7 @@ public partial class MainForm : Form
                     foreach (var s3 in s2)
                     {
                         var s4 = s3;
-                        if (s3.StartsWith("br>")) s4 = s3.Substring(3);
+                        if (s3.StartsWith("br>")) s4 = s3[3..];
 
                         sottopezzi2.Add(new InfoParteDiGruppo(s4));
                     }
@@ -1748,7 +1748,7 @@ public partial class MainForm : Form
         return Variabili.L.VediSeCeGiaDaURL(url);
     }
 
-    private Tuple<int?, int?> ControllaSeCeUnSito(List<string> acc)
+    private static Tuple<int?, int?> ControllaSeCeUnSito(IReadOnlyList<string> acc)
     {
         if (acc == null)
             return null;
@@ -1847,7 +1847,7 @@ public partial class MainForm : Form
 
         ;
 
-        var lastSemiColomn = s4.LastIndexOf(";");
+        var lastSemiColomn = s4.LastIndexOf(";", StringComparison.Ordinal);
         if (lastSemiColomn < 0 || lastSemiColomn >= s4.Length)
             return;
 
@@ -1898,14 +1898,14 @@ public partial class MainForm : Form
             ImportaSql6(s6, idInRam.Value);
     }
 
-    private void ImportaSql6(string[] s6, int groupId)
+    private void ImportaSql6(IReadOnlyList<string> s6, int groupId)
     {
         var g = OttieniGruppoSql(s6);
 
         Variabili.L.AddAndMerge(g, groupId);
     }
 
-    private void ImportaSql5(string[] s6)
+    private void ImportaSql5(IReadOnlyList<string> s6)
     {
         ;
 
@@ -1915,7 +1915,7 @@ public partial class MainForm : Form
         Variabili.L.Add(g, false);
     }
 
-    private Gruppo OttieniGruppoSql(IReadOnlyList<string> s6)
+    private static Gruppo OttieniGruppoSql(IReadOnlyList<string> s6)
     {
         var s7 = s6[3].Split('/');
 
@@ -1978,7 +1978,7 @@ public partial class MainForm : Form
 
         if (v4[1][v4[1].Length - 1] == '\'') v4[1] = v4[1].Remove(v4[1].Length - 1);
 
-        if (v4[1].Length > 3) v4[1] = v4[1].Substring(0, 3);
+        if (v4[1].Length > 3) v4[1] = v4[1][..3];
 
         millisec = Convert.ToInt32(v4[1]);
 
