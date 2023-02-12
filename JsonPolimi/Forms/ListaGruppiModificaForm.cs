@@ -82,14 +82,10 @@ public partial class ListaGruppiModificaForm : Form
 
             if (combobox_linkvalido > 0)
             {
-                if (combobox_linkvalido == 1)
+                switch (combobox_linkvalido)
                 {
-                    if (variable.LinkFunzionante == null || variable.LinkFunzionante.Value == false)
-                        continue;
-                }
-                else if (combobox_linkvalido == 2)
-                {
-                    if (variable.LinkFunzionante != null && variable.LinkFunzionante.Value)
+                    case 1 when variable.LinkFunzionante == null || variable.LinkFunzionante.Value == false:
+                    case 2 when variable.LinkFunzionante != null && variable.LinkFunzionante.Value:
                         continue;
                 }
             }
@@ -154,13 +150,11 @@ public partial class ListaGruppiModificaForm : Form
         }
 
         var dialogResult = MessageBox.Show("Vuoi eliminare il gruppo? Sicuro?", "Sicuro?", MessageBoxButtons.YesNo);
-        if (dialogResult == DialogResult.Yes)
-        {
-            var g = (Riga)listBox1.Items[listBox1.SelectedIndex];
-            Variabili.L.Remove(g.I);
-            MessageBox.Show("Eliminato!");
-            Filtra2();
-        }
+        if (dialogResult != DialogResult.Yes) return;
+        var g = (Riga)listBox1.Items[listBox1.SelectedIndex];
+        Variabili.L.Remove(g.I);
+        MessageBox.Show("Eliminato!");
+        Filtra2();
     }
 
     private void Filtra2()

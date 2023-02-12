@@ -236,10 +236,13 @@ public partial class MainForm : Form
         try
         {
             var s = jTokens.ToString();
-            if (s == "Y")
-                return true;
-            if (s == "N")
-                return false;
+            switch (s)
+            {
+                case "Y":
+                    return true;
+                case "N":
+                    return false;
+            }
         }
         catch
         {
@@ -310,8 +313,7 @@ public partial class MainForm : Form
 
     private void Button5_Click(object sender, EventArgs e)
     {
-        if (Variabili.L == null)
-            Variabili.L = new ListaGruppo();
+        Variabili.L ??= new ListaGruppo();
 
         var o = new OpenFileDialog();
         var r = o.ShowDialog();
@@ -431,7 +433,7 @@ public partial class MainForm : Form
 
     private void Button7_Click(object sender, EventArgs e)
     {
-        if (Variabili.L == null) Variabili.L = new ListaGruppo();
+        Variabili.L ??= new ListaGruppo();
 
         if (Variabili.L.GetCount() <= 0)
         {
@@ -451,32 +453,22 @@ public partial class MainForm : Form
     {
         LoadGruppi();
 
-        if (FileSalvare == null)
-            FileSalvare = new FileSalvare();
+        FileSalvare ??= new FileSalvare();
 
-        if (Variabili.L == null)
-            Variabili.L = new ListaGruppo();
+        Variabili.L ??= new ListaGruppo();
 
         var n2 = Variabili.L.GetCount();
 
-        foreach (var r in FileSalvare.Gruppi)
+        foreach (var g in from r in FileSalvare.Gruppi where r.Chat.Type != ChatType.Private where r.we_are_admin != false select new Gruppo
+                 {
+                     Classe = r.Chat.Title,
+                     PermanentId = r.Chat.Id.ToString(),
+                     Platform = "TG",
+                     IdLink = TelegramLinkLastPart(r.Chat.InviteLink),
+                     Tipo = "C",
+                     LastUpdateInviteLinkTime = r.LastUpdateInviteLinkTime
+                 })
         {
-            if (r.Chat.Type == ChatType.Private)
-                continue;
-
-            if (r.we_are_admin == false)
-                continue;
-
-            var g = new Gruppo
-            {
-                Classe = r.Chat.Title,
-                PermanentId = r.Chat.Id.ToString(),
-                Platform = "TG",
-                IdLink = TelegramLinkLastPart(r.Chat.InviteLink),
-                Tipo = "C",
-                LastUpdateInviteLinkTime = r.LastUpdateInviteLinkTime
-            };
-
             g.Aggiusta(true, true);
             Variabili.L.Add(g, n2 != 0);
         }
@@ -495,37 +487,33 @@ public partial class MainForm : Form
 
     public static void BinarySerializeObject(string path, object obj)
     {
-        using (var streamWriter = new StreamWriter(path))
+        using var streamWriter = new StreamWriter(path);
+        var binaryFormatter = new BinaryFormatter();
+        try
         {
-            var binaryFormatter = new BinaryFormatter();
-            try
-            {
-                binaryFormatter.Serialize(streamWriter.BaseStream, obj);
-            }
-            catch (SerializationException ex)
-            {
-                throw new SerializationException(ex + "\n" + ex.Source);
-            }
+            binaryFormatter.Serialize(streamWriter.BaseStream, obj);
+        }
+        catch (SerializationException ex)
+        {
+            throw new SerializationException(ex + "\n" + ex.Source);
         }
     }
 
     public static object BinaryDeserializeObject(string path)
     {
-        using (var streamReader = new StreamReader(path))
+        using var streamReader = new StreamReader(path);
+        var binaryFormatter = new BinaryFormatter();
+        object obj;
+        try
         {
-            var binaryFormatter = new BinaryFormatter();
-            object obj;
-            try
-            {
-                obj = binaryFormatter.Deserialize(streamReader.BaseStream);
-            }
-            catch (SerializationException ex)
-            {
-                throw new SerializationException(ex + "\n" + ex.Source);
-            }
-
-            return obj;
+            obj = binaryFormatter.Deserialize(streamReader.BaseStream);
         }
+        catch (SerializationException ex)
+        {
+            throw new SerializationException(ex + "\n" + ex.Source);
+        }
+
+        return obj;
     }
 
     public static void LoadGruppi()
@@ -734,20 +722,16 @@ public partial class MainForm : Form
         return L2;
     }
 
-    private List<Tuple<Gruppo>> GetGruppiFromDocument2(List<HtmlNode> l2, string pLAT2)
+    private static List<Tuple<Gruppo>> GetGruppiFromDocument2(IEnumerable<HtmlNode> l2, string pLat2)
     {
-        var LG = new List<Tuple<Gruppo>>();
-        foreach (var x in l2)
-        {
-            var x2 = GetGruppiFromDocument3(x, pLAT2);
-            if (x2 != null)
-            {
-                var x3 = x2.Classe.Trim();
-                if (!string.IsNullOrEmpty(x3)) LG.Add(new Tuple<Gruppo>(x2));
-            }
-        }
-
-        return LG;
+        return (
+                from x in l2 
+                select GetGruppiFromDocument3(x, pLat2) into x2 
+                where x2 != null 
+                let x3 = x2.Classe.Trim() 
+                where !string.IsNullOrEmpty(x3) 
+                select new Tuple<Gruppo>(x2)
+            ).ToList();
     }
 
     private static Gruppo GetGruppiFromDocument3(HtmlNode x, string pLat2)
@@ -852,58 +836,64 @@ public partial class MainForm : Form
                         var s2 = htmlNode.ChildNodes[2].InnerHtml.Trim();
                         if (string.IsNullOrEmpty(s1) && string.IsNullOrEmpty(s2))
                         {
-                            if (htmlNode.ChildNodes[1].Name == "div")
+                            switch (htmlNode.ChildNodes[1].Name)
                             {
-                                var x1 = htmlNode.ChildNodes[1];
-                                if (x1.ChildNodes.Count == 1)
+                                case "div":
                                 {
-                                    if (x1.ChildNodes[0].Name == "#text")
-                                        return new InfoParteDiGruppo(x1.ChildNodes[0].InnerHtml.Trim());
-                                    ;
-                                }
-                                else
-                                {
-                                    ;
-                                }
-                            }
-                            else if (htmlNode.ChildNodes[1].Name == "a")
-                            {
-                                var x1 = htmlNode.ChildNodes[1];
-                                if (x1.ChildNodes.Count == 3)
-                                {
-                                    if (x1.ChildNodes[0].Name == "#text" &&
-                                        x1.ChildNodes[1].Name != "#text" &&
-                                        x1.ChildNodes[2].Name == "#text")
+                                    var x1 = htmlNode.ChildNodes[1];
+                                    if (x1.ChildNodes.Count == 1)
                                     {
-                                        if (x1.ChildNodes[1].Name == "img")
-                                        {
-                                            var immagine2 = new ImmagineGruppo(x1.ChildNodes[1]);
-                                            return new InfoParteDiGruppo(immagine2);
-                                        }
-
+                                        if (x1.ChildNodes[0].Name == "#text")
+                                            return new InfoParteDiGruppo(x1.ChildNodes[0].InnerHtml.Trim());
                                         ;
                                     }
                                     else
                                     {
                                         ;
                                     }
+
+                                    break;
                                 }
-                                else
+                                case "a":
                                 {
-                                    var s = htmlNode.InnerHtml.Trim();
-                                    if (string.IsNullOrEmpty(s))
-                                        return null;
-                                    return new InfoParteDiGruppo(
-                                        new LinkGruppo(
-                                            htmlNode.ChildNodes[1].Attributes,
-                                            htmlNode.ChildNodes[1].InnerHtml.Trim()
-                                        )
-                                    );
+                                    var x1 = htmlNode.ChildNodes[1];
+                                    if (x1.ChildNodes.Count == 3)
+                                    {
+                                        if (x1.ChildNodes[0].Name == "#text" &&
+                                            x1.ChildNodes[1].Name != "#text" &&
+                                            x1.ChildNodes[2].Name == "#text")
+                                        {
+                                            if (x1.ChildNodes[1].Name == "img")
+                                            {
+                                                var immagine2 = new ImmagineGruppo(x1.ChildNodes[1]);
+                                                return new InfoParteDiGruppo(immagine2);
+                                            }
+
+                                            ;
+                                        }
+                                        else
+                                        {
+                                            ;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var s = htmlNode.InnerHtml.Trim();
+                                        if (string.IsNullOrEmpty(s))
+                                            return null;
+                                        return new InfoParteDiGruppo(
+                                            new LinkGruppo(
+                                                htmlNode.ChildNodes[1].Attributes,
+                                                htmlNode.ChildNodes[1].InnerHtml.Trim()
+                                            )
+                                        );
+                                    }
+
+                                    break;
                                 }
-                            }
-                            else
-                            {
-                                ;
+                                default:
+                                    ;
+                                    break;
                             }
                         }
                         else
@@ -1415,12 +1405,7 @@ public partial class MainForm : Form
 
         ;
 
-        foreach (var x3 in x1.ChildNodes)
-            if (x3.Name == "option")
-                if (x3.Attributes.Any(x4 => x4.Name == "selected" && x4.Value == "selected"))
-                    return new Tuple<bool, string>(true, x3.InnerHtml.Trim());
-
-        return null;
+        return (from x3 in x1.ChildNodes where x3.Name == "option" where x3.Attributes.Any(x4 => x4.Name == "selected" && x4.Value == "selected") select new Tuple<bool, string>(true, x3.InnerHtml.Trim())).FirstOrDefault();
     }
 
 #pragma warning disable IDE0051 // Rimuovi i membri privati inutilizzati
