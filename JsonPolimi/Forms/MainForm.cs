@@ -622,7 +622,7 @@ public partial class MainForm : Form
         Importa4(x1, Chiedi.SI);
     }
 
-    private static void Importa4(List<Tuple<Gruppo>> x1, Chiedi sI)
+    private static void Importa4(IReadOnlyList<Tuple<Gruppo>> x1, Chiedi sI)
     {
         var r2 = Variabili.L.Importa(x1, false, sI);
         for (var i = 0; i < r2.Count; i++)
@@ -662,17 +662,17 @@ public partial class MainForm : Form
         }
     }
 
-    private List<Tuple<Gruppo>> LoadManifesto(HtmlDocument doc, string PLAT2)
+    private static List<Tuple<Gruppo>> LoadManifesto(HtmlDocument doc, string plat2)
     {
         parametriCondivisi.infoManifesto = new InfoManifesto();
         parametriCondivisi.anno = null;
         parametriCondivisi.pianostudi2 = null;
 
-        var L2 = GetGruppiFromDocument(doc, PLAT2);
+        var l2 = GetGruppiFromDocument(doc, plat2);
 
         if (string.IsNullOrEmpty(parametriCondivisi.pianostudi2) || parametriCondivisi.pianostudi2.Length < 5) ;
 
-        foreach (var t in L2)
+        foreach (var t in l2)
         {
             t.Item1.AggiungiInfoDaManifesto(parametriCondivisi.infoManifesto);
             t.Item1.CCS = new ListaStringhePerJSON(parametriCondivisi.infoManifesto.Corso_di_studio);
@@ -680,7 +680,7 @@ public partial class MainForm : Form
             t.Item1.PianoDiStudi = parametriCondivisi.pianostudi2;
         }
 
-        return L2;
+        return l2;
     }
 
     private static List<Tuple<Gruppo>> GetGruppiFromDocument(HtmlDocument doc, string pLAT2)
@@ -1888,7 +1888,7 @@ public partial class MainForm : Form
         ImportaSql4(s7.ToArray());
     }
 
-    private void ImportaSql4(IReadOnlyList<string> s6)
+    private static void ImportaSql4(IReadOnlyList<string> s6)
     {
         var id = Convert.ToInt64(s6[0][1..].Trim());
         var idInRam = FindInRamSql(id);
