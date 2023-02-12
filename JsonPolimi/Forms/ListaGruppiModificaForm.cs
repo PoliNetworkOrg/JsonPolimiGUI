@@ -81,14 +81,12 @@ public partial class ListaGruppiModificaForm : Form
                 variable.Platform.ToUpper() != comboBox1.Items[selectedIndex].ToString()) continue;
 
             if (combobox_linkvalido > 0)
-            {
                 switch (combobox_linkvalido)
                 {
                     case 1 when variable.LinkFunzionante == null || variable.LinkFunzionante.Value == false:
                     case 2 when variable.LinkFunzionante != null && variable.LinkFunzionante.Value:
                         continue;
                 }
-            }
 
             var anno2 = variable.Year ?? "";
 

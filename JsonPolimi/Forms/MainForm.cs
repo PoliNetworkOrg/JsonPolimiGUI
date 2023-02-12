@@ -459,7 +459,10 @@ public partial class MainForm : Form
 
         var n2 = Variabili.L.GetCount();
 
-        foreach (var g in from r in FileSalvare.Gruppi where r.Chat.Type != ChatType.Private where r.we_are_admin != false select new Gruppo
+        foreach (var g in from r in FileSalvare.Gruppi
+                 where r.Chat.Type != ChatType.Private
+                 where r.we_are_admin != false
+                 select new Gruppo
                  {
                      Classe = r.Chat.Title,
                      PermanentId = r.Chat.Id.ToString(),
@@ -725,13 +728,14 @@ public partial class MainForm : Form
     private static List<Tuple<Gruppo>> GetGruppiFromDocument2(IEnumerable<HtmlNode> l2, string pLat2)
     {
         return (
-                from x in l2 
-                select GetGruppiFromDocument3(x, pLat2) into x2 
-                where x2 != null 
-                let x3 = x2.Classe.Trim() 
-                where !string.IsNullOrEmpty(x3) 
-                select new Tuple<Gruppo>(x2)
-            ).ToList();
+            from x in l2
+            select GetGruppiFromDocument3(x, pLat2)
+            into x2
+            where x2 != null
+            let x3 = x2.Classe.Trim()
+            where !string.IsNullOrEmpty(x3)
+            select new Tuple<Gruppo>(x2)
+        ).ToList();
     }
 
     private static Gruppo GetGruppiFromDocument3(HtmlNode x, string pLat2)
@@ -1405,7 +1409,10 @@ public partial class MainForm : Form
 
         ;
 
-        return (from x3 in x1.ChildNodes where x3.Name == "option" where x3.Attributes.Any(x4 => x4.Name == "selected" && x4.Value == "selected") select new Tuple<bool, string>(true, x3.InnerHtml.Trim())).FirstOrDefault();
+        return (from x3 in x1.ChildNodes
+            where x3.Name == "option"
+            where x3.Attributes.Any(x4 => x4.Name == "selected" && x4.Value == "selected")
+            select new Tuple<bool, string>(true, x3.InnerHtml.Trim())).FirstOrDefault();
     }
 
 #pragma warning disable IDE0051 // Rimuovi i membri privati inutilizzati
