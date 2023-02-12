@@ -112,19 +112,13 @@ public partial class AggiungiForm : Form
         button1.Text = "Modifica";
     }
 
-    private string ToText(int? annoCorsoStudio)
+    private static string ToText(int? annoCorsoStudio)
     {
-        if (annoCorsoStudio == null)
-            return "";
-
-        return annoCorsoStudio.Value.ToString();
+        return annoCorsoStudio == null ? "" : annoCorsoStudio.Value.ToString();
     }
 
-    private string StringCheckNull(ListaStringhePerJSON office)
+    private static string StringCheckNull(ListaStringhePerJSON office)
     {
-        if (office == null)
-            return null;
-
-        return office.StringNotNull();
+        return office?.StringNotNull();
     }
 }

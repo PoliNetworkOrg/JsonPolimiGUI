@@ -1713,26 +1713,17 @@ public partial class MainForm : Form
         if (string.IsNullOrEmpty(acc))
             return false;
 
-        List<string> acc_splitted;
-        if (acc.Contains(' ') == false)
-            acc_splitted = new List<string> { acc };
-        else
-            acc_splitted = acc.Split(' ').ToList();
+        var accSplitted = acc.Contains(' ') == false ? new List<string> { acc } : acc.Split(' ').ToList();
 
-        var indexofwebsite = ControllaSeCeUnSito(acc_splitted);
-        if (indexofwebsite == null || indexofwebsite.Item1 == null || indexofwebsite.Item2 == null)
+        var indexofwebsite = ControllaSeCeUnSito(accSplitted);
+        if (indexofwebsite?.Item1 == null || indexofwebsite.Item2 == null)
             return false;
 
-        var nome = "";
-        for (var i = 0; i < acc_splitted.Count; i++)
-            if (i != indexofwebsite.Item1.Value)
-                nome += acc_splitted[i].Trim() + " ";
+        var nome = accSplitted.Where((t, i) => i != indexofwebsite.Item1.Value).Aggregate("", (current, t) => current + (t.Trim() + " "));
 
         var url = "";
         if (indexofwebsite.Item2.Value == 0)
-            url = acc_splitted[indexofwebsite.Item1.Value];
-        else
-            ;
+            url = accSplitted[indexofwebsite.Item1.Value];
 
         return AggiungiTesto(nome, url, false);
     }
@@ -1740,10 +1731,10 @@ public partial class MainForm : Form
     private bool AggiungiTesto(string nome, string url, bool gruppoAdded)
     {
         var r2 = ControllaSeCeUnSito2(url);
-        if (r2 == null || r2 != 0)
+        if (r2 is not 0)
             return false;
 
-        if (gruppoAdded && lastAdded != null && lastAdded.Count > 0)
+        if (gruppoAdded && lastAdded is { Count: > 0 })
         {
             var g2 = new Gruppo
             {
@@ -1752,18 +1743,14 @@ public partial class MainForm : Form
                 Id = url.Trim()
             };
             g2.RicreaId();
-            var ce_gia2 = VediSeCeGiaDaURL(url);
-            if (ce_gia2 == false)
-            {
-                if (lastAdded == null)
-                    lastAdded = new List<string>();
+            var ce_gia2 = VediSeCeGiaDaUrl(url);
+            if (ce_gia2 != false) return false;
+            lastAdded ??= new List<string>();
 
-                lastAdded.Add(g2.NomeCorso);
-                Variabili.L.Add(g2, false);
-                return true;
-            }
+            lastAdded.Add(g2.NomeCorso);
+            Variabili.L.Add(g2, false);
+            return true;
 
-            return false;
         }
 
         if (string.IsNullOrEmpty(nome) || string.IsNullOrEmpty(url))
@@ -1777,21 +1764,17 @@ public partial class MainForm : Form
         };
         g.RicreaId();
 
-        var ce_gia = VediSeCeGiaDaURL(url);
-        if (ce_gia == false)
-        {
-            if (lastAdded == null)
-                lastAdded = new List<string>();
+        var ceGia = VediSeCeGiaDaUrl(url);
+        if (ceGia) return false;
+        lastAdded ??= new List<string>();
 
-            lastAdded.Add(g.NomeCorso);
-            Variabili.L.Add(g, false);
-            return true;
-        }
+        lastAdded.Add(g.NomeCorso);
+        Variabili.L.Add(g, false);
+        return true;
 
-        return false;
     }
 
-    private bool VediSeCeGiaDaURL(string url)
+    private static bool VediSeCeGiaDaUrl(string url)
     {
         return Variabili.L.VediSeCeGiaDaURL(url);
     }
@@ -1811,7 +1794,7 @@ public partial class MainForm : Form
         return null;
     }
 
-    private int? ControllaSeCeUnSito2(string v)
+    private static int? ControllaSeCeUnSito2(string v)
     {
         var result = Uri.TryCreate(v, UriKind.Absolute, out var uriResult)
                      && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
@@ -1832,8 +1815,7 @@ public partial class MainForm : Form
 
     private void Button10_Click_1(object sender, EventArgs e)
     {
-        if (Variabili.L == null)
-            Variabili.L = new ListaGruppo();
+        Variabili.L ??= new ListaGruppo();
 
         var openFileDialog = new OpenFileDialog();
         var r = openFileDialog.ShowDialog();
@@ -1843,7 +1825,7 @@ public partial class MainForm : Form
 
         try
         {
-            ImportaSQL(read);
+            ImportaSql(read);
         }
         catch
         {
@@ -1851,7 +1833,7 @@ public partial class MainForm : Form
         }
     }
 
-    private void ImportaSQL(string read)
+    private void ImportaSql(string read)
     {
         var s = read.Split(new[] { "INSERT INTO \"Groups\" " }, StringSplitOptions.None);
 
@@ -1860,7 +1842,7 @@ public partial class MainForm : Form
         foreach (var s2 in s)
             try
             {
-                ImportaSQL2(s2);
+                ImportaSql2(s2);
             }
 #pragma warning disable IDE0059
             // Assegnazione non necessaria di un valore
@@ -1876,7 +1858,7 @@ public partial class MainForm : Form
             }
     }
 
-    private void ImportaSQL2(string s2)
+    private void ImportaSql2(string s2)
     {
         if (string.IsNullOrEmpty(s2))
             return;
@@ -1900,14 +1882,14 @@ public partial class MainForm : Form
         if (lastSemiColomn < 0 || lastSemiColomn >= s4.Length)
             return;
 
-        var s5 = s4.Substring(0, lastSemiColomn).Trim();
+        var s5 = s4[..lastSemiColomn].Trim();
 
         ;
 
-        ImportaSQL3(s5);
+        ImportaSql3(s5);
     }
 
-    private void ImportaSQL3(string s5)
+    private void ImportaSql3(string s5)
     {
         ;
 
@@ -1917,7 +1899,7 @@ public partial class MainForm : Form
 
         if (s6.Length == 7)
         {
-            ImportaSQL4(s6);
+            ImportaSql4(s6);
             return;
         }
 
@@ -1930,54 +1912,54 @@ public partial class MainForm : Form
 
         var nome = "";
         for (var i = 6; i < s6.Length; i++) nome += s6[i] + ",";
-        if (nome[nome.Length - 1] == ',') nome = nome.Remove(nome.Length - 1);
+        if (nome[^1] == ',') nome = nome.Remove(nome.Length - 1);
 
         s7.Add(nome);
 
-        ImportaSQL4(s7.ToArray());
+        ImportaSql4(s7.ToArray());
     }
 
-    private void ImportaSQL4(string[] s6)
+    private void ImportaSql4(string[] s6)
     {
         var id = Convert.ToInt64(s6[0][1..].Trim());
-        var id_in_ram = FindInRamSQL(id);
-        if (id_in_ram == null)
-            ImportaSQL5(s6);
+        var idInRam = FindInRamSql(id);
+        if (idInRam == null)
+            ImportaSql5(s6);
         else
-            ImportaSQL6(s6, id_in_ram.Value);
+            ImportaSql6(s6, idInRam.Value);
     }
 
-    private void ImportaSQL6(string[] s6, int GroupId)
+    private void ImportaSql6(string[] s6, int groupId)
     {
-        var g = OttieniGruppoSQL(s6);
+        var g = OttieniGruppoSql(s6);
 
-        Variabili.L.AddAndMerge(g, GroupId);
+        Variabili.L.AddAndMerge(g, groupId);
     }
 
-    private void ImportaSQL5(string[] s6)
+    private void ImportaSql5(string[] s6)
     {
         ;
 
-        var g = OttieniGruppoSQL(s6);
+        var g = OttieniGruppoSql(s6);
 
         //this group is not in ram, we have to add it
         Variabili.L.Add(g, false);
     }
 
-    private Gruppo OttieniGruppoSQL(string[] s6)
+    private Gruppo OttieniGruppoSql(IReadOnlyList<string> s6)
     {
         var s7 = s6[3].Split('/');
 
         var g = new Gruppo
         {
-            PermanentId = s6[0].Substring(1).Trim(),
+            PermanentId = s6[0][1..].Trim(),
             Platform = "TG",
-            IdLink = s7[s7.Length - 1].Trim()
+            IdLink = s7[^1].Trim()
         };
 
-        if (g.IdLink[g.IdLink.Length - 1] == '\'') g.IdLink = g.IdLink.Remove(g.IdLink.Length - 1);
+        if (g.IdLink[^1] == '\'') g.IdLink = g.IdLink.Remove(g.IdLink.Length - 1);
         g.Classe = s6[6].Trim();
-        if (g.Classe[g.Classe.Length - 1] == ')') g.Classe = g.Classe.Remove(g.Classe.Length - 1);
+        if (g.Classe[^1] == ')') g.Classe = g.Classe.Remove(g.Classe.Length - 1);
         if (g.Classe[^1] == '\'') g.Classe = g.Classe.Remove(g.Classe.Length - 1);
         if (g.Classe[0] == '\'') g.Classe = g.Classe.Substring(1).Trim();
 
@@ -1990,7 +1972,7 @@ public partial class MainForm : Form
         return g;
     }
 
-    private DateTime? ToDateTime(string v)
+    private static DateTime? ToDateTime(string v)
     {
         var v2 = v.Trim().Split(' ');
 
@@ -2016,14 +1998,20 @@ public partial class MainForm : Form
         var secondo = Convert.ToInt32(v5[2]);
 
         var millisec = 0;
-        if (v4.Length > 1)
-        {
-            if (v4[1][v4[1].Length - 1] == '\'') v4[1] = v4[1].Remove(v4[1].Length - 1);
+        if (v4.Length <= 1)
+            return new DateTime(anno,
+                mese,
+                giorno,
+                ora,
+                minuto,
+                secondo,
+                millisec);
+        
+        if (v4[1][v4[1].Length - 1] == '\'') v4[1] = v4[1].Remove(v4[1].Length - 1);
 
-            if (v4[1].Length > 3) v4[1] = v4[1].Substring(0, 3);
+        if (v4[1].Length > 3) v4[1] = v4[1].Substring(0, 3);
 
-            millisec = Convert.ToInt32(v4[1]);
-        }
+        millisec = Convert.ToInt32(v4[1]);
 
         return new DateTime(anno,
             mese,
@@ -2034,24 +2022,21 @@ public partial class MainForm : Form
             millisec);
     }
 
-    private static int? FindInRamSQL(long id)
+    private static int? FindInRamSql(long id)
     {
-        ;
-
         return Variabili.L.FindInRamSQL(id);
     }
 
     private void Button20_Click(object sender, EventArgs e)
     {
-        if (Variabili.L == null) Variabili.L = new ListaGruppo();
+        Variabili.L ??= new ListaGruppo();
 
         Variabili.L.AggiustaNomiDoppi();
     }
 
     private void Button21_Click(object sender, EventArgs e)
     {
-        if (Variabili.L == null)
-            Variabili.L = new ListaGruppo();
+        Variabili.L ??= new ListaGruppo();
 
         var parameters = new ParametriFunzione();
         parameters.AddParam(true, "laPrimaVoltaControllaDaCapo"); //bool laPrimaVoltaControllaDaCapo
@@ -2068,21 +2053,21 @@ public partial class MainForm : Form
 
     private void Button22_Click(object sender, EventArgs e)
     {
-        if (Variabili.L == null) Variabili.L = new ListaGruppo();
+        Variabili.L ??= new ListaGruppo();
 
         Variabili.L.SalvaTelegramIdDeiGruppiLinkCheNonVanno(textBox1.Text);
     }
 
     private void Button23_Click(object sender, EventArgs e)
     {
-        if (Variabili.L == null) Variabili.L = new ListaGruppo();
+        Variabili.L ??= new ListaGruppo();
 
         Variabili.L.ImportaGruppiDalComandoDelBotTelegram_UpdateLinkFromJson();
     }
 
     private void Button24_Click(object sender, EventArgs e)
     {
-        if (Variabili.L == null) Variabili.L = new ListaGruppo();
+        Variabili.L ??= new ListaGruppo();
 
         Variabili.L.ImportaGruppiDaTabellaTelegramGruppiBot_PuntoBin();
         MessageBox.Show("Gruppi importati dalla tabella telegram del bot!");
@@ -2092,8 +2077,7 @@ public partial class MainForm : Form
     {
         //"Controlla se i link vanno (solo quelli che già non vanno) e flaggali di conseguenza (tutto in ram)"
 
-        if (Variabili.L == null)
-            Variabili.L = new ListaGruppo();
+        Variabili.L ??= new ListaGruppo();
 
         var parameters = new ParametriFunzione();
         parameters.AddParam(false, "laPrimaVoltaControllaDaCapo"); //bool laPrimaVoltaControllaDaCapo
@@ -2109,16 +2093,14 @@ public partial class MainForm : Form
 
     private void Button26_Click(object sender, EventArgs e)
     {
-        if (Variabili.L == null)
-            Variabili.L = new ListaGruppo();
+        Variabili.L ??= new ListaGruppo();
 
         Variabili.L.StampaWhatsapp();
     }
 
     private void Button27_Click(object sender, EventArgs e)
     {
-        if (Variabili.L == null)
-            Variabili.L = new ListaGruppo();
+        Variabili.L ??= new ListaGruppo();
 
         Variabili.L.AggiustaGruppiDoppiIDTelegramUguale();
     }
