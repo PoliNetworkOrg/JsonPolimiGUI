@@ -289,6 +289,7 @@ namespace JsonPolimi.Forms
         private static void Salva(string json)
         {
             var o = new SaveFileDialog();
+            o.Filter = "Json files (*.json)|*.json";
             var r = o.ShowDialog();
             if (r != DialogResult.OK)
             {
