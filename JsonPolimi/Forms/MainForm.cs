@@ -1395,7 +1395,8 @@ public partial class MainForm : Form
             if (x2.Name != "option")
                 ce = false;
 
-            if (x2.InnerHtml is "2019/2020" or "Qualunque sede" or "Scuola di Architettura Urbanistica Ingegneria delle Costruzioni (Arc. Urb. Ing. Cos.)" or "1")
+            if (x2.InnerHtml is "2019/2020" or "Qualunque sede"
+                or "Scuola di Architettura Urbanistica Ingegneria delle Costruzioni (Arc. Urb. Ing. Cos.)" or "1")
                 return new Tuple<bool, string>(false, null);
         }
 
