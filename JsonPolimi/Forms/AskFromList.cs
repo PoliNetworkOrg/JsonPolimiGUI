@@ -2,36 +2,32 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace JsonPolimi.Forms
+namespace JsonPolimi.Forms;
+
+public partial class AskFromList : Form
 {
-    public partial class AskFromList : Form
+    public int? r;
+
+    public AskFromList(List<string> s)
     {
-        public int? r = null;
+        InitializeComponent();
 
-        public AskFromList(List<string> s)
+        foreach (var s2 in s) listBox1.Items.Add(s2);
+    }
+
+    private void AskFromList_Load(object sender, EventArgs e)
+    {
+    }
+
+    private void Button1_Click(object sender, EventArgs e)
+    {
+        if (listBox1.SelectedIndex < 0)
         {
-            InitializeComponent();
-
-            foreach (var s2 in s)
-            {
-                listBox1.Items.Add(s2);
-            }
+            MessageBox.Show("Non hai selezionato nulla!");
+            return;
         }
 
-        private void AskFromList_Load(object sender, EventArgs e)
-        {
-        }
-
-        private void Button1_Click(object sender, EventArgs e)
-        {
-            if (listBox1.SelectedIndex < 0)
-            {
-                MessageBox.Show("Non hai selezionato nulla!");
-                return;
-            }
-
-            this.r = listBox1.SelectedIndex;
-            this.Close();
-        }
+        r = listBox1.SelectedIndex;
+        Close();
     }
 }
