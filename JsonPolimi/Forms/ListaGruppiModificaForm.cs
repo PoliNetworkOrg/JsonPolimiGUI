@@ -51,7 +51,7 @@ public partial class ListaGruppiModificaForm : Form
         Filtra2();
     }
 
-    private void Filtra(string text, int selectedIndex, string anno, int combobox_linkvalido)
+    private void Filtra(string? text, int selectedIndex, string? anno, int combobox_linkvalido)
     {
         listBox1.Items.Clear();
 

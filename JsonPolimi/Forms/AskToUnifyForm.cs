@@ -8,7 +8,7 @@ namespace JsonPolimi.Forms;
 public partial class AskToUnifyForm : Form
 {
     private readonly int count;
-    private readonly Tuple<SomiglianzaClasse, Gruppo> d;
+    private readonly Tuple<SomiglianzaClasse, Gruppo>? d;
     public bool? r;
 
     public AskToUnifyForm()
@@ -16,7 +16,7 @@ public partial class AskToUnifyForm : Form
         InitializeComponent();
     }
 
-    public AskToUnifyForm(Tuple<SomiglianzaClasse, Gruppo> d, int count)
+    public AskToUnifyForm(Tuple<SomiglianzaClasse, Gruppo>? d, int count)
     {
         this.d = d;
         this.count = count;
@@ -25,14 +25,15 @@ public partial class AskToUnifyForm : Form
 
     private void AskToUnifyForm_Load(object sender, EventArgs e)
     {
-        textBox2.Text = d.Item1.a1.Classe;
-        textBox3.Text = d.Item1.a2.Classe;
 
-        textBox1.Text = d.Item1.a1.To_json(CheckGruppo.E.TUTTO);
-        textBox4.Text = d.Item1.a2.To_json(CheckGruppo.E.TUTTO);
+        textBox2.Text = d?.Item1.a1.Classe;
+        textBox3.Text = d?.Item1.a2.Classe;
 
-        linkLabel1.Text = "https://t.me/joinchat/" + d.Item1.a1.IdLink;
-        linkLabel2.Text = "https://t.me/joinchat/" + d.Item1.a2.IdLink;
+        textBox1.Text = d?.Item1.a1.To_json(CheckGruppo.E.TUTTO);
+        textBox4.Text = d?.Item1.a2.To_json(CheckGruppo.E.TUTTO);
+
+        linkLabel1.Text = "https://t.me/joinchat/" + d?.Item1.a1.IdLink;
+        linkLabel2.Text = "https://t.me/joinchat/" + d?.Item1.a2.IdLink;
 
         Text += " n=" + count;
     }

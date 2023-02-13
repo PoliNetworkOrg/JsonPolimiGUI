@@ -20,13 +20,13 @@ namespace JsonPolimi.Forms;
 
 public partial class MainForm : Form
 {
-    private static FileSalvare FileSalvare;
+    private static FileSalvare? FileSalvare;
 
-    private static ParametriCondivisi parametriCondivisi;
+    private static ParametriCondivisi? parametriCondivisi;
 
-    private List<string> lastAdded;
+    private List<string>? lastAdded;
 
-    public MainForm(ParametriCondivisi parametriCondivisiParam)
+    public MainForm(ParametriCondivisi? parametriCondivisiParam)
     {
         parametriCondivisi = parametriCondivisiParam;
         InitializeComponent();
@@ -68,20 +68,21 @@ public partial class MainForm : Form
         var infoData = stuff["info_data"];
         var count = 0;
 
-        JEnumerable<JToken> i;
+        JEnumerable<JToken>? i;
         if (infoData == null)
         {
             ;
             var i4 = stuff.First;
             ;
-            var i5 = i4.First;
+            var i5 = i4?.First;
             ;
-            i = i5.Children();
-            foreach (var i2 in i)
-            {
-                Aggiungi(i2, false, false);
-                count++;
-            }
+            i = i5?.Children();
+            if (i != null)
+                foreach (var i2 in i)
+                {
+                    Aggiungi(i2, false, false);
+                    count++;
+                }
         }
         else
         {
@@ -104,39 +105,39 @@ public partial class MainForm : Form
         MessageBox.Show("Finito!");
     }
 
-    private static void Aggiungi(JToken i, bool aggiusta_Anno, bool merge)
+    private static void Aggiungi(JToken? i, bool aggiusta_Anno, bool merge)
     {
         var g = new Gruppo
         {
-            Classe = i["class"].ToString(),
-            Degree = i["degree"].ToString()
+            Classe = i?["class"]?.ToString(),
+            Degree = i?["degree"]?.ToString()
         };
 
         try
         {
             try
             {
-                g.Platform = i["group_type"].ToString();
+                g.Platform = i?["group_type"]?.ToString();
             }
             catch
             {
-                g.Platform = i["platform"].ToString();
+                g.Platform = i?["platform"]?.ToString();
             }
         }
         catch
         {
-            g.Platform = i["platform"].ToString();
+            g.Platform = i?["platform"]?.ToString();
         }
 
-        g.Id = i["id"].ToString();
-        g.Language = i["language"].ToString();
-        g.Office = new ListaStringhePerJSON(i["office"].ToString());
-        g.School = i["school"].ToString();
-        g.IdLink = i["id_link"].ToString();
+        g.Id = i?["id"]?.ToString();
+        g.Language = i?["language"]?.ToString();
+        g.Office = new ListaStringhePerJSON(i?["office"]?.ToString());
+        g.School = i?["school"]?.ToString();
+        g.IdLink = i?["id_link"]?.ToString();
 
         try
         {
-            g.Tipo = i["type"].ToString();
+            g.Tipo = i?["type"]?.ToString();
         }
         catch
         {
@@ -145,7 +146,7 @@ public partial class MainForm : Form
 
         try
         {
-            g.Year = i["year"].ToString();
+            g.Year = i?["year"]?.ToString();
         }
         catch
         {
@@ -154,7 +155,7 @@ public partial class MainForm : Form
 
         try
         {
-            g.PermanentId = i["permanentId"].ToString();
+            g.PermanentId = i?["permanentId"]?.ToString();
         }
         catch
         {
@@ -163,7 +164,7 @@ public partial class MainForm : Form
 
         try
         {
-            g.CCS = new ListaStringhePerJSON(i["ccs"].ToString());
+            g.CCS = new ListaStringhePerJSON(i?["ccs"]?.ToString());
         }
         catch
         {
@@ -172,7 +173,7 @@ public partial class MainForm : Form
 
         try
         {
-            var s = i["annocorso"].ToString();
+            var s = i?["annocorso"]?.ToString();
             if (string.IsNullOrEmpty(s))
                 g.AnnoCorsoStudio = null;
             else
@@ -185,7 +186,7 @@ public partial class MainForm : Form
 
         try
         {
-            g.IDCorsoPolimi = i["idcorso"].ToString();
+            g.IDCorsoPolimi = i?["idcorso"]?.ToString();
         }
         catch
         {
@@ -194,19 +195,19 @@ public partial class MainForm : Form
 
         try
         {
-            g.PianoDiStudi = i["pianostudi"].ToString();
+            g.PianoDiStudi = i?["pianostudi"]?.ToString();
         }
         catch
         {
             g.PianoDiStudi = null;
         }
 
-        object data2 = i["LastUpdateInviteLinkTime"];
+        object? data2 = i?["LastUpdateInviteLinkTime"];
 
-        string data = null;
+        string? data = null;
         try
         {
-            data = data2.ToString();
+            data = data2?.ToString();
         }
         catch
         {
@@ -223,18 +224,18 @@ public partial class MainForm : Form
             throw e;
         }
 
-        g.LinkFunzionante = BoolFromString(i["linkfunzionante"]);
+        g.LinkFunzionante = BoolFromString(i?["linkfunzionante"]);
 
         g.Aggiusta(aggiusta_Anno, false);
 
         Variabili.L.Add(g, merge);
     }
 
-    private static bool? BoolFromString(JToken jTokens)
+    private static bool? BoolFromString(JToken? jTokens)
     {
         try
         {
-            var s = jTokens.ToString();
+            var s = jTokens?.ToString();
             switch (s)
             {
                 case "Y":
@@ -268,12 +269,12 @@ public partial class MainForm : Form
         foreach (var i in list) i.Aggiusta(true, true);
     }
 
-    private static void Button3_Click(CheckGruppo.E i, bool entrambiIndex)
+    private static void Button3_Click(CheckGruppo.E i, bool? entrambiIndex)
     {
         Salva_Generico(new CheckGruppo(i), entrambiIndex);
     }
 
-    private static void Salva_Generico(CheckGruppo v, bool entrambiIndex)
+    private static void Salva_Generico(CheckGruppo v, bool? entrambiIndex)
     {
         if (Variabili.L == null)
         {
@@ -281,7 +282,8 @@ public partial class MainForm : Form
             return;
         }
 
-        var json = JsonBuilder.GetJson(v, entrambiIndex);
+        var index = entrambiIndex ?? false;
+        var json = JsonBuilder.GetJson(v, index);
 
         Salva(json);
     }
@@ -478,12 +480,12 @@ public partial class MainForm : Form
         Variabili.L.Sort();
     }
 
-    private static string TelegramLinkLastPart(string chatInviteLink)
+    private static string? TelegramLinkLastPart(string? chatInviteLink)
     {
         if (string.IsNullOrEmpty(chatInviteLink))
             return null;
 
-        var r = chatInviteLink.Split('/');
+        string?[] r = chatInviteLink.Split('/');
         return r[^1];
     }
 
@@ -528,20 +530,21 @@ public partial class MainForm : Form
             return;
         }
 
-        string content = null;
-        Exception ex = null;
+        string? content = null;
+        Exception? ex = null;
         try
         {
             content = File.ReadAllText(ofd.FileName);
         }
-        catch (Exception e2)
+        catch (Exception? e2)
         {
             ex = e2;
         }
 
         try
         {
-            FileSalvare = JsonConvert.DeserializeObject<FileSalvare>(content);
+            if (content != null) 
+                FileSalvare = JsonConvert.DeserializeObject<FileSalvare?>(content);
         }
         catch
         {
@@ -550,7 +553,7 @@ public partial class MainForm : Form
 
         if (content == null)
         {
-            MessageBox.Show("Lettura fallita! \n\n" + ex.Message);
+            MessageBox.Show("Lettura fallita! \n\n" + ex?.Message);
             return;
         }
 
@@ -570,7 +573,7 @@ public partial class MainForm : Form
         MessageBox.Show("Prova ad unire terminato!");
     }
 
-    private static void Button10_Click(object sender, EventArgs e)
+    private static void Button10_Click(object? sender, EventArgs? e)
     {
         if (Variabili.L == null)
         {
@@ -622,7 +625,7 @@ public partial class MainForm : Form
         Importa4(x1, Chiedi.SI);
     }
 
-    private static void Importa4(IReadOnlyList<Tuple<Gruppo>> x1, Chiedi sI)
+    private static void Importa4(IReadOnlyList<Tuple<Gruppo>>? x1, Chiedi sI)
     {
         var r2 = Variabili.L.Importa(x1, false, sI);
         for (var i = 0; i < r2.Count; i++)
@@ -655,7 +658,7 @@ public partial class MainForm : Form
                         break;
                     }
 
-                    if (importato == false) Variabili.L.Add(x1[i].Item1, false);
+                    if (importato == false) Variabili.L.Add(x1?[i].Item1, false);
                     break;
                 }
             }
@@ -664,6 +667,7 @@ public partial class MainForm : Form
 
     private static List<Tuple<Gruppo>> LoadManifesto(HtmlDocument doc, string plat2)
     {
+        parametriCondivisi ??= new ParametriCondivisi();
         parametriCondivisi.infoManifesto = new InfoManifesto();
         parametriCondivisi.anno = null;
         parametriCondivisi.pianostudi2 = null;
@@ -736,7 +740,7 @@ public partial class MainForm : Form
         ).ToList();
     }
 
-    private static Gruppo GetGruppiFromDocument3(HtmlNode x, string pLat2)
+    private static Gruppo? GetGruppiFromDocument3(HtmlNode x, string pLat2)
     {
         var l = x.ChildNodes.Where(t => t.Name == "td").ToList();
 
@@ -753,7 +757,7 @@ public partial class MainForm : Form
         return htmlNode.ChildNodes.Any(x => x.Name == "table");
     }
 
-    private static InfoParteDiGruppo GetGruppiFromDocument5(HtmlNode htmlNode)
+    private static InfoParteDiGruppo? GetGruppiFromDocument5(HtmlNode htmlNode)
     {
         var contieneTable = Contiene_table2(htmlNode);
         if (contieneTable)
@@ -763,6 +767,7 @@ public partial class MainForm : Form
         var enumerable = classes.ToList();
         var ce = enumerable?.Any(c2 => c2 == "TitleInfoCard");
 
+        parametriCondivisi ??= new ParametriCondivisi();
         if (ce ?? false)
         {
             var s = htmlNode.InnerHtml.Trim();
@@ -788,18 +793,19 @@ public partial class MainForm : Form
                 ;
         }
 
-        var ce2 = enumerable.Count(c2 => c2 is "ElementInfoCard2" or "left");
+        var ce2 = enumerable?.Count(c2 => c2 is "ElementInfoCard2" or "left");
 
         if (ce2 == 2)
         {
             if (htmlNode.ChildNodes.Count > 0)
             {
                 var x1 = htmlNode.ChildNodes[0];
-                ;
+                parametriCondivisi ??= new ParametriCondivisi();
+                
                 if (x1.Name == "select")
                 {
                     var x2 = GetPianoStudi(x1);
-                    if (x2.Item1)
+                    if (x2?.Item1 ?? false)
                     {
                         parametriCondivisi.pianostudi2 = x2.Item2;
                         return null; //sicuro
@@ -1384,10 +1390,10 @@ public partial class MainForm : Form
         return null;
     }
 
-    private static Tuple<bool, string> GetPianoStudi(HtmlNode x1)
+    private static Tuple<bool, string?>? GetPianoStudi(HtmlNode x1)
     {
         if (x1.ChildNodes.Count == 0)
-            return new Tuple<bool, string>(false, null);
+            return new Tuple<bool, string?>(false, null);
 
         var ce = true;
         foreach (var x2 in x1.ChildNodes)
@@ -1397,10 +1403,10 @@ public partial class MainForm : Form
 
             if (x2.InnerHtml is "2019/2020" or "Qualunque sede"
                 or "Scuola di Architettura Urbanistica Ingegneria delle Costruzioni (Arc. Urb. Ing. Cos.)" or "1")
-                return new Tuple<bool, string>(false, null);
+                return new Tuple<bool, string?>(false, null);
         }
 
-        if (!ce) return new Tuple<bool, string>(false, null);
+        if (!ce) return new Tuple<bool, string?>(false, null);
 
         return (from x3 in x1.ChildNodes
             where x3.Name == "option"
@@ -1444,7 +1450,7 @@ public partial class MainForm : Form
 
     private void Button13_Click(object sender, EventArgs e)
     {
-        string[] f = null;
+        string[]? f = null;
         using (var fbd = new FolderBrowserDialog())
         {
             var result = fbd.ShowDialog();
@@ -1471,21 +1477,22 @@ public partial class MainForm : Form
         var r = saveFileDialog.ShowDialog();
         if (r != DialogResult.OK) return;
         var b2 = ObjectToByteArray(l);
-        File.WriteAllBytes(saveFileDialog.FileName, b2);
+        if (b2 != null) 
+            File.WriteAllBytes(saveFileDialog.FileName, b2);
     }
 
-    private static byte[] ObjectToByteArray(object obj)
+    private static byte[]? ObjectToByteArray(object? obj)
     {
         if (obj == null)
             return null;
 
         var bf = new BinaryFormatter();
         using var ms = new MemoryStream();
-        bf.Serialize(ms, obj);
+        bf?.Serialize(ms, obj);
         return ms.ToArray();
     }
 
-    private static T FromByteArray<T>(byte[] data)
+    private static T? FromByteArray<T>(byte[]? data)
     {
         if (data == null)
 #pragma warning disable IDE0034 // Semplifica l'espressione 'default'
@@ -1512,7 +1519,7 @@ public partial class MainForm : Form
 
         Variabili.L ??= new ListaGruppo();
 
-        var l3 = L2.Select(item => new Tuple<Gruppo>(item)).ToList();
+        var l3 = L2?.Select(item => new Tuple<Gruppo>(item)).ToList();
 
         Importa4(l3, chiedi2);
         MessageBox.Show("Fatto!");
@@ -1560,7 +1567,7 @@ public partial class MainForm : Form
         var i = askFromList.r.Value;
 #pragma warning restore CS1690 // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
 
-        bool? entrambi_index = null;
+        bool? entrambiIndex = null;
         switch (i)
         {
             case 0:
@@ -1570,14 +1577,14 @@ public partial class MainForm : Form
             {
                 var dialogResult = MessageBox.Show("Vuoi entrambi gli index (si) o solo uno (no)?", "Scegli",
                     MessageBoxButtons.YesNo);
-                entrambi_index = dialogResult switch
+                entrambiIndex = dialogResult switch
                 {
                     DialogResult.Yes => true,
                     DialogResult.No => false,
                     _ => null
                 };
 
-                if (entrambi_index == null)
+                if (entrambiIndex == null)
                 {
                     MessageBox.Show("Non hai scelto nulla!");
                     return;
@@ -1597,19 +1604,19 @@ public partial class MainForm : Form
 
             case 1:
             {
-                Button3_Click(CheckGruppo.E.VECCHIA_RICERCA, entrambi_index.Value);
+                Button3_Click(CheckGruppo.E.VECCHIA_RICERCA, entrambiIndex);
                 return;
             }
 
             case 2:
             {
-                Button3_Click(CheckGruppo.E.NUOVA_RICERCA, entrambi_index.Value);
+                Button3_Click(CheckGruppo.E.NUOVA_RICERCA, entrambiIndex);
                 return;
             }
 
             case 3:
             {
-                Button3_Click(CheckGruppo.E.TUTTO, entrambi_index.Value);
+                Button3_Click(CheckGruppo.E.TUTTO, entrambiIndex);
                 return;
             }
             case 4:
@@ -1659,7 +1666,7 @@ public partial class MainForm : Form
             if (string.IsNullOrEmpty(acc) && lastAdded is { Count: > 0 })
                 try
                 {
-                    var aggiunto2 = AggiungiTesto("", t.Trim(), true);
+                    var aggiunto2 = AggiungiTesto("", t?.Trim(), true);
                     if (aggiunto2)
                         continue;
                 }
@@ -1699,7 +1706,7 @@ public partial class MainForm : Form
         return AggiungiTesto(nome, url, false);
     }
 
-    private bool AggiungiTesto(string nome, string url, bool gruppoAdded)
+    private bool AggiungiTesto(string nome, string? url, bool gruppoAdded)
     {
         var r2 = ControllaSeCeUnSito2(url);
         if (r2 is not 0)
@@ -1710,8 +1717,8 @@ public partial class MainForm : Form
             var g2 = new Gruppo
             {
                 NomeCorso = lastAdded[^1].Trim(),
-                IdLink = url.Trim(),
-                Id = url.Trim()
+                IdLink = url?.Trim(),
+                Id = url?.Trim()
             };
             g2.RicreaId();
             var ceGia2 = VediSeCeGiaDaUrl(url);
@@ -1743,12 +1750,12 @@ public partial class MainForm : Form
         return true;
     }
 
-    private static bool VediSeCeGiaDaUrl(string url)
+    private static bool VediSeCeGiaDaUrl(string? url)
     {
         return Variabili.L.VediSeCeGiaDaURL(url);
     }
 
-    private static Tuple<int?, int?> ControllaSeCeUnSito(IReadOnlyList<string> acc)
+    private static Tuple<int?, int?>? ControllaSeCeUnSito(IReadOnlyList<string>? acc)
     {
         if (acc == null)
             return null;
@@ -1763,8 +1770,11 @@ public partial class MainForm : Form
         return null;
     }
 
-    private static int? ControllaSeCeUnSito2(string v)
+    private static int? ControllaSeCeUnSito2(string? v)
     {
+        if (string.IsNullOrEmpty(v))
+            return null;
+        
         var result = Uri.TryCreate(v, UriKind.Absolute, out var uriResult)
                      && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
 

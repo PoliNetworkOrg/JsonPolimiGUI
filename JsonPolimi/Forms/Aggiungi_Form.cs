@@ -7,10 +7,10 @@ namespace JsonPolimi.Forms;
 
 public partial class AggiungiForm : Form
 {
-    public static Gruppo g;
+    public static Gruppo? g;
     private readonly bool _edit;
 
-    public AggiungiForm(bool edit, Gruppo g2 = null)
+    public AggiungiForm(bool edit, Gruppo? g2 = null)
     {
         _edit = edit;
         g = g2;
@@ -116,7 +116,7 @@ public partial class AggiungiForm : Form
         return annoCorsoStudio == null ? "" : annoCorsoStudio.Value.ToString();
     }
 
-    private static string StringCheckNull(ListaStringhePerJSON office)
+    private static string? StringCheckNull(ListaStringhePerJSON office)
     {
         return office?.StringNotNull();
     }
