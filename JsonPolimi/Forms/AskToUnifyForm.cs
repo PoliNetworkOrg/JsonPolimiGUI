@@ -26,14 +26,14 @@ public partial class AskToUnifyForm : Form
     private void AskToUnifyForm_Load(object sender, EventArgs e)
     {
 
-        textBox2.Text = d?.Item1.a1.Classe;
-        textBox3.Text = d?.Item1.a2.Classe;
+        textBox2.Text = d?.Item1.a1?.Classe;
+        textBox3.Text = d?.Item1.a2?.Classe;
 
-        textBox1.Text = d?.Item1.a1.To_json(CheckGruppo.E.TUTTO);
-        textBox4.Text = d?.Item1.a2.To_json(CheckGruppo.E.TUTTO);
+        textBox1.Text = d?.Item1.a1?.To_json(CheckGruppo.E.TUTTO);
+        textBox4.Text = d?.Item1.a2?.To_json(CheckGruppo.E.TUTTO);
 
-        linkLabel1.Text = "https://t.me/joinchat/" + d?.Item1.a1.IdLink;
-        linkLabel2.Text = "https://t.me/joinchat/" + d?.Item1.a2.IdLink;
+        linkLabel1.Text = "https://t.me/joinchat/" + d?.Item1.a1?.IdLink;
+        linkLabel2.Text = "https://t.me/joinchat/" + d?.Item1.a2?.IdLink;
 
         Text += " n=" + count;
     }

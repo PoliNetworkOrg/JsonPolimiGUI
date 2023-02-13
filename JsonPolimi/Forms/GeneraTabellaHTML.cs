@@ -39,7 +39,7 @@ public partial class GeneraTabellaHTML : Form
         for (var i = 0; i < n; i++)
         {
             var elem = Variabili.L.GetElem(i);
-            var html_elem = elem.GetHTML_DataRow(textBox_anno, textBox_piattaforma);
+            var html_elem = elem?.GetHTML_DataRow(textBox_anno, textBox_piattaforma);
             html += html_elem;
 
             if (!string.IsNullOrEmpty(html_elem)) done++;

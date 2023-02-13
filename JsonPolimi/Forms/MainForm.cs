@@ -216,7 +216,7 @@ public partial class MainForm : Form
 
         try
         {
-            g.LastUpdateInviteLinkTime = Dates.DataFromString(data);
+            if (data != null) g.LastUpdateInviteLinkTime = Dates.DataFromString(data);
         }
         catch (Exception e)
         {
@@ -228,7 +228,7 @@ public partial class MainForm : Form
 
         g.Aggiusta(aggiusta_Anno, false);
 
-        Variabili.L.Add(g, merge);
+        Variabili.L?.Add(g, merge);
     }
 
     private static bool? BoolFromString(JToken? jTokens)
@@ -266,7 +266,7 @@ public partial class MainForm : Form
 
         var list = Variabili.L.GetGroups();
 
-        foreach (var i in list) i.Aggiusta(true, true);
+        foreach (var i in list) i?.Aggiusta(true, true);
     }
 
     private static void Button3_Click(CheckGruppo.E i, bool? entrambiIndex)
@@ -289,7 +289,7 @@ public partial class MainForm : Form
     }
 
 
-    private static void Salva(string json)
+    private static void Salva(string? json)
     {
         var o = new SaveFileDialog();
         o.Filter = "Json files (*.json)|*.json";
@@ -397,32 +397,33 @@ public partial class MainForm : Form
 
         var nomeOld = new Gruppo();
 
-        var n2 = Variabili.L.GetCount();
+        var n2 = Variabili.L?.GetCount();
 
-        foreach (var y2 in ods_read)
-        {
-            //Console.WriteLine("----- NUOVA RIGA ------");
+        if (ods_read != null)
+            foreach (var y2 in ods_read)
+            {
+                //Console.WriteLine("----- NUOVA RIGA ------");
 
-            var g = new InsiemeDiGruppi { GruppoDiBase = { Year = year }, NomeOld = nomeOld };
+                var g = new InsiemeDiGruppi { GruppoDiBase = { Year = year }, NomeOld = nomeOld };
 
-            foreach (var y3 in y2) Gruppo.AggiungiInformazioneAmbigua(y3.Trim(), ref g);
+                foreach (var y3 in y2) Gruppo.AggiungiInformazioneAmbigua(y3.Trim(), ref g);
 
-            g.Aggiusta();
+                g.Aggiusta();
 
-            foreach (var g3 in g.L) Variabili.L.Add(g3, n2 != 0);
+                foreach (var g3 in g.L) Variabili.L?.Add(g3, n2 != 0);
 
-            if (!string.IsNullOrEmpty(g.NomeOld.Classe)) nomeOld.Classe = g.NomeOld.Classe;
+                if (!string.IsNullOrEmpty(g.NomeOld.Classe)) nomeOld.Classe = g.NomeOld.Classe;
 
-            if (!string.IsNullOrEmpty(g.NomeOld.Language)) nomeOld.Language = g.NomeOld.Language;
+                if (!string.IsNullOrEmpty(g.NomeOld.Language)) nomeOld.Language = g.NomeOld.Language;
 
-            if (!string.IsNullOrEmpty(g.NomeOld.Degree)) nomeOld.Degree = g.NomeOld.Degree;
+                if (!string.IsNullOrEmpty(g.NomeOld.Degree)) nomeOld.Degree = g.NomeOld.Degree;
 
-            if (!string.IsNullOrEmpty(g.NomeOld.School)) nomeOld.School = g.NomeOld.School;
+                if (!string.IsNullOrEmpty(g.NomeOld.School)) nomeOld.School = g.NomeOld.School;
 
-            if (!Gruppo.IsEmpty(g.NomeOld.Office)) nomeOld.Office = g.NomeOld.Office;
+                if (!Gruppo.IsEmpty(g.NomeOld.Office)) nomeOld.Office = g.NomeOld.Office;
 
-            if (!string.IsNullOrEmpty(g.NomeOld.Year)) nomeOld.Year = g.NomeOld.Year;
-        }
+                if (!string.IsNullOrEmpty(g.NomeOld.Year)) nomeOld.Year = g.NomeOld.Year;
+            }
     }
 
     private void Button6_Click(object sender, EventArgs e)
@@ -569,7 +570,7 @@ public partial class MainForm : Form
 
     private void Button9_Click(object sender, EventArgs e)
     {
-        Variabili.L.ProvaAdUnire();
+        Variabili.L?.ProvaAdUnire();
         MessageBox.Show("Prova ad unire terminato!");
     }
 
@@ -591,7 +592,7 @@ public partial class MainForm : Form
         {
             var elem = Variabili.L.GetElem(i);
 
-            var j = elem.To_json_Tg();
+            var j = elem?.To_json_Tg();
 
             if (j == null)
                 continue;
@@ -627,39 +628,50 @@ public partial class MainForm : Form
 
     private static void Importa4(IReadOnlyList<Tuple<Gruppo>>? x1, Chiedi sI)
     {
-        var r2 = Variabili.L.Importa(x1, false, sI);
-        for (var i = 0; i < r2.Count; i++)
+        if (x1 != null)
         {
-            var r3 = r2[i];
-            switch (r3.actionDoneImport)
+            var r2 = Variabili.L?.Importa(x1, false, sI);
+            for (var i = 0; i < r2?.Count; i++)
             {
-                case ActionDoneImport.IMPORTED:
-                    break;
-
-                case ActionDoneImport.ADDED:
-                    break;
-
-                case ActionDoneImport.SIMILARITIES_FOUND:
+                var r3 = r2[i];
+                switch (r3.actionDoneImport)
                 {
-                    var importato = false;
-                    foreach (var r4 in r3.simili)
+                    case ActionDoneImport.IMPORTED:
+                        break;
+
+                    case ActionDoneImport.ADDED:
+                        break;
+
+                    case ActionDoneImport.SIMILARITIES_FOUND:
                     {
-                        var askToUnifyForm = new AskToUnifyForm(r4.Item2, r3.simili.Count)
-                        {
-                            StartPosition = FormStartPosition.CenterScreen
-                        };
-                        askToUnifyForm.ShowDialog();
-                        if (askToUnifyForm.r == null) continue;
+                        var importato = false;
+                        if (r3.simili != null)
+                            foreach ((int item1, Tuple<SomiglianzaClasse, Gruppo?> r4Item2) in r3.simili)
+                            {
+                                var r4Item2Item2 = r4Item2.Item2;
+                                if (r4Item2Item2 != null)
+                                {
+                                    var item2 = new Tuple<SomiglianzaClasse, Gruppo>(r4Item2.Item1, r4Item2Item2);
+                                    var askToUnifyForm = new AskToUnifyForm(item2, r3.simili.Count)
+                                    {
+                                        StartPosition = FormStartPosition.CenterScreen
+                                    };
+                                    askToUnifyForm.ShowDialog();
+                                    if (askToUnifyForm.r == null) continue;
 #pragma warning disable CS1690 // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
-                        if (!askToUnifyForm.r.Value) continue;
-                        // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
-                        Variabili.L.Importa3(r4.Item1, r4.Item2);
-                        importato = true;
+                                    if (!askToUnifyForm.r.Value) continue;
+                                    // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
+                                    var tuple = new Tuple<SomiglianzaClasse, Gruppo?>(item2.Item1, item2.Item2);
+                                    Variabili.L?.Importa3(item1, tuple);
+                                }
+
+                                importato = true;
+                                break;
+                            }
+
+                        if (importato == false) Variabili.L?.Add(x1?[i].Item1, false);
                         break;
                     }
-
-                    if (importato == false) Variabili.L.Add(x1?[i].Item1, false);
-                    break;
                 }
             }
         }
@@ -679,7 +691,15 @@ public partial class MainForm : Form
         foreach (var t in l2)
         {
             t.Item1.AggiungiInfoDaManifesto(parametriCondivisi.infoManifesto);
-            t.Item1.CCS = new ListaStringhePerJSON(parametriCondivisi.infoManifesto.Corso_di_studio);
+            var infoManifestoCorsoDiStudio = parametriCondivisi.infoManifesto.Corso_di_studio;
+            var manifestoCorsoDiStudio = new List<string?>(){};
+            if (infoManifestoCorsoDiStudio != null)
+                foreach (var x in infoManifestoCorsoDiStudio)
+                {
+                    manifestoCorsoDiStudio.Add(x);
+                }
+
+            t.Item1.CCS = new ListaStringhePerJSON(manifestoCorsoDiStudio);
 
             t.Item1.PianoDiStudi = parametriCondivisi.pianostudi2;
         }
@@ -734,7 +754,7 @@ public partial class MainForm : Form
             select GetGruppiFromDocument3(x, pLat2)
             into x2
             where x2 != null
-            let x3 = x2.Classe.Trim()
+            let x3 = x2?.Classe?.Trim()
             where !string.IsNullOrEmpty(x3)
             select new Tuple<Gruppo>(x2)
         ).ToList();
@@ -1244,6 +1264,7 @@ public partial class MainForm : Form
             {
                 var s = htmlNode.InnerHtml.Trim();
                 var s2 = s.Split('<');
+                parametriCondivisi.infoManifesto ??= new InfoManifesto();
                 parametriCondivisi.infoManifesto.Scuola = s2[0].Trim();
                 return null;
             }
@@ -1527,7 +1548,7 @@ public partial class MainForm : Form
 
     private void Button15_Click(object sender, EventArgs e)
     {
-        Variabili.L.RicreaID();
+        Variabili.L?.RicreaID();
     }
 
     private void Button16_Click(object sender, EventArgs e)
@@ -1544,7 +1565,7 @@ public partial class MainForm : Form
 
     private void Button18_Click(object sender, EventArgs e)
     {
-        Variabili.L.FixPianoStudi();
+        Variabili.L?.FixPianoStudi();
     }
 
     private void Button19_Click(object sender, EventArgs e)
@@ -1726,7 +1747,7 @@ public partial class MainForm : Form
             lastAdded ??= new List<string>();
 
             lastAdded.Add(g2.NomeCorso);
-            Variabili.L.Add(g2, false);
+            Variabili.L?.Add(g2, false);
             return true;
         }
 
@@ -1746,13 +1767,16 @@ public partial class MainForm : Form
         lastAdded ??= new List<string>();
 
         lastAdded.Add(g.NomeCorso);
-        Variabili.L.Add(g, false);
+        Variabili.L?.Add(g, false);
         return true;
     }
 
     private static bool VediSeCeGiaDaUrl(string? url)
     {
-        return Variabili.L.VediSeCeGiaDaURL(url);
+        if (url == null) return false;
+        var vediSeCeGiaDaUrl = Variabili.L?.VediSeCeGiaDaURL(url);
+        return vediSeCeGiaDaUrl??false;
+
     }
 
     private static Tuple<int?, int?>? ControllaSeCeUnSito(IReadOnlyList<string>? acc)
@@ -1912,7 +1936,7 @@ public partial class MainForm : Form
     {
         var g = OttieniGruppoSql(s6);
 
-        Variabili.L.AddAndMerge(g, groupId);
+        Variabili.L?.AddAndMerge(g, groupId);
     }
 
     private static void ImportaSql5(IReadOnlyList<string> s6)
@@ -1922,7 +1946,7 @@ public partial class MainForm : Form
         var g = OttieniGruppoSql(s6);
 
         //this group is not in ram, we have to add it
-        Variabili.L.Add(g, false);
+        Variabili.L?.Add(g, false);
     }
 
     private static Gruppo OttieniGruppoSql(IReadOnlyList<string> s6)
@@ -2003,7 +2027,7 @@ public partial class MainForm : Form
 
     private static int? FindInRamSql(long id)
     {
-        return Variabili.L.FindInRamSQL(id);
+        return Variabili.L?.FindInRamSQL(id);
     }
 
     private void Button20_Click(object sender, EventArgs e)
@@ -2024,7 +2048,7 @@ public partial class MainForm : Form
 
         //saltaQuelliGiaFunzionanti: false
         var r1 = Variabili.L.CheckSeILinkVanno(parameters);
-        r1.action(null, null);
+        if (r1.action != null) r1.action(null, null);
 
 
         MessageBox.Show("Finito il check dei link!");
@@ -2065,7 +2089,8 @@ public partial class MainForm : Form
 
         //saltaQuelliGiaFunzionanti: true
         var r1 = Variabili.L.CheckSeILinkVanno(parameters);
-        r1.action(null, null);
+        if (r1.action != null) 
+            r1.action(null, null);
 
         MessageBox.Show("Finito il check dei link!");
     }

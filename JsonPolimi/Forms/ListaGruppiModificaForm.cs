@@ -38,10 +38,13 @@ public partial class ListaGruppiModificaForm : Form
         var x = new AggiungiForm(true, r.G);
         x.ShowDialog();
 
-        r.G = AggiungiForm.g;
-
+        if (AggiungiForm.g != null)
+        {
+            r.G = AggiungiForm.g;
+        }
         listBox1.Items[i] = r;
-        Variabili.L.SetElem(r.I, AggiungiForm.g);
+        Variabili.L?.SetElem(r.I, AggiungiForm.g);
+        
 
         x.Dispose();
     }
@@ -68,14 +71,14 @@ public partial class ListaGruppiModificaForm : Form
         text = text.ToLower();
         anno = anno.ToLower();
 
-        for (var i = 0; i < Variabili.L.GetCount(); i++)
+        for (var i = 0; i < Variabili.L?.GetCount(); i++)
         {
             var variable = Variabili.L.GetElem(i);
 
-            if (!variable.Classe.ToLower().Contains(text)) continue;
+            if (!(variable?.Classe?.ToLower().Contains(text)??false)) continue;
 
             if (selectedIndex != 0 &&
-                variable.Platform.ToUpper() != comboBox1.Items[selectedIndex].ToString()) continue;
+                variable.Platform?.ToUpper() != comboBox1.Items[selectedIndex].ToString()) continue;
 
             if (combobox_linkvalido > 0)
                 switch (combobox_linkvalido)
@@ -104,7 +107,7 @@ public partial class ListaGruppiModificaForm : Form
 
         var dialogResult = MessageBox.Show("Sei sicuro di volerli unire?", "Sicuro?", MessageBoxButtons.YesNo);
         if (dialogResult != DialogResult.Yes) return;
-        Variabili.L.MergeUnione(v1, v2);
+        Variabili.L?.MergeUnione(v1, v2);
         Filtra2();
     }
 
@@ -132,7 +135,7 @@ public partial class ListaGruppiModificaForm : Form
             MessageBox.Show("Sei sicuro di voler far diventare il link del gruppo 1 quello del gruppo 2?", "Sicuro?",
                 MessageBoxButtons.YesNo);
         if (dialogResult != DialogResult.Yes) return;
-        Variabili.L.MergeLink((int)v1, (int)v2);
+        Variabili.L?.MergeLink((int)v1, (int)v2);
         Filtra2();
     }
 
@@ -147,7 +150,7 @@ public partial class ListaGruppiModificaForm : Form
         var dialogResult = MessageBox.Show("Vuoi eliminare il gruppo? Sicuro?", "Sicuro?", MessageBoxButtons.YesNo);
         if (dialogResult != DialogResult.Yes) return;
         var g = (Riga)listBox1.Items[listBox1.SelectedIndex];
-        Variabili.L.Remove(g.I);
+        Variabili.L?.Remove(g.I);
         MessageBox.Show("Eliminato!");
         Filtra2();
     }
