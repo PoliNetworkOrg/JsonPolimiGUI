@@ -399,31 +399,31 @@ public partial class MainForm : Form
 
         var n2 = Variabili.L?.GetCount();
 
-        if (ods_read != null)
-            foreach (var y2 in ods_read)
-            {
-                //Console.WriteLine("----- NUOVA RIGA ------");
+        if (ods_read == null) return;
+        foreach (var y2 in ods_read)
+        {
+            //Console.WriteLine("----- NUOVA RIGA ------");
 
-                var g = new InsiemeDiGruppi { GruppoDiBase = { Year = year }, NomeOld = nomeOld };
+            var g = new InsiemeDiGruppi { GruppoDiBase = { Year = year }, NomeOld = nomeOld };
 
-                foreach (var y3 in y2) Gruppo.AggiungiInformazioneAmbigua(y3.Trim(), ref g);
+            foreach (var y3 in y2) Gruppo.AggiungiInformazioneAmbigua(y3.Trim(), ref g);
 
-                g.Aggiusta();
+            g.Aggiusta();
 
-                foreach (var g3 in g.L) Variabili.L?.Add(g3, n2 != 0);
+            foreach (var g3 in g.L) Variabili.L?.Add(g3, n2 != 0);
 
-                if (!string.IsNullOrEmpty(g.NomeOld.Classe)) nomeOld.Classe = g.NomeOld.Classe;
+            if (!string.IsNullOrEmpty(g.NomeOld.Classe)) nomeOld.Classe = g.NomeOld.Classe;
 
-                if (!string.IsNullOrEmpty(g.NomeOld.Language)) nomeOld.Language = g.NomeOld.Language;
+            if (!string.IsNullOrEmpty(g.NomeOld.Language)) nomeOld.Language = g.NomeOld.Language;
 
-                if (!string.IsNullOrEmpty(g.NomeOld.Degree)) nomeOld.Degree = g.NomeOld.Degree;
+            if (!string.IsNullOrEmpty(g.NomeOld.Degree)) nomeOld.Degree = g.NomeOld.Degree;
 
-                if (!string.IsNullOrEmpty(g.NomeOld.School)) nomeOld.School = g.NomeOld.School;
+            if (!string.IsNullOrEmpty(g.NomeOld.School)) nomeOld.School = g.NomeOld.School;
 
-                if (!Gruppo.IsEmpty(g.NomeOld.Office)) nomeOld.Office = g.NomeOld.Office;
+            if (!Gruppo.IsEmpty(g.NomeOld.Office)) nomeOld.Office = g.NomeOld.Office;
 
-                if (!string.IsNullOrEmpty(g.NomeOld.Year)) nomeOld.Year = g.NomeOld.Year;
-            }
+            if (!string.IsNullOrEmpty(g.NomeOld.Year)) nomeOld.Year = g.NomeOld.Year;
+        }
     }
 
     private void Button6_Click(object sender, EventArgs e)
@@ -544,7 +544,7 @@ public partial class MainForm : Form
 
         try
         {
-            if (content != null) 
+            if (content != null)
                 FileSalvare = JsonConvert.DeserializeObject<FileSalvare?>(content);
         }
         catch
@@ -628,50 +628,47 @@ public partial class MainForm : Form
 
     private static void Importa4(IReadOnlyList<Tuple<Gruppo>>? x1, Chiedi sI)
     {
-        if (x1 != null)
+        if (x1 == null) return;
+        var r2 = Variabili.L?.Importa(x1, false, sI);
+        for (var i = 0; i < r2?.Count; i++)
         {
-            var r2 = Variabili.L?.Importa(x1, false, sI);
-            for (var i = 0; i < r2?.Count; i++)
+            var r3 = r2[i];
+            switch (r3.actionDoneImport)
             {
-                var r3 = r2[i];
-                switch (r3.actionDoneImport)
+                case ActionDoneImport.IMPORTED:
+                    break;
+
+                case ActionDoneImport.ADDED:
+                    break;
+
+                case ActionDoneImport.SIMILARITIES_FOUND:
                 {
-                    case ActionDoneImport.IMPORTED:
-                        break;
-
-                    case ActionDoneImport.ADDED:
-                        break;
-
-                    case ActionDoneImport.SIMILARITIES_FOUND:
-                    {
-                        var importato = false;
-                        if (r3.simili != null)
-                            foreach ((int item1, Tuple<SomiglianzaClasse, Gruppo?> r4Item2) in r3.simili)
+                    var importato = false;
+                    if (r3.simili != null)
+                        foreach (var (item1, (somiglianzaClasse, r4Item2Item2)) in r3.simili)
+                        {
+                            if (r4Item2Item2 != null)
                             {
-                                var r4Item2Item2 = r4Item2.Item2;
-                                if (r4Item2Item2 != null)
+                                var item2 = new Tuple<SomiglianzaClasse, Gruppo>(somiglianzaClasse, r4Item2Item2);
+                                var askToUnifyForm = new AskToUnifyForm(item2, r3.simili.Count)
                                 {
-                                    var item2 = new Tuple<SomiglianzaClasse, Gruppo>(r4Item2.Item1, r4Item2Item2);
-                                    var askToUnifyForm = new AskToUnifyForm(item2, r3.simili.Count)
-                                    {
-                                        StartPosition = FormStartPosition.CenterScreen
-                                    };
-                                    askToUnifyForm.ShowDialog();
-                                    if (askToUnifyForm.r == null) continue;
+                                    StartPosition = FormStartPosition.CenterScreen
+                                };
+                                askToUnifyForm.ShowDialog();
+                                if (askToUnifyForm.r == null) continue;
 #pragma warning disable CS1690 // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
-                                    if (!askToUnifyForm.r.Value) continue;
-                                    // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
-                                    var tuple = new Tuple<SomiglianzaClasse, Gruppo?>(item2.Item1, item2.Item2);
-                                    Variabili.L?.Importa3(item1, tuple);
-                                }
-
-                                importato = true;
-                                break;
+                                if (!askToUnifyForm.r.Value) continue;
+                                // L'accesso a un membro in un campo di una classe con marshalling per riferimento potrebbe causare un'eccezione in fase di esecuzione
+                                var tuple = new Tuple<SomiglianzaClasse, Gruppo?>(item2.Item1, item2.Item2);
+                                Variabili.L?.Importa3(item1, tuple);
                             }
 
-                        if (importato == false) Variabili.L?.Add(x1?[i].Item1, false);
-                        break;
-                    }
+                            importato = true;
+                            break;
+                        }
+
+                    if (importato == false) Variabili.L?.Add(x1?[i].Item1, false);
+                    break;
                 }
             }
         }
@@ -692,12 +689,8 @@ public partial class MainForm : Form
         {
             t.Item1.AggiungiInfoDaManifesto(parametriCondivisi.infoManifesto);
             var infoManifestoCorsoDiStudio = parametriCondivisi.infoManifesto.Corso_di_studio;
-            var manifestoCorsoDiStudio = new List<string?>(){};
-            if (infoManifestoCorsoDiStudio != null)
-                foreach (var x in infoManifestoCorsoDiStudio)
-                {
-                    manifestoCorsoDiStudio.Add(x);
-                }
+            var manifestoCorsoDiStudio = new List<string?>();
+            if (infoManifestoCorsoDiStudio != null) manifestoCorsoDiStudio.AddRange(infoManifestoCorsoDiStudio);
 
             t.Item1.CCS = new ListaStringhePerJSON(manifestoCorsoDiStudio);
 
@@ -821,7 +814,7 @@ public partial class MainForm : Form
             {
                 var x1 = htmlNode.ChildNodes[0];
                 parametriCondivisi ??= new ParametriCondivisi();
-                
+
                 if (x1.Name == "select")
                 {
                     var x2 = GetPianoStudi(x1);
@@ -1498,7 +1491,7 @@ public partial class MainForm : Form
         var r = saveFileDialog.ShowDialog();
         if (r != DialogResult.OK) return;
         var b2 = ObjectToByteArray(l);
-        if (b2 != null) 
+        if (b2 != null)
             File.WriteAllBytes(saveFileDialog.FileName, b2);
     }
 
@@ -1775,8 +1768,7 @@ public partial class MainForm : Form
     {
         if (url == null) return false;
         var vediSeCeGiaDaUrl = Variabili.L?.VediSeCeGiaDaURL(url);
-        return vediSeCeGiaDaUrl??false;
-
+        return vediSeCeGiaDaUrl ?? false;
     }
 
     private static Tuple<int?, int?>? ControllaSeCeUnSito(IReadOnlyList<string>? acc)
@@ -1798,7 +1790,7 @@ public partial class MainForm : Form
     {
         if (string.IsNullOrEmpty(v))
             return null;
-        
+
         var result = Uri.TryCreate(v, UriKind.Absolute, out var uriResult)
                      && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
 
@@ -2048,7 +2040,7 @@ public partial class MainForm : Form
 
         //saltaQuelliGiaFunzionanti: false
         var r1 = Variabili.L.CheckSeILinkVanno(parameters);
-        if (r1.action != null) r1.action(null, null);
+        r1.action?.Invoke(null, null);
 
 
         MessageBox.Show("Finito il check dei link!");
@@ -2089,8 +2081,7 @@ public partial class MainForm : Form
 
         //saltaQuelliGiaFunzionanti: true
         var r1 = Variabili.L.CheckSeILinkVanno(parameters);
-        if (r1.action != null) 
-            r1.action(null, null);
+        r1.action?.Invoke(null, null);
 
         MessageBox.Show("Finito il check dei link!");
     }

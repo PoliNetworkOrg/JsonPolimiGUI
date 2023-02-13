@@ -38,13 +38,10 @@ public partial class ListaGruppiModificaForm : Form
         var x = new AggiungiForm(true, r.G);
         x.ShowDialog();
 
-        if (AggiungiForm.g != null)
-        {
-            r.G = AggiungiForm.g;
-        }
+        if (AggiungiForm.g != null) r.G = AggiungiForm.g;
         listBox1.Items[i] = r;
         Variabili.L?.SetElem(r.I, AggiungiForm.g);
-        
+
 
         x.Dispose();
     }
@@ -75,7 +72,7 @@ public partial class ListaGruppiModificaForm : Form
         {
             var variable = Variabili.L.GetElem(i);
 
-            if (!(variable?.Classe?.ToLower().Contains(text)??false)) continue;
+            if (!(variable?.Classe?.ToLower().Contains(text) ?? false)) continue;
 
             if (selectedIndex != 0 &&
                 variable.Platform?.ToUpper() != comboBox1.Items[selectedIndex].ToString()) continue;

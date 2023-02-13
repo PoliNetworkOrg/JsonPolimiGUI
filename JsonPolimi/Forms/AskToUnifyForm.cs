@@ -25,7 +25,6 @@ public partial class AskToUnifyForm : Form
 
     private void AskToUnifyForm_Load(object sender, EventArgs e)
     {
-
         textBox2.Text = d?.Item1.a1?.Classe;
         textBox3.Text = d?.Item1.a2?.Classe;
 
